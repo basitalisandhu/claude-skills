@@ -1,4 +1,5 @@
 name: sync
+# Registered on the default branch; see CONTRIBUTING.md for how to run it.
 
 on:
   schedule:

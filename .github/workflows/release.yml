@@ -1,4 +1,5 @@
 name: release
+# Registered on the default branch; see CONTRIBUTING.md for how to run it.
 
 on:
   push:
