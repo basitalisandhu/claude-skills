@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS Security plugin: 9 skills | Claude Code skills</title>
+<meta name="description" content="AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="AWS Security plugin: 9 skills | Claude Code skills">
+<meta property="og:description" content="AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / aws-security</p>
+<h1>AWS Security</h1>
+<p class="lede">AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.</p>
+<p class="meta">Plugin <code>aws-security</code>, version 0.2.0, 9 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install aws-security@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only aws-security</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="agent-safe-aws-access/index.html">agent-safe-aws-access</a></td><td>Set up least-privilege, auditable AWS access for an AI coding agent, or review an existing agent role.</td><td>yes</td></tr><tr><td><a href="aws-account-audit/index.html">aws-account-audit</a></td><td>Read-only security audit of one AWS account.</td><td>yes</td></tr><tr><td><a href="aws-incident-response-runbook/index.html">aws-incident-response-runbook</a></td><td>Produce a step-by-step AWS incident response runbook in Markdown for one of six scenarios (leaked access key, compromised EC2 instance, public S3 bucket exposure, suspicious IAM activity, ransomware against S3 or EBS, crypto-mining), filled in with the account, region and resource identifiers.</td><td>yes</td></tr><tr><td><a href="aws-spend-guardrails/index.html">aws-spend-guardrails</a></td><td>Generate AWS spend guardrails and check exported cost data against them.</td><td>yes</td></tr><tr><td><a href="iam-least-privilege-review/index.html">iam-least-privilege-review</a></td><td>Review AWS IAM policy documents offline for over-broad permissions and privilege-escalation paths.</td><td>yes</td></tr><tr><td><a href="landing-zone-blast-radius/index.html">landing-zone-blast-radius</a></td><td>Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account.</td><td>yes</td></tr><tr><td><a href="sandbox-account-guardrail-pack/index.html">sandbox-account-guardrail-pack</a></td><td>Generate a complete guardrail pack for an AWS sandbox OU where engineers and AI agents experiment.</td><td>yes</td></tr><tr><td><a href="scp-guardrails/index.html">scp-guardrails</a></td><td>Generate and lint AWS Organizations service control policies (SCPs).</td><td>yes</td></tr><tr><td><a href="security-hub-triage/index.html">security-hub-triage</a></td><td>Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list.</td><td>yes</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Nine AWS security skills for Claude Code: a read-only account audit, an SCP guardrail builder and linter, a landing zone blast-radius designer, an IAM least-privilege reviewer, a Security Hub and GuardDuty triage tool, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, and a sandbox OU guardrail pack.</p>
+<h3 id="install">Install</h3>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/aws-security-skills
+/plugin install aws-security@aws-security-skills</code></pre>
+<p>Skills then appear as <code>/aws-security:&lt;skill&gt;</code>. Scripts need Python 3.11 or newer on <code>PATH</code> as <code>python3</code>; they use the standard library only and make no network calls. The AWS CLI is used only in the collection steps the skills describe, with read-only credentials.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>aws-account-audit</code></td><td>audit, baseline or health-check one AWS account</td><td><code>audit_account.py</code> findings (17 checks) with severity, evidence and a fix command to review</td></tr><tr><td><code>scp-guardrails</code></td><td>write, review or debug service control policies</td><td><code>scp_builder.py</code> SCP documents under 5120 characters; <code>scp_lint.py</code> findings</td></tr><tr><td><code>landing-zone-blast-radius</code></td><td>design an AWS organization, place a workload</td><td><code>blast_radius.py</code> OU tree, account names, SCP map, blast-radius table</td></tr><tr><td><code>iam-least-privilege-review</code></td><td>review or tighten an IAM policy, check escalation</td><td><code>iam_review.py</code> ranked findings and a tightened policy template</td></tr><tr><td><code>security-hub-triage</code></td><td>Security Hub or GuardDuty backlog, weekly review</td><td><code>triage_findings.py</code> grouped findings and an owner-assigned action list</td></tr><tr><td><code>agent-safe-aws-access</code></td><td>AWS access for an AI agent, agent role review, kill switch</td><td><code>agent_access.py</code> trust, permission, boundary and SCP documents plus commands; role review findings</td></tr><tr><td><code>aws-incident-response-runbook</code></td><td>an AWS security incident or a GuardDuty finding that needs a response</td><td><code>ir_runbook.py</code> Markdown runbook for one of six scenarios, picked from GuardDuty findings or by name</td></tr><tr><td><code>aws-spend-guardrails</code></td><td>budget alerts, anomaly detection, sandbox spend limits, cost spikes</td><td><code>spend_guardrails.py</code> Budgets and anomaly JSON, spend-deny SCPs, cost review with anomaly flags</td></tr><tr><td><code>sandbox-account-guardrail-pack</code></td><td>create or tighten a sandbox OU</td><td><code>sandbox_pack.py</code> SCPs, baseline checklist, auto-expiry design, budget files and a user README</td></tr></tbody></table>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

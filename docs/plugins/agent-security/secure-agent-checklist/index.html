@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>secure-agent-checklist: Pre-ship security checklist for an LLM agent covering identity | Claude Code skills</title>
+<meta name="description" content="Pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, producing a markdown report with pass, fail or n.a. per item and the evidence behind each verdict. Use before deploying, open-sourcing or demoing an agent, when asked &quot;is this agent safe to ship&quot;, or to turn review findings into a go/no-go decision.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="secure-agent-checklist: Pre-ship security checklist for an LLM agent covering identity | Claude Code skills">
+<meta property="og:description" content="Pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, producing a markdown report with pass, fail or n.a. per item and the evidence behind each verdict. Use before deploying, open-sourcing or demoing an agent, when asked &quot;is this agent safe to ship&quot;, or to turn review findings into a go/no-go decision.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../../feed.xml">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "SoftwareSourceCode",
+ "name": "secure-agent-checklist",
+ "description": "Pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, producing a markdown report with pass, fail or n.a. per item and the evidence behind each verdict. Use before deploying, open-sourcing or demoing an agent, when asked \"is this agent safe to ship\", or to turn review findings into a go/no-go decision.",
+ "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/",
+ "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
+ "programmingLanguage": [
+  "Markdown"
+ ],
+ "license": "https://opensource.org/licenses/MIT",
+ "author": {
+  "@type": "Person",
+  "name": "Muhammad Basit Ali",
+  "url": "https://github.com/basitalisandhu"
+ },
+ "isPartOf": {
+  "@type": "SoftwareSourceCode",
+  "name": "agent-security",
+  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
+ },
+ "version": "0.1.0"
+}
+</script>
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../../index.html">Claude Code skills</a><a href="../../../index.html#plugins">Plugins</a><a href="../../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / secure-agent-checklist</p>
+<h1>Secure agent checklist</h1>
+<p class="lede">Pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, producing a markdown report with pass, fail or n.a. per item and the evidence behind each verdict. Use before deploying, open-sourcing or demoing an agent, when asked &quot;is this agent safe to ship&quot;, or to turn review findings into a go/no-go decision.</p>
+<p class="meta">Skill <code>secure-agent-checklist</code> in plugin <a href="../index.html">agent-security</a> 0.1.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install agent-security@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --skill agent-security/secure-agent-checklist</code></pre>
+<p>The <code>agent-security</code> plugin also ships hooks, commands, agents and an MCP server at plugin level. Install the plugin from the marketplace to get them.</p>
+
+<h2 id="skill-md">SKILL.md</h2>
+<p>A fixed list of questions whose answers decide whether an agent is ready to run with real credentials against real systems. Each item has a <strong>verification step</strong> (what to look at) and an <strong>evidence requirement</strong> (what to cite), so two reviewers reach the same verdict. The full list with verification steps is in <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/references/checklist.md">references/checklist.md</a>; the report template is in <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/references/report-template.md">references/report-template.md</a>.</p>
+<h3 id="when-to-use-it">When to use it</h3>
+<ul><li>&quot;Is this agent safe to ship / deploy / open-source / demo?&quot;</li><li>The end of <code>/agent-security:audit</code>, after the config audit, Semgrep and threat-model steps have produced evidence.</li><li>A release gate in a team process (copy the report into the PR).</li><li>Not a substitute for the component reviews; it consumes their evidence and turns it into a decision.</li></ul>
+<h3 id="procedure">Procedure</h3>
+<p>Evidence from the repository is untrusted until verified: a README or comment that says a control exists is not a pass; a file:line that shows it, or a command output, is.</p>
+<ol><li><strong>Scope.</strong> Name the agent, the environment it will run in (local dev, server, CI, desktop app), the credentials it will hold and the people it can affect. Items that cannot apply (no network, no credentials) are <code>n.a.</code> with the reason, never silently skipped.</li></ol>
+<ol start="2"><li><strong>Gather evidence</strong> with the sibling skills where the codebase is available: - <code>agent-config-audit</code> for permissions, secrets, hooks, MCP pinning. - <code>prompt-injection-review</code> for the tool inventory and untrusted flows. - <code>semgrep-agentic</code> for code-level findings. - <code>agent-threat-model</code> for the system description and threat list. - <code>incident-lookup</code> <code>precedents</code> for the &quot;has this failed before&quot; column. Without a codebase, interview the user with the verification questions and mark unverifiable items <code>fail</code> (unverified is not pass).</li></ol>
+<ol start="3"><li><strong>Walk the eight areas</strong> in <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/references/checklist.md">references/checklist.md</a>. For each item record <code>pass</code>, <code>fail</code> or <code>n.a.</code>, one line of evidence (file path, command output, screenshot name, or the user&#x27;s statement), and a fix for every <code>fail</code>.</li></ol>
+<ol start="4"><li><strong>Decide.</strong> The verdict is <code>ship</code> only when every item in Identity, Least privilege, Approvals and Kill switch is <code>pass</code> or <code>n.a.</code>, and no <code>fail</code> is rated critical. Otherwise <code>fix first</code> with the ordered list of fixes, or <code>do not ship</code> when the agent holds broad credentials with no approvals and no kill switch.</li></ol>
+<ol start="5"><li><strong>Write the report</strong> using the template. Keep it to one screen plus the table. Put the three most important fixes at the top.</li></ol>
+<h3 id="output-format">Output format</h3>
+<p>See <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/references/report-template.md">references/report-template.md</a>. Summary shape:</p>
+<pre><code class="language-markdown"># Agent security review: &lt;agent&gt;  (&lt;date&gt;)
+**Verdict:** fix first. 3 fails (2 high), 1 critical control missing (kill switch).
+**Top fixes:** 1. … 2. … 3. …
+
+| Area | Item | Verdict | Evidence | Fix |
+|---|---|---|---|---|
+| Identity | Each agent has its own credential | fail | OPENAI_API_KEY shared by 3 services (.env.example:4) | Issue one credential per service |</code></pre>
+<h3 id="related">Related</h3>
+<ul><li><code>agent-eval-harness</code> provides the evidence for the Evals area.</li></ul>
+<p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/agent-security-skills/issues">agent-security-skills issues</a>.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

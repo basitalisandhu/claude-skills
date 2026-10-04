@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code Quality plugin: 8 skills | Claude Code skills</title>
+<meta name="description" content="Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="Code Quality plugin: 8 skills | Claude Code skills">
+<meta property="og:description" content="Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / code-quality</p>
+<h1>Code Quality</h1>
+<p class="lede">Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.</p>
+<p class="meta">Plugin <code>code-quality</code>, version 0.1.0, 8 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install code-quality@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only code-quality</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="complexity-report/index.html">complexity-report</a></td><td>Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how.</td><td>yes</td></tr><tr><td><a href="dead-code-finder/index.html">dead-code-finder</a></td><td>Find probably-unused functions, classes, methods and exports in a Python or JavaScript/TypeScript tree with a bundled script, confirm each candidate by searching for dynamic use, and propose a safe deletion order.</td><td>yes</td></tr><tr><td><a href="error-handling-review/index.html">error-handling-review</a></td><td>Review how a codebase or change handles failures: swallowed exceptions, missing timeouts and retries, errors without context, leaking internals to users, and inconsistent error types across layers; then propose a consistent policy with code examples.</td><td>no</td></tr><tr><td><a href="naming-audit/index.html">naming-audit</a></td><td>Audit the names in a module or diff (variables, functions, classes, files, database columns, API fields) for clarity, consistency with the project&#x27;s conventions, and lies (names that no longer match behaviour), then propose renames with a migration path for public ones.</td><td>no</td></tr><tr><td><a href="refactor-plan/index.html">refactor-plan</a></td><td>Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point.</td><td>no</td></tr><tr><td><a href="review-checklist/index.html">review-checklist</a></td><td>Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict.</td><td>no</td></tr><tr><td><a href="test-gap-finder/index.html">test-gap-finder</a></td><td>Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk.</td><td>yes</td></tr><tr><td><a href="type-coverage/index.html">type-coverage</a></td><td>Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold.</td><td>yes</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Eight skills for keeping a codebase healthy: a fixed review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.</p>
+<h3 id="install">Install</h3>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/claude-dev-skills
+/plugin install code-quality@claude-dev-skills</code></pre>
+<p>Skills then appear as <code>/code-quality:&lt;skill&gt;</code>. Scripts need Python 3.11 or newer on <code>PATH</code> as <code>python3</code>; they use the standard library only and make no network calls.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>review-checklist</code></td><td>review a PR, diff or branch</td><td>findings table with severity and file:line, verdict</td></tr><tr><td><code>refactor-plan</code></td><td>refactor, split, untangle, clean up</td><td>ordered behaviour-preserving steps with tests and rollback</td></tr><tr><td><code>dead-code-finder</code></td><td>find unused code, shrink the codebase</td><td><code>dead_code_finder.py</code> report, confirmed deletion list</td></tr><tr><td><code>complexity-report</code></td><td>most complex code, where to start, CI threshold</td><td><code>complexity_report.py</code> ranking with simplifications</td></tr><tr><td><code>naming-audit</code></td><td>are these names clear, naming conventions</td><td>renames grouped by cost, convention proposals</td></tr><tr><td><code>error-handling-review</code></td><td>review error handling, silent failures</td><td>findings plus an error policy per layer</td></tr><tr><td><code>type-coverage</code></td><td>how typed is this, where to add types</td><td><code>type_coverage.py</code> percentages and a ratchet plan</td></tr><tr><td><code>test-gap-finder</code></td><td>what is untested, did the PR add tests</td><td><code>test_gap_finder.py</code> list of modules without tests, prioritised</td></tr></tbody></table>
+<p>Tests for every script live in the repository&#x27;s <code>tests/</code> directory; run <code>python3 -m pytest -q</code> at the repository root.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub Manager plugin: 3 skills | Claude Code skills</title>
+<meta name="description" content="Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, and a blameless incident postmortem timeline. Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="GitHub Manager plugin: 3 skills | Claude Code skills">
+<meta property="og:description" content="Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, and a blameless incident postmortem timeline. Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / github-manager</p>
+<h1>GitHub Manager</h1>
+<p class="lede">Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, and a blameless incident postmortem timeline. Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.</p>
+<p class="meta">Plugin <code>github-manager</code>, version 0.1.0, 3 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install github-manager@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only github-manager</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="incident-postmortem-timeline/index.html">incident-postmortem-timeline</a></td><td>Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR.</td><td>yes</td></tr><tr><td><a href="iteration-report/index.html">iteration-report</a></td><td>Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from.</td><td>yes</td></tr><tr><td><a href="pr-queue-digest/index.html">pr-queue-digest</a></td><td>Build a stuck-PR and review-queue digest from a saved gh pr list export, with a bundled script that flags PRs waiting on review longer than a threshold, PRs blocked on one overloaded reviewer, changes requested with no new commits, new commits with no re-request, failing checks, merge conflicts, approved but unmerged PRs, PRs with no reviewer and stale drafts, then prints a review-queue table per reviewer (counts only) and one next action per PR (nudge, re-request, rebase, fix checks, merge, close as stale), each citing the PR.</td><td>yes</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Three engineering manager skills that compute from exported GitHub data, each with a tested standard-library Python script. Install with <code>/plugin marketplace add basitalisandhu/github-manager-skills</code> and then <code>/plugin install github-manager@github-manager-skills</code>. Skills appear as <code>/github-manager:&lt;skill&gt;</code>, and Claude also invokes them on its own when a request matches a skill&#x27;s description.</p>
+<table><thead><tr><th>Skill</th><th>Script</th><th>Use it to</th></tr></thead><tbody><tr><td><code>pr-queue-digest</code></td><td><code>skills/pr-queue-digest/scripts/pr_queue.py</code></td><td>flag stuck PRs (waiting on review, blocked on one reviewer, changes requested with no new commits, failing checks, conflicts, approved but unmerged, no reviewer, stale drafts), count the review queue per reviewer, and list one next action per PR</td></tr><tr><td><code>iteration-report</code></td><td><code>skills/iteration-report/scripts/iteration_report.py</code></td><td>report shipped, carried-over and newly opened work for a window, with cycle time (median, p90) and review turnaround (median), every number cited to its rows</td></tr><tr><td><code>incident-postmortem-timeline</code></td><td><code>skills/incident-postmortem-timeline/scripts/postmortem.py</code></td><td>build a blameless timeline of an incident issue with detected, acknowledged, mitigated and resolved phases, people as roles, questions for the review and a cited postmortem skeleton</td></tr></tbody></table>
+<p>Requirements: Python 3.11 or newer on <code>PATH</code> as <code>python3</code>, and the gh CLI for the export step. The scripts read saved JSON only: no network access, no third-party packages. Team level only: no per-person scoring.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

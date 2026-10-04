@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security Basics plugin: 6 skills | Claude Code skills</title>
+<meta name="description" content="Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="Security Basics plugin: 6 skills | Claude Code skills">
+<meta property="og:description" content="Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / security-basics</p>
+<h1>Security Basics</h1>
+<p class="lede">Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.</p>
+<p class="meta">Plugin <code>security-basics</code>, version 0.1.0, 6 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install security-basics@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only security-basics</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="auth-flow-review/index.html">auth-flow-review</a></td><td>Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow.</td><td>no</td></tr><tr><td><a href="cors-review/index.html">cors-review</a></td><td>Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use.</td><td>no</td></tr><tr><td><a href="dependency-audit-reader/index.html">dependency-audit-reader</a></td><td>Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates.</td><td>yes</td></tr><tr><td><a href="http-security-headers/index.html">http-security-headers</a></td><td>Check the security headers of a captured HTTP response (saved from curl or the browser) with a bundled script that grades HSTS, Content-Security-Policy, X-Content-Type-Options, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, information disclosure and caching, then produce the header set for the web server or framework.</td><td>yes</td></tr><tr><td><a href="jwt-inspector/index.html">jwt-inspector</a></td><td>Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens.</td><td>yes</td></tr><tr><td><a href="secrets-hygiene/index.html">secrets-hygiene</a></td><td>Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found.</td><td>yes</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Six lightweight security skills for everyday development: a secrets scan, an audit report reader, an HTTP security header check, a JWT inspector, a CORS review and an auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.</p>
+<h3 id="install">Install</h3>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/claude-dev-skills
+/plugin install security-basics@claude-dev-skills</code></pre>
+<p>Skills then appear as <code>/security-basics:&lt;skill&gt;</code>. Scripts need Python 3.11 or newer on <code>PATH</code> as <code>python3</code>; they use the standard library only and make no network calls.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>secrets-hygiene</code></td><td>check for secrets, pre-commit, after a leak</td><td><code>secrets_scan.py</code> redacted findings, baseline, rotation steps</td></tr><tr><td><code>dependency-audit-reader</code></td><td>npm audit or pip-audit fails CI</td><td><code>audit_reader.py</code> ranked packages, upgrade and override plan</td></tr><tr><td><code>http-security-headers</code></td><td>are our headers secure, scanner finding</td><td><code>headers_check.py</code> grade and the server configuration</td></tr><tr><td><code>jwt-inspector</code></td><td>what is in this token, is our JWT setup safe</td><td><code>jwt_inspect.py</code> decoded claims (unverified) and findings</td></tr><tr><td><code>cors-review</code></td><td>CORS error, allow the frontend, permissive policy</td><td>checklist findings and the allowlist configuration</td></tr><tr><td><code>auth-flow-review</code></td><td>design login, review auth, account takeover</td><td>per-flow findings with severity and corrected flows</td></tr></tbody></table>
+<p>Tests for every script live in the repository&#x27;s <code>tests/</code> directory; run <code>python3 -m pytest -q</code> at the repository root.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

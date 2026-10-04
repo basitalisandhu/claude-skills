@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevOps plugin: 8 skills | Claude Code skills</title>
+<meta name="description" content="Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/devops/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="DevOps plugin: 8 skills | Claude Code skills">
+<meta property="og:description" content="Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/devops/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / devops</p>
+<h1>DevOps</h1>
+<p class="lede">Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.</p>
+<p class="meta">Plugin <code>devops</code>, version 0.1.0, 8 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install devops@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only devops</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="cron-doctor/index.html">cron-doctor</a></td><td>Diagnose a crontab with a bundled script that validates every schedule, explains it in words, computes the next runs, and flags jobs with no output redirection, unescaped percent signs, PATH assumptions, day-of-month plus day-of-week confusion, DST-sensitive hours, overlapping frequent jobs and duplicates; then fix the entries and add locking and logging.</td><td>yes</td></tr><tr><td><a href="dockerfile-hardening/index.html">dockerfile-hardening</a></td><td>Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build.</td><td>yes</td></tr><tr><td><a href="env-diff/index.html">env-diff</a></td><td>Compare the keys of a .env.example (or any template) against real .env files with a bundled script, listing missing, extra, empty and duplicated keys and template values that look like real credentials, without ever printing a value.</td><td>yes</td></tr><tr><td><a href="github-actions-author/index.html">github-actions-author</a></td><td>Write or review GitHub Actions workflows with least-privilege permissions, SHA-pinned actions, timeouts, concurrency and caching, and validate them with a bundled linter that catches missing permissions, pull_request_target checkout of fork code, expression injection in run steps, unpinned actions and literal secrets.</td><td>yes</td></tr><tr><td><a href="k8s-manifest-review/index.html">k8s-manifest-review</a></td><td>Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML.</td><td>yes</td></tr><tr><td><a href="release-notes/index.html">release-notes</a></td><td>Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read.</td><td>yes</td></tr><tr><td><a href="semver-advisor/index.html">semver-advisor</a></td><td>Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence.</td><td>no</td></tr><tr><td><a href="terraform-review/index.html">terraform-review</a></td><td>Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene.</td><td>no</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history, and a semver advisor.</p>
+<h3 id="install">Install</h3>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/claude-dev-skills
+/plugin install devops@claude-dev-skills</code></pre>
+<p>Skills then appear as <code>/devops:&lt;skill&gt;</code>. Scripts need Python 3.11 or newer on <code>PATH</code> as <code>python3</code>; they use the standard library only and make no network calls.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>dockerfile-hardening</code></td><td>review, slim or write a Dockerfile</td><td><code>dockerfile_lint.py</code> findings, pinned non-root multi-stage build</td></tr><tr><td><code>github-actions-author</code></td><td>add CI, review workflows, unpinned actions</td><td><code>gha_lint.py</code> findings, least-privilege workflow from templates</td></tr><tr><td><code>k8s-manifest-review</code></td><td>review or harden Kubernetes YAML</td><td><code>k8s_review.py</code> findings, restricted-baseline manifests</td></tr><tr><td><code>terraform-review</code></td><td>review Terraform, is this plan safe</td><td>checklist findings, plan reading, rules to automate</td></tr><tr><td><code>cron-doctor</code></td><td>cron job did not run, ran twice, wrong time</td><td><code>cron_doctor.py</code> schedule explanations, next runs, fixes</td></tr><tr><td><code>env-diff</code></td><td>works locally fails in staging, onboarding config</td><td><code>env_diff.py</code> missing, extra and empty keys (no values)</td></tr><tr><td><code>release-notes</code></td><td>release notes, GitHub release body</td><td><code>release_notes.py</code> grouped Markdown, edited for readers</td></tr><tr><td><code>semver-advisor</code></td><td>is this breaking, major or minor</td><td>version decision with evidence per change</td></tr></tbody></table>
+<p>Tests for every script live in the repository&#x27;s <code>tests/</code> directory; run <code>python3 -m pytest -q</code> at the repository root.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

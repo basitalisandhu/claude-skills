@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mac Maintenance plugin: 3 skills | Claude Code skills</title>
+<meta name="description" content="Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="Mac Maintenance plugin: 3 skills | Claude Code skills">
+<meta property="og:description" content="Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / mac-maintenance</p>
+<h1>Mac Maintenance</h1>
+<p class="lede">Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.</p>
+<p class="meta">Plugin <code>mac-maintenance</code>, version 0.1.0, 3 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install mac-maintenance@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only mac-maintenance</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="mac-app-leftovers/index.html">mac-app-leftovers</a></td><td>Find what uninstalled applications left behind on a Mac with a bundled script: Application Support and container folders, caches, preferences, saved state, WebKit and HTTP storage, logs, login items whose app is gone, and launch agents or daemons whose program no longer exists.</td><td>yes</td></tr><tr><td><a href="mac-cleanup/index.html">mac-cleanup</a></td><td>Clean up and speed up a Mac in three tiers with two bundled scripts.</td><td>yes</td></tr><tr><td><a href="mac-duplicate-finder/index.html">mac-duplicate-finder</a></td><td>Find byte-for-byte duplicate files in a Mac&#x27;s user folders with a bundled script (size grouping, then partial and full hashing), report the largest groups and which folders mirror each other, and single out &quot;suffix copies&quot; (IMG_1 (1).MOV next to an identical IMG_1.MOV) that can be moved to a dated Trash folder after a second hash check, with the original untouched.</td><td>yes</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Mac maintenance skills for Claude Code: a survey that only measures, a safe tier that removes only the caches programs recreate, and a written list for every decision that is yours. For people whose Mac has filled up with build caches, duplicate phone exports, leftovers of uninstalled apps and a few gigabytes pinned in memory, and who do not want a cleaner that guesses.</p>
+<p>Install with <code>/plugin marketplace add basitalisandhu/mac-maintenance-skills</code> and then <code>/plugin install mac-maintenance@mac-maintenance-skills</code>, or add it from Anthropic&#x27;s directory. Skills appear as <code>/mac-maintenance:&lt;skill&gt;</code>, and Claude also invokes them on its own when a request matches a skill&#x27;s description. Ask &quot;look at my Mac and clean up the garbage&quot; to start.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Script</th><th>Use it to</th></tr></thead><tbody><tr><td><code>mac-cleanup</code></td><td><code>skills/mac-cleanup/scripts/mac_survey.py</code>, <code>skills/mac-cleanup/scripts/safe_clean.py</code></td><td>survey what takes space and memory without changing anything, then remove only the caches and leftovers programs recreate (dry run by default), then write the decision list for everything else</td></tr><tr><td><code>mac-duplicate-finder</code></td><td><code>skills/mac-duplicate-finder/scripts/find_dupes.py</code></td><td>find byte-identical files in the user folders, see which folders mirror each other, and move verified &quot; (1)&quot; copies to a dated Trash folder</td></tr><tr><td><code>mac-app-leftovers</code></td><td><code>skills/mac-app-leftovers/scripts/app_leftovers.py</code></td><td>list data, preferences, login items and launch agents left by uninstalled apps, and move the ones the user names to a dated Trash folder</td></tr></tbody></table>
+<h3 id="how-it-treats-your-mac">How it treats your Mac</h3>
+<ul><li><strong>Nothing of yours is deleted.</strong> The cleaner removes only the cache and leftover locations listed below, and only when you pass <code>--apply</code>. Duplicate files and app leftovers are moved into a dated folder under <code>~/.Trash</code> with their relative paths kept, so Finder can put them back, and only after you say which ones.</li><li><strong>Every size is measured</strong>, by <code>du</code> or file metadata, and anything a tool could not check is reported as unverified rather than estimated.</li><li><strong>No network, no telemetry, no sudo.</strong> Nothing leaves the machine. Launch daemons that need administrator rights are listed with the command for you to run yourself.</li></ul>
+<h3 id="what-the-scripts-run">What the scripts run</h3>
+<p>The survey (<code>mac_survey.py</code>) is read-only. It runs <code>du -sk</code>, <code>docker system df</code>, <code>docker volume ls</code>, <code>docker buildx ls</code>, <code>brew cleanup -n</code>, <code>brew outdated</code>, <code>brew list</code>, <code>brew uses</code>, <code>brew services list</code>, <code>mdls</code> (Spotlight last-used dates of apps), <code>ps</code>, <code>sysctl</code>, <code>uptime</code>, and one <code>osascript</code> call to System Events to read login items. It writes a report only where you pass <code>--out</code>.</p>
+<p>The cleaner (<code>safe_clean.py</code>) prints a plan by default. With <code>--apply</code> it removes these locations and runs these commands, each only when its condition holds: <code>~/.npm/_cacache</code> (unless npm is installing), stale <code>~/.npm/_npx</code> entries, <code>~/Library/Caches/go-build</code>, <code>uv cache prune</code>, <code>pip3 cache purge</code>, <code>brew cleanup --prune=all -s</code>, <code>docker builder prune -af</code>, <code>docker image prune -f</code> (dangling images), <code>docker volume prune -f</code> (anonymous unused volumes), <code>docker volume rm</code> of buildx state volumes whose builder no longer exists, Docker Desktop update downloads under Application Support and the temp folder (after <code>hdiutil detach</code> of a mounted installer image), <code>~/Library/Caches/*-updater</code> folders, <code>~/Library/Developer/Xcode/DerivedData</code> (unless Xcode is running), <code>xcrun simctl delete unavailable</code>, files in <code>~/Library/Logs</code> older than seven days, <code>~/Library/Caches/Google/Chrome/*/Cache</code> (unless Chrome is running), and <code>osascript</code> to delete login items whose app no longer exists. It refuses symbolic links and any path outside your home and temp folders.</p>
+<p>The duplicate finder (<code>find_dupes.py</code>) reads files to hash them and moves files only with <code>--trash-suffix-copies</code>. The leftover finder (<code>app_leftovers.py</code>) runs <code>du -sk</code>, <code>mdfind</code> and one <code>osascript</code> call, reads <code>brew list</code>, and moves entries only with <code>--trash</code>.</p>
+<h3 id="where-it-works">Where it works</h3>
+<p>The scripts need to run on the Mac being cleaned, so use the skills from Claude Code on that machine (the terminal, an IDE extension or the desktop app&#x27;s Code tab). In claude.ai chat and Cowork the skill text loads but the scripts cannot reach your Mac&#x27;s file system. Requirements: macOS with Python 3.11 or newer on <code>PATH</code> as <code>python3</code>. No third-party packages. Optional tools (docker, brew, uv, pip3, xcrun, mdls, osascript) are used when present and reported as unverified when not.</p>
+<h3 id="licence">Licence</h3>
+<p>MIT. See <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/LICENSE">LICENSE</a>. Privacy: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/PRIVACY.md">PRIVACY.md</a> (nothing is collected or sent). Source, tests and issues: <a href="https://github.com/basitalisandhu/mac-maintenance-skills">github.com/basitalisandhu/mac-maintenance-skills</a>.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>

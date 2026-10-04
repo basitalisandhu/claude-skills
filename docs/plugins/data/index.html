@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data plugin: 6 skills | Claude Code skills</title>
+<meta name="description" content="Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/data/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="Data plugin: 6 skills | Claude Code skills">
+<meta property="og:description" content="Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/data/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / data</p>
+<h1>Data</h1>
+<p class="lede">Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review.</p>
+<p class="meta">Plugin <code>data</code>, version 0.1.0, 6 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-04T17:07:59Z">2026-10-04</time>.</p>
+<h2 id="install">Install</h2>
+<p>In Claude Code, add the marketplace and install the plugin:</p>
+<pre><code>/plugin marketplace add basitalisandhu/claude-skills
+/plugin install data@claude-skills</code></pre>
+<p>Or copy the skill files into <code>~/.claude/skills/</code> from a clone:</p>
+<pre><code>git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user --only data</code></pre>
+
+<h2 id="skills">Skills</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th><th>Scripts</th></tr></thead><tbody><tr><td><a href="api-contract-review/index.html">api-contract-review</a></td><td>Lint an OpenAPI 3.x document (YAML or JSON) with a bundled script for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies; then review the contract for consistency, versioning and client friendliness.</td><td>yes</td></tr><tr><td><a href="csv-profiler/index.html">csv-profiler</a></td><td>Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules.</td><td>yes</td></tr><tr><td><a href="json-schema-author/index.html">json-schema-author</a></td><td>Write a JSON Schema (draft 2020-12) for an API payload, configuration file or event by inferring a draft from sample documents with a bundled script (types, required fields, nullability, formats, enums, bounds) and then hand-finishing it: tightening constraints, adding descriptions and examples, and deciding additionalProperties and versioning.</td><td>yes</td></tr><tr><td><a href="regex-builder/index.html">regex-builder</a></td><td>Build, explain and test regular expressions against labelled cases with a bundled script that reports which cases match, the captured groups, and warnings for patterns that can backtrack catastrophically, with timing on adversarial inputs.</td><td>yes</td></tr><tr><td><a href="schema-migration-plan/index.html">schema-migration-plan</a></td><td>Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan.</td><td>no</td></tr><tr><td><a href="sql-query-review/index.html">sql-query-review</a></td><td>Review SQL queries, ORM-generated SQL and query plans for correctness and performance: injection, implicit casts, NULL logic, non-sargable predicates, missing indexes, N+1 patterns, unbounded result sets, lock contention and transaction scope, using a fixed checklist and EXPLAIN reading notes for PostgreSQL, MySQL and SQLite.</td><td>no</td></tr></tbody></table>
+<h2 id="readme">Plugin README</h2>
+<p>Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference, regex building with test cases, and OpenAPI 3 contract review.</p>
+<h3 id="install">Install</h3>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/claude-dev-skills
+/plugin install data@claude-dev-skills</code></pre>
+<p>Skills then appear as <code>/data:&lt;skill&gt;</code>. Scripts need Python 3.11 or newer on <code>PATH</code> as <code>python3</code>; they use the standard library only and make no network calls.</p>
+<h3 id="skills">Skills</h3>
+<table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>sql-query-review</code></td><td>why is this query slow, review this SQL</td><td>checklist findings and plan reading with the fix</td></tr><tr><td><code>schema-migration-plan</code></td><td>add, rename, drop or change a column on a live table</td><td>expand, migrate, contract steps with locks and rollback</td></tr><tr><td><code>csv-profiler</code></td><td>what is in this file, load this CSV</td><td><code>csv_profiler.py</code> profile, types, cleaning steps, schema</td></tr><tr><td><code>json-schema-author</code></td><td>validate this JSON, schema from examples</td><td><code>json_schema_infer.py</code> draft, hand-finished schema</td></tr><tr><td><code>regex-builder</code></td><td>write a regex, why does it not match</td><td><code>regex_tester.py</code> case results, backtracking warnings</td></tr><tr><td><code>api-contract-review</code></td><td>review the OpenAPI spec, client generator fails</td><td><code>openapi_lint.py</code> findings, contract review</td></tr></tbody></table>
+<p>Tests for every script live in the repository&#x27;s <code>tests/</code> directory; run <code>python3 -m pytest -q</code> at the repository root.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>
