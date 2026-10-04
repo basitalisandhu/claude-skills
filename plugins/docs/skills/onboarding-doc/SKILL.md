@@ -1,6 +1,6 @@
 ---
 name: onboarding-doc
-description: Write a developer onboarding document for a repository or service that gets a new team member from a clean machine to a merged change: environment setup verified step by step, how the code is organised, how to run and test it, the configuration it needs, the deployment path, who owns what, and the first tasks. Use when a project has no onboarding guide, when the last new joiner struggled, or before a team grows. Not for user-facing documentation (use readme-author) and not for HR onboarding.
+description: "Write a developer onboarding document for a repository or service that gets a new team member from a clean machine to a merged change: environment setup verified step by step, how the code is organised, how to run and test it, the configuration it needs, the deployment path, who owns what, and the first tasks. Use when a project has no onboarding guide, when the last new joiner struggled, or before a team grows. Not for user-facing documentation (use readme-author) and not for HR onboarding."
 license: MIT
 compatibility: Any project. Uses env-diff and test-gap-finder when installed for the configuration and testing sections.
 metadata:

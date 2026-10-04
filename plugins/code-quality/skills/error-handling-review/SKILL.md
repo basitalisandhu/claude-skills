@@ -1,6 +1,6 @@
 ---
 name: error-handling-review
-description: Review how a codebase or change handles failures: swallowed exceptions, missing timeouts and retries, errors without context, leaking internals to users, and inconsistent error types across layers; then propose a consistent policy with code examples. Use when asked to review error handling, when a bug report says "it failed silently", or when designing the error strategy for a service or library. Not for logging configuration alone and not for incident response (use postmortem-writer).
+description: "Review how a codebase or change handles failures: swallowed exceptions, missing timeouts and retries, errors without context, leaking internals to users, and inconsistent error types across layers; then propose a consistent policy with code examples. Use when asked to review error handling, when a bug report says \"it failed silently\", or when designing the error strategy for a service or library. Not for logging configuration alone and not for incident response (use postmortem-writer)."
 license: MIT
 compatibility: Any language. Examples in Python, TypeScript and Go.
 metadata:

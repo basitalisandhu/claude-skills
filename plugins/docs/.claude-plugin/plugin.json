@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "displayName": "Docs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Six skills for writing documentation that stays accurate: README author, ADR writer, changelog keeper, onboarding doc, API docs extracted from docstrings and JSDoc, and a postmortem writer.",
   "author": {
     "name": "Muhammad Basit Ali",

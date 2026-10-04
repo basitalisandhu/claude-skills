@@ -1,7 +1,7 @@
 {
   "name": "agent-security",
   "displayName": "Agent Security",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, and scan with Semgrep. Includes guard hooks for Bash and an optional incident-database MCP server.",
   "author": {
     "name": "Muhammad Basit Ali",

@@ -61,7 +61,7 @@ from _evidence import (  # noqa: E402
 )
 
 SCHEMA = "compliance-evidence-pack/1"
-TOOL = "evidence_pack.py 0.1.0"
+TOOL = "evidence_pack.py 0.1.1"
 SIDECAR = "evidence-sources.json"
 KNOWN_SYSTEMS = {"github", "aws", "m365", "azure", "gcp", "okta", "jira", "hr"}
 FILE_KEYS = {"source_system", "command", "collected_at", "collector", "description"}

@@ -1,6 +1,6 @@
 ---
 name: agent-eval-harness
-description: Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review.
+description: "Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review."
 license: MIT
 compatibility: Python 3.11 or newer for the template. AgentDojo (pip) and model API access only for the real benchmark; the template and its tests make no network calls.
 metadata:
