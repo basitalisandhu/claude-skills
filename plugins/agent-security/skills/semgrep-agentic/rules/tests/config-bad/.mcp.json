@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "plain": {
+      "type": "http",
+      "url": "http://mcp.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer abcdefghijklmnopqrstuvwxyz0123456789"
+      }
+    },
+    "unpinned": {
+      "command": "npx",
+      "args": ["-y", "@scope/some-server"]
+    }
+  }
+}

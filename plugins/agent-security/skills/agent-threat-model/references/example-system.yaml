@@ -1,0 +1,105 @@
+# Complete example in the agent-threat-model format: a support assistant that reads tickets and e-mail,
+# searches a knowledge base, replies to customers on its own and can issue a refund after approval.
+# Validate with: atm validate example-system.yaml    Analyse with: atm analyse example-system.yaml
+system:
+  name: Support assistant
+  description: >-
+    Reads inbound support tickets and customer e-mail, searches the knowledge base, drafts and sends replies on its own,
+    and may issue a refund up to 100 USD after a human approves. It must never read other customers' records or run code.
+  owner: support-platform team
+
+principals:
+  - id: customer
+    kind: human
+    trust: low
+    channels: [tickets, customer-email]
+  - id: support-engineer
+    kind: human
+    trust: high
+    channels: [operator-console]
+
+agents:
+  - id: support-agent
+    model_provider: hosted LLM
+    autonomy: act-with-approval
+    memory: session
+    inputs: [tickets, customer-email, kb-index, operator-console]
+    tools: [read-ticket, search-kb, lookup-customer, send-reply, create-refund]
+    model_pinned: true
+    description: LangGraph agent with a tool node; one instance per worker process.
+
+channels:
+  - id: tickets
+    kind: api
+    trusted: false
+    origin: third-party
+    description: Support tickets written by customers.
+  - id: customer-email
+    kind: email
+    trusted: false
+    origin: third-party
+    description: Anything sent to support@ lands here.
+  - id: kb-index
+    kind: rag
+    trusted: false
+    origin: third-party
+    description: Help articles, some imported from partner sites; re-indexed nightly.
+  - id: operator-console
+    kind: chat
+    trusted: true
+    origin: user
+    description: Internal console used by support engineers.
+
+tools:
+  - id: read-ticket
+    kind: read
+    target: ticketing
+    scope: read one ticket and its thread
+    auth: short-lived
+    approval: none
+  - id: search-kb
+    kind: read
+    target: kb-store
+    scope: vector search over help articles
+    auth: short-lived
+    approval: none
+  - id: lookup-customer
+    kind: read
+    target: crm
+    scope: the ticket's customer record only
+    auth: brokered
+    approval: none
+  - id: send-reply
+    kind: messaging
+    target: smtp relay
+    scope: reply on the ticket's thread to the ticket's customer
+    auth: brokered
+    approval: none
+  - id: create-refund
+    kind: payment
+    target: billing
+    scope: refund up to 100 USD to the ticket's customer
+    auth: brokered
+    approval: always
+
+data_stores:
+  - id: ticketing
+    sensitivity: confidential
+  - id: kb-store
+    sensitivity: internal
+  - id: crm
+    sensitivity: regulated
+    description: Customer records with personal data.
+  - id: billing
+    sensitivity: regulated
+
+controls:
+  - brokered-credentials
+  - secrets-out-of-context
+  - approval-gates
+  - audit-log
+  - kill-switch
+  - rate-limiting
+  - least-privilege-tool-scopes
+  - input-provenance-tagging
+  - per-user-authorisation

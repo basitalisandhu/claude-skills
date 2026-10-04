@@ -1,0 +1,155 @@
+rules:
+  - id: agentic.js.model-output-to-exec
+    message: >-
+      Model output reaches eval/new Function/child_process. LLM text is untrusted input. Execute generated code only
+      in a sandbox without credentials, or parse the narrow structure you expect instead of executing it.
+    severity: ERROR
+    languages: [javascript, typescript]
+    mode: taint
+    metadata:
+      upstream: [llm-output-to-child-process, llm-output-to-eval-function]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-94: Improper Control of Generation of Code"
+      owasp-agentic: "ASI05 Unexpected code execution"
+      confidence: MEDIUM
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: await $CLIENT.chat.completions.create(...)
+              - pattern: await $CLIENT.messages.create(...)
+              - pattern: await $CLIENT.responses.create(...)
+              - pattern: await generateText(...)
+              - pattern: await generateObject(...)
+              - pattern: await $MODEL.generateContent(...)
+              - pattern: await $MODEL.invoke(...)
+              - pattern: await $AGENT.run(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: eval($X)
+              - pattern: new Function(..., $X)
+              - pattern: $CP.exec($X, ...)
+              - pattern: $CP.execSync($X, ...)
+              - pattern: exec($X, ...)
+              - pattern: execSync($X, ...)
+              - pattern: $CP.spawn($X, ...)
+              - pattern: spawn($X, ...)
+              - pattern: vm.runInThisContext($X, ...)
+              - pattern: vm.runInNewContext($X, ...)
+          - focus-metavariable: $X
+
+  - id: agentic.js.exec-with-template-literal
+    message: >-
+      child_process.exec with a template literal or concatenated string. In an agent, the interpolated value can be a
+      tool argument chosen by the model. Use execFile/spawn with an argument array and no shell.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      upstream: [mcp-tool-param-to-shell]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-78: OS Command Injection"
+      owasp-agentic: "ASI05 Unexpected code execution"
+      confidence: HIGH
+    pattern-either:
+      - pattern: $CP.exec(`...`, ...)
+      - pattern: $CP.execSync(`...`, ...)
+      - pattern: exec(`...`, ...)
+      - pattern: execSync(`...`, ...)
+      - pattern: $CP.exec($A + $B, ...)
+      - pattern: $CP.execSync($A + $B, ...)
+      - pattern: exec($A + $B, ...)
+      - pattern: execSync($A + $B, ...)
+
+  - id: agentic.js.mcp-server-binds-all-interfaces
+    message: >-
+      The server listens on 0.0.0.0 (every interface). An MCP or tool server reachable from the network needs
+      authentication, origin validation (DNS rebinding) and TLS. Bind 127.0.0.1 by default.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      upstream: [mcp-http-transport-without-auth]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-1327: Binding to an Unrestricted IP Address"
+      owasp-agentic: "ASI03 Identity and privilege abuse"
+      confidence: HIGH
+    pattern-either:
+      - pattern: $APP.listen($PORT, "0.0.0.0", ...)
+      - pattern: |
+          $APP.listen({..., host: "0.0.0.0", ...}, ...)
+      - pattern: |
+          serve({..., hostname: "0.0.0.0", ...}, ...)
+      - pattern: |
+          Bun.serve({..., hostname: "0.0.0.0", ...})
+
+  - id: agentic.js.user-input-in-system-prompt
+    message: >-
+      A system prompt is built from a template literal or concatenation. Untrusted content in it (user text, retrieved
+      documents, tool output) becomes a system-level instruction. Keep the system prompt static and pass variable
+      content as a delimited user or tool message.
+    severity: WARNING
+    languages: [javascript, typescript]
+    metadata:
+      upstream: [user-input-in-system-prompt]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-74: Improper Neutralization of Special Elements"
+      owasp-agentic: "ASI01 Agent goal hijack"
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: |
+          { role: "system", content: `...` }
+      - pattern: |
+          { role: "system", content: $A + $B }
+      - pattern: |
+          $CLIENT.messages.create({..., system: `...`, ...})
+      - pattern: |
+          $CLIENT.messages.create({..., system: $A + $B, ...})
+      - pattern: |
+          generateText({..., system: `...`, ...})
+      - pattern: |
+          streamText({..., system: `...`, ...})
+      - pattern: new SystemMessage(`...`)
+
+  - id: agentic.js.tool-fetches-model-controlled-url
+    message: >-
+      A tool handler fetches a URL from its arguments, which the model chooses. Under prompt injection this is SSRF:
+      internal services, cloud metadata (169.254.169.254) and exfiltration through the query string. Allowlist hosts,
+      block private ranges, and disable redirects.
+    severity: WARNING
+    languages: [javascript, typescript]
+    mode: taint
+    metadata:
+      upstream: [llm-output-to-fetch]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp-agentic: "ASI02 Tool misuse"
+      confidence: MEDIUM
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  $SERVER.registerTool($NAME, {...}, async ({ ..., $URL, ... }) => { ... })
+              - pattern-inside: |
+                  $SERVER.tool($NAME, ..., async ({ ..., $URL, ... }) => { ... })
+              - pattern-inside: |
+                  tool({..., execute: async ({ ..., $URL, ... }) => { ... }, ...})
+          - focus-metavariable: $URL
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: fetch($X, ...)
+              - pattern: axios.$M($X, ...)
+              - pattern: axios($X, ...)
+              - pattern: got($X, ...)
+              - pattern: $HTTP.get($X, ...)
+              - pattern: $HTTP.request($X, ...)
+          - focus-metavariable: $X
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: validateUrl(...)
+          - pattern: isAllowedUrl(...)
+          - pattern: assertAllowedUrl(...)

@@ -1,0 +1,14 @@
+{
+  "name": "devops",
+  "displayName": "DevOps",
+  "version": "0.1.0",
+  "description": "Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.",
+  "author": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+  "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+  "license": "MIT",
+  "keywords": ["docker", "github-actions", "kubernetes", "terraform", "cron", "dotenv", "release-notes", "semver"]
+}

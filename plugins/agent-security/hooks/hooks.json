@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block_secret_exposure.py"],
+            "timeout": 10,
+            "statusMessage": "agent-security: checking command for secret exposure"
+          },
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["${CLAUDE_PLUGIN_ROOT}/hooks/scripts/warn_insecure_fetch.py"],
+            "timeout": 10,
+            "statusMessage": "agent-security: checking command for insecure fetches"
+          }
+        ]
+      }
+    ]
+  }
+}

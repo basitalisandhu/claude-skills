@@ -1,0 +1,14 @@
+{
+  "name": "data",
+  "displayName": "Data",
+  "version": "0.1.0",
+  "description": "Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review.",
+  "author": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+  "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+  "license": "MIT",
+  "keywords": ["sql", "migrations", "csv", "json-schema", "regex", "openapi"]
+}

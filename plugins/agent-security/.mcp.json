@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agent-incidents": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/incidents-server/dist/index.js"],
+      "env": {
+        "AGENT_INCIDENTS_DATA": "${CLAUDE_PLUGIN_ROOT}/data/incidents.json"
+      }
+    }
+  }
+}

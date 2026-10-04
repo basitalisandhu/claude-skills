@@ -1,0 +1,61 @@
+{
+  "name": "@basitalisandhu/agent-incidents-mcp",
+  "version": "0.1.0",
+  "mcpName": "io.github.basitalisandhu/agent-incidents",
+  "private": false,
+  "description": "Read-only MCP server (stdio) over the AI agent incident dataset bundled with the agent-security plugin.",
+  "license": "MIT",
+  "author": "Muhammad Basit Ali",
+  "homepage": "https://github.com/basitalisandhu/agent-security-skills/tree/main/plugins/agent-security/mcp/incidents-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basitalisandhu/agent-security-skills.git",
+    "directory": "plugins/agent-security/mcp/incidents-server"
+  },
+  "bugs": {
+    "url": "https://github.com/basitalisandhu/agent-security-skills/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "claude-code",
+    "ai-security",
+    "agent-security",
+    "incidents"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "agent-incidents-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "README.md",
+    "server.json"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "pretest": "npm run build",
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "start": "node dist/index.js",
+    "prepack": "npm run build && node scripts/bundle-data.mjs",
+    "postpack": "node scripts/bundle-data.mjs --clean"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  }
+}

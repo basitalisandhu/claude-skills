@@ -1,0 +1,22 @@
+# Example spec for agent_access.py plan. Replace the account id, operator names, roles and task targets with your own.
+agent_name: claude-code
+operators: [jane.doe, sam.lee]
+accounts: ["123456789012"]
+regions: [ap-southeast-2]
+session_minutes: 45
+trust:
+  permission_set: AgentOperators
+admin_roles: [OrganizationAccountAccessRole, BreakGlassAdmin]
+tasks:
+  - type: read-only-inventory
+    services: [ec2, s3, lambda, iam]
+  - type: deploy-stack
+    stack_name: example-app
+    execution_role_name: example-app-cfn-exec
+  - type: invoke-lambda
+    function_name: example-report
+  - type: read-logs
+    log_group_prefix: /aws/lambda/example-
+  - type: read-s3-prefix
+    bucket: example-artifacts
+    prefix: builds/

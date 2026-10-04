@@ -1,0 +1,207 @@
+rules:
+  - id: agentic.python.model-output-to-exec
+    message: >-
+      Model output reaches eval/exec/os.system/subprocess(shell=True). Text produced by an LLM is untrusted
+      input (prompt injection, hallucinated commands). Run generated code only in a sandbox with no credentials,
+      or replace exec with a parser for the narrow format you expect.
+    severity: ERROR
+    languages: [python]
+    mode: taint
+    metadata:
+      upstream: [llm-output-to-exec-eval, llm-output-to-os-system, llm-output-to-subprocess]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      subcategory: [vuln]
+      cwe: "CWE-94: Improper Control of Generation of Code"
+      owasp-agentic: "ASI05 Unexpected code execution"
+      references:
+        - https://github.com/basitalisandhu/ai-agent-incidents
+        - https://github.com/basitalisandhu/agentic-semgrep-rules
+      confidence: MEDIUM
+      likelihood: HIGH
+      impact: HIGH
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: $CLIENT.chat.completions.create(...)
+              - pattern: $CLIENT.messages.create(...)
+              - pattern: $CLIENT.responses.create(...)
+              - pattern: $MODEL.generate_content(...)
+              - pattern: $LLM.invoke(...)
+              - pattern: $LLM.predict(...)
+              - pattern: $LLM.ainvoke(...)
+              - pattern: Runner.run_sync(...)
+              - pattern: Runner.run(...)
+              - pattern: $CREW.kickoff(...)
+              - pattern: ollama.chat(...)
+              - pattern: ollama.generate(...)
+              - pattern: litellm.completion(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: eval($X)
+              - pattern: exec($X)
+              - pattern: os.system($X)
+              - pattern: os.popen($X)
+              - pattern: subprocess.$F($X, ..., shell=True, ...)
+              - pattern: subprocess.$F($X, ...)
+          - focus-metavariable: $X
+
+  - id: agentic.python.shell-true-with-interpolation
+    message: >-
+      subprocess with shell=True and an interpolated command string. In an agent, any part of that string can
+      come from a tool argument the model chose. Pass an argument list without shell=True, or validate against an allowlist.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      upstream: [agent-tool-param-to-shell]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-78: OS Command Injection"
+      owasp-agentic: "ASI05 Unexpected code execution"
+      confidence: HIGH
+    pattern-either:
+      - pattern: subprocess.$F(f"...", ..., shell=True, ...)
+      - pattern: subprocess.$F("..." % ..., ..., shell=True, ...)
+      - pattern: subprocess.$F("...".format(...), ..., shell=True, ...)
+      - pattern: subprocess.$F($A + $B, ..., shell=True, ...)
+      - pattern: os.system(f"...")
+      - pattern: os.system("..." % ...)
+      - pattern: os.system("...".format(...))
+      - pattern: os.system($A + $B)
+
+  - id: agentic.python.user-input-in-system-prompt
+    message: >-
+      A system prompt is built by interpolating a variable. Anything untrusted in that variable (user text,
+      retrieved documents, tool output) becomes a system-level instruction. Keep the system prompt static and pass
+      variable content in a user or tool message, clearly delimited.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      upstream: [user-input-in-system-prompt]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-74: Improper Neutralization of Special Elements"
+      owasp-agentic: "ASI01 Agent goal hijack"
+      confidence: MEDIUM
+    pattern-either:
+      - pattern: |
+          {"role": "system", "content": f"..."}
+      - pattern: |
+          {"role": "system", "content": "..." % ...}
+      - pattern: |
+          {"role": "system", "content": "...".format(...)}
+      - pattern: |
+          {"role": "system", "content": $A + $B}
+      - pattern: $CLIENT.messages.create(..., system=f"...", ...)
+      - pattern: $CLIENT.messages.create(..., system="..." % ..., ...)
+      - pattern: $CLIENT.messages.create(..., system="...".format(...), ...)
+      - pattern: $CLIENT.messages.create(..., system=$A + $B, ...)
+      - pattern: SystemMessage(content=f"...")
+      - pattern: SystemMessage(f"...")
+
+  - id: agentic.python.tool-fetches-model-controlled-url
+    message: >-
+      A tool function fetches a URL taken from its parameters, which the model chooses. This is server-side request
+      forgery under prompt injection (internal services, cloud metadata at 169.254.169.254, exfiltration by query string).
+      Resolve the host, allowlist domains, block private ranges, and disable redirects.
+    severity: WARNING
+    languages: [python]
+    mode: taint
+    metadata:
+      upstream: [llm-output-to-http-request]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp-agentic: "ASI02 Tool misuse"
+      confidence: MEDIUM
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern-inside: |
+                  @tool
+                  def $FUNC(..., $URL, ...):
+                    ...
+              - pattern-inside: |
+                  @tool(...)
+                  def $FUNC(..., $URL, ...):
+                    ...
+              - pattern-inside: |
+                  @$MCP.tool(...)
+                  def $FUNC(..., $URL, ...):
+                    ...
+              - pattern-inside: |
+                  @$MCP.tool
+                  def $FUNC(..., $URL, ...):
+                    ...
+              - pattern-inside: |
+                  @function_tool
+                  def $FUNC(..., $URL, ...):
+                    ...
+              - pattern-inside: |
+                  @function_tool(...)
+                  def $FUNC(..., $URL, ...):
+                    ...
+          - focus-metavariable: $URL
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: requests.$M($X, ...)
+              - pattern: httpx.$M($X, ...)
+              - pattern: $CLIENT.get($X, ...)
+              - pattern: $CLIENT.post($X, ...)
+              - pattern: urllib.request.urlopen($X, ...)
+              - pattern: urlopen($X, ...)
+              - pattern: aiohttp.ClientSession().get($X, ...)
+          - focus-metavariable: $X
+    pattern-sanitizers:
+      - pattern-either:
+          - pattern: validate_url(...)
+          - pattern: is_allowed_url(...)
+          - pattern: $X.hostname in $ALLOWLIST
+
+  - id: agentic.python.mcp-server-binds-all-interfaces
+    message: >-
+      The server binds 0.0.0.0 (every interface). An MCP or agent tool server reachable from the network needs
+      authentication, origin checks and TLS; by default bind 127.0.0.1 and put a reverse proxy in front for remote access.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      upstream: [fastmcp-bind-all-interfaces, fastmcp-http-transport-without-auth]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-1327: Binding to an Unrestricted IP Address"
+      owasp-agentic: "ASI03 Identity and privilege abuse"
+      confidence: HIGH
+    pattern-either:
+      - pattern: $APP.run(..., host="0.0.0.0", ...)
+      - pattern: uvicorn.run(..., host="0.0.0.0", ...)
+      - pattern: FastMCP(..., host="0.0.0.0", ...)
+      - pattern: $MCP.run(..., host="0.0.0.0", ...)
+      - pattern: $MCP.settings.host = "0.0.0.0"
+      - pattern: $S.bind(("0.0.0.0", ...))
+      - pattern: $S.bind(("", ...))
+      - pattern: HTTPServer(("0.0.0.0", ...), ...)
+      - pattern: HTTPServer(("", ...), ...)
+
+  - id: agentic.python.pickle-model-load
+    message: >-
+      Loading a model or artefact with pickle/torch.load deserialises arbitrary code. Malicious models on public hubs
+      are a documented supply-chain vector. Use safetensors, weights_only=True, or verify the artefact signature first.
+    severity: WARNING
+    languages: [python]
+    metadata:
+      upstream: [pickle-load-model-file, torch-load-without-weights-only]
+      upstream_pack: https://github.com/basitalisandhu/agentic-semgrep-rules
+      category: security
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp-agentic: "ASI04 Supply chain and dependency attacks"
+      confidence: MEDIUM
+    patterns:
+      - pattern-either:
+          - pattern: pickle.load(...)
+          - pattern: pickle.loads(...)
+          - pattern: joblib.load(...)
+          - pattern: torch.load($X)
+          - pattern: torch.load($X, ..., weights_only=False, ...)
+      - pattern-not: torch.load($X, ..., weights_only=True, ...)

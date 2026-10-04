@@ -1,0 +1,23 @@
+{
+  "collector": "jane.doe@example.com",
+  "collected_at": "2026-10-01T09:30:00Z",
+  "scope": "GitHub repository example-org/payments-api (branch main), AWS account 123456789012",
+  "period": {"start": "2026-07-01", "end": "2026-09-30"},
+  "notes": "Exports taken with read-only credentials. Commands copied from the terminal history.",
+  "files": {
+    "github/branch-protection.json": {
+      "source_system": "github",
+      "command": "gh api repos/example-org/payments-api/branches/main/protection"
+    },
+    "github/pulls-merged.json": {
+      "source_system": "github",
+      "command": "gh pr list --repo example-org/payments-api --state merged --base main --limit 1000 --json number,author,mergedAt,mergedBy,reviewDecision,reviews",
+      "collected_at": "2026-10-01T09:35:00Z"
+    },
+    "aws/cloudtrail-trails.json": {
+      "source_system": "aws",
+      "command": "aws cloudtrail describe-trails --output json",
+      "description": "All trails visible from the audited account"
+    }
+  }
+}

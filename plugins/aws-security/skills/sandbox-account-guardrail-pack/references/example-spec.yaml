@@ -1,0 +1,34 @@
+# Example spec for sandbox_pack.py. Replace the account ids, role names, contacts and limits with your own.
+sandbox_name: sandbox
+allowed_regions: [ap-southeast-2, us-east-1]
+protected_roles: [OrganizationAccountAccessRole, SandboxAdmin]
+log_archive_account: "111122223333"
+owner_tag_key: owner
+ttl_tag_key: expires-on
+default_ttl_days: 14
+max_ttl_days: 30
+grace_days: 3
+sweep_schedule: "cron(0 18 * * ? *)"
+sweep_timezone: Australia/Sydney
+contacts:
+  owner: platform-team@example.com
+  channel: "#sandbox-help"
+budget:
+  name_prefix: sandbox
+  budget_account: "123456789012"
+  monthly_limit: 200
+  thresholds: [80, 100]
+  forecast_thresholds: [100]
+  notify_emails: [platform-team@example.com]
+  anomaly:
+    monitor: services
+    threshold_absolute: 25
+spend:
+  deny_instance_types: ["p*", "g*", "inf*", "trn*", "dl*", "x*", "u-*", "*.metal*", "*.24xlarge", "*.32xlarge", "*.48xlarge"]
+  max_volume_iops: 3000
+  deny_volume_types: [io1, io2]
+  sagemaker_instance_types: ["ml.p*", "ml.g*", "ml.inf*", "ml.trn*"]
+  deny_bedrock_customization: true
+  deny_services: [redshift, redshift-serverless]
+  deny_commitments: true
+  protect_budgets: true

@@ -1,0 +1,14 @@
+# Example spec for scp_builder.py. Replace the account id and role names with your own.
+allowed_regions:
+  - ap-southeast-2
+  - us-east-1
+protected_roles:
+  - OrganizationAccountAccessRole
+  - BreakGlassAdmin
+deny_leave_organization: true
+deny_disable_security_services: true
+deny_root_user: true
+deny_iam_users_outside:
+  - "111122223333"
+require_imdsv2: true
+deny_public_s3_acls: true

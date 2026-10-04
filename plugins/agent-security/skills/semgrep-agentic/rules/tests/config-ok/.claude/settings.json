@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(npm test)",
+      "Read"
+    ]
+  }
+}

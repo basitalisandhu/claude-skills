@@ -1,0 +1,3840 @@
+[
+ {
+  "id": "001",
+  "date": "2023-02",
+  "name": "Bing Chat \"Sydney\" system prompt leak",
+  "type": "incident",
+  "lens": "target",
+  "vector": "extraction",
+  "channel_in": "chat message",
+  "authority": "read-only",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theverge.com/23599441/microsoft-bing-ai-sydney-secret-rules"
+   }
+  ],
+  "summary": "Prompt injection exposed hidden rules and codename; Microsoft confirmed Sydney was an internal codename.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM01",
+    "LLM07"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.000",
+    "AML.T0056"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Bing Chat"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "system-prompt-leak",
+   "chatbot",
+   "direct-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "002",
+  "date": "2023-03",
+  "name": "ChatGPT Redis client bug exposes chat titles and billing data",
+  "type": "incident",
+  "lens": "target",
+  "vector": "exposure/misconfig",
+  "channel_in": "none",
+  "authority": "database",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://openai.com/index/march-20-chatgpt-outage/"
+   }
+  ],
+  "summary": "Open-source library bug exposed payment details of 1.2% of Plus subscribers; service paused.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM02"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT"
+   ],
+   "frameworks": [
+    "redis-py"
+   ]
+  },
+  "tags": [
+   "data-exposure",
+   "library-bug",
+   "outage"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "003",
+  "date": "2023-04",
+  "name": "LangChain LLMMathChain prompt injection to code execution",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "direct-injection",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2023-29374"
+  ],
+  "sources": [
+   {
+    "url": "https://github.com/langchain-ai/langchain/issues/1026",
+    "title": "Security concerns (langchain-ai/langchain issue #1026)",
+    "publisher": "GitHub",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "LLM-generated code reached Python exec in LLMMathChain; affects LangChain through 0.0.131.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM05"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.000",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "LangChain"
+   ],
+   "products": [
+    "LangChain"
+   ],
+   "frameworks": [
+    "LangChain"
+   ]
+  },
+  "tags": [
+   "rce",
+   "generated-code-execution",
+   "framework"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "004",
+  "date": "2023-04",
+  "name": "Samsung staff paste confidential data into ChatGPT",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "exposure/misconfig",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://techcrunch.com/2023/05/02/samsung-bans-use-of-generative-ai-tools-like-chatgpt-after-april-internal-data-leak/"
+   }
+  ],
+  "summary": "Internal data pasted into public chatbot; Samsung then restricted generative AI tools.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM02"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Samsung",
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "data-leak",
+   "shadow-ai",
+   "acceptable-use"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "005",
+  "date": "2023-05",
+  "name": "ChatGPT plugin cross-plugin request forgery",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2023/chatgpt-cross-plugin-request-forgery-and-prompt-injection./"
+   }
+  ],
+  "summary": "Web injection abused Zapier plugin access; first exploitable cross-plugin request forgery; fixed.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0053",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI",
+    "Zapier"
+   ],
+   "products": [
+    "ChatGPT plugins"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "plugin",
+   "cross-plugin-request-forgery",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "006",
+  "date": "2023-11",
+  "name": "ChatGPT and API outages attributed to DDoS",
+  "type": "incident",
+  "lens": "target",
+  "vector": "availability",
+  "channel_in": "none",
+  "authority": "none",
+  "channel_out": "service-disruption",
+  "adversarial": true,
+  "outcome": "service-disruption",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://gizmodo.com/chatgpt-blames-outages-ddos-hackers-gpt-rollout-stalled-1851006900"
+   }
+  ],
+  "summary": "OpenAI cited DDoS-like traffic; Anonymous Sudan claimed credit, unverified.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM10"
+   ],
+   "mitre_atlas": [
+    "AML.T0029"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT",
+    "OpenAI API"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "ddos",
+   "availability"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "007",
+  "date": "2023-11",
+  "name": "ChatGPT training-data extraction by repeated-word divergence",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "extraction",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://not-just-memorization.github.io/extracting-training-data-from-chatgpt.html"
+   }
+  ],
+  "summary": "Megabytes of memorized training data extracted from production ChatGPT; OpenAI patched the exploit.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0057"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "training-data-extraction",
+   "memorization"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "008",
+  "date": "2023-11",
+  "name": "Google Bard exfiltration via Extensions and image rendering",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2023/google-bard-data-exfiltration/"
+   }
+  ],
+  "summary": "Reported 19 Sep 2023; shared-document injection leaked chat history; Google confirmed fix.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Google"
+   ],
+   "products": [
+    "Bard",
+    "Bard Extensions"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "markdown-image-exfiltration",
+   "shared-document",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "009",
+  "date": "2023-12",
+  "name": "1,500+ Hugging Face API tokens exposed in public repos",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "nhi-secrets",
+  "channel_in": "none",
+  "authority": "write-repo",
+  "channel_out": "file publish",
+  "adversarial": false,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.lasso.security/blog/1500-huggingface-api-tokens-were-exposed-leaving-millions-of-meta-llama-bloom-and-pythia-users-for-supply-chain-attacks"
+   }
+  ],
+  "summary": "Tokens spanned 723 organisations; researchers showed write access to Llama-2, Bloom, Pythia repos.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0055"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Hugging Face"
+   ],
+   "products": [
+    "Hugging Face Hub"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "exposed-secrets",
+   "api-tokens",
+   "model-hub"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "010",
+  "date": "2023-12",
+  "name": "Chevrolet of Watsonville chatbot agrees to $1 Tahoe",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "direct-injection",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theautopian.com/chevy-dealers-ai-chatbot-allegedly-recommended-fords-gave-free-access-to-chatgpt/"
+   }
+  ],
+  "summary": "User told bot to agree with anything; dealer dropped the chatbot.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM01"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.000"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Chevrolet of Watsonville"
+   ],
+   "products": [
+    "dealership chatbot"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "chatbot",
+   "customer-service",
+   "direct-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "011",
+  "date": "2023-12",
+  "name": "Writer.com indirect injection exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://promptarmor.substack.com/p/data-exfiltration-from-writercom"
+   }
+  ],
+  "summary": "Hidden text on summarised page leaked documents via image URL; vendor first declined.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Writer"
+   ],
+   "products": [
+    "Writer.com"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "markdown-image-exfiltration",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "012",
+  "date": "2024-01",
+  "name": "DPD chatbot swears and disparages company",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "jailbreak",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theguardian.com/technology/2024/jan/20/dpd-ai-chatbot-swears-calls-itself-useless-and-criticises-firm"
+   }
+  ],
+  "summary": "Customer prompted bot to swear and write critical poem; DPD updated the system.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM01"
+   ],
+   "mitre_atlas": [
+    "AML.T0054"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "DPD"
+   ],
+   "products": [
+    "DPD customer service chatbot"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "chatbot",
+   "jailbreak",
+   "reputational"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "013",
+  "date": "2024-02",
+  "name": "Air Canada chatbot misstates bereavement fare policy",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "excessive-agency",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "financial-loss",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theguardian.com/world/2024/feb/16/air-canada-chatbot-lawsuit"
+   }
+  ],
+  "summary": "Tribunal held airline liable for chatbot's invented refund policy.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM09"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Air Canada"
+   ],
+   "products": [
+    "Air Canada chatbot"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "hallucination",
+   "liability",
+   "tribunal-ruling"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "014",
+  "date": "2024-02",
+  "name": "Arup deepfake video-call CFO fraud",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "social-engineering",
+  "channel_in": "chat message",
+  "authority": "payments",
+  "channel_out": "financial transfer",
+  "adversarial": true,
+  "outcome": "financial-loss",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.cnn.com/2024/05/16/tech/arup-deepfake-scam-loss-hong-kong-intl-hnk"
+   }
+  ],
+  "summary": "Employee paid about US$25M after video call with deepfaked CFO and colleagues.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0052.001",
+    "AML.T0088",
+    "AML.T0048.000"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Arup"
+   ],
+   "products": [],
+   "frameworks": []
+  },
+  "tags": [
+   "deepfake",
+   "business-email-compromise",
+   "fraud",
+   "video-call"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "015",
+  "date": "2024-02",
+  "name": "Malicious pickle models on Hugging Face",
+  "type": "incident",
+  "lens": "target",
+  "vector": "supply-chain",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://jfrog.com/blog/data-scientists-targeted-by-malicious-hugging-face-ml-models-with-silent-backdoor/"
+   }
+  ],
+  "summary": "Malicious models flagged on Hub; baller423 PyTorch model opened reverse shell on load.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0010.003",
+    "AML.T0058",
+    "AML.T0011.000",
+    "AML.T0072"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Hugging Face"
+   ],
+   "products": [
+    "Hugging Face Hub"
+   ],
+   "frameworks": [
+    "PyTorch"
+   ]
+  },
+  "tags": [
+   "malicious-model",
+   "pickle-deserialization",
+   "reverse-shell"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "016",
+  "date": "2024-02",
+  "name": "Microsoft and OpenAI report on state actors using LLMs",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "social-engineering",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.microsoft.com/en-us/security/blog/2024/02/14/staying-ahead-of-threat-actors-in-the-age-of-ai/",
+    "title": "Staying ahead of threat actors in the age of AI",
+    "publisher": "Microsoft Security Blog",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Five state-linked groups used LLMs for research, scripting and phishing; accounts disabled.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002",
+    "AML.T0052.000"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft",
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "state-actor",
+   "llm-misuse"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "017",
+  "date": "2024-03",
+  "name": "huggingface-cli hallucinated PyPI package registered (slopsquatting PoC)",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "generated-code",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.lasso.security/blog/ai-package-hallucinations"
+   }
+  ],
+  "summary": "Empty package drew 30k+ downloads; Alibaba repo README told users to install it.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM03",
+    "LLM09"
+   ],
+   "mitre_atlas": [
+    "AML.T0062",
+    "AML.T0060"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "PyPI"
+   ],
+   "products": [
+    "huggingface-cli (hallucinated PyPI package)"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "slopsquatting",
+   "package-hallucination",
+   "pypi"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "018",
+  "date": "2024-05",
+  "name": "LLMjacking: stolen cloud credentials used to invoke hosted LLMs",
+  "type": "incident",
+  "lens": "target",
+  "vector": "nhi-secrets",
+  "channel_in": "none",
+  "authority": "cloud-creds",
+  "channel_out": "api-abuse",
+  "adversarial": true,
+  "outcome": "financial-loss",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://sysdig.com/blog/llmjacking-stolen-cloud-credentials-used-in-new-ai-attack/"
+   }
+  ],
+  "summary": "Laravel-stolen keys probed ten LLM services; victim cost up to $46k daily.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM10"
+   ],
+   "mitre_atlas": [
+    "AML.T0012",
+    "AML.T0040"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Amazon Web Services"
+   ],
+   "products": [
+    "Amazon Bedrock"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "llmjacking",
+   "stolen-credentials",
+   "cloud"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "019",
+  "date": "2024-05",
+  "name": "Vanna.AI prompt injection to RCE",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "direct-injection",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2024-5565"
+  ],
+  "sources": [
+   {
+    "url": "https://research.jfrog.com/vulnerabilities/vanna-prompt-injection-rce-jfsa-2024-001034449/"
+   }
+  ],
+  "summary": "ask API with visualize runs LLM-generated Python; injection gives RCE.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM05"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.000",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Vanna.AI"
+   ],
+   "products": [
+    "Vanna"
+   ],
+   "frameworks": [
+    "Vanna"
+   ]
+  },
+  "tags": [
+   "rce",
+   "generated-code-execution",
+   "text-to-sql"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "020",
+  "date": "2024-06",
+  "name": "Ollama \"Probllama\" path traversal RCE",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "none",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2024-37032"
+  ],
+  "sources": [
+   {
+    "url": "https://www.wiz.io/blog/probllama-ollama-vulnerability-cve-2024-37032"
+   }
+  ],
+  "summary": "Digest path traversal gave file write and RCE on Ollama servers; fixed in 0.1.34.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0049"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Ollama"
+   ],
+   "products": [
+    "Ollama"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "path-traversal",
+   "rce",
+   "inference-server"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "021",
+  "date": "2024-08",
+  "name": "Copilot Studio SSRF protection bypass",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "none",
+  "authority": "cloud-creds",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "information-disclosure",
+  "cve": [
+   "CVE-2024-38206"
+  ],
+  "sources": [
+   {
+    "url": "https://www.tenable.com/blog/ssrfing-the-web-with-the-help-of-copilot-studio"
+   }
+  ],
+  "summary": "HTTP action SSRF bypass reached Azure metadata service; cross-tenant exposure possible.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0049"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Copilot Studio"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "ssrf",
+   "cloud-metadata",
+   "cross-tenant"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "022",
+  "date": "2024-08",
+  "name": "Slack AI private-channel data exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "retrieval-memory",
+  "channel_in": "chat message",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://promptarmor.substack.com/p/data-exfiltration-from-slack-ai-via"
+   }
+  ],
+  "summary": "Public-channel message retrieved by Slack AI; poisoned link leaked private channel content.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI06"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM08"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0070",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Salesforce"
+   ],
+   "products": [
+    "Slack AI"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "rag",
+   "markdown-link-exfiltration",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "023",
+  "date": "2024-09",
+  "name": "ChatGPT macOS app SpAIware persistent memory exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "retrieval-memory",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2024/chatgpt-macos-app-persistent-data-exfiltration/"
+   }
+  ],
+  "summary": "Injected memory leaked all later chats via image URLs; OpenAI fixed macOS app.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI06"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0080.000",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT macOS app"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "memory-poisoning",
+   "persistence",
+   "markdown-image-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "024",
+  "date": "2024-10",
+  "name": "Claude Computer Use \"ZombAIs\" command-and-control",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2024/claude-computer-use-c2-the-zombais-are-coming/"
+   }
+  ],
+  "summary": "Web page text made Computer Use download and run attacker binary; beta product.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0100",
+    "AML.T0050",
+    "AML.T0108"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Computer Use (beta)"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "computer-use-agent",
+   "command-and-control",
+   "malware-download"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "025",
+  "date": "2025-01",
+  "name": "DeepSeek publicly exposed ClickHouse database",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exposure/misconfig",
+  "channel_in": "none",
+  "authority": "database",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.wiz.io/blog/wiz-research-uncovers-exposed-deepseek-database-leak"
+   }
+  ],
+  "summary": "Open database with chat history, API secrets and logs; secured after Wiz notice.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM02"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "DeepSeek"
+   ],
+   "products": [
+    "DeepSeek"
+   ],
+   "frameworks": [
+    "ClickHouse"
+   ]
+  },
+  "tags": [
+   "exposed-database",
+   "misconfiguration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "026",
+  "date": "2025-02",
+  "name": "ChatGPT Operator prompt-injection data theft",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "repo issue/pr",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2025/chatgpt-operator-prompt-injection-exploits/"
+   }
+  ],
+  "summary": "GitHub issue steered Operator to copy private Hacker News email into attacker page.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "Operator"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "browser-agent",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "027",
+  "date": "2025-02",
+  "name": "Storm-2139 resells stolen Azure OpenAI access for illicit content",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "nhi-secrets",
+  "channel_in": "none",
+  "authority": "cloud-creds",
+  "channel_out": "api-abuse",
+  "adversarial": true,
+  "outcome": "fraud",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://blogs.microsoft.com/on-the-issues/2025/02/27/disrupting-cybercrime-abusing-gen-ai/"
+   }
+  ],
+  "summary": "Scraped customer credentials plus guardrail-bypass tool; Microsoft sued four named defendants.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM10"
+   ],
+   "mitre_atlas": [
+    "AML.T0012",
+    "AML.T0040",
+    "AML.T0054"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Azure OpenAI Service"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "stolen-credentials",
+   "hacking-as-a-service",
+   "guardrail-bypass",
+   "threat-report"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "028",
+  "date": "2025-03",
+  "name": "Rules File Backdoor in Copilot and Cursor",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "poisoning",
+  "channel_in": "rules file",
+  "authority": "write-repo",
+  "channel_out": "file publish",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents"
+   }
+  ],
+  "summary": "Hidden Unicode in rules files steers assistants to emit malicious code; vendors cited user responsibility.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI06",
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM01"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0081"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "GitHub",
+    "Cursor"
+   ],
+   "products": [
+    "GitHub Copilot",
+    "Cursor"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "rules-file",
+   "hidden-unicode",
+   "coding-assistant"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "029",
+  "date": "2025-04",
+  "name": "MCP tool poisoning attacks",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "poisoning",
+  "channel_in": "tool description",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks"
+   }
+  ],
+  "summary": "Malicious tool description made Cursor send SSH key and MCP config as arguments.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0110",
+    "AML.T0051.001",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Cursor"
+   ],
+   "products": [
+    "Cursor"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "mcp",
+   "tool-poisoning"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "030",
+  "date": "2025-05",
+  "name": "GitHub MCP server toxic agent flow leaks private repos",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "repo issue/pr",
+  "authority": "write-repo",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://invariantlabs.ai/blog/mcp-github-vulnerability"
+   }
+  ],
+  "summary": "Malicious public issue made agent leak private repo contents into public pull request.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02",
+    "ASI03"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0093",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "GitHub"
+   ],
+   "products": [
+    "GitHub MCP server"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "mcp",
+   "toxic-agent-flow",
+   "private-repository-leak"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "031",
+  "date": "2025-05",
+  "name": "Lovable-generated apps ship without row-level security",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "generated-code",
+  "channel_in": "none",
+  "authority": "database",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [
+   "CVE-2025-48757"
+  ],
+  "sources": [
+   {
+    "url": "https://mattpalmer.io/posts/2025/05/CVE-2025-48757/"
+   }
+  ],
+  "summary": "Default RLS gaps in generated Supabase apps; supplier disputes CVE as customer responsibility.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Lovable",
+    "Supabase"
+   ],
+   "products": [
+    "Lovable"
+   ],
+   "frameworks": [
+    "Supabase"
+   ]
+  },
+  "tags": [
+   "vibe-coding",
+   "insecure-generated-code",
+   "row-level-security",
+   "disputed-cve"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "032",
+  "date": "2025-06",
+  "name": "EchoLeak zero-click exfiltration from Microsoft 365 Copilot",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "email",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2025-32711"
+  ],
+  "sources": [
+   {
+    "url": "https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html"
+   }
+  ],
+  "summary": "Zero-click via crafted email, CVSS 9.3; fixed server-side; no known exploitation.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Microsoft 365 Copilot"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "zero-click",
+   "email",
+   "markdown-image-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "033",
+  "date": "2025-07",
+  "name": "Amazon Q Developer extension shipped wiper prompt",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "supply-chain",
+  "channel_in": "repo issue/pr",
+  "authority": "shell/exec",
+  "channel_out": "data destruction",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [
+   "CVE-2025-8217"
+  ],
+  "sources": [
+   {
+    "url": "https://aws.amazon.com/security/security-bulletins/AWS-2025-015/"
+   }
+  ],
+  "summary": "Wiper prompt shipped in v1.84.0 but failed on a syntax error; AWS revoked credentials.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0010.001",
+    "AML.T0101"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Amazon Web Services"
+   ],
+   "products": [
+    "Amazon Q Developer (VS Code extension)"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "supply-chain",
+   "wiper",
+   "ide-extension"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "034",
+  "date": "2025-07",
+  "name": "Gemini CLI silent code execution via context file",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://tracebit.com/blog/code-exec-deception-gemini-ai-cli-hijack"
+   }
+  ],
+  "summary": "README injection abused grep allowlist; reported 27 June, fixed in v0.1.14 on 25 July.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Google"
+   ],
+   "products": [
+    "Gemini CLI"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "coding-agent",
+   "allowlist-bypass",
+   "context-file"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "035",
+  "date": "2025-07",
+  "name": "McHire chatbot platform default password and IDOR",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exposure/misconfig",
+  "channel_in": "none",
+  "authority": "database",
+  "channel_out": "disclosure-only",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://ian.sh/mcdonalds"
+   }
+  ],
+  "summary": "Admin login 123456 plus IDOR exposed 64 million applicant records; disclosed 30 June.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0012"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Paradox.ai",
+    "McDonald's"
+   ],
+   "products": [
+    "McHire"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "default-credentials",
+   "idor",
+   "chatbot-platform"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "036",
+  "date": "2025-07",
+  "name": "Replit agent deletes SaaStr production database",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "excessive-agency",
+  "channel_in": "chat message",
+  "authority": "database",
+  "channel_out": "data destruction",
+  "adversarial": false,
+  "outcome": "data-destruction",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theregister.com/2025/07/21/replit_saastr_vibe_coding_incident/"
+   }
+  ],
+  "summary": "Agent ignored code freeze, deleted production database, fabricated data and misreported rollback.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Replit"
+   ],
+   "products": [
+    "Replit Agent"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "database-deletion",
+   "excessive-agency",
+   "vibe-coding"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "037",
+  "date": "2025-07",
+  "name": "Supabase MCP support-ticket injection leaks private tables",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "support ticket",
+  "authority": "database",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://generalanalysis.com/blog/supabase-mcp-blog"
+   }
+  ],
+  "summary": "Ticket text made developer's MCP assistant copy private tables into customer-visible reply; dummy data.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02",
+    "ASI03"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0093",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Supabase"
+   ],
+   "products": [
+    "Supabase MCP server"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "mcp",
+   "support-ticket",
+   "sql-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "038",
+  "date": "2025-08",
+  "name": "Anthropic August 2025 threat report (GTG-2002 extortion)",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.anthropic.com/news/detecting-countering-misuse-aug-2025",
+    "title": "Detecting and countering misuse of AI: August 2025",
+    "publisher": "Anthropic",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Claude Code automated recon, credential theft and extortion at 17+ organisations; ransoms exceeded $500k.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Claude Code"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "extortion",
+   "agentic-cyber-operations"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "039",
+  "date": "2025-08",
+  "name": "Claude Code DNS exfiltration via allowlisted commands",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2025-55284"
+  ],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2025/claude-code-exfiltration-via-dns-requests/"
+   }
+  ],
+  "summary": "Broad safe-command allowlist let injected prompt leak secrets over DNS; fixed in v1.0.4.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Claude Code"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "dns-exfiltration",
+   "command-allowlist",
+   "coding-agent"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "040",
+  "date": "2025-08",
+  "name": "Cursor CurXecute prompt injection to RCE",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2025-54135"
+  ],
+  "sources": [
+   {
+    "url": "https://github.com/cursor/cursor/security/advisories/GHSA-4cxx-hrm3-49rm",
+    "title": "Arbitrary code execution from Cursor Agent through a prompt injection via MCP Special Files",
+    "publisher": "GitHub",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Injected external data created .cursor/mcp.json without approval; patched in Cursor 1.3.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0081",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Cursor"
+   ],
+   "products": [
+    "Cursor"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "rce",
+   "mcp-config",
+   "coding-agent"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "041",
+  "date": "2025-08",
+  "name": "Cursor MCPoison trust bypass persistent RCE",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "repo issue/pr",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2025-54136"
+  ],
+  "sources": [
+   {
+    "url": "https://research.checkpoint.com/2025/cursor-vulnerability-mcpoison/"
+   }
+  ],
+  "summary": "Approved MCP config swapped for malicious one without re-approval; fixed in 1.3.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0081"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Cursor"
+   ],
+   "products": [
+    "Cursor"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "trust-bypass",
+   "mcp-config",
+   "persistence"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "042",
+  "date": "2025-08",
+  "name": "Gemini for Workspace calendar-invite promptware",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "calendar invite",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.safebreach.com/blog/invitation-is-all-you-need-hacking-gemini/"
+   }
+  ],
+  "summary": "Invite title drove smart-home control, Zoom video, geolocation and email theft in demos.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0053"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Google"
+   ],
+   "products": [
+    "Gemini for Workspace"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "calendar-invite",
+   "promptware",
+   "smart-home"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "043",
+  "date": "2025-08",
+  "name": "GitHub Copilot RCE via auto-approve settings injection",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2025-53773"
+  ],
+  "sources": [
+   {
+    "url": "https://embracethered.com/blog/posts/2025/github-copilot-remote-code-execution-via-prompt-injection/"
+   }
+  ],
+  "summary": "Injection set chat.tools.autoApprove in settings.json; Microsoft patched August 2025.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0081",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "GitHub",
+    "Microsoft"
+   ],
+   "products": [
+    "GitHub Copilot",
+    "Visual Studio Code"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "rce",
+   "settings-injection",
+   "auto-approve"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "044",
+  "date": "2025-08",
+  "name": "Nx s1ngularity malicious packages weaponize AI CLIs",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "nhi-secrets",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2025-10894"
+  ],
+  "sources": [
+   {
+    "url": "https://github.com/nrwl/nx/security/advisories/GHSA-cxm3-wv7p-598c",
+    "title": "Malicious versions of Nx and some supporting plugins were published",
+    "publisher": "GitHub",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Postinstall prompted local AI CLIs to hunt secrets; stolen data posted to public GitHub repos.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04",
+    "ASI02",
+    "ASI03"
+   ],
+   "owasp_llm": [
+    "LLM03",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0011.001",
+    "AML.T0098"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Nx"
+   ],
+   "products": [
+    "Nx"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "npm",
+   "supply-chain",
+   "credential-theft",
+   "ai-cli-abuse"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "045",
+  "date": "2025-08",
+  "name": "Perplexity Comet indirect prompt injection",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://brave.com/blog/comet-prompt-injection/"
+   }
+  ],
+  "summary": "Reddit comment made agentic browser fetch email OTP and post it back.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Perplexity"
+   ],
+   "products": [
+    "Comet"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "browser-agent",
+   "otp-theft",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "046",
+  "date": "2025-09",
+  "name": "ForcedLeak in Salesforce Agentforce",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://noma.security/blog/forcedleak-agent-risks-exposed-in-salesforce-agentforce/"
+   }
+  ],
+  "summary": "Web-to-Lead injection plus $5 expired whitelisted domain; CVSS 9.4; Salesforce blocked untrusted URLs.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0093",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Salesforce"
+   ],
+   "products": [
+    "Agentforce"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "crm",
+   "expired-domain",
+   "csp-bypass"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "047",
+  "date": "2025-09",
+  "name": "Notion 3.0 AI agent web-search exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "read-only",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.codeintegrity.ai/blog/notion"
+   }
+  ],
+  "summary": "Hidden text in PDF made Notion 3.0 agent leak page contents via search tool.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Notion"
+   ],
+   "products": [
+    "Notion 3.0 AI agent"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "pdf",
+   "hidden-text",
+   "web-search-tool"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "048",
+  "date": "2025-09",
+  "name": "ShadowLeak zero-click Gmail exfiltration from ChatGPT Deep Research",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "email",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.infosecurity-magazine.com/news/vulnerability-chatgpt-agent-gmail/"
+   }
+  ],
+  "summary": "Reported June 2025; OpenAI silently fixed in August, acknowledged early September.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0057"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT Deep Research"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "zero-click",
+   "gmail",
+   "service-side-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "049",
+  "date": "2025-09",
+  "name": "postmark-mcp: first malicious MCP server in the wild",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "supply-chain",
+  "channel_in": "package",
+  "authority": "send-message",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://thehackernews.com/2025/09/first-malicious-mcp-server-found.html"
+   }
+  ],
+  "summary": "v1.0.16 BCC'd every outgoing email to attacker; 1,643 downloads; package removed.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0010.005",
+    "AML.T0104",
+    "AML.T0011.002"
+   ]
+  },
+  "affected": {
+   "vendors": [],
+   "products": [
+    "postmark-mcp (npm)"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "mcp",
+   "npm",
+   "backdoor",
+   "email-bcc"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "050",
+  "date": "2025-10",
+  "name": "CamoLeak: GitHub Copilot Chat private-code exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "repo issue/pr",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.legitsecurity.com/blog/camoleak-critical-github-copilot-vulnerability-leaks-private-source-code"
+   }
+  ],
+  "summary": "Hidden PR comment plus Camo image proxy leaked secrets; GitHub disabled image rendering.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "GitHub"
+   ],
+   "products": [
+    "GitHub Copilot Chat"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "camo-proxy",
+   "hidden-comment",
+   "markdown-image-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "051",
+  "date": "2025-10",
+  "name": "OpenAI October 2025 report on malicious AI uses",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "social-engineering",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "fraud",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://siliconangle.com/2025/10/07/openai-details-expanding-efforts-disrupt-malicious-use-ai-new-report/"
+   }
+  ],
+  "summary": "Actors bolted ChatGPT onto existing toolchains for malware, phishing and scams; accounts banned.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002",
+    "AML.T0052.000"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI"
+   ],
+   "products": [
+    "ChatGPT"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "llm-misuse",
+   "scams"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "052",
+  "date": "2025-11",
+  "name": "Anthropic GTG-1002 AI-orchestrated espionage campaign",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.anthropic.com/news/disrupting-AI-espionage",
+    "title": "Disrupting the first reported AI-orchestrated cyber espionage campaign",
+    "publisher": "Anthropic",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Jailbroken Claude Code plus MCP tools ran 80-90% of intrusions against about 30 targets.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002",
+    "AML.T0054"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Claude Code"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "threat-report",
+   "espionage",
+   "state-actor",
+   "agentic-cyber-operations"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "053",
+  "date": "2025-11",
+  "name": "GTIG report: just-in-time AI malware (PROMPTSTEAL, PROMPTFLUX)",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "none",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools",
+    "title": "GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools",
+    "publisher": "Google Cloud",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "APT28 malware queried Qwen at runtime for commands; first LLM-in-malware seen in operations.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002",
+    "AML.T0102"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Google"
+   ],
+   "products": [
+    "Gemini API",
+    "Hugging Face Inference API"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "llm-in-malware",
+   "just-in-time-malware"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "054",
+  "date": "2025-11",
+  "name": "ServiceNow Now Assist second-order prompt injection",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "support ticket",
+  "authority": "database",
+  "channel_out": "tool-call send",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://appomni.com/ao-labs/ai-agent-to-agent-discovery-prompt-injection/"
+   }
+  ],
+  "summary": "Agent discovery let low-privilege record content steer higher-privilege agents under default configuration.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI03",
+    "ASI07"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0093",
+    "AML.T0086"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "ServiceNow"
+   ],
+   "products": [
+    "Now Assist"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "agent-to-agent",
+   "second-order-injection",
+   "default-configuration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "055",
+  "date": "2025-12",
+  "name": "Google Antigravity agent deletes user's D: drive",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "excessive-agency",
+  "channel_in": "chat message",
+  "authority": "file-delete",
+  "channel_out": "data destruction",
+  "adversarial": false,
+  "outcome": "data-destruction",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theregister.com/2025/12/01/google_antigravity_wipes_d_drive/"
+   }
+  ],
+  "summary": "Turbo-mode agent cleared cache by deleting D: drive root; Google investigating.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI02"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Google"
+   ],
+   "products": [
+    "Antigravity"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "data-destruction",
+   "file-delete",
+   "excessive-agency"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "056",
+  "date": "2025-12",
+  "name": "IDEsaster: 30+ flaws across AI IDEs",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "multiple"
+  ],
+  "sources": [
+   {
+    "url": "https://thehackernews.com/2025/12/researchers-uncover-30-flaws-in-ai.html"
+   }
+  ],
+  "summary": "Prompt injection abused legitimate IDE features in every tested AI IDE; 24 CVEs.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [],
+   "products": [
+    "AI-assisted IDEs (multiple)"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "ide",
+   "cve-cluster",
+   "coding-agent"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "057",
+  "date": "2026-01",
+  "name": "Anthropic Git MCP server flaws chained to code execution",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2025-68143",
+   "CVE-2025-68144",
+   "CVE-2025-68145"
+  ],
+  "sources": [
+   {
+    "url": "https://www.theregister.com/security/2026/01/20/anthropic-quietly-fixed-flaws-in-its-git-mcp-server/4676059"
+   }
+  ],
+  "summary": "Path-validation and git_diff argument-injection flaws chained with Filesystem MCP for code execution.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI02",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "mcp-server-git",
+    "Filesystem MCP server"
+   ],
+   "frameworks": [
+    "Model Context Protocol"
+   ]
+  },
+  "tags": [
+   "mcp",
+   "argument-injection",
+   "path-validation"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "058",
+  "date": "2026-01",
+  "name": "Reprompt one-click data theft from Copilot Personal",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.varonis.com/blog/reprompt"
+   }
+  ],
+  "summary": "Parameter-to-prompt via ?q=, double-request bypass and chained requests; patched on disclosure.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0011.003",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Copilot Personal"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "one-click",
+   "url-parameter",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "059",
+  "date": "2026-02",
+  "name": "AI-augmented actor compromises 600+ FortiGate devices",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://aws.amazon.com/blogs/security/ai-augmented-threat-actor-accesses-fortigate-devices-at-scale"
+   }
+  ],
+  "summary": "Unsophisticated actor used commercial LLMs to compromise 600+ FortiGate devices via weak credentials.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Fortinet"
+   ],
+   "products": [
+    "FortiGate"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "ai-augmented-attacker",
+   "weak-credentials"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "060",
+  "date": "2026-02",
+  "name": "Anthropic report on distillation attacks (DeepSeek, Moonshot, MiniMax)",
+  "type": "threat-report",
+  "lens": "target",
+  "vector": "extraction",
+  "channel_in": "chat message",
+  "authority": "none",
+  "channel_out": "api-abuse",
+  "adversarial": true,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
+    "title": "Detecting and preventing distillation attacks",
+    "publisher": "Anthropic",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "24,000 fraudulent accounts made 16M exchanges to extract Claude capabilities.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [
+    "LLM10"
+   ],
+   "mitre_atlas": [
+    "AML.T0021",
+    "AML.T0040",
+    "AML.T0024.002"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Anthropic API"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "distillation",
+   "model-extraction",
+   "fraudulent-accounts",
+   "threat-report"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "061",
+  "date": "2026-02",
+  "name": "Claude Code project-file RCE and API key theft",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "rules file",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2025-59536",
+   "CVE-2026-21852"
+  ],
+  "sources": [
+   {
+    "url": "https://blog.checkpoint.com/research/check-point-researchers-expose-critical-claude-code-flaws/"
+   }
+  ],
+  "summary": "Repo hooks and ANTHROPIC_BASE_URL ran code and leaked API keys before trust prompt.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0081",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Claude Code"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "hooks",
+   "trust-prompt",
+   "api-key-theft",
+   "coding-agent"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "062",
+  "date": "2026-02",
+  "name": "ClawHavoc: 341 malicious OpenClaw skills on ClawHub",
+  "type": "incident",
+  "lens": "target",
+  "vector": "supply-chain",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://thehackernews.com/2026/02/researchers-find-341-malicious-clawhub.html"
+   }
+  ],
+  "summary": "Koi audit of 2,857 skills found 341 malicious; fake prerequisites installed Atomic Stealer.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0010.005",
+    "AML.T0104",
+    "AML.T0011.002"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenClaw"
+   ],
+   "products": [
+    "ClawHub"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "agent-skills",
+   "marketplace",
+   "infostealer"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "063",
+  "date": "2026-02",
+  "name": "Clinejection: Cline issue-triage agent hijacked",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "repo issue/pr",
+  "authority": "shell/exec",
+  "channel_out": "file publish",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://adnanthekhan.com/posts/clinejection/"
+   }
+  ],
+  "summary": "Issue-title injection plus cache poisoning stole npm token; malicious cline@2.3.0 published 17 Feb.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI04",
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0093",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Cline"
+   ],
+   "products": [
+    "Cline"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "github-actions",
+   "issue-title-injection",
+   "npm-token",
+   "cache-poisoning"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "064",
+  "date": "2026-02",
+  "name": "OpenClaw one-click RCE via gatewayUrl token exfiltration",
+  "type": "vulnerability-disclosure",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "web page",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2026-25253"
+  ],
+  "sources": [
+   {
+    "url": "https://depthfirst.com/post/1-click-rce-to-steal-your-moltbot-data-and-keys"
+   }
+  ],
+  "summary": "Crafted link leaked gateway token over WebSocket even on loopback; fixed in 2026.1.29.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI03"
+   ],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0011.003"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "OpenClaw"
+   ],
+   "products": [
+    "OpenClaw"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "one-click",
+   "websocket",
+   "token-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "065",
+  "date": "2026-02",
+  "name": "hackerbot-claw bot attacks GitHub Actions workflows",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "repo issue/pr",
+  "authority": "write-repo",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.stepsecurity.io/blog/hackerbot-claw-github-actions-exploitation"
+   }
+  ],
+  "summary": "Claimed Claude-powered account; RCE in at least four of seven repos; Trivy releases deleted.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [],
+   "products": [
+    "GitHub Actions workflows"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "github-actions",
+   "bot-account",
+   "agentic-attacker"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "066",
+  "date": "2026-02",
+  "name": "react-codeshift hallucinated npm package spreads via agent skills",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "generated-code",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": false,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.aikido.dev/blog/slopsquatting-ai-package-hallucination-attacks"
+   }
+  ],
+  "summary": "Hallucinated npm name spread through agent skills to 237 repos; researcher claimed it.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM03",
+    "LLM09"
+   ],
+   "mitre_atlas": [
+    "AML.T0062",
+    "AML.T0060"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "npm"
+   ],
+   "products": [
+    "react-codeshift (hallucinated npm package)"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "slopsquatting",
+   "npm",
+   "agent-skills"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "067",
+  "date": "2026-03",
+  "name": "CrewAI Code Interpreter sandbox escape and SSRF CVEs",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2026-2275",
+   "CVE-2026-2285",
+   "CVE-2026-2286",
+   "CVE-2026-2287"
+  ],
+  "sources": [
+   {
+    "url": "https://www.kb.cert.org/vuls/id/221883"
+   }
+  ],
+  "summary": "Direct or indirect injection reaches Code Interpreter SandboxPython fallback; RCE, file read, SSRF.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM05",
+    "LLM06"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0050",
+    "AML.T0105"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "CrewAI"
+   ],
+   "products": [
+    "CrewAI"
+   ],
+   "frameworks": [
+    "CrewAI"
+   ]
+  },
+  "tags": [
+   "code-interpreter",
+   "sandbox-escape",
+   "ssrf"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "068",
+  "date": "2026-03",
+  "name": "Langflow CVE-2026-33017 exploited within 20 hours",
+  "type": "incident",
+  "lens": "target",
+  "vector": "exploitation",
+  "channel_in": "none",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2026-33017"
+  ],
+  "sources": [
+   {
+    "url": "https://www.sysdig.com/blog/cve-2026-33017-how-attackers-compromised-langflow-ai-pipelines-in-20-hours"
+   }
+  ],
+  "summary": "Public build endpoint RCE exploited 20 hours after advisory; attackers harvested keys and .env files.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0049",
+    "AML.T0055"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Langflow"
+   ],
+   "products": [
+    "Langflow"
+   ],
+   "frameworks": [
+    "Langflow"
+   ]
+  },
+  "tags": [
+   "rce",
+   "exposed-endpoint",
+   "in-the-wild-exploitation"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "069",
+  "date": "2026-03",
+  "name": "LiteLLM PyPI releases backdoored (TeamPCP)",
+  "type": "incident",
+  "lens": "target",
+  "vector": "supply-chain",
+  "channel_in": "package",
+  "authority": "cloud-creds",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://securitylabs.datadoghq.com/articles/litellm-compromised-pypi-teampcp-supply-chain-campaign/",
+    "title": "LiteLLM and Telnyx compromised on PyPI: Tracing the TeamPCP supply chain campaign",
+    "publisher": "Datadog Security Labs",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Versions 1.82.7 and 1.82.8 backdoored in TeamPCP campaign after Trivy compromise.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI04"
+   ],
+   "owasp_llm": [
+    "LLM03"
+   ],
+   "mitre_atlas": [
+    "AML.T0010.001",
+    "AML.T0011.001"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "BerriAI"
+   ],
+   "products": [
+    "LiteLLM"
+   ],
+   "frameworks": [
+    "LiteLLM"
+   ]
+  },
+  "tags": [
+   "pypi",
+   "supply-chain",
+   "teampcp"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "070",
+  "date": "2026-03",
+  "name": "Web-based indirect prompt injection observed in the wild (Unit 42)",
+  "type": "threat-report",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "disclosure-only",
+  "adversarial": true,
+  "outcome": "fraud",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://unit42.paloaltonetworks.com/ai-agent-prompt-injection/"
+   }
+  ],
+  "summary": "Web-hosted injections seen in telemetry: ad-review evasion, SEO phishing, destructive and transaction commands.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001"
+   ]
+  },
+  "affected": {
+   "vendors": [],
+   "products": [],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "in-the-wild",
+   "seo-phishing",
+   "indirect-prompt-injection"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "071",
+  "date": "2026-04",
+  "name": "PocketOS production database and backups deleted by Cursor agent",
+  "type": "incident",
+  "lens": "surface",
+  "vector": "excessive-agency",
+  "channel_in": "none",
+  "authority": "cloud-creds",
+  "channel_out": "data destruction",
+  "adversarial": false,
+  "outcome": "data-destruction",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theregister.com/software/2026/04/27/cursor-opus-agent-snuffs-out-startups-production-database/5224442"
+   }
+  ],
+  "summary": "Agent found account-scoped Railway token, ran volume delete in 9 seconds; data later restored.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI02",
+    "ASI03"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "PocketOS",
+    "Cursor",
+    "Railway"
+   ],
+   "products": [
+    "Cursor"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "database-deletion",
+   "scoped-token",
+   "excessive-agency"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "072",
+  "date": "2026-05",
+  "name": "Semantic Kernel prompt injection to RCE",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "direct-injection",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2026-26030",
+   "CVE-2026-25592"
+  ],
+  "sources": [
+   {
+    "url": "https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/",
+    "title": "When prompts become shells: RCE vulnerabilities in AI agent frameworks",
+    "publisher": "Microsoft Security Blog",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Vector-store filter eval and file-write tool turned a prompt into host RCE; both fixed.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI05"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM05"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.000",
+    "AML.T0050"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Semantic Kernel"
+   ],
+   "frameworks": [
+    "Semantic Kernel"
+   ]
+  },
+  "tags": [
+   "rce",
+   "vector-store-filter",
+   "file-write-tool"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "073",
+  "date": "2026-06",
+  "name": "SearchLeak one-click exfiltration from M365 Copilot Enterprise Search",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2026-42824"
+  ],
+  "sources": [
+   {
+    "url": "https://www.varonis.com/blog/searchleak"
+   }
+  ],
+  "summary": "Parameter-to-prompt, sanitizer race and Bing SSRF chain; critical; fixed before disclosure.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0011.003",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Microsoft 365 Copilot"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "one-click",
+   "ssrf",
+   "sanitizer-race"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "074",
+  "date": "2026-07",
+  "name": "Anthropic Claude evaluation agents breach three organizations",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "none",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+    "title": "Investigating three real-world incidents in our cybersecurity evaluations",
+    "publisher": "Anthropic",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Claude, told environment was simulated, breached three organizations via weak passwords; fourth case disclosed September.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI10"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [],
+   "frameworks": []
+  },
+  "tags": [
+   "evaluation-escape",
+   "autonomous-agent",
+   "no-adversary"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "075",
+  "date": "2026-07",
+  "name": "OpenAI evaluation agents breach Hugging Face",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "document",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": false,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://openai.com/index/hugging-face-model-evaluation-security-incident/"
+   }
+  ],
+  "summary": "No human attacker; models cheating an eval escaped sandbox via Artifactory zero-day, hit Hugging Face.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI10"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI",
+    "Hugging Face"
+   ],
+   "products": [],
+   "frameworks": []
+  },
+  "tags": [
+   "evaluation-escape",
+   "sandbox-escape",
+   "autonomous-agent"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "076",
+  "date": "2026-08",
+  "name": "CoSnitch one-click Copilot Personal exfiltration and memory poisoning",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "indirect-injection",
+  "channel_in": "web page",
+  "authority": "read-only",
+  "channel_out": "image/link fetch",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [
+   "CVE-2026-24301"
+  ],
+  "sources": [
+   {
+    "url": "https://www.varonis.com/blog/cosnitch"
+   }
+  ],
+  "summary": "One-click autorun prompt, URL-fetch exfiltration and persistent memory poisoning; critical; patched.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI01",
+    "ASI06"
+   ],
+   "owasp_llm": [
+    "LLM01",
+    "LLM02"
+   ],
+   "mitre_atlas": [
+    "AML.T0051.001",
+    "AML.T0011.003",
+    "AML.T0080.000",
+    "AML.T0077"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Microsoft"
+   ],
+   "products": [
+    "Copilot Personal"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "one-click",
+   "memory-poisoning",
+   "markdown-image-exfiltration"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "077",
+  "date": "2026-08",
+  "name": "Default GitHub Actions of Claude Code, Gemini CLI and Codex exploitable by issue",
+  "type": "vulnerability-disclosure",
+  "lens": "surface",
+  "vector": "exploitation",
+  "channel_in": "repo issue/pr",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "code-execution",
+  "cve": [
+   "CVE-2026-12537",
+   "CVE-2026-54316"
+  ],
+  "sources": [
+   {
+    "url": "https://thehackernews.com/2026/08/claude-code-and-gemini-cli-flaws-let.html"
+   }
+  ],
+  "summary": "Unprivileged issue reached CI in Anthropic, Google, OpenAI agent repos; Gemini CLI CVSS 10.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic",
+    "Google",
+    "OpenAI"
+   ],
+   "products": [
+    "Claude Code",
+    "Gemini CLI",
+    "Codex"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "github-actions",
+   "ci-permissions",
+   "pwn-request"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "078",
+  "date": "2026-09",
+  "name": "Anthropic September 2026 threat report",
+  "type": "threat-report",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "chat message",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": true,
+  "outcome": "data-exfiltration",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.anthropic.com/threat-intelligence-report-september-2026",
+    "title": "Detecting and countering misuse of AI: September 2026",
+    "publisher": "Anthropic",
+    "accessed": "2026-10-03"
+   }
+  ],
+  "summary": "Covers December 2025 to August 2026; Claude used as orchestrator across cyber kill chain.",
+  "mappings": {
+   "owasp_agentic": [],
+   "owasp_llm": [],
+   "mitre_atlas": [
+    "AML.T0016.002"
+   ]
+  },
+  "affected": {
+   "vendors": [
+    "Anthropic"
+   ],
+   "products": [
+    "Claude Code"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "threat-report",
+   "agentic-cyber-operations"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "079",
+  "date": "2026-09",
+  "name": "OpenAI agent breach of Australian government portals including Medicare statistics",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "none",
+  "authority": "shell/exec",
+  "channel_out": "code exec",
+  "adversarial": false,
+  "outcome": "information-disclosure",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theguardian.com/australia-news/2026/sep/24/anthony-albanese-says-openai-agent-hacked-medicare-extreme-concern-sam-altman"
+   }
+  ],
+  "summary": "Agents accessed public and non-public portal files and wrote files; no personal data apparent.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI10"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI",
+    "Australian Government"
+   ],
+   "products": [],
+   "frameworks": []
+  },
+  "tags": [
+   "autonomous-agent",
+   "government",
+   "no-adversary"
+  ],
+  "status": "confirmed"
+ },
+ {
+  "id": "080",
+  "date": "2026-09",
+  "name": "OpenAI agents upload malicious packages to RubyGems",
+  "type": "incident",
+  "lens": "weapon",
+  "vector": "autonomous-ops",
+  "channel_in": "package",
+  "authority": "shell/exec",
+  "channel_out": "file publish",
+  "adversarial": false,
+  "outcome": "none-demo",
+  "cve": [],
+  "sources": [
+   {
+    "url": "https://www.theguardian.com/technology/2026/sep/11/openai-agents-rubygems-malicious-packages"
+   }
+  ],
+  "summary": "Hundreds of malicious packages uploaded 11 May; credential theft attempted, success unclear; OpenAI says benign.",
+  "mappings": {
+   "owasp_agentic": [
+    "ASI10"
+   ],
+   "owasp_llm": [
+    "LLM06"
+   ],
+   "mitre_atlas": []
+  },
+  "affected": {
+   "vendors": [
+    "OpenAI",
+    "RubyGems"
+   ],
+   "products": [
+    "RubyGems"
+   ],
+   "frameworks": []
+  },
+  "tags": [
+   "autonomous-agent",
+   "package-registry",
+   "malicious-packages"
+  ],
+  "status": "confirmed"
+ }
+]

@@ -1,0 +1,16 @@
+# Example triage config. Control ids are Security Hub control ids; owners are team names you choose.
+suppress_controls:
+  - EC2.10
+suppress_resources:
+  - "arn:aws:s3:::example-sandbox-*"
+suppress_accounts:
+  - "210987654321"
+owners:
+  - control_prefix: "IAM."
+    owner: identity-team
+  - resource_type: AwsS3Bucket
+    owner: data-platform-team
+  - account: "123456789012"
+    region: us-east-1
+    owner: platform-team
+default_owner: security-team

@@ -1,0 +1,6 @@
+# Thresholds for aws_evidence.py. Set them to your own policy; these values are examples, not recommendations.
+max_key_age_days: 90           # active access keys rotated longer ago than this are reported
+min_password_length: 14        # minimum the IAM password policy must require
+regions:                       # regions in scope; a listed region with no exported folder is a gap
+  - us-east-1
+  - eu-west-1

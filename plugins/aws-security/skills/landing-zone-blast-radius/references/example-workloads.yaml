@@ -1,0 +1,25 @@
+# Example input for blast_radius.py. Workload names are illustrative.
+organization: acme
+email_domain: example.com
+workloads:
+  - name: payments
+    environment: prod
+    data_classification: restricted
+    internet_facing: true
+    depends_on: [identity-api]
+  - name: identity-api
+    environment: prod
+    data_classification: confidential
+    internet_facing: false
+  - name: marketing-site
+    environment: prod
+    data_classification: public
+    internet_facing: true
+  - name: payments
+    environment: dev
+    data_classification: internal
+    internet_facing: false
+  - name: data-lab
+    environment: sandbox
+    data_classification: internal
+    internet_facing: false

@@ -1,0 +1,397 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-skills",
+  "description": "Every Claude Code skill maintained by Muhammad Basit Ali, in one marketplace: security, AWS, Microsoft 365, compliance evidence, GitHub, repository engineering, everyday development and Mac maintenance. Synced daily from the source repositories.",
+  "owner": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "metadata": {
+    "description": "Every Claude Code skill maintained by Muhammad Basit Ali, in one marketplace: security, AWS, Microsoft 365, compliance evidence, GitHub, repository engineering, everyday development and Mac maintenance. Synced daily from the source repositories.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "agent-security",
+      "source": "./plugins/agent-security",
+      "description": "Eight security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/agent-security-skills",
+      "repository": "https://github.com/basitalisandhu/agent-security-skills",
+      "license": "MIT",
+      "keywords": [
+        "security",
+        "ai-security",
+        "agent-security",
+        "mcp",
+        "prompt-injection",
+        "threat-model"
+      ],
+      "category": "security",
+      "tags": [
+        "security",
+        "agents",
+        "mcp",
+        "prompt-injection",
+        "threat-modeling"
+      ]
+    },
+    {
+      "name": "aws-security",
+      "source": "./plugins/aws-security",
+      "description": "Nine AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails and a sandbox guardrail pack. Scripts run offline on specs and saved CLI output.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/aws-security-skills",
+      "repository": "https://github.com/basitalisandhu/aws-security-skills",
+      "license": "MIT",
+      "keywords": [
+        "aws",
+        "aws-security",
+        "cloud-security",
+        "iam",
+        "scp",
+        "security-hub",
+        "guardduty",
+        "landing-zone",
+        "incident-response",
+        "ai-agents",
+        "budgets"
+      ],
+      "category": "security",
+      "tags": [
+        "aws",
+        "security",
+        "iam",
+        "organizations"
+      ]
+    },
+    {
+      "name": "code-quality",
+      "source": "./plugins/code-quality",
+      "description": "Review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage and test gap finder.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "code-review",
+        "refactoring",
+        "complexity",
+        "dead-code",
+        "types",
+        "tests"
+      ],
+      "category": "development",
+      "tags": [
+        "code-quality",
+        "review",
+        "refactoring"
+      ]
+    },
+    {
+      "name": "compliance-evidence",
+      "source": "./plugins/compliance-evidence",
+      "description": "Five compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter. Exports on disk, offline evaluation, three result states.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/compliance-evidence-skills",
+      "repository": "https://github.com/basitalisandhu/compliance-evidence-skills",
+      "license": "MIT",
+      "keywords": [
+        "compliance",
+        "audit-evidence",
+        "iso-27001",
+        "soc-2",
+        "evidence-pack",
+        "control-mapping",
+        "github",
+        "aws",
+        "microsoft-365"
+      ],
+      "category": "security",
+      "tags": [
+        "compliance",
+        "iso-27001",
+        "soc-2",
+        "audit"
+      ]
+    },
+    {
+      "name": "data",
+      "source": "./plugins/data",
+      "description": "SQL query review, schema migration planning, CSV profiler, JSON Schema inference, regex builder and OpenAPI 3 contract review.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "sql",
+        "migrations",
+        "csv",
+        "json-schema",
+        "regex",
+        "openapi"
+      ],
+      "category": "data",
+      "tags": [
+        "data",
+        "sql",
+        "api",
+        "schemas"
+      ]
+    },
+    {
+      "name": "debugging",
+      "source": "./plugins/debugging",
+      "description": "Bug reproduction minimiser, log triage, flaky test hunter, stack trace explainer, profile reader and a memory leak checklist.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "debugging",
+        "logs",
+        "flaky-tests",
+        "profiling",
+        "memory-leaks"
+      ],
+      "category": "development",
+      "tags": [
+        "debugging",
+        "logs",
+        "performance"
+      ]
+    },
+    {
+      "name": "devops",
+      "source": "./plugins/devops",
+      "description": "Dockerfile hardening, GitHub Actions authoring, Kubernetes manifest and Terraform review, cron doctor, env file diff, release notes and a semver advisor.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "docker",
+        "github-actions",
+        "kubernetes",
+        "terraform",
+        "cron",
+        "release-notes",
+        "semver"
+      ],
+      "category": "devops",
+      "tags": [
+        "devops",
+        "ci",
+        "containers",
+        "infrastructure"
+      ]
+    },
+    {
+      "name": "docs",
+      "source": "./plugins/docs",
+      "description": "README author, ADR writer, changelog keeper, onboarding doc, API docs from code and a postmortem writer.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "documentation",
+        "readme",
+        "adr",
+        "changelog",
+        "postmortem"
+      ],
+      "category": "documentation",
+      "tags": [
+        "docs",
+        "writing"
+      ]
+    },
+    {
+      "name": "github-manager",
+      "source": "./plugins/github-manager",
+      "description": "Three skills, each with a tested standard-library script over saved gh exports: pr-queue-digest, iteration-report and incident-postmortem-timeline. Team level only, no per-person scoring.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/github-manager-skills",
+      "repository": "https://github.com/basitalisandhu/github-manager-skills",
+      "license": "MIT",
+      "keywords": [
+        "engineering-management",
+        "pull-requests",
+        "code-review",
+        "review-queue",
+        "cycle-time",
+        "sprint-report",
+        "postmortem",
+        "incident-response",
+        "github"
+      ],
+      "category": "productivity",
+      "tags": [
+        "github",
+        "engineering-management",
+        "reporting",
+        "incident"
+      ]
+    },
+    {
+      "name": "m365-governance",
+      "source": "./plugins/m365-governance",
+      "description": "Nine Microsoft 365 governance skills: Graph permission preflight, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and groups sprawl, access review pack. Read-only exports, offline evaluation.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/m365-governance-skills",
+      "repository": "https://github.com/basitalisandhu/m365-governance-skills",
+      "license": "MIT",
+      "keywords": [
+        "microsoft-365",
+        "entra-id",
+        "intune",
+        "microsoft-graph",
+        "conditional-access",
+        "access-review",
+        "teams",
+        "governance"
+      ],
+      "category": "security",
+      "tags": [
+        "microsoft-365",
+        "entra-id",
+        "intune",
+        "governance"
+      ]
+    },
+    {
+      "name": "mac-maintenance",
+      "source": "./plugins/mac-maintenance",
+      "description": "Three skills, each with a tested standard-library script: mac-cleanup (survey, safe tier, decision report), mac-duplicate-finder and mac-app-leftovers.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/mac-maintenance-skills",
+      "repository": "https://github.com/basitalisandhu/mac-maintenance-skills",
+      "license": "MIT",
+      "keywords": [
+        "macos",
+        "cleanup",
+        "disk-space",
+        "duplicate-files",
+        "caches",
+        "docker",
+        "homebrew",
+        "uninstall-leftovers"
+      ],
+      "category": "productivity",
+      "tags": [
+        "macos",
+        "cleanup",
+        "disk-space",
+        "maintenance"
+      ]
+    },
+    {
+      "name": "repo-engineering",
+      "source": "./plugins/repo-engineering",
+      "description": "Ten skills, each with a tested standard-library script: docs-truth-check, cited-codebase-audit, agent-context-writer, readme-who-what-why, untested-entry-points, repo-onboarding-guide, restructure-planner, adr-miner, repo-hygiene-bundle and release-notes-verifier.",
+      "version": "0.3.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/repo-engineering-skills",
+      "repository": "https://github.com/basitalisandhu/repo-engineering-skills",
+      "license": "MIT",
+      "keywords": [
+        "documentation",
+        "docs-drift",
+        "codebase-audit",
+        "agents-md",
+        "claude-md",
+        "readme",
+        "test-gaps",
+        "onboarding",
+        "adr",
+        "restructure",
+        "hygiene",
+        "release-notes"
+      ],
+      "category": "development",
+      "tags": [
+        "documentation",
+        "audit",
+        "repository",
+        "testing",
+        "architecture",
+        "release"
+      ]
+    },
+    {
+      "name": "security-basics",
+      "source": "./plugins/security-basics",
+      "description": "Secrets hygiene scan, dependency audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. For agent-specific security see agent-security-skills.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-dev-skills",
+      "repository": "https://github.com/basitalisandhu/claude-dev-skills",
+      "license": "MIT",
+      "keywords": [
+        "security",
+        "secrets",
+        "dependencies",
+        "http-headers",
+        "jwt",
+        "cors",
+        "authentication"
+      ],
+      "category": "security",
+      "tags": [
+        "security",
+        "appsec"
+      ]
+    }
+  ]
+}

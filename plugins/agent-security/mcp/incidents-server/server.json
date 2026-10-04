@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.basitalisandhu/agent-incidents",
+  "description": "Read-only MCP server over the AI Agent Incidents dataset: search, fetch and count incidents.",
+  "title": "AI Agent Incidents",
+  "repository": {
+    "url": "https://github.com/basitalisandhu/agent-security-skills",
+    "source": "github",
+    "subfolder": "plugins/agent-security/mcp/incidents-server"
+  },
+  "websiteUrl": "https://basitalisandhu.github.io/ai-agent-incidents/",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@basitalisandhu/agent-incidents-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AGENT_INCIDENTS_DATA",
+          "description": "Path to an incidents.json to serve instead of the bundled snapshot (for example a fresh download of https://basitalisandhu.github.io/ai-agent-incidents/incidents.json).",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "filepath"
+        }
+      ]
+    }
+  ]
+}

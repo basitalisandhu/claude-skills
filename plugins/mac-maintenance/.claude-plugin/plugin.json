@@ -1,0 +1,14 @@
+{
+  "name": "mac-maintenance",
+  "displayName": "Mac Maintenance",
+  "version": "0.1.0",
+  "description": "Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.",
+  "author": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "homepage": "https://github.com/basitalisandhu/mac-maintenance-skills",
+  "repository": "https://github.com/basitalisandhu/mac-maintenance-skills",
+  "license": "MIT",
+  "keywords": ["macos", "cleanup", "disk-space", "duplicate-files", "caches", "docker", "homebrew", "xcode", "uninstall-leftovers", "login-items"]
+}

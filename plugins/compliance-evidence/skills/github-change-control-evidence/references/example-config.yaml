@@ -1,0 +1,10 @@
+# Thresholds for github_evidence.py. Set them to your own policy; these values are examples, not recommendations.
+min_reviews: 1                 # approving reviews required on the protected branch
+min_signed_ratio: 1.0          # share of recent commits with a verified signature; 0 when signing is not required
+vuln_sla_days:                 # open Dependabot alerts older than this are overdue, per severity
+  critical: 15
+  high: 30
+secret_alert_sla_days: 7       # open secret scanning alerts older than this are overdue
+period:                        # only pull requests merged in this window are tested
+  start: 2026-07-01
+  end: 2026-09-30

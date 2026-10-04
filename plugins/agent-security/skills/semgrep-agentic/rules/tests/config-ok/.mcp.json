@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "secure": {
+      "type": "http",
+      "url": "https://mcp.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MCP_TOKEN}"
+      }
+    },
+    "local": {
+      "type": "http",
+      "url": "http://localhost:8787/mcp"
+    },
+    "pinned": {
+      "command": "npx",
+      "args": ["-y", "@scope/some-server@1.2.3"]
+    }
+  }
+}

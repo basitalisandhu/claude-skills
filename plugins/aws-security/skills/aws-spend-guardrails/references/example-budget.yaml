@@ -1,0 +1,33 @@
+# Example budget spec for spend_guardrails.py. Replace the account ids, amounts, addresses and lists with your own.
+name_prefix: sandbox
+currency: USD
+budget_account: "123456789012"
+accounts: ["123456789012", "111122223333"]
+monthly_limit: 550
+thresholds: [50, 80, 100]
+forecast_thresholds: [100]
+notify_emails: [cloud-team@example.com]
+usage_budgets:
+  - name: ec2-hours
+    usage_type_group: "EC2: Running Hours"
+    limit: 2000
+    unit: Hrs
+anomaly:
+  monitor: services
+  threshold_absolute: 50
+  threshold_percent: 20
+  frequency: DAILY
+review:
+  factor: 3
+  window_days: 7
+  min_amount: 5
+sandbox_scp:
+  protected_roles: [OrganizationAccountAccessRole]
+  deny_instance_types: ["p*", "g*", "inf*", "trn*", "dl*", "x*", "u-*", "*.metal*", "*.24xlarge", "*.32xlarge", "*.48xlarge"]
+  max_volume_iops: 3000
+  deny_volume_types: [io1, io2]
+  sagemaker_instance_types: ["ml.p*", "ml.g*", "ml.inf*", "ml.trn*"]
+  deny_bedrock_customization: true
+  deny_services: [redshift, redshift-serverless]
+  deny_commitments: true
+  protect_budgets: true

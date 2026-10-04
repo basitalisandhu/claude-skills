@@ -1,0 +1,14 @@
+{
+  "name": "github-manager",
+  "displayName": "GitHub Manager",
+  "version": "0.1.0",
+  "description": "Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, and a blameless incident postmortem timeline. Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.",
+  "author": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "homepage": "https://github.com/basitalisandhu/github-manager-skills",
+  "repository": "https://github.com/basitalisandhu/github-manager-skills",
+  "license": "MIT",
+  "keywords": ["engineering-management", "pull-requests", "code-review", "review-queue", "stuck-prs", "cycle-time", "sprint-report", "iteration-report", "postmortem", "incident-response", "blameless", "github", "gh-cli"]
+}

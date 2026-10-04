@@ -1,0 +1,290 @@
+# Starter mapping from exports to control identifiers, for control_map.py.
+#
+# This is a starting point to adapt, not an authoritative mapping. Which evidence satisfies which control is a
+# judgement for your organisation and your assessor. Topics are this repository's own short paraphrases; the
+# standards' text is not reproduced (see iso27001-identifiers.md and soc2-identifiers.md).
+#
+# File paths are relative to the pack's evidence folder and follow the folder layout the skills use:
+#   github/  outputs of gh api and gh pr list (github-change-control-evidence lists the commands)
+#   aws/     outputs of the aws CLI, regional files directly in aws/ or in aws/regions/<region>/
+#   m365/    outputs of mgc (or any Microsoft Graph client)
+# A glob such as aws/*guardduty-detectors.json matches the file in aws/ and in every aws/regions/<region>/.
+version: 1
+
+controls:
+  iso27001:
+    A.5.1: "Security policies exist, are approved and reach the people they apply to"
+    A.5.15: "Access to systems and data follows defined rules"
+    A.5.17: "Passwords, keys and other secrets are handled and rotated with care"
+    A.5.18: "Access is granted, reviewed and removed on purpose"
+    A.6.3: "People receive security awareness training"
+    A.8.1: "Company data on laptops and phones is protected through device management"
+    A.8.2: "Administrative access is kept to few people and watched"
+    A.8.5: "Sign-in uses strong methods such as multi-factor authentication"
+    A.8.8: "Known software weaknesses are found and fixed in time"
+    A.8.9: "System settings are recorded and drift is noticed"
+    A.8.12: "Leaks of sensitive data, including credentials, are prevented or caught"
+    A.8.13: "Copies of data and systems exist and restoring them is tried"
+    A.8.15: "Systems keep a tamper-resistant record of who did what"
+    A.8.16: "Systems are watched for unusual or hostile activity"
+    A.8.25: "Security is part of how software is built"
+    A.8.29: "Automated tests run before changes are accepted"
+    A.8.32: "Changes go through a reviewed, recorded process"
+  soc2:
+    CC1.4: "People with security duties are hired, trained and kept competent"
+    CC6.1: "Logical access is controlled with identities, strong sign-in and access rules"
+    CC6.2: "Accounts are created and removed through an approved process"
+    CC6.3: "Access follows roles and least privilege and is reviewed"
+    CC6.6: "Connections from outside the system boundary are restricted"
+    CC6.8: "Unauthorised or harmful software is prevented or detected"
+    CC7.1: "Weaknesses and risky configuration changes are detected"
+    CC7.2: "Systems are monitored for signs of attack or failure"
+    CC8.1: "Changes are approved, tested and recorded before they go live"
+    A1.2: "Backup and recovery capability supports availability commitments"
+
+checks:
+  # ---- GitHub: change management --------------------------------------------------------------------------------
+  - id: github-branch-protected
+    iso27001: [A.8.32]
+    soc2: [CC8.1]
+    evidence: github/branch-protection.json
+    field: url
+    expect: {exists: true}
+    absent_when: ["Branch not protected"]
+    describes: "The default branch has branch protection"
+
+  - id: github-required-reviews
+    iso27001: [A.8.32]
+    soc2: [CC8.1]
+    evidence: github/branch-protection.json
+    field: required_pull_request_reviews.required_approving_review_count
+    expect: {gte: 1}
+    absent_when: ["Branch not protected"]
+    describes: "Merges to the protected branch need at least one approving review"
+
+  - id: github-admins-included
+    iso27001: [A.8.32, A.8.2]
+    soc2: [CC8.1]
+    evidence: github/branch-protection.json
+    field: enforce_admins.enabled
+    expect: {equals: true}
+    absent_when: ["Branch not protected"]
+    describes: "Branch protection also applies to administrators"
+
+  - id: github-status-checks
+    iso27001: [A.8.29, A.8.25]
+    soc2: [CC8.1]
+    any_of:
+      - evidence: github/branch-protection.json
+        field: required_status_checks.contexts
+        expect: {not_empty: true}
+      - evidence: github/branch-protection.json
+        field: required_status_checks.checks
+        expect: {not_empty: true}
+    describes: "Named status checks must pass before merge"
+
+  - id: github-force-push-blocked
+    iso27001: [A.8.32]
+    soc2: [CC8.1]
+    evidence: github/branch-protection.json
+    field: allow_force_pushes.enabled
+    expect: {equals: false}
+    absent_when: ["Branch not protected"]
+    describes: "History on the protected branch cannot be rewritten by force push"
+
+  - id: github-merged-prs-approved
+    iso27001: [A.8.32]
+    soc2: [CC8.1]
+    evidence: github/pulls-merged.json
+    field: "[]"
+    where:
+      reviewDecision: {not_equals: APPROVED}
+    expect: {count_lte: 0}
+    describes: "Every exported merged pull request ended with an approved review decision"
+
+  - id: github-codeowners
+    iso27001: [A.8.32]
+    soc2: [CC8.1]
+    evidence: github/codeowners.json
+    field: path
+    expect: {exists: true}
+    absent_when: ["Not Found"]
+    describes: "A CODEOWNERS file names who reviews which code"
+
+  # ---- GitHub: vulnerability management and secrets -------------------------------------------------------------
+  - id: github-dependabot-alerts
+    iso27001: [A.8.8]
+    soc2: [CC7.1]
+    evidence: github/vulnerability-alerts.http
+    field: status
+    expect: {equals: 204}
+    describes: "Dependabot alerts are switched on (the API answers 204)"
+
+  - id: github-dependabot-security-updates
+    iso27001: [A.8.8]
+    soc2: [CC7.1]
+    evidence: github/repo.json
+    field: security_and_analysis.dependabot_security_updates.status
+    expect: {equals: enabled}
+    describes: "Dependabot security updates are switched on"
+
+  - id: github-secret-scanning
+    iso27001: [A.8.12, A.5.17]
+    soc2: [CC6.1]
+    evidence: github/repo.json
+    field: security_and_analysis.secret_scanning.status
+    expect: {equals: enabled}
+    describes: "Secret scanning is switched on"
+
+  - id: github-push-protection
+    iso27001: [A.8.12]
+    soc2: [CC6.1]
+    evidence: github/repo.json
+    field: security_and_analysis.secret_scanning_push_protection.status
+    expect: {equals: enabled}
+    describes: "Pushes containing detected secrets are blocked"
+
+  # ---- AWS: logging and monitoring ------------------------------------------------------------------------------
+  - id: aws-cloudtrail-multi-region
+    iso27001: [A.8.15]
+    soc2: [CC7.2]
+    evidence: aws/cloudtrail-trails.json
+    field: trailList[]
+    where:
+      IsMultiRegionTrail: {equals: true}
+    expect: {count_gte: 1}
+    describes: "At least one CloudTrail trail covers every region"
+
+  - id: aws-cloudtrail-validation
+    iso27001: [A.8.15]
+    soc2: [CC7.2]
+    evidence: aws/cloudtrail-trails.json
+    field: trailList[]
+    where:
+      IsMultiRegionTrail: {equals: true}
+      LogFileValidationEnabled: {equals: true}
+    expect: {count_gte: 1}
+    describes: "A multi-region trail has log file integrity validation on"
+
+  - id: aws-cloudtrail-logging
+    iso27001: [A.8.15]
+    soc2: [CC7.2]
+    evidence: aws/cloudtrail-status-*.json
+    field: IsLogging
+    expect: {equals: true}
+    describes: "Every exported trail status says logging is on"
+
+  - id: aws-guardduty
+    iso27001: [A.8.16]
+    soc2: [CC7.2]
+    evidence: aws/*guardduty-detectors.json
+    field: DetectorIds[]
+    expect: {count_gte: 1}
+    describes: "A GuardDuty detector exists in every exported region"
+
+  - id: aws-config-recording
+    iso27001: [A.8.9]
+    soc2: [CC7.1]
+    evidence: aws/*config-recorder-status.json
+    field: ConfigurationRecordersStatus[]
+    where:
+      recording: {equals: true}
+    expect: {count_gte: 1}
+    describes: "An AWS Config recorder is recording in every exported region"
+
+  # ---- AWS: identity and access ---------------------------------------------------------------------------------
+  - id: aws-root-mfa
+    iso27001: [A.8.5, A.8.2]
+    soc2: [CC6.1]
+    evidence: aws/account-summary.json
+    field: SummaryMap.AccountMFAEnabled
+    expect: {equals: 1}
+    describes: "The root user has MFA"
+
+  - id: aws-root-no-access-keys
+    iso27001: [A.8.2]
+    soc2: [CC6.1]
+    evidence: aws/account-summary.json
+    field: SummaryMap.AccountAccessKeysPresent
+    expect: {equals: 0}
+    describes: "The root user has no access keys"
+
+  - id: aws-console-users-mfa
+    iso27001: [A.8.5]
+    soc2: [CC6.1]
+    evidence: aws/credential-report.csv
+    field: "[]"
+    where:
+      password_enabled: {equals: "true"}
+      mfa_active: {equals: "false"}
+    expect: {count_lte: 0}
+    describes: "No IAM user with a console password lacks MFA"
+
+  - id: aws-password-policy-length
+    iso27001: [A.5.17]
+    soc2: [CC6.1]
+    evidence: aws/password-policy.json
+    field: PasswordPolicy.MinimumPasswordLength
+    expect: {gte: 14}
+    absent_when: ["NoSuchEntity"]
+    describes: "The IAM password policy requires at least 14 characters"
+
+  - id: aws-s3-account-public-access-block
+    iso27001: [A.5.15]
+    soc2: [CC6.1, CC6.6]
+    evidence: aws/s3control-public-access-block.json
+    field: PublicAccessBlockConfiguration
+    expect: {equals: {BlockPublicAcls: true, IgnorePublicAcls: true, BlockPublicPolicy: true, RestrictPublicBuckets: true}}
+    absent_when: ["NoSuchPublicAccessBlockConfiguration"]
+    describes: "All four account-level S3 public access block settings are on"
+
+  # ---- AWS: backup ----------------------------------------------------------------------------------------------
+  - id: aws-backup-plans
+    iso27001: [A.8.13]
+    soc2: [A1.2]
+    evidence: aws/*backup-plans.json
+    field: BackupPlansList[]
+    expect: {count_gte: 1}
+    on_fail: not assessable
+    describes: "AWS Backup has at least one backup plan (no plan is a gap: backups may be taken another way)"
+
+  # ---- Microsoft 365 --------------------------------------------------------------------------------------------
+  - id: m365-mfa-everyone
+    iso27001: [A.8.5]
+    soc2: [CC6.1]
+    any_of:
+      - evidence: m365/security-defaults.json
+        field: isEnabled
+        expect: {equals: true}
+      - evidence: m365/conditional-access-policies.json
+        field: value[]
+        where:
+          state: {equals: enabled}
+          grantControls.builtInControls: {contains: mfa}
+          conditions.users.includeUsers: {contains: All}
+        expect: {count_gte: 1}
+    describes: "Security defaults are on, or an enabled Conditional Access policy requires MFA for all users"
+
+  - id: m365-legacy-auth-blocked
+    iso27001: [A.8.5]
+    soc2: [CC6.1]
+    any_of:
+      - evidence: m365/security-defaults.json
+        field: isEnabled
+        expect: {equals: true}
+      - evidence: m365/conditional-access-policies.json
+        field: value[]
+        where:
+          state: {equals: enabled}
+          grantControls.builtInControls: {contains: block}
+          conditions.clientAppTypes: {contains: other}
+        expect: {count_gte: 1}
+    describes: "Security defaults are on, or an enabled Conditional Access policy blocks legacy authentication"
+
+  - id: m365-device-compliance-policies
+    iso27001: [A.8.1]
+    soc2: [CC6.8]
+    evidence: m365/intune-compliance-policies.json
+    field: value[]
+    expect: {count_gte: 1}
+    describes: "At least one Intune device compliance policy exists"

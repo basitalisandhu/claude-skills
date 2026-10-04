@@ -1,0 +1,83 @@
+rules:
+  - id: agentic.config.bash-wildcard-allowed
+    message: >-
+      permissions.allow pre-approves every shell command. One prompt injection then runs anything without a prompt.
+      List specific commands instead (Bash(npm test), Bash(git status *)) and add deny rules.
+    severity: ERROR
+    languages: [json]
+    paths:
+      include: ["**/settings.json", "**/settings.local.json"]
+    metadata:
+      category: security
+      owasp-agentic: "ASI03 Identity and privilege abuse"
+      confidence: HIGH
+    pattern-either:
+      - pattern: |
+          "Bash"
+      - pattern: |
+          "Bash(*)"
+      - pattern: |
+          "Bash(**)"
+
+  - id: agentic.config.bypass-permissions-default
+    message: >-
+      defaultMode bypassPermissions removes every permission prompt, including for destructive commands.
+      Use default or acceptEdits and allowlist what you need.
+    severity: ERROR
+    languages: [json]
+    paths:
+      include: ["**/settings.json", "**/settings.local.json"]
+    metadata:
+      category: security
+      owasp-agentic: "ASI03 Identity and privilege abuse"
+      confidence: HIGH
+    pattern: |
+      "defaultMode": "bypassPermissions"
+
+  - id: agentic.config.mcp-plain-http
+    message: >-
+      An MCP server is configured over plain HTTP. Tokens in headers and every tool result travel in clear text and the
+      server identity is not verified. Use https:// (or keep the server on loopback).
+    severity: WARNING
+    languages: [json]
+    paths:
+      include: ["**/.mcp.json", "**/mcp.json", "**/claude_desktop_config.json", "**/settings.json"]
+    metadata:
+      category: security
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      confidence: HIGH
+    patterns:
+      - pattern: |
+          "url": "=~/^http:\/\/(?!localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)/"
+
+  - id: agentic.config.mcp-literal-bearer-token
+    message: >-
+      A literal bearer token is stored in MCP server configuration. Reference it as ${VAR} and keep the value in the
+      environment or a secret store; rotate this one.
+    severity: ERROR
+    languages: [json]
+    paths:
+      include: ["**/.mcp.json", "**/mcp.json", "**/claude_desktop_config.json", "**/settings.json", "**/plugin.json"]
+    metadata:
+      category: security
+      cwe: "CWE-798: Use of Hard-coded Credentials"
+      confidence: HIGH
+    patterns:
+      - pattern: |
+          "Authorization": "=~/^Bearer (?!\$\{)[A-Za-z0-9._\-]{16,}$/"
+
+  - id: agentic.config.mcp-unpinned-npx
+    message: >-
+      An MCP server runs an npm package with npx -y and no version. Every start fetches whatever is latest, so a
+      compromised release runs with your permissions. Pin a version (package@x.y.z) or install the server locally.
+    severity: WARNING
+    languages: [json]
+    paths:
+      include: ["**/.mcp.json", "**/mcp.json", "**/claude_desktop_config.json", "**/settings.json", "**/plugin.json"]
+    metadata:
+      category: security
+      cwe: "CWE-1357: Reliance on Insufficiently Trustworthy Component"
+      owasp-agentic: "ASI04 Supply chain and dependency attacks"
+      confidence: MEDIUM
+    patterns:
+      - pattern-regex: '"args"\s*:\s*\[\s*"(?:-y|--yes)"\s*,\s*"(?!\.|/)(?:@[^/"]+/)?[^@"]+"'
