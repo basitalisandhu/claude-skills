@@ -215,7 +215,7 @@ python3 install.py --user</code></pre>
     }
     desc = (f"{c['skills']} Claude Code skills in {c['plugins']} plugins in one repository and one plugin "
             f"marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.")
-    return page(rel="", depth=0, title=f"{s.headline()} | {SITE_NAME}", description=desc, body=body,
+    return page(rel="", depth=0, title=s.headline(), description=desc, body=body,
                 extra_head=jsonld(ld) + "\n")
 
 
