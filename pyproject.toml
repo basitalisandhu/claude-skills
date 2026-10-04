@@ -1,0 +1,4 @@
+# Test settings only. This repository is not a Python package.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

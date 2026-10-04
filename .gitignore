@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Node (the agent-security MCP server is built after install, never committed)
+node_modules/
+
+# Local sync and release output
+/sync-summary.md
+/release/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
