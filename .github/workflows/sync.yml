@@ -1,0 +1,57 @@
+name: sync
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync plugins from the source repositories
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Sync (clones the 8 public source repositories over https)
+        run: python3 scripts/sync.py --summary sync-summary.md
+      - name: Validate
+        run: python3 scripts/validate.py
+      - name: Build and check the site
+        run: |
+          python3 site/build.py
+          python3 site/build.py --check
+      - name: Tests
+        run: |
+          python3 -m pip install pytest
+          python3 -m pytest -q
+      - name: Open or update the sync pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: sync/plugins
+          delete-branch: true
+          commit-message: "sync: update plugins from source repositories"
+          title: "sync: update plugins from source repositories"
+          body-path: sync-summary.md
+          labels: sync
+          add-paths: |
+            plugins
+            docs
+            README.md
+            SOURCES.json
+            catalog.json
+            .claude-plugin/marketplace.json

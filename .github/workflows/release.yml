@@ -1,0 +1,52 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, attest and publish the release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Validate before release
+        run: |
+          python3 scripts/validate.py
+          python3 site/build.py --check
+      - name: Build the tarball and checksums
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          mkdir -p release
+          tar --sort=name --owner=0 --group=0 --numeric-owner --mtime="@$(git log -1 --format=%ct)" \
+            -czf "release/claude-skills-${TAG}.tar.gz" plugins install.py catalog.json SOURCES.json LICENSE README.md
+          (cd release && sha256sum "claude-skills-${TAG}.tar.gz" > SHA256SUMS)
+          python3 scripts/release_notes.py "${TAG}" > release/notes.md
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: release/claude-skills-*.tar.gz
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "${TAG}" --repo "${GITHUB_REPOSITORY}" --title "${TAG}" --notes-file release/notes.md \
+            "release/claude-skills-${TAG}.tar.gz" release/SHA256SUMS
