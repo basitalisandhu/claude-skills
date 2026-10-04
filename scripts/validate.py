@@ -117,6 +117,61 @@ def check_structure(root: Path) -> list[str]:
     return problems
 
 
+PLAIN_SCALAR_TRAPS = (": ", " #")
+
+
+def strict_yaml_problems(text: str) -> list[str]:
+    """Return problems a strict YAML reader would raise on top-level scalars in the front matter.
+
+    Claude Code reads SKILL.md front matter leniently, but the skills CLI and other
+    strict parsers reject an unquoted value that contains ": " or " #", or a quote
+    that is never closed, and then skip the skill.
+    """
+    text = text.replace("\r\n", "\n")
+    if not text.startswith("---\n"):
+        return []
+    end = text.find("\n---", 4)
+    block = text[4:end] if end != -1 else text[4:]
+    out: list[str] = []
+    for n, line in enumerate(block.split("\n"), start=2):
+        if not line.strip() or line[0] in " \t" or line.lstrip().startswith("#") or ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        value = value.strip()
+        if not value or value in (">", ">-", "|", "|-", ">+", "|+"):
+            continue
+        if value[0] in "\"'":
+            q = value[0]
+            body = value[1:]
+            closed = False
+            i = 0
+            while i < len(body):
+                c = body[i]
+                if q == '"' and c == "\\":
+                    i += 2
+                    continue
+                if c == q:
+                    if q == "'" and body[i + 1:i + 2] == "'":
+                        i += 2
+                        continue
+                    closed = True
+                    if body[i + 1:].strip() not in ("", "#") and not body[i + 1:].strip().startswith("#"):
+                        out.append(f"line {n}: text after the closing quote of {key.strip()!r}")
+                    break
+                i += 1
+            if not closed:
+                out.append(f"line {n}: unclosed quote in {key.strip()!r}")
+            continue
+        for trap in PLAIN_SCALAR_TRAPS:
+            if trap in value:
+                out.append(f"line {n}: unquoted {key.strip()!r} contains {trap!r}; wrap the value in double quotes")
+                break
+        else:
+            if value.endswith(":"):
+                out.append(f"line {n}: unquoted {key.strip()!r} ends with ':'; wrap the value in double quotes")
+    return out
+
+
 def check_frontmatter(root: Path, allow_duplicates: set[str]) -> tuple[list[str], list[str], list[str]]:
     problems: list[str] = []
     dup_problems: list[str] = []
@@ -125,8 +180,10 @@ def check_frontmatter(root: Path, allow_duplicates: set[str]) -> tuple[list[str]
     for pdir in H.plugin_dirs(root):
         for sdir in H.skill_dirs(pdir):
             rel = f"plugins/{pdir.name}/skills/{sdir.name}/SKILL.md"
-            fields, _, errors = H.parse_frontmatter((sdir / "SKILL.md").read_text(encoding="utf-8"))
+            raw = (sdir / "SKILL.md").read_text(encoding="utf-8")
+            fields, _, errors = H.parse_frontmatter(raw)
             problems += [f"{rel}: {err}" for err in errors]
+            problems += [f"{rel}: {err} (strict YAML)" for err in strict_yaml_problems(raw)]
             name = fields.get("name")
             if not isinstance(name, str) or not name:
                 problems.append(f"{rel}: missing name")

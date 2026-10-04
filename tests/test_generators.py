@@ -107,3 +107,20 @@ def test_validate_catches_a_hand_edit(repo_copy):
     skill.write_text(skill.read_text(encoding="utf-8") + "\nedited here\n", encoding="utf-8")
     assert validate.check_sources(repo_copy)
     assert validate.check_generated(repo_copy)[0] == []  # catalog is unaffected by body text
+
+
+def test_strict_yaml_problems_flags_what_strict_parsers_reject():
+    ok = '---\nname: a\ndescription: "Review a plan: scope, risks"\nlicense: MIT\n---\nbody\n'
+    assert validate.strict_yaml_problems(ok) == []
+    folded = "---\nname: a\ndescription: >\n  Review a plan: scope\n---\n"
+    assert validate.strict_yaml_problems(folded) == []
+    bad = "---\nname: a\ndescription: Review a plan: scope, risks\n---\n"
+    assert any("contains ': '" in p for p in validate.strict_yaml_problems(bad))
+    comment = "---\nname: a\ndescription: Review a plan #1\n---\n"
+    assert any("' #'" in p for p in validate.strict_yaml_problems(comment))
+    unclosed = '---\nname: a\ndescription: "Review a plan\n---\n'
+    assert any("unclosed quote" in p for p in validate.strict_yaml_problems(unclosed))
+    trailing = '---\nname: a\ndescription: "Review" a plan\n---\n'
+    assert any("after the closing quote" in p for p in validate.strict_yaml_problems(trailing))
+    escaped = '---\nname: a\ndescription: "Say \\"hi\\": now"\n---\n'
+    assert validate.strict_yaml_problems(escaped) == []
