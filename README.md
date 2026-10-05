@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![116 skills in 16 plugins](https://img.shields.io/badge/skills-116%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![123 skills in 16 plugins](https://img.shields.io/badge/skills-123%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**116 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**123 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,7 +81,7 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**116 skills in 16 plugins.** 158 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**123 skills in 16 plugins.** 168 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
 
 ### agent-identity-governance
 
@@ -100,12 +100,13 @@ Version 0.1.0. Source: [agent-identity-governance-skills](https://github.com/bas
 
 ### agent-security
 
-Version 0.1.2. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
+Version 0.2.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | agent-config-audit | Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md) |
 | agent-eval-harness | Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-eval-harness/SKILL.md) |
+| agent-session-log-review | Review an AI agent session log for signs that prompt injection took effect, tool misuse, data leaving the boundary and loops, with a bundled script that normalises transcript, chat and event logs and writes a timeline of flagged events. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-session-log-review/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-session-log-review/SKILL.md) |
 | agent-threat-model | Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-threat-model/SKILL.md) |
 | incident-lookup | Look up 80 coded AI-agent security incidents from 2023 to 2026, mapped to OWASP Agentic and LLM Top 10 and MITRE ATLAS, and summarise precedents with sources. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/incident-lookup/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/incident-lookup/SKILL.md) |
 | mcp-server-review | Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/mcp-server-review/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/mcp-server-review/SKILL.md) |
@@ -115,12 +116,13 @@ Version 0.1.2. Source: [agent-security-skills](https://github.com/basitalisandhu
 
 ### aws-security
 
-Version 0.2.1. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
+Version 0.3.0. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | agent-safe-aws-access | Plan least-privilege AWS access for an AI coding agent from a short spec, producing the trust policy, task-scoped permissions, a permission boundary, an SCP backstop, the assume-role command and a kill switch, or review an existing agent role against the same rules. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/agent-safe-aws-access/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/agent-safe-aws-access/SKILL.md) |
 | aws-account-audit | Audit one AWS account for security gaps by collecting inventory with read-only aws CLI commands and evaluating 17 checks offline (root MFA and keys, CloudTrail, GuardDuty, S3 public access, open security groups, old keys, admin policies, encryption), with severity, evidence and a fix per finding. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-account-audit/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-account-audit/SKILL.md) |
+| aws-agent-session-audit | Audit what an AI coding agent did in an AWS account and which permissions it never needed, from a saved CloudTrail export filtered to the agent's role session: actions by service, writes versus reads, calls outside a declared allow list, logging tampering, destructive and IAM calls, resources touched, errors and the time window. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-agent-session-audit/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-agent-session-audit/SKILL.md) |
 | aws-incident-response-runbook | Write a filled-in AWS incident response runbook for a leaked access key, a compromised EC2 instance, a public S3 bucket, suspicious IAM activity, ransomware against S3 or EBS, or crypto-mining, with read-only inventory first, containment commands that each need confirmation, evidence preservation, recovery and templates; a triage mode picks the scenario from GuardDuty findings. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-incident-response-runbook/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-incident-response-runbook/SKILL.md) |
 | aws-spend-guardrails | Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-spend-guardrails/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md) |
 | iam-least-privilege-review | Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/iam-least-privilege-review/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md) |
@@ -146,7 +148,7 @@ Version 0.1.0. Source: [claude-code-tooling-skills](https://github.com/basitalis
 
 ### code-quality
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install code-quality@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install code-quality@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -161,19 +163,21 @@ Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### compliance-evidence
 
-Version 0.1.2. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
+Version 0.2.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | auditor-narrative-drafter | Draft short ISO 27001 or SOC 2 control narratives strictly from a control map, with an inline [evidence: file#field] citation on every evidence sentence, and lint any narrative for uncited claims, citations that do not trace, contradicted states, certainty wording and pasted framework text. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/auditor-narrative-drafter/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/auditor-narrative-drafter/SKILL.md) |
 | aws-identity-and-logging-evidence | Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/aws-identity-and-logging-evidence/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md) |
 | control-map-from-exports | Map the exports in an evidence pack to ISO 27001:2022 Annex A or SOC 2 control identifiers and report per control supported, contradicted or not assessable, citing the exact file, field and value, plus the gaps; every file's SHA-256 is re-checked first. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/control-map-from-exports/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/control-map-from-exports/SKILL.md) |
+| essential-eight-evidence-map | Map an evidence pack to the ASD Essential Eight Maturity Model (November 2023) and show, for each of the eight strategies, which ML1 to ML3 requirements have evidence, which do not, and the maturity level the strategy can claim today, from the pack's manifest and a mapping you own. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/essential-eight-evidence-map/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/essential-eight-evidence-map/SKILL.md) |
 | evidence-pack-builder | Turn a folder of exports already on disk into an integrity-checked ISO 27001 or SOC 2 evidence pack, recording who collected each file, when, from which system and with which command, with a SHA-256 per file, a manifest and later re-verification that flags changed, missing or stale files. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/evidence-pack-builder/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/evidence-pack-builder/SKILL.md) |
 | github-change-control-evidence | Turn saved gh exports of one GitHub repository into ISO 27001 and SOC 2 evidence rows for change and vulnerability management, checking branch protection or rulesets, required reviews, an approval by someone other than the author on every merged pull request, CODEOWNERS, signed commits, Dependabot and secret scanning, and separating switched off from not assessable. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/github-change-control-evidence/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/github-change-control-evidence/SKILL.md) |
+| security-questionnaire-drafter | Draft answers to a customer or vendor security questionnaire only from your own evidence pack and policy folder, citing the policy section or evidence file behind every answer and marking questions with nothing behind them as not assessable instead of inventing an answer. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/security-questionnaire-drafter/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/security-questionnaire-drafter/SKILL.md) |
 
 ### data
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install data@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install data@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -186,7 +190,7 @@ Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### debugging
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install debugging@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install debugging@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -199,7 +203,7 @@ Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### devops
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install devops@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install devops@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -210,11 +214,12 @@ Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 | k8s-manifest-review | Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/devops/k8s-manifest-review/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/k8s-manifest-review/SKILL.md) |
 | release-notes | Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/devops/release-notes/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/release-notes/SKILL.md) |
 | semver-advisor | Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/devops/semver-advisor/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md) |
+| terraform-apply-gate | Decide whether a saved Terraform plan may be applied under the team's written rules: a bundled script checks the plan JSON against a small YAML policy (forbidden destroys by type, required tags, a replacement ceiling, protected names, allowed providers) and prints allow, ask or block with a reason per resource. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/devops/terraform-apply-gate/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/terraform-apply-gate/SKILL.md) |
 | terraform-review | Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/devops/terraform-review/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/terraform-review/SKILL.md) |
 
 ### docs
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install docs@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install docs@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -227,11 +232,12 @@ Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### github-manager
 
-Version 0.1.2. Source: [github-manager-skills](https://github.com/basitalisandhu/github-manager-skills). Install: `/plugin install github-manager@claude-skills`.
+Version 0.2.0. Source: [github-manager-skills](https://github.com/basitalisandhu/github-manager-skills). Install: `/plugin install github-manager@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | incident-postmortem-timeline | Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/github-manager/incident-postmortem-timeline/) · [source](https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md) |
+| issue-triage-digest | Clear an open-issue backlog with a triage digest: a bundled script reads a saved gh issue list export and flags unlabelled issues, issues nobody but the author has answered for N days, probable duplicates by title similarity, stale issues and issues with many thumbs-up, and suggests a label per issue from a keyword map you keep in a YAML file, as Markdown and JSON. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/github-manager/issue-triage-digest/) · [source](https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/issue-triage-digest/SKILL.md) |
 | iteration-report | Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/github-manager/iteration-report/) · [source](https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/iteration-report/SKILL.md) |
 | pr-queue-digest | Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/github-manager/pr-queue-digest/) · [source](https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/pr-queue-digest/SKILL.md) |
 
@@ -281,13 +287,14 @@ Version 0.3.1. Source: [repo-engineering-skills](https://github.com/basitalisand
 
 ### security-basics
 
-Version 0.1.2. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install security-basics@claude-skills`.
+Version 0.2.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install security-basics@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | auth-flow-review | Find the weaknesses in an application's login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/auth-flow-review/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/auth-flow-review/SKILL.md) |
 | cors-review | Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/cors-review/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/cors-review/SKILL.md) |
 | dependency-audit-reader | Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/dependency-audit-reader/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/dependency-audit-reader/SKILL.md) |
+| diff-security-review | Review a change for what it adds to the attack surface before it merges: a bundled script scans only the added lines of a saved git or gh diff for new network calls, shell and process execution, unsafe deserialisation, SQL built from strings, credential-shaped literals, disabled TLS checks and new permissions in workflows and manifests, with file and line. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/diff-security-review/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/diff-security-review/SKILL.md) |
 | http-security-headers | Grade the security headers of a saved HTTP response (HSTS, CSP, nosniff, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, disclosure, caching) with a bundled script, then write the header set for the server or framework. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/http-security-headers/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/http-security-headers/SKILL.md) |
 | jwt-inspector | Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/jwt-inspector/SKILL.md) |
 | secrets-hygiene | Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/) · [source](https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/secrets-hygiene/SKILL.md) |
@@ -327,11 +334,11 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->96 of the 116 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->103 of the 123 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->116 of the 116 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->123 of the 123 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 

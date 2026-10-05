@@ -14,19 +14,19 @@
       "repo": "agent-security-skills",
       "url": "https://github.com/basitalisandhu/agent-security-skills",
       "path": "plugins/agent-security",
-      "commit": "736abaeebe210d1f7b2930fd0f5bf6dcb8ec6ad1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "37c1c9baeceb8d1fa0e8f28a3c4db3aeb97add0118065ca3f60366c1af841c96"
+      "commit": "f0c3485f092b30c30045e8013039fadbe538f679",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "398a2ddb681a3d6576ce28fb279f1713be8ff535dedd6b647e17ba729057a4a8"
     },
     "aws-security": {
       "repo": "aws-security-skills",
       "url": "https://github.com/basitalisandhu/aws-security-skills",
       "path": "plugins/aws-security",
-      "commit": "84e5b3b828075047bb95f7105718293f5dfa519c",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.2.1",
-      "content_sha256": "0fd15fb772f94d5c0868bc919076a03e2258723ccf71f6bed15981b137d8f9d3"
+      "commit": "db47b4315bf7d5b561fdcfb80756f98e282f9d7b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.3.0",
+      "content_sha256": "a804ac359bd4d18661fa733a825f6769df63adcbdd0a48b1dc3589e53122385a"
     },
     "cc-setup-tooling": {
       "repo": "claude-code-tooling-skills",
@@ -41,64 +41,64 @@
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/code-quality",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "127da11726327d9ff93285b43a099fd104ad9187922c396c84a16352fc89782e"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "c9cde4fd03f46a30c9737c2a501c5035bcad328f8e73f44b0476f92b7649a52e"
     },
     "compliance-evidence": {
       "repo": "compliance-evidence-skills",
       "url": "https://github.com/basitalisandhu/compliance-evidence-skills",
       "path": "plugins/compliance-evidence",
-      "commit": "61dc19d12d467d5d83f433f10a357246208777c0",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "9b75ac0605552ab17b6f088ea4d237bcbf9bc84048dde0e86f11e6d11885056d"
+      "commit": "694728a89fb8b607a03eabeb9c0165f92868a483",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "e6e8fb6024e3f1ba21cb99e3b720d9a5bc0cbfd860afe3c605f897e59c12ec39"
     },
     "data": {
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/data",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "7ac33fe5c2191dfe30212af0e7d6aa1dd36e6fd1c1c0ff967256eab41518922a"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "3f5b9551aea9320bae9b0e7ada0f1ad35704ca494f9614f1ea5afb419392ce8d"
     },
     "debugging": {
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/debugging",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "2a117d6048cf51da5a244437989068716035f722c992c640815a446b30985a09"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "7c68e37a103c5a86de388ebe78dfc48f5bd623b9a76771fa721eb0d08e607ab5"
     },
     "devops": {
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/devops",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "7fb6cc9730977ba3d65637a51558ee9cda2fb371339b6bde49386f0c17071d5e"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "302f9500e42beaebff25497b0f859a55c907a5c72391178d31440030c0444155"
     },
     "docs": {
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/docs",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "429eef7715d61567ab5e8d055c22890c1fd472030c169a623c8733a15ce94b02"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "63fe3f21e0c228841667d76d8ea9d91eec0a1e6bd3a366e6704c4267c745ee44"
     },
     "github-manager": {
       "repo": "github-manager-skills",
       "url": "https://github.com/basitalisandhu/github-manager-skills",
       "path": "plugins/github-manager",
-      "commit": "8e05b37714e557c377406dfd0000af4109ffd2fc",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "5b5c5474083949b4439f02b2728bbaea9d661c890dccd8c3fe3740023c768b0d"
+      "commit": "6c79521a2f5af12ec5c030cef3b44231a8ec7bc0",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "0fed8d030d21abdde576a6aa7621286ddae70c105e1c13d0500c7745d169b058"
     },
     "m365-governance": {
       "repo": "m365-governance-skills",
@@ -131,10 +131,10 @@
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
       "path": "plugins/security-basics",
-      "commit": "ef4ad273b9b1ce552c633e46c36e15122fd599e1",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.1.2",
-      "content_sha256": "04839dbfdd86db8c731e381d33e672daa9e5e2ca45111af1f1d5059f2d5347a2"
+      "commit": "e9e52e4f7fa142676ec6d99a655d365b6887c73b",
+      "synced_at": "2026-10-05T12:29:59Z",
+      "upstream_version": "0.2.0",
+      "content_sha256": "eb4492cc60bfedf3099b744a89b7a36dca6e81fc94754ebe02d791eed3ee3211"
     },
     "ways-of-working": {
       "repo": "ways-of-working-skills",

@@ -51,8 +51,8 @@
     {
       "name": "agent-security",
       "source": "./plugins/agent-security",
-      "description": "Eight security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
-      "version": "0.1.2",
+      "description": "Nine security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -80,8 +80,8 @@
     {
       "name": "aws-security",
       "source": "./plugins/aws-security",
-      "description": "Nine AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails and a sandbox guardrail pack. Scripts run offline on specs and saved CLI output.",
-      "version": "0.2.1",
+      "description": "Ten AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails, a sandbox guardrail pack and an agent session audit from CloudTrail. Scripts run offline on specs and saved CLI output.",
+      "version": "0.3.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -100,7 +100,8 @@
         "landing-zone",
         "incident-response",
         "ai-agents",
-        "budgets"
+        "budgets",
+        "cloudtrail"
       ],
       "category": "security",
       "tags": [
@@ -145,7 +146,7 @@
       "name": "code-quality",
       "source": "./plugins/code-quality",
       "description": "Review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage and test gap finder.",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -171,8 +172,8 @@
     {
       "name": "compliance-evidence",
       "source": "./plugins/compliance-evidence",
-      "description": "Five compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter. Exports on disk, offline evaluation, three result states.",
-      "version": "0.1.2",
+      "description": "Seven compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map. Exports on disk, offline evaluation, three result states.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -189,7 +190,9 @@
         "control-mapping",
         "github",
         "aws",
-        "microsoft-365"
+        "microsoft-365",
+        "essential-eight",
+        "security-questionnaire"
       ],
       "category": "security",
       "tags": [
@@ -203,7 +206,7 @@
       "name": "data",
       "source": "./plugins/data",
       "description": "SQL query review, schema migration planning, CSV profiler, JSON Schema inference, regex builder and OpenAPI 3 contract review.",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -231,7 +234,7 @@
       "name": "debugging",
       "source": "./plugins/debugging",
       "description": "Bug reproduction minimiser, log triage, flaky test hunter, stack trace explainer, profile reader and a memory leak checklist.",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -256,8 +259,8 @@
     {
       "name": "devops",
       "source": "./plugins/devops",
-      "description": "Dockerfile hardening, GitHub Actions authoring, Kubernetes manifest and Terraform review, cron doctor, env file diff, release notes and a semver advisor.",
-      "version": "0.1.2",
+      "description": "Dockerfile hardening, GitHub Actions authoring, Kubernetes manifest and Terraform review, a Terraform apply gate, cron doctor, env file diff, release notes and a semver advisor.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -271,6 +274,7 @@
         "kubernetes",
         "terraform",
         "cron",
+        "policy",
         "release-notes",
         "semver"
       ],
@@ -286,7 +290,7 @@
       "name": "docs",
       "source": "./plugins/docs",
       "description": "README author, ADR writer, changelog keeper, onboarding doc, API docs from code and a postmortem writer.",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -310,8 +314,8 @@
     {
       "name": "github-manager",
       "source": "./plugins/github-manager",
-      "description": "Three skills, each with a tested standard-library script over saved gh exports: pr-queue-digest, iteration-report and incident-postmortem-timeline. Team level only, no per-person scoring.",
-      "version": "0.1.2",
+      "description": "Four skills, each with a tested standard-library script over saved gh exports: pr-queue-digest, iteration-report, incident-postmortem-timeline and issue-triage-digest. Team level only, no per-person scoring.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -328,6 +332,7 @@
         "sprint-report",
         "postmortem",
         "incident-response",
+        "issue-triage",
         "github"
       ],
       "category": "productivity",
@@ -438,8 +443,8 @@
     {
       "name": "security-basics",
       "source": "./plugins/security-basics",
-      "description": "Secrets hygiene scan, dependency audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. For agent-specific security see agent-security-skills.",
-      "version": "0.1.2",
+      "description": "Secrets hygiene scan, dependency audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a diff security review. For agent-specific security see agent-security-skills.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -454,7 +459,8 @@
         "http-headers",
         "jwt",
         "cors",
-        "authentication"
+        "authentication",
+        "diff-review"
       ],
       "category": "security",
       "tags": [

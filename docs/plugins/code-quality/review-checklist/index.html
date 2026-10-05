@@ -36,7 +36,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.1.2"
+ "version": "0.2.0"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / review-checklist</p>
 <h1>Review checklist</h1>
 <p class="lede">Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or &quot;look over my changes&quot; before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that).</p>
-<p class="meta">Skill <code>review-checklist</code> in plugin <a href="../index.html">code-quality</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a>.</p>
+<p class="meta">Skill <code>review-checklist</code> in plugin <a href="../index.html">code-quality</a> 0.2.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -89,7 +89,7 @@ python3 install.py --user --skill code-quality/review-checklist</code></pre>
 - ...
 &lt;/details&gt;</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>error-handling-review</code> for a deeper pass on the failure paths the checklist flags.</li><li><code>test-gap-finder</code> to show which changed modules have no test at all.</li><li><code>secrets-hygiene</code> in security-basics when the diff touches configuration or credentials.</li></ul>
+<ul><li><code>error-handling-review</code> for a deeper pass on the failure paths the checklist flags.</li><li><code>test-gap-finder</code> to show which changed modules have no test at all.</li><li><code>secrets-hygiene</code> in security-basics when the diff touches configuration or credentials.</li><li><code>diff-security-review</code> in security-basics for the security row: it scans the diff&#x27;s added lines for new attack surface; this skill covers the whole review.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
