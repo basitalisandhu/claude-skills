@@ -51,6 +51,7 @@ python3 install.py --user
 | --- | --- |
 | `python3 install.py --project` | Copies into `./.claude/skills/` of the directory you run it from |
 | `python3 install.py --list` | Lists plugins and skills, with the name each installs as |
+| `python3 install.py --list --json` | The same plugins, skills and install names as JSON; supports filters and `--prefix` |
 | `python3 install.py --user --only <plugin>` | One plugin; repeat `--only` for more |
 | `python3 install.py --user --skill <plugin>/<skill>` | One skill; repeat for more |
 | `python3 install.py --user --dry-run` | Shows what would happen and writes nothing |

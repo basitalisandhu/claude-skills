@@ -240,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
     where.add_argument("--project", action="store_true", help="install into ./.claude/skills/ of the current directory")
     where.add_argument("--target", help="install into this directory instead")
     ap.add_argument("--list", action="store_true", help="list plugins and skills, then exit")
+    ap.add_argument("--json", action="store_true", help="with --list, output plugins, skills and install names as JSON")
     ap.add_argument("--only", action="append", default=[], metavar="PLUGIN", help="only this plugin (repeatable)")
     ap.add_argument("--skill", action="append", default=[], metavar="PLUGIN/SKILL", help="only this skill (repeatable)")
     ap.add_argument("--prefix", action="store_true", help="install every skill as <plugin>-<skill>")
@@ -249,6 +250,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--from", dest="repo", default=str(Path(__file__).resolve().parent),
                     help="repository root to install from (default: the folder holding install.py)")
     args = ap.parse_args(argv)
+    if args.json and not args.list:
+        ap.error("--json requires --list")
 
     if sys.version_info < (3, 10):
         print("error: Python 3.10 or newer is required", file=sys.stderr)
@@ -263,6 +266,14 @@ def main(argv: list[str] | None = None) -> int:
     # whether it is installed alone or with everything else.
     names = plan_names([(p, s) for p, s, _ in everything], args.prefix)
     if args.list:
+        if args.json:
+            plugins = {}
+            for plugin, skill, _ in found:
+                plugins.setdefault(plugin, []).append({"name": skill, "install_name": names[(plugin, skill)]})
+            print(json.dumps({"plugins": [
+                {"name": plugin, "skills": skills} for plugin, skills in plugins.items()
+            ]}, indent=2))
+            return 0
         return cmd_list(found, names)
     if not (args.user or args.project or args.target):
         ap.error("choose where to install: --user, --project or --target DIR (or use --list)")
