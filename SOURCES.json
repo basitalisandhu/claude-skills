@@ -122,10 +122,10 @@
       "repo": "ways-of-working-skills",
       "url": "https://github.com/basitalisandhu/ways-of-working-skills",
       "path": "plugins/ways-of-working",
-      "commit": "227c8b6fc91784e3cf09bba697d4fe2c518e0faf",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.2.0",
-      "content_sha256": "d4b7919108426cb7daa91b565d42fd0a326d35533da9c5909133e0c06b93cac9"
+      "commit": "3f4a45d535d8461d6d3584867dc77530c3442c63",
+      "synced_at": "2026-10-05T11:51:45Z",
+      "upstream_version": "0.2.1",
+      "content_sha256": "fe79ec71e5b4b9105ab95c0a9a15be7b5c12740d19e54c99c0f6aff9f5b740a4"
     }
   }
 }

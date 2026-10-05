@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>working-agreement-check: Check a team&#x27;s written working agreement | Claude Code skills</title>
-<meta name="description" content="Check a team&#x27;s written working agreement (a Markdown list of rules such as &#x27;PRs need one review&#x27;, &#x27;main is protected&#x27;, &#x27;CI must pass&#x27;, &#x27;CODEOWNERS covers src/&#x27;) against saved GitHub exports: the branch protection JSON, rulesets JSON, the CODEOWNERS file and the workflow list. A bundled script maps each recognised rule to a check and reports it as met, not met, or not checkable from these exports, with the evidence, and lists rules it does not recognise. Use when asked whether the repository settings match what the team agreed, before a team retro on process, or after changing branch protection. Not for audit evidence (github-change-control-evidence does that), checking README claims against code (docs-truth-check), or changing any setting.">
+<title>working-agreement-check: Check whether repository settings match a team&#x27;s written working | Claude Code skills</title>
+<meta name="description" content="Check whether repository settings match a team&#x27;s written working agreement (rules such as &#x27;PRs need one review&#x27; or &#x27;main is protected&#x27;) using saved branch protection and rulesets JSON, CODEOWNERS and the workflow list: each rule met, not met or not checkable, with evidence, and unrecognised rules listed. Use when asked &quot;do our repo settings match what we agreed?&quot; or before a process retro. Not for audit evidence (github-change-control-evidence), README claims against code (docs-truth-check), or changing any setting.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/working-agreement-check/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="working-agreement-check: Check a team&#x27;s written working agreement | Claude Code skills">
-<meta property="og:description" content="Check a team&#x27;s written working agreement (a Markdown list of rules such as &#x27;PRs need one review&#x27;, &#x27;main is protected&#x27;, &#x27;CI must pass&#x27;, &#x27;CODEOWNERS covers src/&#x27;) against saved GitHub exports: the branch protection JSON, rulesets JSON, the CODEOWNERS file and the workflow list. A bundled script maps each recognised rule to a check and reports it as met, not met, or not checkable from these exports, with the evidence, and lists rules it does not recognise. Use when asked whether the repository settings match what the team agreed, before a team retro on process, or after changing branch protection. Not for audit evidence (github-change-control-evidence does that), checking README claims against code (docs-truth-check), or changing any setting.">
+<meta property="og:title" content="working-agreement-check: Check whether repository settings match a team&#x27;s written working | Claude Code skills">
+<meta property="og:description" content="Check whether repository settings match a team&#x27;s written working agreement (rules such as &#x27;PRs need one review&#x27; or &#x27;main is protected&#x27;) using saved branch protection and rulesets JSON, CODEOWNERS and the workflow list: each rule met, not met or not checkable, with evidence, and unrecognised rules listed. Use when asked &quot;do our repo settings match what we agreed?&quot; or before a process retro. Not for audit evidence (github-change-control-evidence), README claims against code (docs-truth-check), or changing any setting.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/working-agreement-check/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "working-agreement-check",
- "description": "Check a team's written working agreement (a Markdown list of rules such as 'PRs need one review', 'main is protected', 'CI must pass', 'CODEOWNERS covers src/') against saved GitHub exports: the branch protection JSON, rulesets JSON, the CODEOWNERS file and the workflow list. A bundled script maps each recognised rule to a check and reports it as met, not met, or not checkable from these exports, with the evidence, and lists rules it does not recognise. Use when asked whether the repository settings match what the team agreed, before a team retro on process, or after changing branch protection. Not for audit evidence (github-change-control-evidence does that), checking README claims against code (docs-truth-check), or changing any setting.",
+ "description": "Check whether repository settings match a team's written working agreement (rules such as 'PRs need one review' or 'main is protected') using saved branch protection and rulesets JSON, CODEOWNERS and the workflow list: each rule met, not met or not checkable, with evidence, and unrecognised rules listed. Use when asked \"do our repo settings match what we agreed?\" or before a process retro. Not for audit evidence (github-change-control-evidence), README claims against code (docs-truth-check), or changing any setting.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/working-agreement-check/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / working-agreement-check</p>
 <h1>Working agreement check</h1>
-<p class="lede">Check a team&#x27;s written working agreement (a Markdown list of rules such as &#x27;PRs need one review&#x27;, &#x27;main is protected&#x27;, &#x27;CI must pass&#x27;, &#x27;CODEOWNERS covers src/&#x27;) against saved GitHub exports: the branch protection JSON, rulesets JSON, the CODEOWNERS file and the workflow list. A bundled script maps each recognised rule to a check and reports it as met, not met, or not checkable from these exports, with the evidence, and lists rules it does not recognise. Use when asked whether the repository settings match what the team agreed, before a team retro on process, or after changing branch protection. Not for audit evidence (github-change-control-evidence does that), checking README claims against code (docs-truth-check), or changing any setting.</p>
-<p class="meta">Skill <code>working-agreement-check</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/working-agreement-check/SKILL.md">plugins/ways-of-working/skills/working-agreement-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/working-agreement-check/SKILL.md">plugins/ways-of-working/skills/working-agreement-check/SKILL.md</a>.</p>
+<p class="lede">Check whether repository settings match a team&#x27;s written working agreement (rules such as &#x27;PRs need one review&#x27; or &#x27;main is protected&#x27;) using saved branch protection and rulesets JSON, CODEOWNERS and the workflow list: each rule met, not met or not checkable, with evidence, and unrecognised rules listed. Use when asked &quot;do our repo settings match what we agreed?&quot; or before a process retro. Not for audit evidence (github-change-control-evidence), README claims against code (docs-truth-check), or changing any setting.</p>
+<p class="meta">Skill <code>working-agreement-check</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/working-agreement-check/SKILL.md">plugins/ways-of-working/skills/working-agreement-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/working-agreement-check/SKILL.md">plugins/ways-of-working/skills/working-agreement-check/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
