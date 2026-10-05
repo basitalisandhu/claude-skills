@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code skills: 99 skills in 14 plugins, one repository</title>
-<meta name="description" content="99 Claude Code skills in 14 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<title>Claude Code skills: 107 skills in 15 plugins, one repository</title>
+<meta name="description" content="107 Claude Code skills in 15 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="Claude Code skills: 99 skills in 14 plugins, one repository">
-<meta property="og:description" content="99 Claude Code skills in 14 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<meta property="og:title" content="Claude Code skills: 107 skills in 15 plugins, one repository">
+<meta property="og:description" content="107 Claude Code skills in 15 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
@@ -18,13 +18,101 @@
 {
  "@context": "https://schema.org",
  "@type": "ItemList",
- "name": "Claude Code skills: 99 skills in 14 plugins, one repository",
+ "name": "Claude Code skills: 107 skills in 15 plugins, one repository",
  "url": "https://basitalisandhu.github.io/claude-skills/",
- "numberOfItems": 99,
+ "numberOfItems": 107,
  "itemListElement": [
   {
    "@type": "ListItem",
    "position": 1,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "agent-action-timeline",
+    "description": "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked 'what did this agent do last week?', during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "agent-kill-switch-runbook",
+    "description": "Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. Checks every credential and assignment in the inventory has a step. Use when asked 'how do we turn this agent off?', before an agent goes live, or in an incident. Not for running the steps (it changes nothing) or for offboarding a human account.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-kill-switch-runbook/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "agent-recertification",
+    "description": "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked 'prepare the agent access review for this quarter' or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 4,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "connector-register",
+    "description": "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked 'which MCP servers are we actually running?' or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 5,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "credential-expiry-radar",
+    "description": "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked 'which app secrets expire this month?', before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 6,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "entra-agent-id-review",
+    "description": "Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked 'what can our agent apps do in Entra?' or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 7,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "leaked-credential-response",
+    "description": "Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. Reads the identity's inventory record and saved audit exports. Use when a key or token turns up in a commit, transcript, log or ticket, or when asked 'was this leaked key used?'. Not for scanning code for secrets, for rotating keys itself, or for audit evidence outside an incident (evidence-pack-builder).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/leaked-credential-response/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 8,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "nhi-inventory",
+    "description": "List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked 'which agent identities have no owner?', before an access review, or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/",
+    "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 9,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-config-audit",
@@ -35,7 +123,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 2,
+   "position": 10,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-eval-harness",
@@ -46,7 +134,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 3,
+   "position": 11,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-threat-model",
@@ -57,7 +145,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 4,
+   "position": 12,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "incident-lookup",
@@ -68,7 +156,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 5,
+   "position": 13,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mcp-server-review",
@@ -79,7 +167,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 6,
+   "position": 14,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "prompt-injection-review",
@@ -90,7 +178,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 7,
+   "position": 15,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "secure-agent-checklist",
@@ -101,7 +189,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 8,
+   "position": 16,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "semgrep-agentic",
@@ -112,7 +200,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 9,
+   "position": 17,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-safe-aws-access",
@@ -123,7 +211,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 10,
+   "position": 18,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "aws-account-audit",
@@ -134,7 +222,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 11,
+   "position": 19,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "aws-incident-response-runbook",
@@ -145,7 +233,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 12,
+   "position": 20,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "aws-spend-guardrails",
@@ -156,7 +244,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 13,
+   "position": 21,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "iam-least-privilege-review",
@@ -167,7 +255,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 14,
+   "position": 22,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "landing-zone-blast-radius",
@@ -178,7 +266,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 15,
+   "position": 23,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "sandbox-account-guardrail-pack",
@@ -189,7 +277,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 16,
+   "position": 24,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "scp-guardrails",
@@ -200,7 +288,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 17,
+   "position": 25,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "security-hub-triage",
@@ -211,7 +299,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 18,
+   "position": 26,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "complexity-report",
@@ -222,7 +310,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 19,
+   "position": 27,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dead-code-finder",
@@ -233,7 +321,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 20,
+   "position": 28,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "error-handling-review",
@@ -244,7 +332,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 21,
+   "position": 29,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "naming-audit",
@@ -255,7 +343,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 22,
+   "position": 30,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "refactor-plan",
@@ -266,7 +354,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 23,
+   "position": 31,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "review-checklist",
@@ -277,7 +365,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 24,
+   "position": 32,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "test-gap-finder",
@@ -288,7 +376,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 25,
+   "position": 33,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "type-coverage",
@@ -299,7 +387,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 26,
+   "position": 34,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "auditor-narrative-drafter",
@@ -310,7 +398,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 27,
+   "position": 35,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "aws-identity-and-logging-evidence",
@@ -321,7 +409,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 28,
+   "position": 36,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "control-map-from-exports",
@@ -332,7 +420,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 29,
+   "position": 37,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "evidence-pack-builder",
@@ -343,7 +431,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 30,
+   "position": 38,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "github-change-control-evidence",
@@ -354,7 +442,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 31,
+   "position": 39,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "api-contract-review",
@@ -365,7 +453,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 32,
+   "position": 40,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "csv-profiler",
@@ -376,7 +464,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 33,
+   "position": 41,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "json-schema-author",
@@ -387,7 +475,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 34,
+   "position": 42,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "regex-builder",
@@ -398,7 +486,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 35,
+   "position": 43,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "schema-migration-plan",
@@ -409,7 +497,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 36,
+   "position": 44,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "sql-query-review",
@@ -420,7 +508,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 37,
+   "position": 45,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "bug-repro-minimiser",
@@ -431,7 +519,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 38,
+   "position": 46,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "flaky-test-hunter",
@@ -442,7 +530,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 39,
+   "position": 47,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "log-triage",
@@ -453,7 +541,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 40,
+   "position": 48,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "memory-leak-checklist",
@@ -464,7 +552,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 41,
+   "position": 49,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "perf-profile-reader",
@@ -475,7 +563,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 42,
+   "position": 50,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "stack-trace-explainer",
@@ -486,7 +574,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 43,
+   "position": 51,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cron-doctor",
@@ -497,7 +585,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 44,
+   "position": 52,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dockerfile-hardening",
@@ -508,7 +596,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 45,
+   "position": 53,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "env-diff",
@@ -519,7 +607,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 46,
+   "position": 54,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "github-actions-author",
@@ -530,7 +618,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 47,
+   "position": 55,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "k8s-manifest-review",
@@ -541,7 +629,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 48,
+   "position": 56,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "release-notes",
@@ -552,7 +640,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 49,
+   "position": 57,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "semver-advisor",
@@ -563,7 +651,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 50,
+   "position": 58,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "terraform-review",
@@ -574,7 +662,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 51,
+   "position": 59,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "adr-writer",
@@ -585,7 +673,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 52,
+   "position": 60,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "api-docs-from-code",
@@ -596,7 +684,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 53,
+   "position": 61,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "changelog-keeper",
@@ -607,7 +695,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 54,
+   "position": 62,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "onboarding-doc",
@@ -618,7 +706,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 55,
+   "position": 63,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "postmortem-writer",
@@ -629,7 +717,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 56,
+   "position": 64,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "readme-author",
@@ -640,7 +728,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 57,
+   "position": 65,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "incident-postmortem-timeline",
@@ -651,7 +739,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 58,
+   "position": 66,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "iteration-report",
@@ -662,7 +750,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 59,
+   "position": 67,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "pr-queue-digest",
@@ -673,7 +761,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 60,
+   "position": 68,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "access-review-pack",
@@ -684,7 +772,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 61,
+   "position": 69,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "conditional-access-gap-analysis",
@@ -695,7 +783,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 62,
+   "position": 70,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "entra-posture-review",
@@ -706,7 +794,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 63,
+   "position": 71,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "graph-permission-preflight",
@@ -717,7 +805,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 64,
+   "position": 72,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "guest-and-external-sharing-review",
@@ -728,7 +816,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 65,
+   "position": 73,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "intune-baseline-check",
@@ -739,7 +827,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 66,
+   "position": 74,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "license-and-service-plan-audit",
@@ -750,7 +838,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 67,
+   "position": 75,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "privileged-access-review",
@@ -761,7 +849,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 68,
+   "position": 76,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "teams-and-groups-sprawl",
@@ -772,7 +860,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 69,
+   "position": 77,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-app-leftovers",
@@ -783,7 +871,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 70,
+   "position": 78,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-cleanup",
@@ -794,7 +882,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 71,
+   "position": 79,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-duplicate-finder",
@@ -805,7 +893,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 72,
+   "position": 80,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "adr-miner",
@@ -816,7 +904,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 73,
+   "position": 81,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-context-writer",
@@ -827,7 +915,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 74,
+   "position": 82,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cited-codebase-audit",
@@ -838,7 +926,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 75,
+   "position": 83,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "docs-truth-check",
@@ -849,7 +937,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 76,
+   "position": 84,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "readme-who-what-why",
@@ -860,7 +948,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 77,
+   "position": 85,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "release-notes-verifier",
@@ -871,7 +959,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 78,
+   "position": 86,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-hygiene-bundle",
@@ -882,7 +970,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 79,
+   "position": 87,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-onboarding-guide",
@@ -893,7 +981,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 80,
+   "position": 88,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "restructure-planner",
@@ -904,7 +992,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 81,
+   "position": 89,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "untested-entry-points",
@@ -915,7 +1003,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 82,
+   "position": 90,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "auth-flow-review",
@@ -926,7 +1014,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 83,
+   "position": 91,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cors-review",
@@ -937,7 +1025,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 84,
+   "position": 92,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dependency-audit-reader",
@@ -948,7 +1036,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 85,
+   "position": 93,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "http-security-headers",
@@ -959,7 +1047,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 86,
+   "position": 94,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "jwt-inspector",
@@ -970,7 +1058,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 87,
+   "position": 95,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "secrets-hygiene",
@@ -981,7 +1069,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 88,
+   "position": 96,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "change-request-writer",
@@ -992,7 +1080,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 89,
+   "position": 97,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "decision-log",
@@ -1003,7 +1091,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 90,
+   "position": 98,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "focus-plan",
@@ -1014,7 +1102,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 91,
+   "position": 99,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "meeting-actions-ledger",
@@ -1025,7 +1113,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 92,
+   "position": 100,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "one-on-one-ledger",
@@ -1036,7 +1124,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 93,
+   "position": 101,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "rfc-lifecycle",
@@ -1047,7 +1135,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 94,
+   "position": 102,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-exception-register",
@@ -1058,7 +1146,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 95,
+   "position": 103,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-register-refresh",
@@ -1069,7 +1157,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 96,
+   "position": 104,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "shift-handover",
@@ -1080,7 +1168,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 97,
+   "position": 105,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "vendor-scorecard",
@@ -1091,7 +1179,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 98,
+   "position": 106,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "weekly-status-rollup",
@@ -1102,7 +1190,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 99,
+   "position": 107,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "working-agreement-check",
@@ -1182,8 +1270,8 @@
 <body>
 <header class="top"><nav><a class="home" href="index.html">Claude Code skills</a><a href="index.html#plugins">Plugins</a><a href="llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
 <main>
-<h1>Claude Code skills: 99 skills in 14 plugins, one repository</h1>
-<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 99 skills in 14 plugins, synced daily from 9 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
+<h1>Claude Code skills: 107 skills in 15 plugins, one repository</h1>
+<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 107 skills in 15 plugins, synced daily from 10 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -1194,6 +1282,7 @@ cd claude-skills
 python3 install.py --user</code></pre>
 <h2 id="plugins">Plugins</h2>
 <table><thead><tr><th>Plugin</th><th>Skills</th><th>Version</th><th>Description</th></tr></thead><tbody>
+<tr><td><a href="plugins/agent-identity-governance/index.html">agent-identity-governance</a></td><td>8</td><td>0.1.0</td><td>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network.</td></tr>
 <tr><td><a href="plugins/agent-security/index.html">agent-security</a></td><td>8</td><td>0.1.2</td><td>Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, and scan with Semgrep. Includes guard hooks for Bash and an optional incident-database MCP server.</td></tr>
 <tr><td><a href="plugins/aws-security/index.html">aws-security</a></td><td>9</td><td>0.2.1</td><td>AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.</td></tr>
 <tr><td><a href="plugins/code-quality/index.html">code-quality</a></td><td>8</td><td>0.1.2</td><td>Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.</td></tr>
@@ -1210,6 +1299,8 @@ python3 install.py --user</code></pre>
 <tr><td><a href="plugins/ways-of-working/index.html">ways-of-working</a></td><td>12</td><td>0.2.1</td><td>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people.</td></tr>
 </tbody></table>
 <h2 id="skills">All skills</h2>
+<h3 id="agent-identity-governance"><a href="plugins/agent-identity-governance/index.html">agent-identity-governance</a></h3>
+<ul><li><a href="plugins/agent-identity-governance/agent-action-timeline/index.html">agent-action-timeline</a>: Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list.</li><li><a href="plugins/agent-identity-governance/agent-kill-switch-runbook/index.html">agent-kill-switch-runbook</a>: Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command.</li><li><a href="plugins/agent-identity-governance/agent-recertification/index.html">agent-recertification</a>: Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV.</li><li><a href="plugins/agent-identity-governance/connector-register/index.html">connector-register</a>: Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date.</li><li><a href="plugins/agent-identity-governance/credential-expiry-radar/index.html">credential-expiry-radar</a>: Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner.</li><li><a href="plugins/agent-identity-governance/entra-agent-id-review/index.html">entra-agent-id-review</a>: Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover.</li><li><a href="plugins/agent-identity-governance/leaked-credential-response/index.html">leaked-credential-response</a>: Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes.</li><li><a href="plugins/agent-identity-governance/nhi-inventory/index.html">nhi-inventory</a>: List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused.</li></ul>
 <h3 id="agent-security"><a href="plugins/agent-security/index.html">agent-security</a></h3>
 <ul><li><a href="plugins/agent-security/agent-config-audit/index.html">agent-config-audit</a>: Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets.</li><li><a href="plugins/agent-security/agent-eval-harness/index.html">agent-eval-harness</a>: Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook.</li><li><a href="plugins/agent-security/agent-threat-model/index.html">agent-threat-model</a>: Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents.</li><li><a href="plugins/agent-security/incident-lookup/index.html">incident-lookup</a>: Look up 80 coded AI-agent security incidents from 2023 to 2026, mapped to OWASP Agentic and LLM Top 10 and MITRE ATLAS, and summarise precedents with sources.</li><li><a href="plugins/agent-security/mcp-server-review/index.html">mcp-server-review</a>: Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line.</li><li><a href="plugins/agent-security/prompt-injection-review/index.html">prompt-injection-review</a>: Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules.</li><li><a href="plugins/agent-security/secure-agent-checklist/index.html">secure-agent-checklist</a>: Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence.</li><li><a href="plugins/agent-security/semgrep-agentic/index.html">semgrep-agentic</a>: Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits.</li></ul>
 <h3 id="aws-security"><a href="plugins/aws-security/index.html">aws-security</a></h3>

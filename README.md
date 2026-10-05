@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![99 skills in 14 plugins](https://img.shields.io/badge/skills-99%20in%2014%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![107 skills in 15 plugins](https://img.shields.io/badge/skills-107%20in%2015%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**99 skills in 14 plugins, from 9 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**107 skills in 15 plugins, from 10 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,7 +81,22 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**99 skills in 14 plugins.** 135 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**107 skills in 15 plugins.** 143 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+
+### agent-identity-governance
+
+Version 0.1.0. Source: [agent-identity-governance-skills](https://github.com/basitalisandhu/agent-identity-governance-skills). Install: `/plugin install agent-identity-governance@claude-skills`.
+
+| Skill | What it does | Scripts | Links |
+| --- | --- | --- | --- |
+| agent-action-timeline | Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md) |
+| agent-kill-switch-runbook | Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-kill-switch-runbook/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-kill-switch-runbook/SKILL.md) |
+| agent-recertification | Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md) |
+| connector-register | Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md) |
+| credential-expiry-radar | Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md) |
+| entra-agent-id-review | Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md) |
+| leaked-credential-response | Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/leaked-credential-response/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/leaked-credential-response/SKILL.md) |
+| nhi-inventory | List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md) |
 
 ### agent-security
 
@@ -296,11 +311,11 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->79 of the 99 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->87 of the 107 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->99 of the 99 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->107 of the 107 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 
