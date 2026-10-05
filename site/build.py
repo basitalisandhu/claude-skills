@@ -75,9 +75,9 @@ def faq_items(s: "Site") -> list[tuple[str, str]]:
     return [(q, a.format(**fmt)) for q, a in FAQS]
 
 
-def load_content(root: Path, name: str) -> tuple[dict[str, str], str]:
-    """Read site/content/<name>.md and return its front matter and Markdown body."""
-    text = (root / "site" / "content" / f"{name}.md").read_text(encoding="utf-8")
+def load_content(name: str) -> tuple[dict[str, str], str]:
+    """Read site/content/<name>.md (next to this script, like style.css) and return its front matter and Markdown body."""
+    text = (SITE_DIR / "content" / f"{name}.md").read_text(encoding="utf-8")
     return md.split_front_matter(text)
 
 
@@ -272,7 +272,7 @@ python3 install.py --user</code></pre>
 
 
 def build_guide(s: Site) -> str:
-    meta, body_md = load_content(s.root, GUIDE_SLUG)
+    meta, body_md = load_content(GUIDE_SLUG)
     title = meta["title"]
     body = f"""<p class="crumbs"><a href="../../index.html">Home</a> / Guide</p>
 {md.convert(body_md)}"""
