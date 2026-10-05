@@ -34,6 +34,7 @@ SOURCE_REPOS = [
     "agent-identity-governance-skills",
     "agent-security-skills",
     "aws-security-skills",
+    "claude-code-tooling-skills",
     "claude-dev-skills",
     "compliance-evidence-skills",
     "github-manager-skills",
