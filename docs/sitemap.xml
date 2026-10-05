@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://basitalisandhu.github.io/claude-skills/</loc><lastmod>2026-10-04</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/</loc><lastmod>2026-10-04</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/</loc><lastmod>2026-10-04</lastmod></url>
@@ -102,4 +102,14 @@
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/http-security-headers/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/</loc><lastmod>2026-10-04</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/</loc><lastmod>2026-10-04</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/change-request-writer/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/decision-log/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/focus-plan/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/one-on-one-ledger/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/rfc-lifecycle/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/risk-exception-register/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/risk-register-refresh/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/weekly-status-rollup/</loc><lastmod>2026-10-05</lastmod></url>
 </urlset>

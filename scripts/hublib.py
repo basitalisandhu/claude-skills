@@ -39,6 +39,7 @@ SOURCE_REPOS = [
     "m365-governance-skills",
     "mac-maintenance-skills",
     "repo-engineering-skills",
+    "ways-of-working-skills",
 ]
 
 # Files and directories never copied from a source plugin.

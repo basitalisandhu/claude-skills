@@ -392,6 +392,42 @@
         "security",
         "appsec"
       ]
+    },
+    {
+      "name": "ways-of-working",
+      "source": "./plugins/ways-of-working",
+      "description": "Nine ways-of-working skills, each with a tested standard-library script over local files: change-request-writer, meeting-actions-ledger, risk-exception-register, risk-register-refresh, rfc-lifecycle, decision-log, weekly-status-rollup, one-on-one-ledger and focus-plan. No network, no rating of people.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/ways-of-working-skills",
+      "repository": "https://github.com/basitalisandhu/ways-of-working-skills",
+      "license": "MIT",
+      "keywords": [
+        "ways-of-working",
+        "change-management",
+        "cab",
+        "terraform-plan",
+        "meeting-actions",
+        "risk-exceptions",
+        "risk-acceptance",
+        "rfc",
+        "design-review",
+        "decision-log",
+        "weekly-status",
+        "one-on-one",
+        "focus-time",
+        "risk-register"
+      ],
+      "category": "productivity",
+      "tags": [
+        "change-management",
+        "governance",
+        "team-process",
+        "security"
+      ]
     }
   ]
 }

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code skills: 87 skills in 13 plugins, one repository</title>
-<meta name="description" content="87 Claude Code skills in 13 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<title>Claude Code skills: 96 skills in 14 plugins, one repository</title>
+<meta name="description" content="96 Claude Code skills in 14 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="Claude Code skills: 87 skills in 13 plugins, one repository">
-<meta property="og:description" content="87 Claude Code skills in 13 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<meta property="og:title" content="Claude Code skills: 96 skills in 14 plugins, one repository">
+<meta property="og:description" content="96 Claude Code skills in 14 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
@@ -18,9 +18,9 @@
 {
  "@context": "https://schema.org",
  "@type": "ItemList",
- "name": "Claude Code skills: 87 skills in 13 plugins, one repository",
+ "name": "Claude Code skills: 96 skills in 14 plugins, one repository",
  "url": "https://basitalisandhu.github.io/claude-skills/",
- "numberOfItems": 87,
+ "numberOfItems": 96,
  "itemListElement": [
   {
    "@type": "ListItem",
@@ -978,6 +978,105 @@
     "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/",
     "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills"
    }
+  },
+  {
+   "@type": "ListItem",
+   "position": 88,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "change-request-writer",
+    "description": "Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export. A bundled script counts resources to add, change, destroy and replace, lists them by type, flags IAM, security group, KMS, S3 policy and network changes as needs reviewer, tiers the risk by a stated rule, and prints a Markdown record with summary, scope, risk, rollback, verification, an approvers table and a maintenance window placeholder. Use when asked to write a change request, CAB record, RFC for change or change ticket for an infrastructure change, to say what a plan will destroy or replace, or which changes need a security reviewer. Not for approving changes, running terraform, reviewing the Terraform code itself, or ServiceNow and Jira integration.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/change-request-writer/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 89,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "decision-log",
+    "description": "Keep a lightweight decision log with one Markdown file per decision (context in two sentences, the decision, who decided, date, review date, status, supersedes and superseded-by links), and lint the folder with a bundled script that lists every decision, flags reviews that are overdue, broken or one-way supersede links, supersede cycles and missing fields, and renders an INDEX.md table. Use when asked to record an operational decision, to find which decisions are due for review, or to rebuild the decision index. Not for architecture decisions with options analysis (use adr-writer), not for recovering old decisions from git history (use adr-miner), and not for choosing between options.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/decision-log/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 90,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "focus-plan",
+    "description": "Analyse meeting load from a saved calendar export (.ics) with a bundled standard-library script that reports meetings and hours in meetings per day, back-to-back runs, the longest free blocks inside working hours, recurring series with their occurrence counts, and a plain-language focus plan for the week; recurring rules it cannot expand are listed as not expanded, never guessed. Inputs: one .ics file exported from Outlook, Google Calendar or Apple Calendar, plus working hours and the week to look at. Use when asked \"where can I find focus time this week?\", \"how meeting-heavy is my week?\", \"which days have no deep work block?\", or \"which recurring meetings eat my time?\". Not for writing to or changing a calendar, not for reading mail or meeting content, and not for judging which meetings to decline.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/focus-plan/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 91,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "meeting-actions-ledger",
+    "description": "Build one action ledger across a folder of meeting notes in Markdown or plain text. A bundled script reads action lines such as '- [ ] owner: action (due 2026-10-12)' or 'Action: ...', extracts each action with its owner and due date, merges the same action carried from meeting to meeting into one item, flags overdue items, items with no owner and items carried in three or more meetings, and writes ledger.md and ledger.json with every item cited to its file and line. Use when asked what was agreed across recent meetings, which actions are overdue or keep being carried over, or for the open-actions list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how well people follow up.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 92,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "one-on-one-ledger",
+    "description": "Keep a private per-person 1:1 ledger from your own local notes with a bundled standard-library script that tracks days since the last 1:1 against an expected cadence, earlier gaps, open commitments on each side (yours first, overdue ones marked), and topics raised more than once, then renders one ledger per person or a prep sheet for one person. Inputs: a local folder of Markdown or text notes, either one file per person with dated sections or dated files with a section per person. Use when asked \"prep my 1:1 with Sam\", \"who am I overdue a 1:1 with?\", \"what did I promise in my 1:1s?\", or \"which topics keep coming back?\". Not for performance reviews, ratings, rankings, sentiment scoring or comparing people, not for notes kept in a shared drive or repository (the script refuses those paths), and not for sending anything to anyone.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/one-on-one-ledger/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 93,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "rfc-lifecycle",
+    "description": "Write a design proposal (RFC) with a fixed section list and a security review checklist, then lint a folder of RFCs with a bundled script that checks the status header (draft, review, accepted, rejected, superseded), review threads with a Q line and no A line, open questions left in review or accepted RFCs, a missing decision date, missing sections, and RFCs in review for more than 14 days. Use when asked to draft an RFC or design proposal, to check which RFCs are stuck in review, or to see which review questions are still unanswered. Not for architecture decision records (use adr-writer once the RFC is accepted), not for choosing the design, and not a replacement for the review itself.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/rfc-lifecycle/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 94,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "risk-exception-register",
+    "description": "Keep and lint a register of time-bound security exceptions and risk acceptances held as a CSV or a Markdown table with id, system, control, reason, approver, granted, expires and compensating controls. A bundled script flags expired exceptions, exceptions expiring within 30 days, missing approvers, missing compensating controls, approvers who are also the requester, and the same exception renewed again and again, then prints a review agenda with a blank decision line per item. Use when asked to review the exceptions register, prepare the monthly or quarterly exception review, find what has expired or is about to, or check a register before an audit. Not for deciding whether a risk is acceptable, scoring risk, or integrating with Vanta or other GRC tools.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/risk-exception-register/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 95,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "risk-register-refresh",
+    "description": "Refresh a risk register kept as CSV for its quarterly review with a bundled standard-library script that compares it with saved findings exports and last quarter's snapshot, then reports new findings with no register entry, register risks with no supporting finding, likelihood or impact changes between snapshots, overdue reviews and risks without an owner, and renders a refresh agenda. Inputs: the register CSV (id, title, owner, likelihood, impact, treatment, review date, status, optional finding refs), an optional previous snapshot, and findings as Security Hub ASFF JSON, generic JSON or CSV saved to disk. Use when asked \"prepare the quarterly risk review\", \"what changed in the risk register?\", \"which findings are not in the register?\", or \"which risks are overdue for review?\". Not for scoring or rating risk (it uses the register's own values), not for triaging a live findings backlog, and not for GRC tool integration.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/risk-register-refresh/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 96,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "weekly-status-rollup",
+    "description": "Write one lead's weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week's note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version. Inputs: git log text from one or more repositories, saved gh pr list and gh issue list JSON, and last week's note. Use when asked \"write my weekly status\", \"what did I ship this week?\", \"what keeps carrying over?\", or \"give me a standup update from yesterday's work\". Not for team-level sprint metrics (use iteration-report), not for the review queue (use pr-queue-digest), not for ranking people by output, and not for repositories you cannot export.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/weekly-status-rollup/",
+    "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills"
+   }
   }
  ]
 }
@@ -1050,8 +1149,8 @@
 <body>
 <header class="top"><nav><a class="home" href="index.html">Claude Code skills</a><a href="index.html#plugins">Plugins</a><a href="llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
 <main>
-<h1>Claude Code skills: 87 skills in 13 plugins, one repository</h1>
-<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 87 skills in 13 plugins, synced daily from 8 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
+<h1>Claude Code skills: 96 skills in 14 plugins, one repository</h1>
+<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 96 skills in 14 plugins, synced daily from 9 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -1075,6 +1174,7 @@ python3 install.py --user</code></pre>
 <tr><td><a href="plugins/mac-maintenance/index.html">mac-maintenance</a></td><td>3</td><td>0.1.1</td><td>Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.</td></tr>
 <tr><td><a href="plugins/repo-engineering/index.html">repo-engineering</a></td><td>10</td><td>0.3.0</td><td>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, and check release notes against the commits between two tags.</td></tr>
 <tr><td><a href="plugins/security-basics/index.html">security-basics</a></td><td>6</td><td>0.1.1</td><td>Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.</td></tr>
+<tr><td><a href="plugins/ways-of-working/index.html">ways-of-working</a></td><td>9</td><td>0.1.0</td><td>Nine ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, and meeting load and focus blocks from a calendar export. Standard-library scripts, no network, no rating of people.</td></tr>
 </tbody></table>
 <h2 id="skills">All skills</h2>
 <h3 id="agent-security"><a href="plugins/agent-security/index.html">agent-security</a></h3>
@@ -1103,6 +1203,8 @@ python3 install.py --user</code></pre>
 <ul><li><a href="plugins/repo-engineering/adr-miner/index.html">adr-miner</a>: Recover architecture decisions that were made but never written down, by mining git history (commit messages with decision phrases such as switch to, replace, adopt, drop, migrate, deprecate, in favour of), configuration changes (a dependency swapped in a manifest, a Dockerfile base image changed, CI files added or removed) and TODO or NOTE comments that carry a rationale, then drafting MADR stubs with status proposed that cite the commit SHA for every line; a second script lints an existing docs/adr folder for numbering gaps, duplicate numbers, missing or unknown status and broken superseded links.</li><li><a href="plugins/repo-engineering/agent-context-writer/index.html">agent-context-writer</a>: Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget.</li><li><a href="plugins/repo-engineering/cited-codebase-audit/index.html">cited-codebase-audit</a>: Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve.</li><li><a href="plugins/repo-engineering/docs-truth-check/index.html">docs-truth-check</a>: Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree.</li><li><a href="plugins/repo-engineering/readme-who-what-why/index.html">readme-who-what-why</a>: Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text.</li><li><a href="plugins/repo-engineering/release-notes-verifier/index.html">release-notes-verifier</a>: Check a release&#x27;s notes against what actually changed, with a bundled script that reads the commits between two tags (and, only when asked, pull request titles through a read-only gh call) and compares them with the CHANGELOG section or a release notes file, flagging notes that match no commit, commits with no note (chores excluded by a configurable pattern), manifest versions that disagree with the tag, and missing compare or reference links.</li><li><a href="plugins/repo-engineering/repo-hygiene-bundle/index.html">repo-hygiene-bundle</a>: Run one offline hygiene pass over a repository with a bundled script and report each finding with a severity, as a table, JSON or SARIF, with an exit code for CI.</li><li><a href="plugins/repo-engineering/repo-onboarding-guide/index.html">repo-onboarding-guide</a>: Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result.</li><li><a href="plugins/repo-engineering/restructure-planner/index.html">restructure-planner</a>: Plan a repository restructure (split a package or a monorepo, merge packages, fix module boundaries) from the real import graph instead of a guess, using a bundled script that reads Python imports with ast and JS or TS imports and requires with regex, then reports the most coupled files, import cycles, files importing from many packages and god modules, and proposes a move plan as a table (file, from, to, reason, blast radius as the number of importers) with the exact git mv commands, which it prints and never runs.</li><li><a href="plugins/repo-engineering/untested-entry-points/index.html">untested-entry-points</a>: Find public functions, classes and CLI entry points that no test mentions, using a bundled script that parses Python with ast and JS or TS exports with regex, maps each unit to the test files that reference it by name, ranks the untested ones (entry points first, then by size and fan-in), and writes characterisation test stubs in the project&#x27;s framework (pytest, unittest, jest, vitest, node:test).</li></ul>
 <h3 id="security-basics"><a href="plugins/security-basics/index.html">security-basics</a></h3>
 <ul><li><a href="plugins/security-basics/auth-flow-review/index.html">auth-flow-review</a>: Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow.</li><li><a href="plugins/security-basics/cors-review/index.html">cors-review</a>: Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use.</li><li><a href="plugins/security-basics/dependency-audit-reader/index.html">dependency-audit-reader</a>: Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates.</li><li><a href="plugins/security-basics/http-security-headers/index.html">http-security-headers</a>: Check the security headers of a captured HTTP response (saved from curl or the browser) with a bundled script that grades HSTS, Content-Security-Policy, X-Content-Type-Options, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, information disclosure and caching, then produce the header set for the web server or framework.</li><li><a href="plugins/security-basics/jwt-inspector/index.html">jwt-inspector</a>: Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens.</li><li><a href="plugins/security-basics/secrets-hygiene/index.html">secrets-hygiene</a>: Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found.</li></ul>
+<h3 id="ways-of-working"><a href="plugins/ways-of-working/index.html">ways-of-working</a></h3>
+<ul><li><a href="plugins/ways-of-working/change-request-writer/index.html">change-request-writer</a>: Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export.</li><li><a href="plugins/ways-of-working/decision-log/index.html">decision-log</a>: Keep a lightweight decision log with one Markdown file per decision (context in two sentences, the decision, who decided, date, review date, status, supersedes and superseded-by links), and lint the folder with a bundled script that lists every decision, flags reviews that are overdue, broken or one-way supersede links, supersede cycles and missing fields, and renders an INDEX.md table.</li><li><a href="plugins/ways-of-working/focus-plan/index.html">focus-plan</a>: Analyse meeting load from a saved calendar export (.ics) with a bundled standard-library script that reports meetings and hours in meetings per day, back-to-back runs, the longest free blocks inside working hours, recurring series with their occurrence counts, and a plain-language focus plan for the week; recurring rules it cannot expand are listed as not expanded, never guessed.</li><li><a href="plugins/ways-of-working/meeting-actions-ledger/index.html">meeting-actions-ledger</a>: Build one action ledger across a folder of meeting notes in Markdown or plain text.</li><li><a href="plugins/ways-of-working/one-on-one-ledger/index.html">one-on-one-ledger</a>: Keep a private per-person 1:1 ledger from your own local notes with a bundled standard-library script that tracks days since the last 1:1 against an expected cadence, earlier gaps, open commitments on each side (yours first, overdue ones marked), and topics raised more than once, then renders one ledger per person or a prep sheet for one person.</li><li><a href="plugins/ways-of-working/rfc-lifecycle/index.html">rfc-lifecycle</a>: Write a design proposal (RFC) with a fixed section list and a security review checklist, then lint a folder of RFCs with a bundled script that checks the status header (draft, review, accepted, rejected, superseded), review threads with a Q line and no A line, open questions left in review or accepted RFCs, a missing decision date, missing sections, and RFCs in review for more than 14 days.</li><li><a href="plugins/ways-of-working/risk-exception-register/index.html">risk-exception-register</a>: Keep and lint a register of time-bound security exceptions and risk acceptances held as a CSV or a Markdown table with id, system, control, reason, approver, granted, expires and compensating controls.</li><li><a href="plugins/ways-of-working/risk-register-refresh/index.html">risk-register-refresh</a>: Refresh a risk register kept as CSV for its quarterly review with a bundled standard-library script that compares it with saved findings exports and last quarter&#x27;s snapshot, then reports new findings with no register entry, register risks with no supporting finding, likelihood or impact changes between snapshots, overdue reviews and risks without an owner, and renders a refresh agenda.</li><li><a href="plugins/ways-of-working/weekly-status-rollup/index.html">weekly-status-rollup</a>: Write one lead&#x27;s weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week&#x27;s note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version.</li></ul>
 <h2 id="questions">Questions</h2>
 <h3>What is this repository?</h3>
 <p>It is one repository with every Claude Code skill maintained by Muhammad Basit Ali, and it is also a single Claude Code plugin marketplace. Each skill is a SKILL.md file, and most bundle a small Python script.</p>
