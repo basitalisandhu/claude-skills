@@ -37,7 +37,7 @@ jobs:
       # POSIX paths, so they run on Linux and macOS only. The Windows leg runs tests/ and nothing else.
       - name: Structure, front matter, generated files and house rules
         if: runner.os != 'Windows'
-        run: python3 scripts/validate.py
+        run: python3 scripts/validate.py --strict-quality
       - name: Site is up to date and every internal link resolves
         if: runner.os != 'Windows'
         run: python3 site/build.py --check

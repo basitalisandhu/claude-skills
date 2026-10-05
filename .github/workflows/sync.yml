@@ -31,7 +31,7 @@ jobs:
       - name: Sync (clones the public source repositories over https)
         run: python3 scripts/sync.py --summary sync-summary.md
       - name: Validate
-        run: python3 scripts/validate.py
+        run: python3 scripts/validate.py --strict-quality
       - name: Build and check the site
         run: |
           python3 site/build.py
