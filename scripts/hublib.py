@@ -31,6 +31,7 @@ HUB_DESCRIPTION = (
 
 # The source repositories, in sync order. Each one publishes its plugins at plugins/<plugin>/.
 SOURCE_REPOS = [
+    "agent-identity-governance-skills",
     "agent-security-skills",
     "aws-security-skills",
     "claude-dev-skills",
