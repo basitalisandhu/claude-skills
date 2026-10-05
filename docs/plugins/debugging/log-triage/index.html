@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>log-triage: Reduce a large log file to its distinct message templates with counts | Claude Code skills</title>
-<meta name="description" content="Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not a log shipping or alerting setup, and not for binary or structured-only formats without a text line per event.">
+<meta name="description" content="Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not for log shipping or alerting setup, or for binary or structured-only formats without a text line per event.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/debugging/log-triage/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="log-triage: Reduce a large log file to its distinct message templates with counts | Claude Code skills">
-<meta property="og:description" content="Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not a log shipping or alerting setup, and not for binary or structured-only formats without a text line per event.">
+<meta property="og:description" content="Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not for log shipping or alerting setup, or for binary or structured-only formats without a text line per event.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/debugging/log-triage/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "log-triage",
- "description": "Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or \"the logs are full of errors\" and asked what is going on. Not a log shipping or alerting setup, and not for binary or structured-only formats without a text line per event.",
+ "description": "Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or \"the logs are full of errors\" and asked what is going on. Not for log shipping or alerting setup, or for binary or structured-only formats without a text line per event.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/debugging/log-triage/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "debugging",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/debugging/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">debugging</a> / log-triage</p>
 <h1>Log triage</h1>
-<p class="lede">Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not a log shipping or alerting setup, and not for binary or structured-only formats without a text line per event.</p>
-<p class="meta">Skill <code>log-triage</code> in plugin <a href="../index.html">debugging</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/log-triage/SKILL.md">plugins/debugging/skills/log-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/log-triage/SKILL.md">plugins/debugging/skills/log-triage/SKILL.md</a>.</p>
+<p class="lede">Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or &quot;the logs are full of errors&quot; and asked what is going on. Not for log shipping or alerting setup, or for binary or structured-only formats without a text line per event.</p>
+<p class="meta">Skill <code>log-triage</code> in plugin <a href="../index.html">debugging</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/log-triage/SKILL.md">plugins/debugging/skills/log-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/log-triage/SKILL.md">plugins/debugging/skills/log-triage/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

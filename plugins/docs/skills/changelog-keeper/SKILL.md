@@ -1,6 +1,6 @@
 ---
 name: changelog-keeper
-description: Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).
+description: "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Keep a Changelog 1.1 format with semantic version headings.
 metadata:
@@ -77,6 +77,12 @@ All notable changes to this project are documented here. The format follows Keep
 [1.3.0]: https://github.com/owner/repo/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/owner/repo/releases/tag/v1.2.0
 ```
+
+## Limits
+
+- The script expects Keep a Changelog headings with semantic version numbers; other version shapes are reported by `check`, and per-package sections in a monorepo are not supported.
+- It does not read git history (release-notes does) or check that entries describe real changes.
+- `add` and `release` rewrite the file in place (use `--dry-run` to preview); it never contacts the network, even when writing compare links.
 
 ## Related
 

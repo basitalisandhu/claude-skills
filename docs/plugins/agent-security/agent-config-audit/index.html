@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>agent-config-audit: Audit AI-agent configuration for risky permissions | Claude Code skills</title>
-<meta name="description" content="Audit AI-agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt-injection in instruction files. Use when asked to review, harden or sanity-check .claude/ settings, CLAUDE.md, .cursor/ rules, .mcp.json, claude_desktop_config.json, hooks, skills or plugins, or before enabling a cloned repository&#x27;s agent config. Runs a stdlib Python scanner and explains each finding.">
+<title>agent-config-audit: Scan an AI agent configuration for risky permissions | Claude Code skills</title>
+<meta name="description" content="Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to &quot;check my .claude settings&quot;, to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="agent-config-audit: Audit AI-agent configuration for risky permissions | Claude Code skills">
-<meta property="og:description" content="Audit AI-agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt-injection in instruction files. Use when asked to review, harden or sanity-check .claude/ settings, CLAUDE.md, .cursor/ rules, .mcp.json, claude_desktop_config.json, hooks, skills or plugins, or before enabling a cloned repository&#x27;s agent config. Runs a stdlib Python scanner and explains each finding.">
+<meta property="og:title" content="agent-config-audit: Scan an AI agent configuration for risky permissions | Claude Code skills">
+<meta property="og:description" content="Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to &quot;check my .claude settings&quot;, to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-config-audit",
- "description": "Audit AI-agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt-injection in instruction files. Use when asked to review, harden or sanity-check .claude/ settings, CLAUDE.md, .cursor/ rules, .mcp.json, claude_desktop_config.json, hooks, skills or plugins, or before enabling a cloned repository's agent config. Runs a stdlib Python scanner and explains each finding.",
+ "description": "Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to \"check my .claude settings\", to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / agent-config-audit</p>
 <h1>Agent configuration audit</h1>
-<p class="lede">Audit AI-agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt-injection in instruction files. Use when asked to review, harden or sanity-check .claude/ settings, CLAUDE.md, .cursor/ rules, .mcp.json, claude_desktop_config.json, hooks, skills or plugins, or before enabling a cloned repository&#x27;s agent config. Runs a stdlib Python scanner and explains each finding.</p>
-<p class="meta">Skill <code>agent-config-audit</code> in plugin <a href="../index.html">agent-security</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a>.</p>
+<p class="lede">Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to &quot;check my .claude settings&quot;, to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review).</p>
+<p class="meta">Skill <code>agent-config-audit</code> in plugin <a href="../index.html">agent-security</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -88,7 +88,7 @@ python3 install.py --user --skill agent-security/agent-config-audit</code></pre>
 <h3 id="severity-guide">Severity guide</h3>
 <table><thead><tr><th>Severity</th><th>Meaning</th></tr></thead><tbody><tr><td>critical</td><td>Exploitable now with no user interaction: bypass mode, <code>Bash(*)</code>, a live credential, remote code piped into a hook</td></tr><tr><td>high</td><td>One prompt injection away from damage: dangerous program wildcards, exfil-capable hooks, plain-HTTP MCP with a token, override phrases in instruction files</td></tr><tr><td>medium</td><td>Weakens defence in depth: unpinned servers, broad write grants, invisible characters, auto-approved project MCP servers</td></tr><tr><td>low</td><td>Hygiene: unquoted plugin paths, missing deny rules, unparseable config</td></tr><tr><td>info</td><td>Quality notes, no security impact on their own</td></tr></tbody></table>
 <h3 id="related">Related</h3>
-<ul><li><code>secure-agent-checklist</code> for the pre-ship review that uses these findings as evidence.</li><li><code>semgrep-agentic</code> for the same configuration checks as Semgrep rules in CI.</li></ul>
+<ul><li><code>secure-agent-checklist</code> for the pre-ship review that uses these findings as evidence.</li><li><code>semgrep-agentic</code> for the same configuration checks as Semgrep rules in CI.</li><li><code>agent-context-writer</code> (repo-engineering-skills) writes a lean AGENTS.md or CLAUDE.md; this skill audits agent configuration for risk and does not write it.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/agent-security-skills/issues">agent-security-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

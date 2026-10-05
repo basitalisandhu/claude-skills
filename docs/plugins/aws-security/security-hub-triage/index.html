@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>security-hub-triage: Triage exported AWS Security Hub | Claude Code skills</title>
-<meta name="description" content="Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list. A bundled script drops archived, resolved, suppressed and passed findings, suppresses known-noisy controls, resources and accounts from a config file, groups the rest by severity, control and resource, assigns owners from rules (account, resource type, control prefix, region), and orders actions by severity and number of affected resources. Use when facing a Security Hub or GuardDuty backlog, preparing a weekly security review, deciding what to fix first, or routing findings to teams. Not for running new checks against an account (use aws-account-audit) or for incident response on a single active GuardDuty finding.">
+<title>security-hub-triage: Turn a Security Hub or GuardDuty findings backlog | Claude Code skills</title>
+<meta name="description" content="Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked &quot;what do we fix first in Security Hub?&quot;, for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="security-hub-triage: Triage exported AWS Security Hub | Claude Code skills">
-<meta property="og:description" content="Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list. A bundled script drops archived, resolved, suppressed and passed findings, suppresses known-noisy controls, resources and accounts from a config file, groups the rest by severity, control and resource, assigns owners from rules (account, resource type, control prefix, region), and orders actions by severity and number of affected resources. Use when facing a Security Hub or GuardDuty backlog, preparing a weekly security review, deciding what to fix first, or routing findings to teams. Not for running new checks against an account (use aws-account-audit) or for incident response on a single active GuardDuty finding.">
+<meta property="og:title" content="security-hub-triage: Turn a Security Hub or GuardDuty findings backlog | Claude Code skills">
+<meta property="og:description" content="Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked &quot;what do we fix first in Security Hub?&quot;, for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "security-hub-triage",
- "description": "Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list. A bundled script drops archived, resolved, suppressed and passed findings, suppresses known-noisy controls, resources and accounts from a config file, groups the rest by severity, control and resource, assigns owners from rules (account, resource type, control prefix, region), and orders actions by severity and number of affected resources. Use when facing a Security Hub or GuardDuty backlog, preparing a weekly security review, deciding what to fix first, or routing findings to teams. Not for running new checks against an account (use aws-account-audit) or for incident response on a single active GuardDuty finding.",
+ "description": "Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked \"what do we fix first in Security Hub?\", for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / security-hub-triage</p>
 <h1>Security Hub triage</h1>
-<p class="lede">Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list. A bundled script drops archived, resolved, suppressed and passed findings, suppresses known-noisy controls, resources and accounts from a config file, groups the rest by severity, control and resource, assigns owners from rules (account, resource type, control prefix, region), and orders actions by severity and number of affected resources. Use when facing a Security Hub or GuardDuty backlog, preparing a weekly security review, deciding what to fix first, or routing findings to teams. Not for running new checks against an account (use aws-account-audit) or for incident response on a single active GuardDuty finding.</p>
-<p class="meta">Skill <code>security-hub-triage</code> in plugin <a href="../index.html">aws-security</a> 0.2.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a>.</p>
+<p class="lede">Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked &quot;what do we fix first in Security Hub?&quot;, for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook).</p>
+<p class="meta">Skill <code>security-hub-triage</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

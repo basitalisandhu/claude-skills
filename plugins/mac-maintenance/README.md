@@ -4,6 +4,8 @@ Mac maintenance skills for Claude Code: a survey that only measures, a safe tier
 
 Install with `/plugin marketplace add basitalisandhu/mac-maintenance-skills` and then `/plugin install mac-maintenance@mac-maintenance-skills`, or add it from Anthropic's directory. Skills appear as `/mac-maintenance:<skill>`, and Claude also invokes them on its own when a request matches a skill's description. Ask "look at my Mac and clean up the garbage" to start.
 
+Use it when "System Data is huge" in Storage settings (the survey shows the caches, Docker and developer folders that usually make it up), or when Docker.raw has grown (the survey reports its size on disk, and the safe tier prunes Docker build cache). Time Machine local snapshots are not measured or removed by these skills; `tmutil listlocalsnapshots /` lists them.
+
 ## Skills
 
 | Skill | Script | Use it to |

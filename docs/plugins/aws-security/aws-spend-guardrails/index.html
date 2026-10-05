@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>aws-spend-guardrails: Generate AWS spend guardrails and check exported cost data against | Claude Code skills</title>
-<meta name="description" content="Generate AWS spend guardrails and check exported cost data against them. A bundled script turns a short budget spec into AWS Budgets JSON (a monthly cost budget with actual and forecast percentage alerts, plus usage budgets), a Cost Anomaly Detection monitor and alert subscription, and an SCP snippet for sandbox accounts that denies expensive or unusual spend (large, GPU and bare-metal instance types, high EBS IOPS, SageMaker GPU instances, Bedrock model customization, chosen services such as Redshift, reserved capacity and Savings Plans) and denies changing budgets, budget actions and anomaly monitors. Its review mode summarises an exported Cost Explorer daily report by service, account and month against the budget and flags anomalies with a simple rule (a day over the prior 7-day median by a set factor). Use when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.">
+<title>aws-spend-guardrails: Generate AWS Budgets | Claude Code skills</title>
+<meta name="description" content="Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. Use when asked to &quot;stop runaway AWS spend&quot;, when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-spend-guardrails/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="aws-spend-guardrails: Generate AWS spend guardrails and check exported cost data against | Claude Code skills">
-<meta property="og:description" content="Generate AWS spend guardrails and check exported cost data against them. A bundled script turns a short budget spec into AWS Budgets JSON (a monthly cost budget with actual and forecast percentage alerts, plus usage budgets), a Cost Anomaly Detection monitor and alert subscription, and an SCP snippet for sandbox accounts that denies expensive or unusual spend (large, GPU and bare-metal instance types, high EBS IOPS, SageMaker GPU instances, Bedrock model customization, chosen services such as Redshift, reserved capacity and Savings Plans) and denies changing budgets, budget actions and anomaly monitors. Its review mode summarises an exported Cost Explorer daily report by service, account and month against the budget and flags anomalies with a simple rule (a day over the prior 7-day median by a set factor). Use when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.">
+<meta property="og:title" content="aws-spend-guardrails: Generate AWS Budgets | Claude Code skills">
+<meta property="og:description" content="Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. Use when asked to &quot;stop runaway AWS spend&quot;, when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-spend-guardrails/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "aws-spend-guardrails",
- "description": "Generate AWS spend guardrails and check exported cost data against them. A bundled script turns a short budget spec into AWS Budgets JSON (a monthly cost budget with actual and forecast percentage alerts, plus usage budgets), a Cost Anomaly Detection monitor and alert subscription, and an SCP snippet for sandbox accounts that denies expensive or unusual spend (large, GPU and bare-metal instance types, high EBS IOPS, SageMaker GPU instances, Bedrock model customization, chosen services such as Redshift, reserved capacity and Savings Plans) and denies changing budgets, budget actions and anomaly monitors. Its review mode summarises an exported Cost Explorer daily report by service, account and month against the budget and flags anomalies with a simple rule (a day over the prior 7-day median by a set factor). Use when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.",
+ "description": "Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. Use when asked to \"stop runaway AWS spend\", when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-spend-guardrails/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / aws-spend-guardrails</p>
 <h1>AWS spend guardrails</h1>
-<p class="lede">Generate AWS spend guardrails and check exported cost data against them. A bundled script turns a short budget spec into AWS Budgets JSON (a monthly cost budget with actual and forecast percentage alerts, plus usage budgets), a Cost Anomaly Detection monitor and alert subscription, and an SCP snippet for sandbox accounts that denies expensive or unusual spend (large, GPU and bare-metal instance types, high EBS IOPS, SageMaker GPU instances, Bedrock model customization, chosen services such as Redshift, reserved capacity and Savings Plans) and denies changing budgets, budget actions and anomaly monitors. Its review mode summarises an exported Cost Explorer daily report by service, account and month against the budget and flags anomalies with a simple rule (a day over the prior 7-day median by a set factor). Use when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.</p>
-<p class="meta">Skill <code>aws-spend-guardrails</code> in plugin <a href="../index.html">aws-security</a> 0.2.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md">plugins/aws-security/skills/aws-spend-guardrails/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md">plugins/aws-security/skills/aws-spend-guardrails/SKILL.md</a>.</p>
+<p class="lede">Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. Use when asked to &quot;stop runaway AWS spend&quot;, when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations.</p>
+<p class="meta">Skill <code>aws-spend-guardrails</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 4 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md">plugins/aws-security/skills/aws-spend-guardrails/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md">plugins/aws-security/skills/aws-spend-guardrails/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -71,7 +71,7 @@ python3 install.py --user --skill aws-security/aws-spend-guardrails</code></pre>
 <ol start="2"><li><strong>Generate:</strong></li></ol>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/aws-spend-guardrails/scripts/spend_guardrails.py&quot; --budget budget.yaml --out ./spend
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/aws-spend-guardrails/scripts/spend_guardrails.py&quot; --budget budget.yaml --json</code></pre>
-<p>SCP documents are packed under 5120 characters with the <code>scp-guardrails</code> packer and linted with <code>scp_lint.py</code>; a lint error stops the write (exit 1). Exit 2 on a bad spec.</p>
+<p>SCP documents are packed under 5120 characters with the <code>scp-guardrails</code> packer and linted with <code>scp_lint.py</code> (private copies in this skill&#x27;s <code>scripts/</code> folder, so the skill works when installed on its own); a lint error stops the write (exit 1). Exit 2 on a bad spec.</p>
 <ol start="3"><li><strong>Review with the person</strong>, then they run the commands in <code>commands.md</code>. Creating budgets needs <code>budgets:ModifyBudget</code>; the anomaly monitor and subscription need <code>ce:CreateAnomalyMonitor</code> and <code>ce:CreateAnomalySubscription</code>; the SCP needs <code>organizations:CreatePolicy</code> and <code>organizations:AttachPolicy</code> in the management account.</li></ol>
 <ol start="4"><li><strong>Review spend</strong> from a read-only export (needs <code>ce:GetCostAndUsage</code>; Cost Explorer API calls are billed per request):</li></ol>
 <pre><code class="language-bash">aws ce get-cost-and-usage --time-period Start=2026-09-01,End=2026-10-01 --granularity DAILY --metrics UnblendedCost --group-by Type=DIMENSION,Key=SERVICE Type=DIMENSION,Key=LINKED_ACCOUNT --output json &gt; cost.json

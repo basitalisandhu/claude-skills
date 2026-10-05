@@ -1,7 +1,7 @@
 {
   "name": "security-basics",
   "displayName": "Security Basics",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.",
   "author": {
     "name": "Muhammad Basit Ali",

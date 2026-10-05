@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>docs-truth-check: Verify that a repository&#x27;s README | Claude Code skills</title>
-<meta name="description" content="Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree. Use when asked &quot;are the docs still accurate?&quot;, &quot;is the README out of date?&quot;, &quot;check the docs against the code&quot;, after renaming files, flags or functions, before a release, when reviewing a pull request that changes a CLI or a public name, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs from scratch (use readme-who-what-why or a writing skill), and not for checking external URLs (no network).">
+<meta name="description" content="Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. Use when asked &quot;is the README out of date?&quot;, after renaming files, flags or functions, before a release, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs (readme-who-what-why), or checking external URLs.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/docs-truth-check/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="docs-truth-check: Verify that a repository&#x27;s README | Claude Code skills">
-<meta property="og:description" content="Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree. Use when asked &quot;are the docs still accurate?&quot;, &quot;is the README out of date?&quot;, &quot;check the docs against the code&quot;, after renaming files, flags or functions, before a release, when reviewing a pull request that changes a CLI or a public name, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs from scratch (use readme-who-what-why or a writing skill), and not for checking external URLs (no network).">
+<meta property="og:description" content="Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. Use when asked &quot;is the README out of date?&quot;, after renaming files, flags or functions, before a release, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs (readme-who-what-why), or checking external URLs.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/docs-truth-check/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "docs-truth-check",
- "description": "Verify that a repository's README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree. Use when asked \"are the docs still accurate?\", \"is the README out of date?\", \"check the docs against the code\", after renaming files, flags or functions, before a release, when reviewing a pull request that changes a CLI or a public name, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs from scratch (use readme-who-what-why or a writing skill), and not for checking external URLs (no network).",
+ "description": "Verify that a repository's README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. Use when asked \"is the README out of date?\", after renaming files, flags or functions, before a release, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs (readme-who-what-why), or checking external URLs.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/docs-truth-check/",
  "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / docs-truth-check</p>
 <h1>Docs truth check</h1>
-<p class="lede">Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree. Use when asked &quot;are the docs still accurate?&quot;, &quot;is the README out of date?&quot;, &quot;check the docs against the code&quot;, after renaming files, flags or functions, before a release, when reviewing a pull request that changes a CLI or a public name, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs from scratch (use readme-who-what-why or a writing skill), and not for checking external URLs (no network).</p>
-<p class="meta">Skill <code>docs-truth-check</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/docs-truth-check/SKILL.md">plugins/repo-engineering/skills/docs-truth-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/docs-truth-check/SKILL.md">plugins/repo-engineering/skills/docs-truth-check/SKILL.md</a>.</p>
+<p class="lede">Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. Use when asked &quot;is the README out of date?&quot;, after renaming files, flags or functions, before a release, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs (readme-who-what-why), or checking external URLs.</p>
+<p class="meta">Skill <code>docs-truth-check</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/docs-truth-check/SKILL.md">plugins/repo-engineering/skills/docs-truth-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/docs-truth-check/SKILL.md">plugins/repo-engineering/skills/docs-truth-check/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

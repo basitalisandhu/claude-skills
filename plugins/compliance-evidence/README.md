@@ -2,6 +2,8 @@
 
 Five compliance evidence skills for Claude Code: an evidence pack builder with SHA-256 manifests, a control map from exports to ISO 27001 and SOC 2 identifiers, GitHub change-control evidence, AWS identity and logging evidence, and an auditor narrative drafter with a citation linter.
 
+Use it when you are gathering SOC 2 Type II evidence across the audit period or ISO 27001 evidence, preparing a readiness assessment (which controls your exports support, contradict or cannot speak to), or handing a Vanta or Drata export to an assessor alongside your own exports (`evidence-pack-builder` hashes any file; the starter control map does not read those platforms' formats).
+
 ## Install
 
 ```text

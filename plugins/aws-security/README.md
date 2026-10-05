@@ -2,6 +2,8 @@
 
 Nine AWS security skills for Claude Code: a read-only account audit, an SCP guardrail builder and linter, a landing zone blast-radius designer, an IAM least-privilege reviewer, a Security Hub and GuardDuty triage tool, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, and a sandbox OU guardrail pack.
 
+Use it when you need a quick check against the CIS AWS Foundations benchmark (many of the 17 `aws-account-audit` checks, such as root MFA, CloudTrail, old access keys and open security groups, are CIS controls; the skill does not score the benchmark), when preparing for a Well-Architected security pillar review (account separation with `landing-zone-blast-radius`, detective controls, least privilege), or when an agent role needs a permission boundary (`agent-safe-aws-access`).
+
 ## Install
 
 ```text

@@ -1,6 +1,6 @@
 ---
 name: agent-context-writer
-description: Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget. Use when asked to create, write, update, shorten or clean up AGENTS.md, CLAUDE.md or another agent context file, after /init produced a long file, or when agents keep ignoring a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (a security review), and not for human onboarding docs.
+description: "Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. Use when asked to \"shorten our CLAUDE.md\", after /init produced a long file, or when agents ignore a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (agent-config-audit), or human onboarding docs."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:
@@ -91,3 +91,4 @@ The report always prints the file's length against the budget. Exit codes: 0 cle
 
 - `docs-truth-check` verifies paths, flags and symbols in AGENTS.md and CLAUDE.md along with the rest of the docs.
 - `readme-who-what-why` for the README, which is written for people rather than agents.
+- `agent-config-audit` (agent-security-skills) audits agent configuration for risk; this skill writes a lean AGENTS.md or CLAUDE.md and does not judge permissions, hooks or MCP servers.

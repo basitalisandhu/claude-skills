@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>agent-threat-model: Write a system description of an LLM-agent codebase | Claude Code skills</title>
-<meta name="description" content="Write a system description of an LLM-agent codebase in the agent-threat-model YAML format (principals, agents, channels, tools, data stores, controls), validate it with atm validate, run atm analyse for a STRIDE and OWASP threat model with residual risk scoring, then interpret and summarise the result with incident precedents. Use when asked for a threat model, risk assessment, attack surface or security architecture review of an agent, or at the start of a design review.">
+<title>agent-threat-model: Write a threat model for an LLM-agent system by drafting principals | Claude Code skills</title>
+<meta name="description" content="Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to &quot;threat model this agent&quot;, for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="agent-threat-model: Write a system description of an LLM-agent codebase | Claude Code skills">
-<meta property="og:description" content="Write a system description of an LLM-agent codebase in the agent-threat-model YAML format (principals, agents, channels, tools, data stores, controls), validate it with atm validate, run atm analyse for a STRIDE and OWASP threat model with residual risk scoring, then interpret and summarise the result with incident precedents. Use when asked for a threat model, risk assessment, attack surface or security architecture review of an agent, or at the start of a design review.">
+<meta property="og:title" content="agent-threat-model: Write a threat model for an LLM-agent system by drafting principals | Claude Code skills">
+<meta property="og:description" content="Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to &quot;threat model this agent&quot;, for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-threat-model",
- "description": "Write a system description of an LLM-agent codebase in the agent-threat-model YAML format (principals, agents, channels, tools, data stores, controls), validate it with atm validate, run atm analyse for a STRIDE and OWASP threat model with residual risk scoring, then interpret and summarise the result with incident precedents. Use when asked for a threat model, risk assessment, attack surface or security architecture review of an agent, or at the start of a design review.",
+ "description": "Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / agent-threat-model</p>
 <h1>Agent threat model</h1>
-<p class="lede">Write a system description of an LLM-agent codebase in the agent-threat-model YAML format (principals, agents, channels, tools, data stores, controls), validate it with atm validate, run atm analyse for a STRIDE and OWASP threat model with residual risk scoring, then interpret and summarise the result with incident precedents. Use when asked for a threat model, risk assessment, attack surface or security architecture review of an agent, or at the start of a design review.</p>
-<p class="meta">Skill <code>agent-threat-model</code> in plugin <a href="../index.html">agent-security</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-threat-model/SKILL.md">plugins/agent-security/skills/agent-threat-model/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-threat-model/SKILL.md">plugins/agent-security/skills/agent-threat-model/SKILL.md</a>.</p>
+<p class="lede">Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to &quot;threat model this agent&quot;, for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist).</p>
+<p class="meta">Skill <code>agent-threat-model</code> in plugin <a href="../index.html">agent-security</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-threat-model/SKILL.md">plugins/agent-security/skills/agent-threat-model/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-threat-model/SKILL.md">plugins/agent-security/skills/agent-threat-model/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill agent-security/agent-threat-model</code></pre>
 <p>The <code>agent-security</code> plugin also ships hooks, commands, agents and an MCP server at plugin level. Install the plugin from the marketplace to get them.</p>
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The scanner finds tools, channels and stores through framework and SDK patterns. Tools your own code defines without a framework are missed and must be added by hand.</li><li>Autonomy, trust, sensitivity and the controls in place are guesses until a person confirms them; the analysis is only as true as the description.</li><li><code>atm</code> applies a fixed catalogue of 30 threats and 29 controls. Threats outside the catalogue only come from the manual interpretation step.</li><li>Without the <code>atm</code> CLI the analysis is done by hand from the catalogue, and the report must say the automated run was skipped.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p><a href="https://github.com/basitalisandhu/agent-threat-model">agent-threat-model</a> (<code>atm</code>) is a deterministic, offline threat-modelling tool: describe the system in one YAML file, and it applies a catalogue of 30 agent-specific threats (STRIDE plus OWASP mappings, each with an <code>applies_when</code> rule) and 29 controls, scores inherent and residual severity, and renders a table, Markdown, JSON, SARIF or HTML. The hard part is the description. This skill drafts it from the code in the tool&#x27;s exact format (<a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-threat-model/references/input-format.md">references/input-format.md</a>), walks you through the facts static scanning cannot see, and turns the analysis into a short summary with precedents.</p>
 <h3 id="when-to-use-it">When to use it</h3>

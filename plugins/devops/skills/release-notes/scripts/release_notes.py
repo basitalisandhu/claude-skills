@@ -130,13 +130,16 @@ def git_log(repo: Path, rng: str | None) -> str:
     cmd = ["git", "-C", str(repo), "log", "--no-merges", "--date=short", f"--format={FORMAT}"]
     if rng:
         cmd.append(rng)
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or f"git exited {proc.returncode}")
     return proc.stdout
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--repo", default=".", help="repository directory (default: current)")
     ap.add_argument("--range", dest="rng", help="revision range such as v1.2.0..HEAD (default: whole history)")

@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>landing-zone-blast-radius: Design an AWS Organizations landing zone with one account per | Claude Code skills</title>
-<meta name="description" content="Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account. A bundled script takes a workload list (name, environment, data classification, internet-facing, cross-account dependencies) and produces the OU tree, account names and root email pattern, the foundation accounts (management, log-archive, security-tooling, shared-services, network), which SCP guardrails attach where, and a table of what a compromise of each account can reach. Use when planning a new AWS organization, splitting a shared account, adding a workload, or explaining why one account per workload matters. Not for auditing an existing account (aws-account-audit) or writing the SCP JSON (scp-guardrails).">
+<meta name="description" content="Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. A bundled script turns a workload list into the OU tree, account names, foundation accounts and where SCP guardrails attach. Use when asked &quot;how should we split our AWS accounts?&quot;, when planning a new organization, splitting a shared account or adding a workload. Not for auditing an existing account (aws-account-audit) or writing SCP JSON (scp-guardrails).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/landing-zone-blast-radius/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="landing-zone-blast-radius: Design an AWS Organizations landing zone with one account per | Claude Code skills">
-<meta property="og:description" content="Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account. A bundled script takes a workload list (name, environment, data classification, internet-facing, cross-account dependencies) and produces the OU tree, account names and root email pattern, the foundation accounts (management, log-archive, security-tooling, shared-services, network), which SCP guardrails attach where, and a table of what a compromise of each account can reach. Use when planning a new AWS organization, splitting a shared account, adding a workload, or explaining why one account per workload matters. Not for auditing an existing account (aws-account-audit) or writing the SCP JSON (scp-guardrails).">
+<meta property="og:description" content="Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. A bundled script turns a workload list into the OU tree, account names, foundation accounts and where SCP guardrails attach. Use when asked &quot;how should we split our AWS accounts?&quot;, when planning a new organization, splitting a shared account or adding a workload. Not for auditing an existing account (aws-account-audit) or writing SCP JSON (scp-guardrails).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/landing-zone-blast-radius/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "landing-zone-blast-radius",
- "description": "Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account. A bundled script takes a workload list (name, environment, data classification, internet-facing, cross-account dependencies) and produces the OU tree, account names and root email pattern, the foundation accounts (management, log-archive, security-tooling, shared-services, network), which SCP guardrails attach where, and a table of what a compromise of each account can reach. Use when planning a new AWS organization, splitting a shared account, adding a workload, or explaining why one account per workload matters. Not for auditing an existing account (aws-account-audit) or writing the SCP JSON (scp-guardrails).",
+ "description": "Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. A bundled script turns a workload list into the OU tree, account names, foundation accounts and where SCP guardrails attach. Use when asked \"how should we split our AWS accounts?\", when planning a new organization, splitting a shared account or adding a workload. Not for auditing an existing account (aws-account-audit) or writing SCP JSON (scp-guardrails).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/landing-zone-blast-radius/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / landing-zone-blast-radius</p>
 <h1>Landing zone blast radius</h1>
-<p class="lede">Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account. A bundled script takes a workload list (name, environment, data classification, internet-facing, cross-account dependencies) and produces the OU tree, account names and root email pattern, the foundation accounts (management, log-archive, security-tooling, shared-services, network), which SCP guardrails attach where, and a table of what a compromise of each account can reach. Use when planning a new AWS organization, splitting a shared account, adding a workload, or explaining why one account per workload matters. Not for auditing an existing account (aws-account-audit) or writing the SCP JSON (scp-guardrails).</p>
-<p class="meta">Skill <code>landing-zone-blast-radius</code> in plugin <a href="../index.html">aws-security</a> 0.2.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md">plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md">plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md</a>.</p>
+<p class="lede">Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. A bundled script turns a workload list into the OU tree, account names, foundation accounts and where SCP guardrails attach. Use when asked &quot;how should we split our AWS accounts?&quot;, when planning a new organization, splitting a shared account or adding a workload. Not for auditing an existing account (aws-account-audit) or writing SCP JSON (scp-guardrails).</p>
+<p class="meta">Skill <code>landing-zone-blast-radius</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md">plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md">plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

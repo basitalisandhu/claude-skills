@@ -60,7 +60,14 @@ See [references/template.md](references/template.md). Summary shape:
 | 3 | Keep the last 5 images; rollback drill monthly | recover (18 min -> 3 min) | @cy | 2026-03-31 |
 ```
 
+## Limits
+
+- The timeline and impact numbers are only as good as the logs, metrics and transcripts supplied; gaps are marked, not filled in.
+- It does not assign blame or evaluate people, and it does not track action items after the document is written.
+- There is no bundled script, and nothing is sent over the network.
+
 ## Related
 
 - `log-triage` to reconstruct the error timeline from logs.
 - `adr-writer` when an action is a design change worth recording.
+- Boundary: `incident-postmortem-timeline` (github-manager-skills marketplace) builds the cited timeline from a GitHub issue export; `postmortem-writer` writes the narrative, causes and actions from any source.

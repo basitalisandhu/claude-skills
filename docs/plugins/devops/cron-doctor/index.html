@@ -37,7 +37,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / cron-doctor</p>
 <h1>Cron doctor</h1>
 <p class="lede">Diagnose a crontab with a bundled script that validates every schedule, explains it in words, computes the next runs, and flags jobs with no output redirection, unescaped percent signs, PATH assumptions, day-of-month plus day-of-week confusion, DST-sensitive hours, overlapping frequent jobs and duplicates; then fix the entries and add locking and logging. Use when a cron job did not run, ran twice, ran at the wrong time, or when writing a new schedule. Not for Kubernetes CronJobs beyond the schedule field, and not for systemd timers except as the suggested replacement.</p>
-<p class="meta">Skill <code>cron-doctor</code> in plugin <a href="../index.html">devops</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/cron-doctor/SKILL.md">plugins/devops/skills/cron-doctor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/cron-doctor/SKILL.md">plugins/devops/skills/cron-doctor/SKILL.md</a>.</p>
+<p class="meta">Skill <code>cron-doctor</code> in plugin <a href="../index.html">devops</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/cron-doctor/SKILL.md">plugins/devops/skills/cron-doctor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/cron-doctor/SKILL.md">plugins/devops/skills/cron-doctor/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill devops/cron-doctor</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>Next runs use the time zone of <code>--now</code> (local time by default); <code>CRON_TZ</code> lines are read as plain variables and not applied.</li><li>It knows the standard five fields, names and macros; Quartz-style seconds fields and <code>L</code>, <code>W</code>, <code>?</code> or <code>#</code> are reported as invalid.</li><li>It reads the crontab text only: it cannot tell whether the command exists, the user may run it, or the cron daemon is running. It never contacts the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Cron has a small syntax with large surprises: five fields where the third and fifth combine with OR, a <code>%</code> that becomes a newline, a default PATH of <code>/usr/bin:/bin</code>, no locking, and output that goes to local mail. The bundled script reads a crontab and reports each surprise with a fix; this skill applies them and decides when a job should leave cron altogether.</p>
 <h3 id="when-to-use-it">When to use it</h3>

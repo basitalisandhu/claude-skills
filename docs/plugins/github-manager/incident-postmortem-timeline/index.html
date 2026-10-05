@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>incident-postmortem-timeline: Build a blameless postmortem timeline and document skeleton | Claude Code skills</title>
-<meta name="description" content="Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR. Use when asked &quot;write the postmortem for incident #412&quot;, &quot;build the incident timeline&quot;, &quot;how long did it take to mitigate?&quot;, or &quot;prepare the incident review doc&quot;. Not for deciding a root cause or assigning blame, not for incidents with no GitHub issue, and not for live incident response.">
+<title>incident-postmortem-timeline: Build a blameless | Claude Code skills</title>
+<meta name="description" content="Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to &quot;write the postmortem for incident #412&quot; or &quot;how long did it take to mitigate?&quot;. Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/incident-postmortem-timeline/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="incident-postmortem-timeline: Build a blameless postmortem timeline and document skeleton | Claude Code skills">
-<meta property="og:description" content="Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR. Use when asked &quot;write the postmortem for incident #412&quot;, &quot;build the incident timeline&quot;, &quot;how long did it take to mitigate?&quot;, or &quot;prepare the incident review doc&quot;. Not for deciding a root cause or assigning blame, not for incidents with no GitHub issue, and not for live incident response.">
+<meta property="og:title" content="incident-postmortem-timeline: Build a blameless | Claude Code skills">
+<meta property="og:description" content="Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to &quot;write the postmortem for incident #412&quot; or &quot;how long did it take to mitigate?&quot;. Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/incident-postmortem-timeline/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "incident-postmortem-timeline",
- "description": "Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR. Use when asked \"write the postmortem for incident #412\", \"build the incident timeline\", \"how long did it take to mitigate?\", or \"prepare the incident review doc\". Not for deciding a root cause or assigning blame, not for incidents with no GitHub issue, and not for live incident response.",
+ "description": "Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to \"write the postmortem for incident #412\" or \"how long did it take to mitigate?\". Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/incident-postmortem-timeline/",
  "codeRepository": "https://github.com/basitalisandhu/github-manager-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "github-manager",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">github-manager</a> / incident-postmortem-timeline</p>
 <h1>Incident postmortem timeline</h1>
-<p class="lede">Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR. Use when asked &quot;write the postmortem for incident #412&quot;, &quot;build the incident timeline&quot;, &quot;how long did it take to mitigate?&quot;, or &quot;prepare the incident review doc&quot;. Not for deciding a root cause or assigning blame, not for incidents with no GitHub issue, and not for live incident response.</p>
-<p class="meta">Skill <code>incident-postmortem-timeline</code> in plugin <a href="../index.html">github-manager</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md">plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md">plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md</a>.</p>
+<p class="lede">Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to &quot;write the postmortem for incident #412&quot; or &quot;how long did it take to mitigate?&quot;. Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response.</p>
+<p class="meta">Skill <code>incident-postmortem-timeline</code> in plugin <a href="../index.html">github-manager</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md">plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md">plugins/github-manager/skills/incident-postmortem-timeline/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -100,7 +100,7 @@ Status: draft for the review. Blameless.
 ## Questions for the review
 ## Action items       (agreed at the review, each linked to an issue)</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>pr-queue-digest</code> to see whether review queues delayed a mitigation PR.</li><li><code>iteration-report</code> to show the incident&#x27;s place in the iteration.</li></ul>
+<ul><li><code>pr-queue-digest</code> to see whether review queues delayed a mitigation PR.</li><li><code>iteration-report</code> to show the incident&#x27;s place in the iteration.</li><li><code>postmortem-writer</code> (docs plugin, claude-dev-skills): incident-postmortem-timeline builds the cited timeline from a GitHub issue export; postmortem-writer writes the narrative, causes and actions from any source.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/github-manager-skills/issues">github-manager-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

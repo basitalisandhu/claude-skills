@@ -37,7 +37,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / changelog-keeper</p>
 <h1>Changelog keeper</h1>
 <p class="lede">Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).</p>
-<p class="meta">Skill <code>changelog-keeper</code> in plugin <a href="../index.html">docs</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a>.</p>
+<p class="meta">Skill <code>changelog-keeper</code> in plugin <a href="../index.html">docs</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill docs/changelog-keeper</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The script expects Keep a Changelog headings with semantic version numbers; other version shapes are reported by <code>check</code>, and per-package sections in a monorepo are not supported.</li><li>It does not read git history (release-notes does) or check that entries describe real changes.</li><li><code>add</code> and <code>release</code> rewrite the file in place (use <code>--dry-run</code> to preview); it never contacts the network, even when writing compare links.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>A changelog is only useful if every release has one and the format never drifts. The bundled script enforces the Keep a Changelog shape (an <code>[Unreleased]</code> section, versions in descending order with ISO dates, the six categories), adds entries where they belong, and performs the release step so the compare links stay correct.</p>
 <h3 id="when-to-use-it">When to use it</h3>

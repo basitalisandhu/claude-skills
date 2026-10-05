@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>naming-audit: Audit the names in a module or diff | Claude Code skills</title>
-<meta name="description" content="Audit the names in a module or diff (variables, functions, classes, files, database columns, API fields) for clarity, consistency with the project&#x27;s conventions, and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked whether names are clear, to review naming in a PR, or to agree conventions for a new codebase. Not for code formatting or for choosing a product name.">
+<title>naming-audit: Audit names in a module or diff for clarity | Claude Code skills</title>
+<meta name="description" content="Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked &quot;are these names clear?&quot;, to review naming in a PR, or to agree conventions for a new codebase. Not for formatting or choosing a product name.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/naming-audit/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="naming-audit: Audit the names in a module or diff | Claude Code skills">
-<meta property="og:description" content="Audit the names in a module or diff (variables, functions, classes, files, database columns, API fields) for clarity, consistency with the project&#x27;s conventions, and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked whether names are clear, to review naming in a PR, or to agree conventions for a new codebase. Not for code formatting or for choosing a product name.">
+<meta property="og:title" content="naming-audit: Audit names in a module or diff for clarity | Claude Code skills">
+<meta property="og:description" content="Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked &quot;are these names clear?&quot;, to review naming in a PR, or to agree conventions for a new codebase. Not for formatting or choosing a product name.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/naming-audit/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "naming-audit",
- "description": "Audit the names in a module or diff (variables, functions, classes, files, database columns, API fields) for clarity, consistency with the project's conventions, and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked whether names are clear, to review naming in a PR, or to agree conventions for a new codebase. Not for code formatting or for choosing a product name.",
+ "description": "Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked \"are these names clear?\", to review naming in a PR, or to agree conventions for a new codebase. Not for formatting or choosing a product name.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/naming-audit/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / naming-audit</p>
 <h1>Naming audit</h1>
-<p class="lede">Audit the names in a module or diff (variables, functions, classes, files, database columns, API fields) for clarity, consistency with the project&#x27;s conventions, and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked whether names are clear, to review naming in a PR, or to agree conventions for a new codebase. Not for code formatting or for choosing a product name.</p>
-<p class="meta">Skill <code>naming-audit</code> in plugin <a href="../index.html">code-quality</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/naming-audit/SKILL.md">plugins/code-quality/skills/naming-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/naming-audit/SKILL.md">plugins/code-quality/skills/naming-audit/SKILL.md</a>.</p>
+<p class="lede">Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked &quot;are these names clear?&quot;, to review naming in a PR, or to agree conventions for a new codebase. Not for formatting or choosing a product name.</p>
+<p class="meta">Skill <code>naming-audit</code> in plugin <a href="../index.html">code-quality</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/naming-audit/SKILL.md">plugins/code-quality/skills/naming-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/naming-audit/SKILL.md">plugins/code-quality/skills/naming-audit/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill code-quality/naming-audit</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It samples the public surface and the hot paths rather than every local variable, so a large module gets a partial inventory.</li><li>It cannot see callers outside the repository, so the cost of renaming a public name (library export, API field, column) is an estimate until consumers are checked.</li><li>There is no bundled script, and nothing is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Bad names are the cheapest defects to introduce and the most expensive to live with, because every reader pays. This skill finds them with a fixed set of rules, checks them against what the project already does, and proposes renames in an order that does not break callers. The rules are in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/naming-audit/references/conventions.md">references/conventions.md</a>.</p>
 <h3 id="when-to-use-it">When to use it</h3>

@@ -37,7 +37,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / release-notes</p>
 <h1>Release notes</h1>
 <p class="lede">Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing.</p>
-<p class="meta">Skill <code>release-notes</code> in plugin <a href="../index.html">devops</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/release-notes/SKILL.md">plugins/devops/skills/release-notes/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/release-notes/SKILL.md">plugins/devops/skills/release-notes/SKILL.md</a>.</p>
+<p class="meta">Skill <code>release-notes</code> in plugin <a href="../index.html">devops</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/release-notes/SKILL.md">plugins/devops/skills/release-notes/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/release-notes/SKILL.md">plugins/devops/skills/release-notes/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill devops/release-notes</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>Grouping depends on commit messages: commits without a Conventional Commits prefix are classified by keywords in the subject and can land in the wrong group, which is why step 3 edits the draft.</li><li>Merge commits are skipped and pull request titles, labels and descriptions are not read.</li><li>It runs <code>git log</code> locally and never contacts GitHub or the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Release notes written from memory miss things; raw <code>git log</code> output is not notes. The bundled script turns a commit range into grouped Markdown with links; this skill then edits the output for the reader: a user who wants to know what changed for them, what might break, and what to do about it.</p>
 <h3 id="when-to-use-it">When to use it</h3>
@@ -93,7 +94,7 @@ Faster exports and a new webhook retry policy. Upgrading from 1.3 needs one conf
 
 Thanks to @external-contributor for #398.</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>semver-advisor</code> decides whether this is 1.4.0 or 2.0.0.</li><li><code>changelog-keeper</code> writes the same content into CHANGELOG.md in the Keep a Changelog format.</li></ul>
+<ul><li><code>semver-advisor</code> decides whether this is 1.4.0 or 2.0.0.</li><li><code>changelog-keeper</code> writes the same content into CHANGELOG.md in the Keep a Changelog format.</li><li>Boundary: <code>release-notes</code> drafts notes from commits; <code>release-notes-verifier</code> (repo-engineering-skills marketplace) checks finished notes against the tag range and runs as a CI gate.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

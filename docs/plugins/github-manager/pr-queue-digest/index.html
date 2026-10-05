@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pr-queue-digest: Build a stuck-PR and review-queue digest from a saved gh pr list | Claude Code skills</title>
-<meta name="description" content="Build a stuck-PR and review-queue digest from a saved gh pr list export, with a bundled script that flags PRs waiting on review longer than a threshold, PRs blocked on one overloaded reviewer, changes requested with no new commits, new commits with no re-request, failing checks, merge conflicts, approved but unmerged PRs, PRs with no reviewer and stale drafts, then prints a review-queue table per reviewer (counts only) and one next action per PR (nudge, re-request, rebase, fix checks, merge, close as stale), each citing the PR. Use when asked &quot;which PRs are stuck?&quot;, &quot;what is waiting on review?&quot;, &quot;who is the review bottleneck on this repo?&quot; (as a queue, not a judgement), &quot;give me the PR digest for standup&quot;, or &quot;which drafts can we close?&quot;. Not for reviewing the code in a PR, not for measuring or ranking individual engineers, and not for repositories you cannot export with gh.">
+<title>pr-queue-digest: Find stuck pull requests and review bottlenecks from a saved gh pr | Claude Code skills</title>
+<meta name="description" content="Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked &quot;which PRs are stuck?&quot; or for a standup PR digest. Not for reviewing code, ranking engineers, or repositories you cannot export with gh.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/pr-queue-digest/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="pr-queue-digest: Build a stuck-PR and review-queue digest from a saved gh pr list | Claude Code skills">
-<meta property="og:description" content="Build a stuck-PR and review-queue digest from a saved gh pr list export, with a bundled script that flags PRs waiting on review longer than a threshold, PRs blocked on one overloaded reviewer, changes requested with no new commits, new commits with no re-request, failing checks, merge conflicts, approved but unmerged PRs, PRs with no reviewer and stale drafts, then prints a review-queue table per reviewer (counts only) and one next action per PR (nudge, re-request, rebase, fix checks, merge, close as stale), each citing the PR. Use when asked &quot;which PRs are stuck?&quot;, &quot;what is waiting on review?&quot;, &quot;who is the review bottleneck on this repo?&quot; (as a queue, not a judgement), &quot;give me the PR digest for standup&quot;, or &quot;which drafts can we close?&quot;. Not for reviewing the code in a PR, not for measuring or ranking individual engineers, and not for repositories you cannot export with gh.">
+<meta property="og:title" content="pr-queue-digest: Find stuck pull requests and review bottlenecks from a saved gh pr | Claude Code skills">
+<meta property="og:description" content="Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked &quot;which PRs are stuck?&quot; or for a standup PR digest. Not for reviewing code, ranking engineers, or repositories you cannot export with gh.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/pr-queue-digest/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "pr-queue-digest",
- "description": "Build a stuck-PR and review-queue digest from a saved gh pr list export, with a bundled script that flags PRs waiting on review longer than a threshold, PRs blocked on one overloaded reviewer, changes requested with no new commits, new commits with no re-request, failing checks, merge conflicts, approved but unmerged PRs, PRs with no reviewer and stale drafts, then prints a review-queue table per reviewer (counts only) and one next action per PR (nudge, re-request, rebase, fix checks, merge, close as stale), each citing the PR. Use when asked \"which PRs are stuck?\", \"what is waiting on review?\", \"who is the review bottleneck on this repo?\" (as a queue, not a judgement), \"give me the PR digest for standup\", or \"which drafts can we close?\". Not for reviewing the code in a PR, not for measuring or ranking individual engineers, and not for repositories you cannot export with gh.",
+ "description": "Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked \"which PRs are stuck?\" or for a standup PR digest. Not for reviewing code, ranking engineers, or repositories you cannot export with gh.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/pr-queue-digest/",
  "codeRepository": "https://github.com/basitalisandhu/github-manager-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "github-manager",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">github-manager</a> / pr-queue-digest</p>
 <h1>PR queue digest</h1>
-<p class="lede">Build a stuck-PR and review-queue digest from a saved gh pr list export, with a bundled script that flags PRs waiting on review longer than a threshold, PRs blocked on one overloaded reviewer, changes requested with no new commits, new commits with no re-request, failing checks, merge conflicts, approved but unmerged PRs, PRs with no reviewer and stale drafts, then prints a review-queue table per reviewer (counts only) and one next action per PR (nudge, re-request, rebase, fix checks, merge, close as stale), each citing the PR. Use when asked &quot;which PRs are stuck?&quot;, &quot;what is waiting on review?&quot;, &quot;who is the review bottleneck on this repo?&quot; (as a queue, not a judgement), &quot;give me the PR digest for standup&quot;, or &quot;which drafts can we close?&quot;. Not for reviewing the code in a PR, not for measuring or ranking individual engineers, and not for repositories you cannot export with gh.</p>
-<p class="meta">Skill <code>pr-queue-digest</code> in plugin <a href="../index.html">github-manager</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/pr-queue-digest/SKILL.md">plugins/github-manager/skills/pr-queue-digest/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/pr-queue-digest/SKILL.md">plugins/github-manager/skills/pr-queue-digest/SKILL.md</a>.</p>
+<p class="lede">Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked &quot;which PRs are stuck?&quot; or for a standup PR digest. Not for reviewing code, ranking engineers, or repositories you cannot export with gh.</p>
+<p class="meta">Skill <code>pr-queue-digest</code> in plugin <a href="../index.html">github-manager</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/pr-queue-digest/SKILL.md">plugins/github-manager/skills/pr-queue-digest/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/pr-queue-digest/SKILL.md">plugins/github-manager/skills/pr-queue-digest/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

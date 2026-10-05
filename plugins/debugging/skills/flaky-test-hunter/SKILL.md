@@ -1,6 +1,6 @@
 ---
 name: flaky-test-hunter
-description: Find tests that pass and fail without code changes by comparing JUnit XML reports from several runs with a bundled script, then classify each flaky test by cause (ordering, timing, shared state, resources, environment) and prescribe the fix. Use when CI fails intermittently, when someone asks "is this test flaky?", or to quarantine and track flaky tests. Not for tests that fail every time (that is a bug, use bug-repro-minimiser).
+description: "Find tests that pass and fail without code changes by comparing JUnit XML reports from several runs with a bundled script, then classify each flaky test by cause (ordering, timing, shared state, resources, environment) and prescribe the fix. Use when CI fails intermittently, when someone asks \"is this test flaky?\", or to quarantine and track flaky tests. Not for tests that fail every time (that is a bug, use bug-repro-minimiser)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads JUnit XML from pytest, Jest, Surefire, Gradle, go-junit-report, .NET and others.
 metadata:

@@ -1,6 +1,6 @@
 ---
 name: incident-lookup
-description: Look up real AI agent security incidents, vulnerability disclosures and threat reports (80 coded events, 2023 to 2026, mapped to OWASP Agentic Top 10, OWASP LLM Top 10 and MITRE ATLAS) and summarise precedents for a design. Use when asked "has this happened before", for examples of prompt injection, MCP, supply-chain or autonomous-agent failures, to justify a control with evidence, or to cite incidents in a threat model, review or report. Works offline from a bundled snapshot.
+description: "Look up 80 coded AI-agent security incidents from 2023 to 2026, mapped to OWASP Agentic and LLM Top 10 and MITRE ATLAS, and summarise precedents with sources. Use when asked \"has this happened before?\", to justify a control with evidence, or to cite incidents in a threat model. Not for general CVE lookups or a live threat feed; it reads a daily-refreshed copy of the published dataset and falls back to a bundled snapshot offline."
 license: MIT
 compatibility: Python 3.11 or newer. Optional network access to refresh the dataset; falls back to the bundled copy.
 metadata:
@@ -85,8 +85,20 @@ For a precedent summary:
 **Controls that would have helped:** <one line per vector, naming the control and where it lives>
 ```
 
+## Limits
+
+- It covers publicly documented events that involve LLM applications and AI agents (80 records in the bundled snapshot). It is not a general CVE or vulnerability database.
+- Vectors, channels, outcomes and framework mappings are the dataset's coding. Check the `status` field, since some records are reported or disputed rather than confirmed.
+- Offline, results are only as recent as the bundled snapshot; the daily refresh needs network access to the published JSON.
+
 ## Notes
 
 - The dataset is CC BY 4.0: attribute it when quoting in a document.
 - Refresh with `--refresh`; the only network call is the documented fetch of the published JSON (raw GitHub, also served at `https://basitalisandhu.github.io/ai-agent-incidents/incidents.json`).
 - To refresh the bundle in this plugin: `python3 scripts/build_incidents.py /path/to/ai-agent-incidents` (validates every record against the dataset's schema).
+
+## Related
+
+- `agent-threat-model` attaches precedents from this skill to its top threats.
+- `prompt-injection-review` maps each failing flow to precedents with the `precedents` command.
+- `secure-agent-checklist` uses precedents as evidence that a control matters.

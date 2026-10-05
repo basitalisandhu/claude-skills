@@ -1,6 +1,6 @@
 ---
 name: refactor-plan
-description: Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or "clean up" code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.
+description: "Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or \"clean up\" code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change."
 license: MIT
 compatibility: Any language. Uses complexity-report and dead-code-finder when the code-quality plugin is installed.
 metadata:
@@ -57,6 +57,12 @@ See [references/plan-template.md](references/plan-template.md). Summary shape:
 **Not in scope (behaviour changes, do after):** retry on timeout (#123), new discount rule
 **After:** <numbers after execution>
 ```
+
+## Limits
+
+- It plans the steps; it does not prove that behaviour is preserved. The tests in the safety net decide that, and characterisation tests cover only the inputs chosen for them.
+- The before and after numbers come from the code-quality scripts, which measure Python and JavaScript/TypeScript; for other languages record what the language's own tools report.
+- There is no bundled script; executing the plan runs only the project's own tests, and nothing is sent over the network.
 
 ## Related
 

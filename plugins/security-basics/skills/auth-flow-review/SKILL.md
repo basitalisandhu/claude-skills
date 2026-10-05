@@ -1,6 +1,6 @@
 ---
 name: auth-flow-review
-description: Review an application's authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow. Use when designing login, reviewing an auth implementation, integrating a third-party identity provider, or after an account-takeover report. Not for authorization rules inside the app beyond noting where they must be checked, and not for implementing cryptography.
+description: "Find the weaknesses in an application's login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked \"is our login flow secure?\", when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography."
 license: MIT
 compatibility: Any web or mobile stack. Covers session cookies, JWT access tokens, OAuth 2.0 and OpenID Connect.
 metadata:
@@ -51,6 +51,12 @@ Credentials, tokens and user data encountered during the review are secrets and 
 
 **Flows corrected:** see diagrams. **Tests added:** 7 (staging). **Logging:** login success and failure now logged with request id, no credentials.
 ```
+
+## Limits
+
+- It reviews design and code against a checklist and never attacks a running system, so issues that only a live test shows (credential stuffing at scale, timing differences) are out of reach.
+- Authorization inside the application is noted where it must be checked, not reviewed.
+- There is no bundled script, and nothing is sent over the network.
 
 ## Related
 

@@ -59,6 +59,12 @@ Deliver the schema file plus a short note:
 **Fixtures:** tests/schema/valid/*.json (240), tests/schema/invalid/*.json (6), all behaving as expected with `jsonschema`
 ```
 
+## Limits
+
+- Inference sees only the samples: a field absent from them is missing from the draft, and `required`, `enum` and bounds may be coincidences until step 3 decides them.
+- Formats are detected only when every value matches (date, date-time, email, uuid, uri, ipv4); `oneOf`, discriminators and `pattern` are not inferred.
+- The script does not validate documents (use python-jsonschema or ajv) and makes no network calls; `$id` URLs are never fetched.
+
 ## Related
 
 - `api-contract-review` lints the OpenAPI document that embeds this schema.

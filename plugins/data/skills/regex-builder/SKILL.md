@@ -57,6 +57,12 @@ PATTERN = re.compile(r"""
 **Not covered on purpose:** full RFC 5322 (quoted local parts, IP literals); deliverability is verified by sending mail
 ```
 
+## Limits
+
+- The tester runs Python's `re` dialect; JavaScript, PCRE, Go and Rust differences are listed in step 5 but not executed.
+- The backtracking check is a heuristic: it flags known shapes and times a few adversarial inputs, so a pattern can pass and still be slow on input it did not try.
+- It makes no network calls.
+
 ## Related
 
 - `log-triage` in debugging when the goal is to group log lines rather than extract one field.

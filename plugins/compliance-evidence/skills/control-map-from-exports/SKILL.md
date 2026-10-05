@@ -1,6 +1,6 @@
 ---
 name: control-map-from-exports
-description: Map the exports inside an evidence pack to ISO/IEC 27001:2022 Annex A or SOC 2 control identifiers with a mapping file, and report per control one of three states (supported, contradicted, not assessable) with citations to the exact file, field and value, plus the gaps. A bundled script re-checks every file's SHA-256 against the pack manifest before reading it, and ships a starter map for what GitHub, AWS and Microsoft 365 exports can speak to, using identifiers and short paraphrases only. Use when preparing a statement of applicability, readiness review or audit request list, asking "which controls do our exports support?", or before drafting narratives. Not for collecting data, not a substitute for the assessor's judgement, and never an opinion or attestation.
+description: "Map the exports in an evidence pack to ISO 27001:2022 Annex A or SOC 2 control identifiers and report per control supported, contradicted or not assessable, citing the exact file, field and value, plus the gaps; every file's SHA-256 is re-checked first. Use when asked \"which controls do our exports support?\", for a statement of applicability, a readiness assessment or an audit request list. Not for collecting data, replacing the assessor's judgement, or an opinion or attestation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads an evidence pack built by evidence-pack-builder; makes no network calls.
 metadata:

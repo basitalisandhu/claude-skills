@@ -21,16 +21,16 @@ ATM = next((c for c in ATM_CANDIDATES if c and Path(c).exists()), None)
 
 
 def make_fixture(root: Path) -> None:
-    (root / "requirements.txt").write_text("langchain==0.3.0\nopenai\nchromadb\npsycopg2\n")
+    (root / "requirements.txt").write_text("langchain==0.3.0\nopenai\nchromadb\npsycopg2\n", encoding="utf-8")
     (root / "agent.py").write_text(
         "import os, subprocess, smtplib, imaplib\nfrom langchain_core.tools import tool\nimport chromadb\n"
         "KEY = os.environ['OPENAI_API_KEY']\n@tool\ndef run(cmd):\n    return subprocess.run(cmd, shell=True)\n"
-        "def mail():\n    smtplib.SMTP('x').send_message(None)\n# requires_approval before send; rate_limit 10/min\n"
+        "def mail():\n    smtplib.SMTP('x').send_message(None)\n# requires_approval before send; rate_limit 10/min\n", encoding="utf-8"
     )
     (root / ".mcp.json").write_text(json.dumps({"mcpServers": {"gh": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"], "env": {"GITHUB_TOKEN": "${GITHUB_TOKEN}"}},
-                                                               "fs": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem@0.6.2", "/tmp"]}}}))
+                                                               "fs": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem@0.6.2", "/tmp"]}}}), encoding="utf-8")
     (root / "node_modules").mkdir()
-    (root / "node_modules" / "x.py").write_text("import crewai")
+    (root / "node_modules" / "x.py").write_text("import crewai", encoding="utf-8")
 
 
 def check_schema_shape(tc: unittest.TestCase, model: dict) -> None:
@@ -132,13 +132,13 @@ class ScanTests(unittest.TestCase):
             root = Path(td)
             make_fixture(root)
             out = root / "system.yaml"
-            out.write_text(sas.to_yaml(sas.build_model(root, sas.detect(root))))
+            out.write_text(sas.to_yaml(sas.build_model(root, sas.detect(root))), encoding="utf-8")
             proc = subprocess.run([ATM, "validate", str(out)], capture_output=True, text=True, timeout=120)
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertIn("ok:", proc.stdout)
             empty = root / "empty"; empty.mkdir()
             out2 = root / "empty.yaml"
-            out2.write_text(sas.to_yaml(sas.build_model(empty, sas.detect(empty))))
+            out2.write_text(sas.to_yaml(sas.build_model(empty, sas.detect(empty))), encoding="utf-8")
             proc = subprocess.run([ATM, "validate", str(out2)], capture_output=True, text=True, timeout=120)
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 

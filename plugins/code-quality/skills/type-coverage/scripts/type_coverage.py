@@ -187,7 +187,7 @@ def analyse(root: Path, excludes: set[str]) -> dict:
         rec = python_file(p, text) if p.suffix == ".py" else ts_file(p, text)
         if root.is_dir():
             try:
-                rec["file"] = str(p.relative_to(root))
+                rec["file"] = p.relative_to(root).as_posix()
             except ValueError:
                 pass
         rec["percent"] = round(100.0 * rec["covered"] / rec["slots"], 1) if rec["slots"] else 100.0
@@ -201,6 +201,9 @@ def analyse(root: Path, excludes: set[str]) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")

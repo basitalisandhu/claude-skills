@@ -1,6 +1,6 @@
 ---
 name: readme-author
-description: Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when a repository has no README, the README is out of date, or a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy.
+description: "Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when a repository has no README, the README is out of date, or a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy."
 license: MIT
 compatibility: Any project. Verifies commands by running them when the environment allows.
 metadata:
@@ -50,7 +50,14 @@ The README itself, following [references/template.md](references/template.md), p
 **Open questions for the owner:** licence file says MIT, package metadata says Apache-2.0
 ```
 
+## Limits
+
+- Commands are verified only when the environment can run them; the rest are marked unverified.
+- It writes one README, not a documentation site or an API reference.
+- There is no bundled script; verifying install commands may download packages, and nothing else is sent over the network.
+
 ## Related
 
 - `onboarding-doc` for the longer document a new team member reads after the README.
 - `changelog-keeper` and `release-notes` for the history the README should link to.
+- Boundary: `readme-author` writes or rewrites the README; `readme-who-what-why` (repo-engineering-skills marketplace) checks six first-screen questions and fails CI when they are unanswered.

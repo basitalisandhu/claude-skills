@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>repo-onboarding-guide: Write an onboarding guide for a repository | Claude Code skills</title>
-<meta name="description" content="Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result. Use when asked to &quot;write an onboarding doc&quot;, &quot;how do I get started in this repo?&quot;, &quot;explain this codebase to a new hire or contractor&quot;, &quot;write a getting-started or architecture overview&quot;, or to refresh an onboarding guide that has drifted. Not for generating diagrams or a knowledge graph, not for API reference docs, and not for rewriting a README&#x27;s first screen (use readme-who-what-why).">
+<meta name="description" content="Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. Use when asked &quot;how do I get started in this repo?&quot; or to write or refresh an onboarding doc for a new hire. Not for diagrams, API reference docs, or a README&#x27;s first screen (readme-who-what-why).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/repo-onboarding-guide/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="repo-onboarding-guide: Write an onboarding guide for a repository | Claude Code skills">
-<meta property="og:description" content="Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result. Use when asked to &quot;write an onboarding doc&quot;, &quot;how do I get started in this repo?&quot;, &quot;explain this codebase to a new hire or contractor&quot;, &quot;write a getting-started or architecture overview&quot;, or to refresh an onboarding guide that has drifted. Not for generating diagrams or a knowledge graph, not for API reference docs, and not for rewriting a README&#x27;s first screen (use readme-who-what-why).">
+<meta property="og:description" content="Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. Use when asked &quot;how do I get started in this repo?&quot; or to write or refresh an onboarding doc for a new hire. Not for diagrams, API reference docs, or a README&#x27;s first screen (readme-who-what-why).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/repo-onboarding-guide/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "repo-onboarding-guide",
- "description": "Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result. Use when asked to \"write an onboarding doc\", \"how do I get started in this repo?\", \"explain this codebase to a new hire or contractor\", \"write a getting-started or architecture overview\", or to refresh an onboarding guide that has drifted. Not for generating diagrams or a knowledge graph, not for API reference docs, and not for rewriting a README's first screen (use readme-who-what-why).",
+ "description": "Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. Use when asked \"how do I get started in this repo?\" or to write or refresh an onboarding doc for a new hire. Not for diagrams, API reference docs, or a README's first screen (readme-who-what-why).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/repo-onboarding-guide/",
  "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / repo-onboarding-guide</p>
 <h1>Repo onboarding guide</h1>
-<p class="lede">Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result. Use when asked to &quot;write an onboarding doc&quot;, &quot;how do I get started in this repo?&quot;, &quot;explain this codebase to a new hire or contractor&quot;, &quot;write a getting-started or architecture overview&quot;, or to refresh an onboarding guide that has drifted. Not for generating diagrams or a knowledge graph, not for API reference docs, and not for rewriting a README&#x27;s first screen (use readme-who-what-why).</p>
-<p class="meta">Skill <code>repo-onboarding-guide</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md">plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md">plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md</a>.</p>
+<p class="lede">Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. Use when asked &quot;how do I get started in this repo?&quot; or to write or refresh an onboarding doc for a new hire. Not for diagrams, API reference docs, or a README&#x27;s first screen (readme-who-what-why).</p>
+<p class="meta">Skill <code>repo-onboarding-guide</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md">plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md">plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -96,7 +96,7 @@ python3 install.py --user --skill repo-engineering/repo-onboarding-guide</code><
 **Not covered by any fact:** &lt;questions a newcomer will ask, for the owner to answer&gt;
 **Commands not run by me:** &lt;list, or &quot;none&quot;&gt;</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>docs-truth-check</code> checks the finished guide&#x27;s paths, flags, defaults and targets.</li><li><code>cited-codebase-audit</code> uses a similar inventory (<code>repo_facts.py</code>) for audits rather than onboarding.</li><li><code>readme-who-what-why</code> for the README&#x27;s first screen.</li></ul>
+<ul><li><code>docs-truth-check</code> checks the finished guide&#x27;s paths, flags, defaults and targets.</li><li><code>cited-codebase-audit</code> uses a similar inventory (<code>repo_facts.py</code>) for audits rather than onboarding.</li><li><code>readme-who-what-why</code> for the README&#x27;s first screen.</li><li><code>onboarding-doc</code> (docs plugin, claude-dev-skills): repo-onboarding-guide cites a path:line fact for every sentence; onboarding-doc is the freehand version for non-code processes and teams.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/repo-engineering-skills/issues">repo-engineering-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

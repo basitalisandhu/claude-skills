@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>agent-eval-harness: Set up AgentDojo-style security evaluations for an agent | Claude Code skills</title>
-<meta name="description" content="Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review.">
+<title>agent-eval-harness: Build a security evaluation for an agent with benign tasks | Claude Code skills</title>
+<meta name="description" content="Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked &quot;what is our attack success rate?&quot;, to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="agent-eval-harness: Set up AgentDojo-style security evaluations for an agent | Claude Code skills">
-<meta property="og:description" content="Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review.">
+<meta property="og:title" content="agent-eval-harness: Build a security evaluation for an agent with benign tasks | Claude Code skills">
+<meta property="og:description" content="Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked &quot;what is our attack success rate?&quot;, to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-eval-harness",
- "description": "Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review.",
+ "description": "Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked \"what is our attack success rate?\", to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / agent-eval-harness</p>
 <h1>Agent evaluation harness</h1>
-<p class="lede">Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review.</p>
-<p class="meta">Skill <code>agent-eval-harness</code> in plugin <a href="../index.html">agent-security</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-eval-harness/SKILL.md">plugins/agent-security/skills/agent-eval-harness/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-eval-harness/SKILL.md">plugins/agent-security/skills/agent-eval-harness/SKILL.md</a>.</p>
+<p class="lede">Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked &quot;what is our attack success rate?&quot;, to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark.</p>
+<p class="meta">Skill <code>agent-eval-harness</code> in plugin <a href="../index.html">agent-security</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-eval-harness/SKILL.md">plugins/agent-security/skills/agent-eval-harness/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-eval-harness/SKILL.md">plugins/agent-security/skills/agent-eval-harness/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill agent-security/agent-eval-harness</code></pre>
 <p>The <code>agent-security</code> plugin also ships hooks, commands, agents and an MCP server at plugin level. Install the plugin from the marketplace to get them.</p>
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The bundled demo agent is scripted, so its numbers only show the report shape; results mean something only after <code>agent_fn</code> calls your real model through the executor.</li><li>Attack success rate depends on the injection tasks you write. A low rate on a small suite says nothing about phrasings or channels the suite does not include.</li><li>The <code>approval</code> policy uses an oracle approver that passes only arguments the request entails; a human approver is weaker, so treat its numbers as a best case.</li><li>The template makes no network calls. Model costs, rate limits and the full AgentDojo benchmark are outside it.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>A security eval for an agent answers two questions with numbers: does it still do the job (<strong>utility</strong>), and how often does an attacker&#x27;s planted instruction get carried out (<strong>attack success rate, ASR</strong>)? AgentDojo established the shape: an environment with tools and state, benign user tasks with checks, injection tasks that place attacker text where the agent will read it, and a runner that crosses them. This skill gives you that shape in a dependency-free template, wired to a provenance policy and an approval policy (the rules in the <code>prompt-injection-review</code> skill&#x27;s provenance model) so defences can be compared on the same suite.</p>
 <h3 id="when-to-use-it">When to use it</h3>

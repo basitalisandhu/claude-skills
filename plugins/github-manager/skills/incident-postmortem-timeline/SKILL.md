@@ -1,6 +1,6 @@
 ---
 name: incident-postmortem-timeline
-description: "Build a blameless postmortem timeline and document skeleton from a saved incident issue export (gh issue view with comments, the issue timeline, and the PRs it references), with a bundled script that orders every label change, assignment, comment, cross-reference, PR merge and close by time, derives detected, acknowledged, mitigated and resolved from those records, reports where two signals for one phase disagree, lists people as roles, and writes contributing factors as questions for the review, citing each row to its comment id, event id or PR. Use when asked \"write the postmortem for incident #412\", \"build the incident timeline\", \"how long did it take to mitigate?\", or \"prepare the incident review doc\". Not for deciding a root cause or assigning blame, not for incidents with no GitHub issue, and not for live incident response."
+description: "Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to \"write the postmortem for incident #412\" or \"how long did it take to mitigate?\". Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs the gh CLI, logged in with read access to the repository.
 metadata:
@@ -110,3 +110,4 @@ Status: draft for the review. Blameless.
 
 - `pr-queue-digest` to see whether review queues delayed a mitigation PR.
 - `iteration-report` to show the incident's place in the iteration.
+- `postmortem-writer` (docs plugin, claude-dev-skills): incident-postmortem-timeline builds the cited timeline from a GitHub issue export; postmortem-writer writes the narrative, causes and actions from any source.

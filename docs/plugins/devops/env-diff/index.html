@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>env-diff: Compare the keys of a .env.example | Claude Code skills</title>
-<meta name="description" content="Compare the keys of a .env.example (or any template) against real .env files with a bundled script, listing missing, extra, empty and duplicated keys and template values that look like real credentials, without ever printing a value. Use when a service fails on a missing variable, when onboarding to a project, before a deploy to a new environment, or to keep .env.example in sync in CI. Not a secret manager and not for comparing values.">
+<title>env-diff: Compare the keys of .env.example against real .env files | Claude Code skills</title>
+<meta name="description" content="Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked &quot;which env vars am I missing?&quot;, when a service fails on a missing variable, when onboarding, before deploying to a new environment, or to keep .env.example in sync in CI. Not for comparing values, and not a secret manager.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/devops/env-diff/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="env-diff: Compare the keys of a .env.example | Claude Code skills">
-<meta property="og:description" content="Compare the keys of a .env.example (or any template) against real .env files with a bundled script, listing missing, extra, empty and duplicated keys and template values that look like real credentials, without ever printing a value. Use when a service fails on a missing variable, when onboarding to a project, before a deploy to a new environment, or to keep .env.example in sync in CI. Not a secret manager and not for comparing values.">
+<meta property="og:title" content="env-diff: Compare the keys of .env.example against real .env files | Claude Code skills">
+<meta property="og:description" content="Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked &quot;which env vars am I missing?&quot;, when a service fails on a missing variable, when onboarding, before deploying to a new environment, or to keep .env.example in sync in CI. Not for comparing values, and not a secret manager.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/devops/env-diff/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "env-diff",
- "description": "Compare the keys of a .env.example (or any template) against real .env files with a bundled script, listing missing, extra, empty and duplicated keys and template values that look like real credentials, without ever printing a value. Use when a service fails on a missing variable, when onboarding to a project, before a deploy to a new environment, or to keep .env.example in sync in CI. Not a secret manager and not for comparing values.",
+ "description": "Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked \"which env vars am I missing?\", when a service fails on a missing variable, when onboarding, before deploying to a new environment, or to keep .env.example in sync in CI. Not for comparing values, and not a secret manager.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/env-diff/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / env-diff</p>
 <h1>Env diff</h1>
-<p class="lede">Compare the keys of a .env.example (or any template) against real .env files with a bundled script, listing missing, extra, empty and duplicated keys and template values that look like real credentials, without ever printing a value. Use when a service fails on a missing variable, when onboarding to a project, before a deploy to a new environment, or to keep .env.example in sync in CI. Not a secret manager and not for comparing values.</p>
-<p class="meta">Skill <code>env-diff</code> in plugin <a href="../index.html">devops</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/env-diff/SKILL.md">plugins/devops/skills/env-diff/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/env-diff/SKILL.md">plugins/devops/skills/env-diff/SKILL.md</a>.</p>
+<p class="lede">Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked &quot;which env vars am I missing?&quot;, when a service fails on a missing variable, when onboarding, before deploying to a new environment, or to keep .env.example in sync in CI. Not for comparing values, and not a secret manager.</p>
+<p class="meta">Skill <code>env-diff</code> in plugin <a href="../index.html">devops</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/env-diff/SKILL.md">plugins/devops/skills/env-diff/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/env-diff/SKILL.md">plugins/devops/skills/env-diff/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill devops/env-diff</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>Multi-line quoted values and variable expansion (<code>${OTHER}</code>) are not interpreted; a value spread over several lines shows up as malformed lines.</li><li>It compares key names only: it cannot tell whether a value is right for the environment, and the credential check on template values is an entropy heuristic.</li><li>It never prints a value and makes no network calls.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Configuration drift between environments shows up as a crash at startup or, worse, a default silently used in production. This skill compares the key sets of the template and the real files (never the values), reports what each environment is missing, and keeps the template honest.</p>
 <h3 id="when-to-use-it">When to use it</h3>
@@ -85,7 +86,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/env-diff/scripts/env_diff.py&quot; .e
 **Template values that look real:** `MAILGUN_KEY` (rotate; replaced with placeholder)
 **Actions:** add 2 keys to .env from the vault; add `DEBUG_SQL`, `FEATURE_FLAGS_URL` to template; `--ignore SENTRY_DSN` in CI.</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>secrets-hygiene</code> in security-basics when a template or env file is found to hold real credentials.</li><li><code>onboarding-doc</code> in docs, which uses this report for the &quot;configuration&quot; section.</li></ul>
+<ul><li><code>secrets-hygiene</code> in security-basics when a template or env file is found to hold real credentials.</li><li><code>onboarding-doc</code> in docs, which uses this report for the &quot;configuration&quot; section.</li><li>Boundary: <code>env-diff</code> compares key names across env files and never prints a value; <code>secrets-hygiene</code> hunts credential-shaped values in the working tree or staged files.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

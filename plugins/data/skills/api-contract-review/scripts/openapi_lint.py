@@ -211,6 +211,9 @@ def lint(doc) -> list[dict]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("spec")
     ap.add_argument("--json", action="store_true")

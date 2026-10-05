@@ -1,6 +1,6 @@
 ---
 name: iteration-report
-description: Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from. Use when asked "write the sprint report", "what did we ship this iteration?", "what carried over?", "what is our cycle time?", or "summarise the milestone for the stakeholder update". Not for per-person output, rankings or performance reviews, not for planning the next sprint, and not for teams whose work is tracked outside GitHub.
+description: "Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. Use when asked \"what did we ship this sprint?\", for a milestone summary or a stakeholder update. Not for per-person output or performance reviews, sprint planning, or work tracked outside GitHub."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs the gh CLI, logged in with read access to the repository.
 metadata:
@@ -110,3 +110,4 @@ Exit codes: 0 report written, 2 bad input (missing files, invalid JSON, a window
 
 - `pr-queue-digest` for what is stuck right now.
 - `incident-postmortem-timeline` when an incident took part of the iteration.
+- `weekly-status-rollup` (ways-of-working-skills): weekly-status-rollup is one lead's note; iteration-report is team metrics for a sprint or milestone.

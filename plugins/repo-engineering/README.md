@@ -16,3 +16,5 @@ Ten skills for repository audits, documentation and release checks, each with a 
 | `release-notes-verifier` | `skills/release-notes-verifier/scripts/release_notes_verify.py` | compare release notes with the commits between two tags, and version fields with the tag |
 
 Requirements: Python 3.11 or newer on `PATH` as `python3`, and git for `adr-miner` and `release-notes-verifier`. No network access (except `release_notes_verify.py --gh`), no third-party packages.
+
+Use it for technical due diligence before taking over or acquiring a codebase (`cited-codebase-audit`), to see a package's internal dependency graph of imports before a split (`restructure-planner`; it does not graph third-party packages), or to record who owns what from CODEOWNERS in an onboarding guide (`repo-onboarding-guide`). No skill measures bus factor from commit history.

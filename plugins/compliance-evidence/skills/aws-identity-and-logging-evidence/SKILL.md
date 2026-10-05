@@ -1,6 +1,6 @@
 ---
 name: aws-identity-and-logging-evidence
-description: Turn saved aws CLI output from one AWS account into evidence rows for logging, access control and backup controls (ISO/IEC 27001:2022 A.8.15, A.8.16, A.8.5, A.8.2, A.5.17, A.8.9, A.5.15, A.8.13 and SOC 2 CC7.2, CC6.1, CC7.1, CC6.6, A1.2 by identifier). A bundled script evaluates CloudTrail coverage, logging status and log file validation, root MFA and access keys, console users without MFA, access key age, the IAM password policy, GuardDuty and AWS Config per region, the account S3 public access block, and AWS Backup plans. Saved stderr tells AccessDenied (not assessable) apart from "not configured" (contradicted). Use when preparing AWS audit evidence for ISO 27001 or SOC 2. Not a full security audit, no live API calls by the script, and not an attestation.
+description: "Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). Use when asked to \"prepare AWS evidence for our SOC 2 audit\", or for ISO 27001 logging and access controls. Not for ranking security risk (aws-account-audit), live API calls by the script, or an attestation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. AWS CLI v2 with read-only credentials for the export step only; the script makes no network calls.
 metadata:
@@ -131,3 +131,4 @@ in-scope set with the user. For one region, the regional files can sit directly 
 
 - `evidence-pack-builder` to hash these exports with their commands.
 - `control-map-from-exports` maps the same files through the starter map.
+- `aws-account-audit` (aws-security-skills): aws-account-audit tells you what is wrong; aws-identity-and-logging-evidence turns the same saved CLI output into ISO or SOC 2 evidence rows and never ranks risk.

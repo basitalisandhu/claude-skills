@@ -434,7 +434,7 @@ class Index:
         env = {"PATH": os.environ.get("PATH", "/usr/bin:/bin"), "LANG": "C.UTF-8", "NO_COLOR": "1"}
         try:
             proc = subprocess.run(cmd, cwd=self.root, env=env, capture_output=True, text=True, timeout=10,
-                                  stdin=subprocess.DEVNULL, check=False)
+                                  stdin=subprocess.DEVNULL, check=False, encoding="utf-8", errors="replace")
         except (OSError, subprocess.TimeoutExpired):
             return set()
         return set(FLAG_RE.findall(proc.stdout + proc.stderr))

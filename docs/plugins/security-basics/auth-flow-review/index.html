@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>auth-flow-review: Review an application&#x27;s authentication and session design against | Claude Code skills</title>
-<meta name="description" content="Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow. Use when designing login, reviewing an auth implementation, integrating a third-party identity provider, or after an account-takeover report. Not for authorization rules inside the app beyond noting where they must be checked, and not for implementing cryptography.">
+<title>auth-flow-review: Find the weaknesses in an application&#x27;s login and session design | Claude Code skills</title>
+<meta name="description" content="Find the weaknesses in an application&#x27;s login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked &quot;is our login flow secure?&quot;, when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/auth-flow-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="auth-flow-review: Review an application&#x27;s authentication and session design against | Claude Code skills">
-<meta property="og:description" content="Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow. Use when designing login, reviewing an auth implementation, integrating a third-party identity provider, or after an account-takeover report. Not for authorization rules inside the app beyond noting where they must be checked, and not for implementing cryptography.">
+<meta property="og:title" content="auth-flow-review: Find the weaknesses in an application&#x27;s login and session design | Claude Code skills">
+<meta property="og:description" content="Find the weaknesses in an application&#x27;s login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked &quot;is our login flow secure?&quot;, when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/auth-flow-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "auth-flow-review",
- "description": "Review an application's authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow. Use when designing login, reviewing an auth implementation, integrating a third-party identity provider, or after an account-takeover report. Not for authorization rules inside the app beyond noting where they must be checked, and not for implementing cryptography.",
+ "description": "Find the weaknesses in an application's login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked \"is our login flow secure?\", when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/auth-flow-review/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "security-basics",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">security-basics</a> / auth-flow-review</p>
 <h1>Auth flow review</h1>
-<p class="lede">Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow. Use when designing login, reviewing an auth implementation, integrating a third-party identity provider, or after an account-takeover report. Not for authorization rules inside the app beyond noting where they must be checked, and not for implementing cryptography.</p>
-<p class="meta">Skill <code>auth-flow-review</code> in plugin <a href="../index.html">security-basics</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/auth-flow-review/SKILL.md">plugins/security-basics/skills/auth-flow-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/auth-flow-review/SKILL.md">plugins/security-basics/skills/auth-flow-review/SKILL.md</a>.</p>
+<p class="lede">Find the weaknesses in an application&#x27;s login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked &quot;is our login flow secure?&quot;, when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography.</p>
+<p class="meta">Skill <code>auth-flow-review</code> in plugin <a href="../index.html">security-basics</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/auth-flow-review/SKILL.md">plugins/security-basics/skills/auth-flow-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/auth-flow-review/SKILL.md">plugins/security-basics/skills/auth-flow-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill security-basics/auth-flow-review</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It reviews design and code against a checklist and never attacks a running system, so issues that only a live test shows (credential stuffing at scale, timing differences) are out of reach.</li><li>Authorization inside the application is noted where it must be checked, not reviewed.</li><li>There is no bundled script, and nothing is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Authentication bugs are rarely in the cryptography; they are in the flow: a reset link that does not expire, a redirect URI matched by prefix, a login that tells you which e-mails exist, a session that survives a password change. This skill walks every flow against the checklist in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/auth-flow-review/references/checklist.md">references/checklist.md</a>, with the reference flows in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/auth-flow-review/references/flows.md">references/flows.md</a>, and reports what to change.</p>
 <h3 id="when-to-use-it">When to use it</h3>

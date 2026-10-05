@@ -231,6 +231,9 @@ def render_markdown(report: dict) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")
@@ -247,7 +250,7 @@ def main(argv: list[str] | None = None) -> int:
         text = p.read_text(encoding="utf-8", errors="replace")
         rec = extract_python(p, text, args.include_private) if p.suffix == ".py" else extract_js(p, text, args.include_private)
         if root.is_dir():
-            rec["file"] = str(p.relative_to(root))
+            rec["file"] = p.relative_to(root).as_posix()
         modules.append(rec)
     total = sum(len(m["symbols"]) for m in modules)
     documented = sum(1 for m in modules for s in m["symbols"] if s["documented"])

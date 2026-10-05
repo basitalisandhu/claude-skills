@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>test-gap-finder: Map source modules to their test files by naming convention | Claude Code skills</title>
-<meta name="description" content="Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not a coverage tool: it works at module level without running anything (use coverage.py, c8 or go test -cover for line coverage).">
+<meta name="description" content="Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/test-gap-finder/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="test-gap-finder: Map source modules to their test files by naming convention | Claude Code skills">
-<meta property="og:description" content="Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not a coverage tool: it works at module level without running anything (use coverage.py, c8 or go test -cover for line coverage).">
+<meta property="og:description" content="Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/test-gap-finder/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "test-gap-finder",
- "description": "Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not a coverage tool: it works at module level without running anything (use coverage.py, c8 or go test -cover for line coverage).",
+ "description": "Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/test-gap-finder/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / test-gap-finder</p>
 <h1>Test gap finder</h1>
-<p class="lede">Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not a coverage tool: it works at module level without running anything (use coverage.py, c8 or go test -cover for line coverage).</p>
-<p class="meta">Skill <code>test-gap-finder</code> in plugin <a href="../index.html">code-quality</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/test-gap-finder/SKILL.md">plugins/code-quality/skills/test-gap-finder/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/test-gap-finder/SKILL.md">plugins/code-quality/skills/test-gap-finder/SKILL.md</a>.</p>
+<p class="lede">Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that).</p>
+<p class="meta">Skill <code>test-gap-finder</code> in plugin <a href="../index.html">code-quality</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/test-gap-finder/SKILL.md">plugins/code-quality/skills/test-gap-finder/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/test-gap-finder/SKILL.md">plugins/code-quality/skills/test-gap-finder/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -87,7 +87,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/test-gap-finder/scripts/test_gap_find
 **Indirectly covered (via integration tests):** api/serializers.py (tests/test_api.py)
 **Gate:** `--min 74` in CI; fail when `uncovered` grows versus main.</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>flaky-test-hunter</code> in debugging once tests exist and start failing intermittently.</li><li><code>review-checklist</code> item 2.1 asks the per-change version of this question.</li></ul>
+<ul><li><code>flaky-test-hunter</code> in debugging once tests exist and start failing intermittently.</li><li><code>review-checklist</code> item 2.1 asks the per-change version of this question.</li><li>Boundary: <code>test-gap-finder</code> maps modules to test files; <code>untested-entry-points</code> (repo-engineering-skills marketplace) names the public functions no test mentions and writes characterisation stubs.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

@@ -9,13 +9,13 @@
     "subfolder": "plugins/agent-security/mcp/incidents-server"
   },
   "websiteUrl": "https://basitalisandhu.github.io/ai-agent-incidents/",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@basitalisandhu/agent-incidents-mcp",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"

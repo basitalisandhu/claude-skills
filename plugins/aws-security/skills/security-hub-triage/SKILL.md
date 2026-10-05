@@ -1,6 +1,6 @@
 ---
 name: security-hub-triage
-description: Triage exported AWS Security Hub (ASFF) and GuardDuty findings offline into an owner-assigned next-actions list. A bundled script drops archived, resolved, suppressed and passed findings, suppresses known-noisy controls, resources and accounts from a config file, groups the rest by severity, control and resource, assigns owners from rules (account, resource type, control prefix, region), and orders actions by severity and number of affected resources. Use when facing a Security Hub or GuardDuty backlog, preparing a weekly security review, deciding what to fix first, or routing findings to teams. Not for running new checks against an account (use aws-account-audit) or for incident response on a single active GuardDuty finding.
+description: "Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked \"what do we fix first in Security Hub?\", for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. AWS CLI only for exporting findings; the script makes no network calls.
 metadata:

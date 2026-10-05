@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>iam-least-privilege-review: Review AWS IAM policy documents offline for over-broad permissions | Claude Code skills</title>
-<meta name="description" content="Review AWS IAM policy documents offline for over-broad permissions and privilege-escalation paths. A bundled script reads policy JSON, get-policy-version output or get-account-authorization-details output and reports, ranked by severity, full admin grants, service and action wildcards, write actions on every resource without conditions, unscoped iam:PassRole, sts:AssumeRole on any role, NotAction or NotResource in Allow statements, and known escalation combinations (iam:CreatePolicyVersion, iam:AttachUserPolicy, iam:PutUserPolicy, iam:PassRole with lambda:CreateFunction, lambda:UpdateFunctionCode and others), with a tightened policy template per document. Use when reviewing an IAM policy or role, before approving a permissions change, when asked &quot;is this least privilege?&quot;, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.">
+<title>iam-least-privilege-review: Review AWS IAM policies offline for over-broad permissions | Claude Code skills</title>
+<meta name="description" content="Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked &quot;is this least privilege?&quot;, before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/iam-least-privilege-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="iam-least-privilege-review: Review AWS IAM policy documents offline for over-broad permissions | Claude Code skills">
-<meta property="og:description" content="Review AWS IAM policy documents offline for over-broad permissions and privilege-escalation paths. A bundled script reads policy JSON, get-policy-version output or get-account-authorization-details output and reports, ranked by severity, full admin grants, service and action wildcards, write actions on every resource without conditions, unscoped iam:PassRole, sts:AssumeRole on any role, NotAction or NotResource in Allow statements, and known escalation combinations (iam:CreatePolicyVersion, iam:AttachUserPolicy, iam:PutUserPolicy, iam:PassRole with lambda:CreateFunction, lambda:UpdateFunctionCode and others), with a tightened policy template per document. Use when reviewing an IAM policy or role, before approving a permissions change, when asked &quot;is this least privilege?&quot;, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.">
+<meta property="og:title" content="iam-least-privilege-review: Review AWS IAM policies offline for over-broad permissions | Claude Code skills">
+<meta property="og:description" content="Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked &quot;is this least privilege?&quot;, before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/iam-least-privilege-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "iam-least-privilege-review",
- "description": "Review AWS IAM policy documents offline for over-broad permissions and privilege-escalation paths. A bundled script reads policy JSON, get-policy-version output or get-account-authorization-details output and reports, ranked by severity, full admin grants, service and action wildcards, write actions on every resource without conditions, unscoped iam:PassRole, sts:AssumeRole on any role, NotAction or NotResource in Allow statements, and known escalation combinations (iam:CreatePolicyVersion, iam:AttachUserPolicy, iam:PutUserPolicy, iam:PassRole with lambda:CreateFunction, lambda:UpdateFunctionCode and others), with a tightened policy template per document. Use when reviewing an IAM policy or role, before approving a permissions change, when asked \"is this least privilege?\", or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.",
+ "description": "Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked \"is this least privilege?\", before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/iam-least-privilege-review/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / iam-least-privilege-review</p>
 <h1>IAM least-privilege review</h1>
-<p class="lede">Review AWS IAM policy documents offline for over-broad permissions and privilege-escalation paths. A bundled script reads policy JSON, get-policy-version output or get-account-authorization-details output and reports, ranked by severity, full admin grants, service and action wildcards, write actions on every resource without conditions, unscoped iam:PassRole, sts:AssumeRole on any role, NotAction or NotResource in Allow statements, and known escalation combinations (iam:CreatePolicyVersion, iam:AttachUserPolicy, iam:PutUserPolicy, iam:PassRole with lambda:CreateFunction, lambda:UpdateFunctionCode and others), with a tightened policy template per document. Use when reviewing an IAM policy or role, before approving a permissions change, when asked &quot;is this least privilege?&quot;, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.</p>
-<p class="meta">Skill <code>iam-least-privilege-review</code> in plugin <a href="../index.html">aws-security</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a>.</p>
+<p class="lede">Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked &quot;is this least privilege?&quot;, before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.</p>
+<p class="meta">Skill <code>iam-least-privilege-review</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

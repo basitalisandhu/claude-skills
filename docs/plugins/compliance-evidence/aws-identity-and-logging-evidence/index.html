@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>aws-identity-and-logging-evidence: Turn saved aws CLI output from one AWS account into evidence rows | Claude Code skills</title>
-<meta name="description" content="Turn saved aws CLI output from one AWS account into evidence rows for logging, access control and backup controls (ISO/IEC 27001:2022 A.8.15, A.8.16, A.8.5, A.8.2, A.5.17, A.8.9, A.5.15, A.8.13 and SOC 2 CC7.2, CC6.1, CC7.1, CC6.6, A1.2 by identifier). A bundled script evaluates CloudTrail coverage, logging status and log file validation, root MFA and access keys, console users without MFA, access key age, the IAM password policy, GuardDuty and AWS Config per region, the account S3 public access block, and AWS Backup plans. Saved stderr tells AccessDenied (not assessable) apart from &quot;not configured&quot; (contradicted). Use when preparing AWS audit evidence for ISO 27001 or SOC 2. Not a full security audit, no live API calls by the script, and not an attestation.">
+<title>aws-identity-and-logging-evidence: Turn saved aws CLI output from one AWS account into ISO 27001 and SOC | Claude Code skills</title>
+<meta name="description" content="Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). Use when asked to &quot;prepare AWS evidence for our SOC 2 audit&quot;, or for ISO 27001 logging and access controls. Not for ranking security risk (aws-account-audit), live API calls by the script, or an attestation.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/aws-identity-and-logging-evidence/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="aws-identity-and-logging-evidence: Turn saved aws CLI output from one AWS account into evidence rows | Claude Code skills">
-<meta property="og:description" content="Turn saved aws CLI output from one AWS account into evidence rows for logging, access control and backup controls (ISO/IEC 27001:2022 A.8.15, A.8.16, A.8.5, A.8.2, A.5.17, A.8.9, A.5.15, A.8.13 and SOC 2 CC7.2, CC6.1, CC7.1, CC6.6, A1.2 by identifier). A bundled script evaluates CloudTrail coverage, logging status and log file validation, root MFA and access keys, console users without MFA, access key age, the IAM password policy, GuardDuty and AWS Config per region, the account S3 public access block, and AWS Backup plans. Saved stderr tells AccessDenied (not assessable) apart from &quot;not configured&quot; (contradicted). Use when preparing AWS audit evidence for ISO 27001 or SOC 2. Not a full security audit, no live API calls by the script, and not an attestation.">
+<meta property="og:title" content="aws-identity-and-logging-evidence: Turn saved aws CLI output from one AWS account into ISO 27001 and SOC | Claude Code skills">
+<meta property="og:description" content="Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). Use when asked to &quot;prepare AWS evidence for our SOC 2 audit&quot;, or for ISO 27001 logging and access controls. Not for ranking security risk (aws-account-audit), live API calls by the script, or an attestation.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/aws-identity-and-logging-evidence/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "aws-identity-and-logging-evidence",
- "description": "Turn saved aws CLI output from one AWS account into evidence rows for logging, access control and backup controls (ISO/IEC 27001:2022 A.8.15, A.8.16, A.8.5, A.8.2, A.5.17, A.8.9, A.5.15, A.8.13 and SOC 2 CC7.2, CC6.1, CC7.1, CC6.6, A1.2 by identifier). A bundled script evaluates CloudTrail coverage, logging status and log file validation, root MFA and access keys, console users without MFA, access key age, the IAM password policy, GuardDuty and AWS Config per region, the account S3 public access block, and AWS Backup plans. Saved stderr tells AccessDenied (not assessable) apart from \"not configured\" (contradicted). Use when preparing AWS audit evidence for ISO 27001 or SOC 2. Not a full security audit, no live API calls by the script, and not an attestation.",
+ "description": "Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). Use when asked to \"prepare AWS evidence for our SOC 2 audit\", or for ISO 27001 logging and access controls. Not for ranking security risk (aws-account-audit), live API calls by the script, or an attestation.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/aws-identity-and-logging-evidence/",
  "codeRepository": "https://github.com/basitalisandhu/compliance-evidence-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "compliance-evidence",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">compliance-evidence</a> / aws-identity-and-logging-evidence</p>
 <h1>AWS identity and logging evidence</h1>
-<p class="lede">Turn saved aws CLI output from one AWS account into evidence rows for logging, access control and backup controls (ISO/IEC 27001:2022 A.8.15, A.8.16, A.8.5, A.8.2, A.5.17, A.8.9, A.5.15, A.8.13 and SOC 2 CC7.2, CC6.1, CC7.1, CC6.6, A1.2 by identifier). A bundled script evaluates CloudTrail coverage, logging status and log file validation, root MFA and access keys, console users without MFA, access key age, the IAM password policy, GuardDuty and AWS Config per region, the account S3 public access block, and AWS Backup plans. Saved stderr tells AccessDenied (not assessable) apart from &quot;not configured&quot; (contradicted). Use when preparing AWS audit evidence for ISO 27001 or SOC 2. Not a full security audit, no live API calls by the script, and not an attestation.</p>
-<p class="meta">Skill <code>aws-identity-and-logging-evidence</code> in plugin <a href="../index.html">compliance-evidence</a> 0.1.1, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md">plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md</a> in <a href="https://github.com/basitalisandhu/compliance-evidence-skills">compliance-evidence-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md">plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md</a>.</p>
+<p class="lede">Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). Use when asked to &quot;prepare AWS evidence for our SOC 2 audit&quot;, or for ISO 27001 logging and access controls. Not for ranking security risk (aws-account-audit), live API calls by the script, or an attestation.</p>
+<p class="meta">Skill <code>aws-identity-and-logging-evidence</code> in plugin <a href="../index.html">compliance-evidence</a> 0.1.2, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md">plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md</a> in <a href="https://github.com/basitalisandhu/compliance-evidence-skills">compliance-evidence-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md">plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -107,7 +107,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/aws-identity-and-logging-evidence/scr
 <h3 id="interpreting-the-output">Interpreting the output</h3>
 <ul><li><code>AWS-CT-LOGGING</code> needs one <code>cloudtrail-status-&lt;name&gt;.json</code> per multi-region trail; a missing status file makes it <code>not assessable</code>.</li><li><code>AWS-ROOT-MFA</code> and <code>AWS-ROOT-ACCESS-KEYS</code> read the account summary and fall back to the credential report&#x27;s root row.</li><li><code>AWS-ACCESS-KEY-AGE</code> uses <code>access_key_N_last_rotated</code> against <code>--as-of</code>.</li><li>Regional rows cite one file per region and list per-region gaps.</li></ul>
 <h3 id="related">Related</h3>
-<ul><li><code>evidence-pack-builder</code> to hash these exports with their commands.</li><li><code>control-map-from-exports</code> maps the same files through the starter map.</li></ul>
+<ul><li><code>evidence-pack-builder</code> to hash these exports with their commands.</li><li><code>control-map-from-exports</code> maps the same files through the starter map.</li><li><code>aws-account-audit</code> (aws-security-skills): aws-account-audit tells you what is wrong; aws-identity-and-logging-evidence turns the same saved CLI output into ISO or SOC 2 evidence rows and never ranks risk.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/compliance-evidence-skills/issues">compliance-evidence-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

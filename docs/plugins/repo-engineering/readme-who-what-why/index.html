@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>readme-who-what-why: Check whether a README answers six questions in its first screen | Claude Code skills</title>
-<meta name="description" content="Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text. Use when asked to review, critique, score or improve a README, before publishing or announcing a repository, when a README &quot;does not explain what this is&quot;, or to add a README gate to CI. Not for checking whether README commands and paths still work (use docs-truth-check) and not for writing long-form documentation.">
+<title>readme-who-what-why: Check whether a README&#x27;s first screen answers six questions | Claude Code skills</title>
+<meta name="description" content="Check whether a README&#x27;s first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. Use when asked to &quot;review my README&quot;, before publishing or announcing a repository, or to add a README gate to CI. Not for checking whether README commands still work (docs-truth-check), writing a README from scratch (readme-author), or long-form documentation.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/readme-who-what-why/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="readme-who-what-why: Check whether a README answers six questions in its first screen | Claude Code skills">
-<meta property="og:description" content="Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text. Use when asked to review, critique, score or improve a README, before publishing or announcing a repository, when a README &quot;does not explain what this is&quot;, or to add a README gate to CI. Not for checking whether README commands and paths still work (use docs-truth-check) and not for writing long-form documentation.">
+<meta property="og:title" content="readme-who-what-why: Check whether a README&#x27;s first screen answers six questions | Claude Code skills">
+<meta property="og:description" content="Check whether a README&#x27;s first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. Use when asked to &quot;review my README&quot;, before publishing or announcing a repository, or to add a README gate to CI. Not for checking whether README commands still work (docs-truth-check), writing a README from scratch (readme-author), or long-form documentation.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/readme-who-what-why/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "readme-who-what-why",
- "description": "Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text. Use when asked to review, critique, score or improve a README, before publishing or announcing a repository, when a README \"does not explain what this is\", or to add a README gate to CI. Not for checking whether README commands and paths still work (use docs-truth-check) and not for writing long-form documentation.",
+ "description": "Check whether a README's first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. Use when asked to \"review my README\", before publishing or announcing a repository, or to add a README gate to CI. Not for checking whether README commands still work (docs-truth-check), writing a README from scratch (readme-author), or long-form documentation.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/readme-who-what-why/",
  "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / readme-who-what-why</p>
 <h1>README who, what, why</h1>
-<p class="lede">Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text. Use when asked to review, critique, score or improve a README, before publishing or announcing a repository, when a README &quot;does not explain what this is&quot;, or to add a README gate to CI. Not for checking whether README commands and paths still work (use docs-truth-check) and not for writing long-form documentation.</p>
-<p class="meta">Skill <code>readme-who-what-why</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/readme-who-what-why/SKILL.md">plugins/repo-engineering/skills/readme-who-what-why/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/readme-who-what-why/SKILL.md">plugins/repo-engineering/skills/readme-who-what-why/SKILL.md</a>.</p>
+<p class="lede">Check whether a README&#x27;s first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. Use when asked to &quot;review my README&quot;, before publishing or announcing a repository, or to add a README gate to CI. Not for checking whether README commands still work (docs-truth-check), writing a README from scratch (readme-author), or long-form documentation.</p>
+<p class="meta">Skill <code>readme-who-what-why</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/readme-who-what-why/SKILL.md">plugins/repo-engineering/skills/readme-who-what-why/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/readme-who-what-why/SKILL.md">plugins/repo-engineering/skills/readme-who-what-why/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -88,7 +88,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/readme-who-what-why/scripts/readme_ch
 
 **Proposed first screen** (every claim backed by &lt;file or user statement&gt;)</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>docs-truth-check</code> to verify the commands, paths and versions the README mentions.</li><li><code>agent-context-writer</code> for AGENTS.md and CLAUDE.md, which serve agents rather than people.</li></ul>
+<ul><li><code>docs-truth-check</code> to verify the commands, paths and versions the README mentions.</li><li><code>agent-context-writer</code> for AGENTS.md and CLAUDE.md, which serve agents rather than people.</li><li><code>readme-author</code> (docs plugin, claude-dev-skills): readme-author writes or rewrites the README; readme-who-what-why checks six first-screen questions and fails CI when they are unanswered.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/repo-engineering-skills/issues">repo-engineering-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

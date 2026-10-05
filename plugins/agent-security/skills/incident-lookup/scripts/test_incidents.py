@@ -148,7 +148,7 @@ class PrecedentTests(unittest.TestCase):
     def test_design_file(self):
         with tempfile.TemporaryDirectory() as td:
             design = Path(td) / "design.json"
-            design.write_text(json.dumps({"name": "support bot", "channel_in": ["support ticket", "email"], "authority": ["database"]}))
+            design.write_text(json.dumps({"name": "support bot", "channel_in": ["support ticket", "email"], "authority": ["database"]}), encoding="utf-8")
             rc, out, _ = run(["--offline", "precedents", "--design", str(design), "--limit", "5"])
             self.assertEqual(rc, 0)
             self.assertIn("support bot", out); self.assertIn("Controls that would have helped", out); self.assertIn("OWASP Agentic", out)
@@ -168,7 +168,7 @@ class SourceSelectionTests(unittest.TestCase):
                  "sources": [{"url": "https://example.com/a", "title": "A"}], "summary": "a summary here", "mappings": {"owasp_agentic": ["ASI04"], "owasp_llm": [], "mitre_atlas": []},
                  "affected": {"vendors": ["Acme"], "products": [], "frameworks": []}, "tags": ["demo"], "status": "confirmed"},
                 {"id": "2", "date": "2026-02", "name": "legacy", "vector": "poisoning", "adversarial": "yes", "cve": "-", "url": "https://example.com/b", "notes": "n", "vendors": ["Old"]},
-            ]))
+            ]), encoding="utf-8")
             rc, out, _ = run(["--data", str(f), "--format", "json", "list"])
             rows = {r["id"]: r for r in json.loads(out)}
             self.assertEqual(rows["001"]["affected"]["vendors"], ["Acme"])

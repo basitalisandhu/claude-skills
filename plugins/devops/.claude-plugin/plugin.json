@@ -1,7 +1,7 @@
 {
   "name": "devops",
   "displayName": "DevOps",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.",
   "author": {
     "name": "Muhammad Basit Ali",

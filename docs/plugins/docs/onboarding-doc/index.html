@@ -36,7 +36,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / onboarding-doc</p>
 <h1>Onboarding doc</h1>
 <p class="lede">Write a developer onboarding document for a repository or service that gets a new team member from a clean machine to a merged change: environment setup verified step by step, how the code is organised, how to run and test it, the configuration it needs, the deployment path, who owns what, and the first tasks. Use when a project has no onboarding guide, when the last new joiner struggled, or before a team grows. Not for user-facing documentation (use readme-author) and not for HR onboarding.</p>
-<p class="meta">Skill <code>onboarding-doc</code> in plugin <a href="../index.html">docs</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/onboarding-doc/SKILL.md">plugins/docs/skills/onboarding-doc/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/onboarding-doc/SKILL.md">plugins/docs/skills/onboarding-doc/SKILL.md</a>.</p>
+<p class="meta">Skill <code>onboarding-doc</code> in plugin <a href="../index.html">docs</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/onboarding-doc/SKILL.md">plugins/docs/skills/onboarding-doc/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/onboarding-doc/SKILL.md">plugins/docs/skills/onboarding-doc/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill docs/onboarding-doc</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>Setup steps are verified only as far as the current machine allows; steps for other operating systems are marked unverified.</li><li>It covers the codebase and its setup, not company access requests or HR processes.</li><li>There is no bundled script; it runs only the project&#x27;s own setup and test commands, which may download dependencies, and makes no other network calls.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>The README gets a stranger to a first result; the onboarding document gets a new team member to a merged change, which needs the things nobody writes down: the real setup steps, the mental map of the code, the known sharp edges, and who to ask. This skill writes it from the repository&#x27;s evidence in the structure in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/onboarding-doc/references/template.md">references/template.md</a>, and verifies the setup path on a clean machine.</p>
 <h3 id="when-to-use-it">When to use it</h3>
@@ -83,7 +84,7 @@ python3 install.py --user --skill docs/onboarding-doc</code></pre>
 6. People and decisions: owners, channel, ADR index, the three &quot;why is it like this&quot; answers
 7. First tasks: 4 issues, smallest first</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>readme-author</code> for the public front door; the onboarding doc links to it rather than repeating it.</li><li><code>env-diff</code> and <code>test-gap-finder</code> supply the configuration and test sections.</li></ul>
+<ul><li><code>readme-author</code> for the public front door; the onboarding doc links to it rather than repeating it.</li><li><code>env-diff</code> and <code>test-gap-finder</code> supply the configuration and test sections.</li><li>Boundary: <code>repo-onboarding-guide</code> (repo-engineering-skills marketplace) cites a path:line fact for every sentence and suits any repository it can read; <code>onboarding-doc</code> is the freehand version for teams and processes where no scripts can run.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

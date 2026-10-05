@@ -110,11 +110,11 @@ def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
         for key in candidate_test_keys(stem):
             for t in test_keys.get(key, []):
                 if t != s:
-                    covered_by.append(str(t.relative_to(root)))
+                    covered_by.append(t.relative_to(root).as_posix())
         if s.suffix == ".rs":
             text = s.read_text(encoding="utf-8", errors="replace")
             if "#[cfg(test)]" in text:
-                covered_by.append(f"{s.relative_to(root)} (inline #[cfg(test)])")
+                covered_by.append(f"{s.relative_to(root).as_posix()} (inline #[cfg(test)])")
         if not covered_by:
             mod_names = {stem.lower()}
             parts = s.relative_to(root).with_suffix("").parts
@@ -123,8 +123,8 @@ def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
                 mod_names.add("/".join(parts[i:]).lower())
             for t, names in test_imports.items():
                 if names & mod_names:
-                    covered_by.append(str(t.relative_to(root)))
-        modules.append({"module": str(s.relative_to(root)), "language": s.suffix.lstrip("."), "covered": bool(covered_by),
+                    covered_by.append(t.relative_to(root).as_posix())
+        modules.append({"module": s.relative_to(root).as_posix(), "language": s.suffix.lstrip("."), "covered": bool(covered_by),
                         "tests": sorted(set(covered_by))})
     uncovered = [m for m in modules if not m["covered"]]
     return {"version": VERSION, "root": str(root), "source_modules": len(modules), "test_files": len(tests),
@@ -135,6 +135,9 @@ def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>graph-permission-preflight: Preflight the Microsoft Graph permissions an app registration | Claude Code skills</title>
-<meta name="description" content="Preflight the Microsoft Graph permissions an app registration, enterprise application or third-party connector requests or already holds, before it touches a Microsoft 365 tenant. A bundled script compares the exported requiredResourceAccess, delegated grants (oauth2PermissionGrants) and application permissions (appRoleAssignments) with a needs manifest for the task, and reports high-risk permissions, write where read suffices, application where delegated is enough, .All where a scoped permission exists, unused grants, admin versus user consent, and a least-privilege replacement set with exact permission names. Use before granting admin consent, before connecting an MCP server, connector or automation to Microsoft 365, when a vendor asks for Graph permissions, or when reviewing what an existing app can do. Not for a tenant-wide review of every app (use entra-posture-review) and not for granting or changing consent.">
+<title>graph-permission-preflight: Check the Microsoft Graph permissions an app | Claude Code skills</title>
+<meta name="description" content="Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set. Use when asked &quot;is it safe to grant admin consent to this app?&quot;, before granting consent, or before connecting an automation to Microsoft 365. Not for tenant-wide app review (entra-posture-review); it never changes consent.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/graph-permission-preflight/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="graph-permission-preflight: Preflight the Microsoft Graph permissions an app registration | Claude Code skills">
-<meta property="og:description" content="Preflight the Microsoft Graph permissions an app registration, enterprise application or third-party connector requests or already holds, before it touches a Microsoft 365 tenant. A bundled script compares the exported requiredResourceAccess, delegated grants (oauth2PermissionGrants) and application permissions (appRoleAssignments) with a needs manifest for the task, and reports high-risk permissions, write where read suffices, application where delegated is enough, .All where a scoped permission exists, unused grants, admin versus user consent, and a least-privilege replacement set with exact permission names. Use before granting admin consent, before connecting an MCP server, connector or automation to Microsoft 365, when a vendor asks for Graph permissions, or when reviewing what an existing app can do. Not for a tenant-wide review of every app (use entra-posture-review) and not for granting or changing consent.">
+<meta property="og:title" content="graph-permission-preflight: Check the Microsoft Graph permissions an app | Claude Code skills">
+<meta property="og:description" content="Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set. Use when asked &quot;is it safe to grant admin consent to this app?&quot;, before granting consent, or before connecting an automation to Microsoft 365. Not for tenant-wide app review (entra-posture-review); it never changes consent.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/graph-permission-preflight/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "graph-permission-preflight",
- "description": "Preflight the Microsoft Graph permissions an app registration, enterprise application or third-party connector requests or already holds, before it touches a Microsoft 365 tenant. A bundled script compares the exported requiredResourceAccess, delegated grants (oauth2PermissionGrants) and application permissions (appRoleAssignments) with a needs manifest for the task, and reports high-risk permissions, write where read suffices, application where delegated is enough, .All where a scoped permission exists, unused grants, admin versus user consent, and a least-privilege replacement set with exact permission names. Use before granting admin consent, before connecting an MCP server, connector or automation to Microsoft 365, when a vendor asks for Graph permissions, or when reviewing what an existing app can do. Not for a tenant-wide review of every app (use entra-posture-review) and not for granting or changing consent.",
+ "description": "Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set. Use when asked \"is it safe to grant admin consent to this app?\", before granting consent, or before connecting an automation to Microsoft 365. Not for tenant-wide app review (entra-posture-review); it never changes consent.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/graph-permission-preflight/",
  "codeRepository": "https://github.com/basitalisandhu/m365-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "m365-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"
  },
- "version": "0.2.1"
+ "version": "0.2.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">m365-governance</a> / graph-permission-preflight</p>
 <h1>Graph permission preflight</h1>
-<p class="lede">Preflight the Microsoft Graph permissions an app registration, enterprise application or third-party connector requests or already holds, before it touches a Microsoft 365 tenant. A bundled script compares the exported requiredResourceAccess, delegated grants (oauth2PermissionGrants) and application permissions (appRoleAssignments) with a needs manifest for the task, and reports high-risk permissions, write where read suffices, application where delegated is enough, .All where a scoped permission exists, unused grants, admin versus user consent, and a least-privilege replacement set with exact permission names. Use before granting admin consent, before connecting an MCP server, connector or automation to Microsoft 365, when a vendor asks for Graph permissions, or when reviewing what an existing app can do. Not for a tenant-wide review of every app (use entra-posture-review) and not for granting or changing consent.</p>
-<p class="meta">Skill <code>graph-permission-preflight</code> in plugin <a href="../index.html">m365-governance</a> 0.2.1, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/graph-permission-preflight/SKILL.md">plugins/m365-governance/skills/graph-permission-preflight/SKILL.md</a> in <a href="https://github.com/basitalisandhu/m365-governance-skills">m365-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/m365-governance/skills/graph-permission-preflight/SKILL.md">plugins/m365-governance/skills/graph-permission-preflight/SKILL.md</a>.</p>
+<p class="lede">Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set. Use when asked &quot;is it safe to grant admin consent to this app?&quot;, before granting consent, or before connecting an automation to Microsoft 365. Not for tenant-wide app review (entra-posture-review); it never changes consent.</p>
+<p class="meta">Skill <code>graph-permission-preflight</code> in plugin <a href="../index.html">m365-governance</a> 0.2.2, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/graph-permission-preflight/SKILL.md">plugins/m365-governance/skills/graph-permission-preflight/SKILL.md</a> in <a href="https://github.com/basitalisandhu/m365-governance-skills">m365-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/m365-governance/skills/graph-permission-preflight/SKILL.md">plugins/m365-governance/skills/graph-permission-preflight/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
