@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.1"
+ "version": "0.4.0"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / repo-hygiene-bundle</p>
 <h1>Repo hygiene bundle</h1>
 <p class="lede">Run one offline hygiene pass over a repository and report findings with severity as a table, JSON or SARIF with a CI exit code, covering manifests without lockfiles, lockfile drift, version splits across workspaces, missing licence or SPDX fields, redacted secret-shaped strings, actions pinned by tag, write-all workflows, missing SECURITY.md, and large or built files. Use when asked &quot;is this repository ready to open source?&quot; or to add a hygiene gate to CI. Not for vulnerability scanning, secret search through history, or licence compatibility audits.</p>
-<p class="meta">Skill <code>repo-hygiene-bundle</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md">plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md">plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md</a>.</p>
+<p class="meta">Skill <code>repo-hygiene-bundle</code> in plugin <a href="../index.html">repo-engineering</a> 0.4.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md">plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md">plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -95,7 +95,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/repo-hygiene-bundle/scripts/hygiene.p
 **False positives:** &lt;rule, location: why&gt;
 **Not checked (offline):** known vulnerabilities, dependency licences, secrets in git history, branch protection</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>cited-codebase-audit</code> for a broader audit whose findings cite lines; its <code>ci-health</code> and <code>secrets-config</code> categories can start from this report.</li><li>Anthropic&#x27;s <code>claude-security</code> plugin covers vulnerability scanning of code; this skill covers repository hygiene around it.</li><li><code>github-actions-author</code> (devops plugin, claude-dev-skills): github-actions-author writes and lints one workflow; repo-hygiene-bundle only flags unpinned actions and write-all permissions across the repository.</li></ul>
+<ul><li><code>cited-codebase-audit</code> for a broader audit whose findings cite lines; its <code>ci-health</code> and <code>secrets-config</code> categories can start from this report.</li><li><code>stale-branch-sweep</code>: reports merged and idle remote branches with delete commands for review; this skill does not look at branches.</li><li>Anthropic&#x27;s <code>claude-security</code> plugin covers vulnerability scanning of code; this skill covers repository hygiene around it.</li><li><code>github-actions-author</code> (devops plugin, claude-dev-skills): github-actions-author writes and lints one workflow; repo-hygiene-bundle only flags unpinned actions and write-all permissions across the repository.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/repo-engineering-skills/issues">repo-engineering-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

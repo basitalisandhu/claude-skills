@@ -407,8 +407,8 @@
     {
       "name": "repo-engineering",
       "source": "./plugins/repo-engineering",
-      "description": "Ten skills, each with a tested standard-library script: docs-truth-check, cited-codebase-audit, agent-context-writer, readme-who-what-why, untested-entry-points, repo-onboarding-guide, restructure-planner, adr-miner, repo-hygiene-bundle and release-notes-verifier.",
-      "version": "0.3.1",
+      "description": "Twelve skills, each with a tested standard-library script: docs-truth-check, cited-codebase-audit, agent-context-writer, readme-who-what-why, untested-entry-points, repo-onboarding-guide, restructure-planner, adr-miner, repo-hygiene-bundle, release-notes-verifier, stale-branch-sweep and plan-grill.",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
