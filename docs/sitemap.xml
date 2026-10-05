@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://basitalisandhu.github.io/claude-skills/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-kill-switch-runbook/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/leaked-credential-response/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/</loc><lastmod>2026-10-05</lastmod></url>

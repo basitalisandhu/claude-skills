@@ -18,9 +18,48 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 81
+## Skills that point at a skill in another plugin: 117
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
+
+### agent-identity-governance (36)
+
+- `agent-identity-governance/agent-action-timeline -> agent-security/agent-config-audit`
+- `agent-identity-governance/agent-action-timeline -> aws-security/aws-account-audit`
+- `agent-identity-governance/agent-action-timeline -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/agent-action-timeline -> m365-governance/privileged-access-review`
+- `agent-identity-governance/agent-kill-switch-runbook -> agent-security/agent-config-audit`
+- `agent-identity-governance/agent-kill-switch-runbook -> aws-security/aws-account-audit`
+- `agent-identity-governance/agent-kill-switch-runbook -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/agent-kill-switch-runbook -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/agent-kill-switch-runbook -> m365-governance/privileged-access-review`
+- `agent-identity-governance/agent-recertification -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/agent-recertification -> compliance-evidence/evidence-pack-builder`
+- `agent-identity-governance/agent-recertification -> m365-governance/access-review-pack`
+- `agent-identity-governance/agent-recertification -> m365-governance/privileged-access-review`
+- `agent-identity-governance/connector-register -> agent-security/agent-config-audit`
+- `agent-identity-governance/connector-register -> agent-security/mcp-server-review`
+- `agent-identity-governance/connector-register -> compliance-evidence/evidence-pack-builder`
+- `agent-identity-governance/connector-register -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/credential-expiry-radar -> aws-security/aws-account-audit`
+- `agent-identity-governance/credential-expiry-radar -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/credential-expiry-radar -> compliance-evidence/evidence-pack-builder`
+- `agent-identity-governance/credential-expiry-radar -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/entra-agent-id-review -> agent-security/agent-config-audit`
+- `agent-identity-governance/entra-agent-id-review -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/entra-agent-id-review -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/entra-agent-id-review -> m365-governance/privileged-access-review`
+- `agent-identity-governance/leaked-credential-response -> agent-security/agent-config-audit`
+- `agent-identity-governance/leaked-credential-response -> aws-security/aws-account-audit`
+- `agent-identity-governance/leaked-credential-response -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/leaked-credential-response -> compliance-evidence/evidence-pack-builder`
+- `agent-identity-governance/leaked-credential-response -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/leaked-credential-response -> m365-governance/privileged-access-review`
+- `agent-identity-governance/nhi-inventory -> agent-security/agent-config-audit`
+- `agent-identity-governance/nhi-inventory -> aws-security/aws-account-audit`
+- `agent-identity-governance/nhi-inventory -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/nhi-inventory -> m365-governance/graph-permission-preflight`
+- `agent-identity-governance/nhi-inventory -> m365-governance/privileged-access-review`
 
 ### agent-security (1)
 

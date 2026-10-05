@@ -12,6 +12,43 @@
   },
   "plugins": [
     {
+      "name": "agent-identity-governance",
+      "source": "./plugins/agent-identity-governance",
+      "description": "Eight agent identity governance skills, each with a tested standard-library script over saved Entra, AWS, GitHub and register exports: nhi-inventory, entra-agent-id-review, agent-recertification, credential-expiry-radar, connector-register, agent-action-timeline, agent-kill-switch-runbook and leaked-credential-response. No network calls; key ids shown by their last four characters.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/agent-identity-governance-skills",
+      "repository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
+      "license": "MIT",
+      "keywords": [
+        "non-human-identity",
+        "workload-identity",
+        "agent-identity",
+        "service-principal",
+        "entra-id",
+        "aws-iam",
+        "github-apps",
+        "access-review",
+        "recertification",
+        "credential-expiry",
+        "mcp",
+        "connector-register",
+        "audit-log",
+        "kill-switch",
+        "incident-response"
+      ],
+      "category": "security",
+      "tags": [
+        "identity",
+        "governance",
+        "security",
+        "ai-agents"
+      ]
+    },
+    {
       "name": "agent-security",
       "source": "./plugins/agent-security",
       "description": "Eight security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",

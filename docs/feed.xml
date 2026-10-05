@@ -4,8 +4,15 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-05T11:51:45Z</updated>
+  <updated>2026-10-05T11:59:40Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
+  <entry>
+    <title>agent-identity-governance 0.1.0</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/#v0.1.0-6e1ccd045ee1</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"/>
+    <updated>2026-10-05T11:59:40Z</updated>
+    <summary>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network. Synced from https://github.com/basitalisandhu/agent-identity-governance-skills at commit 6e1ccd045ee1.</summary>
+  </entry>
   <entry>
     <title>ways-of-working 0.2.1</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.1-3f4a45d535d8</id>
