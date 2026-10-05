@@ -18,7 +18,7 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 117
+## Skills that point at a skill in another plugin: 125
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
@@ -68,6 +68,17 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 ### aws-security (1)
 
 - `aws-security/aws-account-audit -> compliance-evidence/aws-identity-and-logging-evidence`
+
+### cc-setup-tooling (8)
+
+- `cc-setup-tooling/context-budget-audit -> repo-engineering/agent-context-writer`
+- `cc-setup-tooling/permissions-builder -> agent-security/agent-config-audit`
+- `cc-setup-tooling/skill-collision-check -> devops/release-notes`
+- `cc-setup-tooling/skill-collision-check -> docs/changelog-keeper`
+- `cc-setup-tooling/skill-description-linter -> ways-of-working/decision-log`
+- `cc-setup-tooling/skill-portability-check -> mac-maintenance/mac-cleanup`
+- `cc-setup-tooling/skill-supply-chain-review -> agent-security/agent-config-audit`
+- `cc-setup-tooling/skill-trigger-eval -> ways-of-working/decision-log`
 
 ### code-quality (7)
 

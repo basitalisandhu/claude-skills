@@ -1,0 +1,31 @@
+{
+  "name": "cc-setup-tooling",
+  "displayName": "Claude Code Setup Tooling",
+  "version": "0.1.0",
+  "description": "Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network.",
+  "author": {
+    "name": "Muhammad Basit Ali",
+    "url": "https://github.com/basitalisandhu"
+  },
+  "homepage": "https://github.com/basitalisandhu/claude-code-tooling-skills",
+  "repository": "https://github.com/basitalisandhu/claude-code-tooling-skills",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "skills",
+    "plugins",
+    "supply-chain",
+    "skill-lint",
+    "skill-description",
+    "trigger-evaluation",
+    "context-window",
+    "token-budget",
+    "permissions",
+    "least-privilege",
+    "mcp",
+    "hooks",
+    "skill-collisions",
+    "portability",
+    "windows"
+  ]
+}

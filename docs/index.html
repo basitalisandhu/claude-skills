@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code skills: 107 skills in 15 plugins, one repository</title>
-<meta name="description" content="107 Claude Code skills in 15 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<title>Claude Code skills: 116 skills in 16 plugins, one repository</title>
+<meta name="description" content="116 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="Claude Code skills: 107 skills in 15 plugins, one repository">
-<meta property="og:description" content="107 Claude Code skills in 15 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<meta property="og:title" content="Claude Code skills: 116 skills in 16 plugins, one repository">
+<meta property="og:description" content="116 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
@@ -18,9 +18,9 @@
 {
  "@context": "https://schema.org",
  "@type": "ItemList",
- "name": "Claude Code skills: 107 skills in 15 plugins, one repository",
+ "name": "Claude Code skills: 116 skills in 16 plugins, one repository",
  "url": "https://basitalisandhu.github.io/claude-skills/",
- "numberOfItems": 107,
+ "numberOfItems": 116,
  "itemListElement": [
   {
    "@type": "ListItem",
@@ -302,6 +302,94 @@
    "position": 26,
    "item": {
     "@type": "SoftwareSourceCode",
+    "name": "context-budget-audit",
+    "description": "Audit what a Claude Code project puts in context on every turn (CLAUDE.md and its imports, AGENTS.md, rules files, skill descriptions, MCP tool schemas from saved tools/list output, hooks), estimate the tokens, rank the biggest items and flag duplicates and stale sections. Use when asked \"why is my context so full?\", when sessions compact early, or before adding more skills or servers. Not for measuring a live session's usage or for editing a skill's own instructions.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 27,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "hook-author",
+    "description": "Write and test a Claude Code hook with cc-hooks: pick the event and the decision (block, warn, allow or modify) from a table, scaffold the hook, its fixtures, a pytest file and the settings block from a short spec, then prove it with cc-hooks test. Use when asked \"add a hook that blocks this command\", to warn on risky edits, or to turn a team rule into a check that runs every time. Not for permission rules alone (use permissions-builder) or hooks for other agents.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 28,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "permissions-builder",
+    "description": "Build a least-privilege .claude/settings.json permission set from what a project actually needs: generate MCP rules with claude-mcp-allow, merge them with your own allow, ask and deny lists, put deny first, diff against the current file, then test the result with claude-perm-sim against the commands the team runs. Use when asked \"set up permissions for this repo\" or to stop approving the same prompts. Not for sandboxing or for organisation-wide managed settings.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 29,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "skill-collision-check",
+    "description": "Find installed skills that share a name, shadow each other or overlap so much in description that the wrong one gets picked, across personal, project, managed, plugin and copied folders, and say which one wins. Use when asked \"why did the wrong skill run?\", after installing a plugin or skill pack, or before choosing a name for a new skill. Not for linting one description (use skill-description-linter) or for measuring triggering against prompts (use skill-trigger-eval).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 30,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "skill-description-linter",
+    "description": "Lint the front matter of your SKILL.md files so each skill is listed and picked correctly: double-quoted description under 600 characters, a verb first, a quoted trigger phrase, Use when and Not for sentences, name equal to the folder, strict-YAML safety and a Limits section, with --fix for the quoting. Use when asked \"why does my skill not trigger?\", before publishing skills, or in CI. Not for testing which prompts trigger a skill (use skill-trigger-eval) or for reviewing third-party skills.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 31,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "skill-portability-check",
+    "description": "Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file. Use when asked \"will this skill work on Windows?\", before publishing a skill, or in CI. Not for security review (use skill-supply-chain-review) or description wording.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 32,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "skill-supply-chain-review",
+    "description": "Review a third-party skill or plugin before you install it: run skill-scan-gate on the folder, lock it with cc-plugin-lock, read every script for network and shell use with a bundled offline inventory, and write a one-page verdict. Use when asked \"is this skill safe to install?\", before adding a marketplace or plugin, or when a locked plugin changed. Not for skills you are writing yourself (use skill-description-linter and skill-portability-check) and not a malware sandbox.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 33,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "skill-trigger-eval",
+    "description": "Measure whether a skill's description triggers on the prompts it should and stays quiet on the ones it should not, using a labelled prompt set and transparent lexical scoring, and compare two description versions by precision and recall. Use when asked \"will this description trigger?\", before and after rewriting a description, or to find two skills competing for one prompt. Not for predicting the host's real choice, which a model makes; this is a proxy.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/",
+    "codeRepository": "https://github.com/basitalisandhu/claude-code-tooling-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 34,
+   "item": {
+    "@type": "SoftwareSourceCode",
     "name": "complexity-report",
     "description": "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.",
     "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/",
@@ -310,7 +398,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 27,
+   "position": 35,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dead-code-finder",
@@ -321,7 +409,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 28,
+   "position": 36,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "error-handling-review",
@@ -332,7 +420,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 29,
+   "position": 37,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "naming-audit",
@@ -343,7 +431,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 30,
+   "position": 38,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "refactor-plan",
@@ -354,7 +442,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 31,
+   "position": 39,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "review-checklist",
@@ -365,7 +453,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 32,
+   "position": 40,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "test-gap-finder",
@@ -376,7 +464,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 33,
+   "position": 41,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "type-coverage",
@@ -387,7 +475,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 34,
+   "position": 42,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "auditor-narrative-drafter",
@@ -398,7 +486,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 35,
+   "position": 43,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "aws-identity-and-logging-evidence",
@@ -409,7 +497,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 36,
+   "position": 44,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "control-map-from-exports",
@@ -420,7 +508,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 37,
+   "position": 45,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "evidence-pack-builder",
@@ -431,7 +519,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 38,
+   "position": 46,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "github-change-control-evidence",
@@ -442,7 +530,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 39,
+   "position": 47,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "api-contract-review",
@@ -453,7 +541,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 40,
+   "position": 48,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "csv-profiler",
@@ -464,7 +552,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 41,
+   "position": 49,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "json-schema-author",
@@ -475,7 +563,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 42,
+   "position": 50,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "regex-builder",
@@ -486,7 +574,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 43,
+   "position": 51,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "schema-migration-plan",
@@ -497,7 +585,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 44,
+   "position": 52,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "sql-query-review",
@@ -508,7 +596,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 45,
+   "position": 53,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "bug-repro-minimiser",
@@ -519,7 +607,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 46,
+   "position": 54,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "flaky-test-hunter",
@@ -530,7 +618,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 47,
+   "position": 55,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "log-triage",
@@ -541,7 +629,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 48,
+   "position": 56,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "memory-leak-checklist",
@@ -552,7 +640,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 49,
+   "position": 57,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "perf-profile-reader",
@@ -563,7 +651,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 50,
+   "position": 58,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "stack-trace-explainer",
@@ -574,7 +662,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 51,
+   "position": 59,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cron-doctor",
@@ -585,7 +673,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 52,
+   "position": 60,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dockerfile-hardening",
@@ -596,7 +684,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 53,
+   "position": 61,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "env-diff",
@@ -607,7 +695,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 54,
+   "position": 62,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "github-actions-author",
@@ -618,7 +706,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 55,
+   "position": 63,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "k8s-manifest-review",
@@ -629,7 +717,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 56,
+   "position": 64,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "release-notes",
@@ -640,7 +728,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 57,
+   "position": 65,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "semver-advisor",
@@ -651,7 +739,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 58,
+   "position": 66,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "terraform-review",
@@ -662,7 +750,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 59,
+   "position": 67,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "adr-writer",
@@ -673,7 +761,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 60,
+   "position": 68,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "api-docs-from-code",
@@ -684,7 +772,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 61,
+   "position": 69,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "changelog-keeper",
@@ -695,7 +783,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 62,
+   "position": 70,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "onboarding-doc",
@@ -706,7 +794,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 63,
+   "position": 71,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "postmortem-writer",
@@ -717,7 +805,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 64,
+   "position": 72,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "readme-author",
@@ -728,7 +816,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 65,
+   "position": 73,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "incident-postmortem-timeline",
@@ -739,7 +827,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 66,
+   "position": 74,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "iteration-report",
@@ -750,7 +838,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 67,
+   "position": 75,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "pr-queue-digest",
@@ -761,7 +849,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 68,
+   "position": 76,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "access-review-pack",
@@ -772,7 +860,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 69,
+   "position": 77,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "conditional-access-gap-analysis",
@@ -783,7 +871,18 @@
   },
   {
    "@type": "ListItem",
-   "position": 70,
+   "position": 78,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "copilot-oversharing-readiness",
+    "description": "Score a Microsoft 365 tenant's readiness for a Copilot rollout against Microsoft's oversharing checks and produce a fix list per site owner, from read-only exports of SharePoint sites, sensitivity labels, Everyone grants, sharing links and DLP policies. Use when asked \"are we ready to turn on Copilot?\", before a Copilot pilot or before it widens. Not for tenant guest settings alone (guest-and-external-sharing-review), reading file contents, or changing any permission.",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/copilot-oversharing-readiness/",
+    "codeRepository": "https://github.com/basitalisandhu/m365-governance-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 79,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "entra-posture-review",
@@ -794,7 +893,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 71,
+   "position": 80,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "graph-permission-preflight",
@@ -805,7 +904,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 72,
+   "position": 81,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "guest-and-external-sharing-review",
@@ -816,7 +915,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 73,
+   "position": 82,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "intune-baseline-check",
@@ -827,7 +926,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 74,
+   "position": 83,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "license-and-service-plan-audit",
@@ -838,7 +937,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 75,
+   "position": 84,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "privileged-access-review",
@@ -849,7 +948,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 76,
+   "position": 85,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "teams-and-groups-sprawl",
@@ -860,7 +959,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 77,
+   "position": 86,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-app-leftovers",
@@ -871,7 +970,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 78,
+   "position": 87,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-cleanup",
@@ -882,7 +981,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 79,
+   "position": 88,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "mac-duplicate-finder",
@@ -893,7 +992,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 80,
+   "position": 89,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "adr-miner",
@@ -904,7 +1003,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 81,
+   "position": 90,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "agent-context-writer",
@@ -915,7 +1014,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 82,
+   "position": 91,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cited-codebase-audit",
@@ -926,7 +1025,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 83,
+   "position": 92,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "docs-truth-check",
@@ -937,7 +1036,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 84,
+   "position": 93,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "readme-who-what-why",
@@ -948,7 +1047,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 85,
+   "position": 94,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "release-notes-verifier",
@@ -959,7 +1058,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 86,
+   "position": 95,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-hygiene-bundle",
@@ -970,7 +1069,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 87,
+   "position": 96,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-onboarding-guide",
@@ -981,7 +1080,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 88,
+   "position": 97,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "restructure-planner",
@@ -992,7 +1091,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 89,
+   "position": 98,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "untested-entry-points",
@@ -1003,7 +1102,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 90,
+   "position": 99,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "auth-flow-review",
@@ -1014,7 +1113,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 91,
+   "position": 100,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cors-review",
@@ -1025,7 +1124,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 92,
+   "position": 101,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dependency-audit-reader",
@@ -1036,7 +1135,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 93,
+   "position": 102,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "http-security-headers",
@@ -1047,7 +1146,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 94,
+   "position": 103,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "jwt-inspector",
@@ -1058,7 +1157,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 95,
+   "position": 104,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "secrets-hygiene",
@@ -1069,7 +1168,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 96,
+   "position": 105,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "change-request-writer",
@@ -1080,7 +1179,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 97,
+   "position": 106,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "decision-log",
@@ -1091,7 +1190,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 98,
+   "position": 107,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "focus-plan",
@@ -1102,7 +1201,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 99,
+   "position": 108,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "meeting-actions-ledger",
@@ -1113,7 +1212,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 100,
+   "position": 109,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "one-on-one-ledger",
@@ -1124,7 +1223,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 101,
+   "position": 110,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "rfc-lifecycle",
@@ -1135,7 +1234,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 102,
+   "position": 111,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-exception-register",
@@ -1146,7 +1245,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 103,
+   "position": 112,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-register-refresh",
@@ -1157,7 +1256,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 104,
+   "position": 113,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "shift-handover",
@@ -1168,7 +1267,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 105,
+   "position": 114,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "vendor-scorecard",
@@ -1179,7 +1278,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 106,
+   "position": 115,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "weekly-status-rollup",
@@ -1190,7 +1289,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 107,
+   "position": 116,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "working-agreement-check",
@@ -1270,8 +1369,8 @@
 <body>
 <header class="top"><nav><a class="home" href="index.html">Claude Code skills</a><a href="index.html#plugins">Plugins</a><a href="llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
 <main>
-<h1>Claude Code skills: 107 skills in 15 plugins, one repository</h1>
-<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 107 skills in 15 plugins, synced daily from 10 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
+<h1>Claude Code skills: 116 skills in 16 plugins, one repository</h1>
+<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 116 skills in 16 plugins, synced daily from 11 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -1285,6 +1384,7 @@ python3 install.py --user</code></pre>
 <tr><td><a href="plugins/agent-identity-governance/index.html">agent-identity-governance</a></td><td>8</td><td>0.1.0</td><td>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network.</td></tr>
 <tr><td><a href="plugins/agent-security/index.html">agent-security</a></td><td>8</td><td>0.1.2</td><td>Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, and scan with Semgrep. Includes guard hooks for Bash and an optional incident-database MCP server.</td></tr>
 <tr><td><a href="plugins/aws-security/index.html">aws-security</a></td><td>9</td><td>0.2.1</td><td>AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.</td></tr>
+<tr><td><a href="plugins/cc-setup-tooling/index.html">cc-setup-tooling</a></td><td>8</td><td>0.1.0</td><td>Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network.</td></tr>
 <tr><td><a href="plugins/code-quality/index.html">code-quality</a></td><td>8</td><td>0.1.2</td><td>Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.</td></tr>
 <tr><td><a href="plugins/compliance-evidence/index.html">compliance-evidence</a></td><td>5</td><td>0.1.2</td><td>Compliance evidence skills for Claude Code: build integrity-checked evidence packs from GitHub, AWS and Microsoft 365 exports, map them to ISO 27001 and SOC 2 control identifiers, and draft auditor narratives that cite evidence or say not assessable. Standard-library Python scripts read exports already on disk and make no network calls.</td></tr>
 <tr><td><a href="plugins/data/index.html">data</a></td><td>6</td><td>0.1.2</td><td>Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review.</td></tr>
@@ -1292,7 +1392,7 @@ python3 install.py --user</code></pre>
 <tr><td><a href="plugins/devops/index.html">devops</a></td><td>8</td><td>0.1.2</td><td>Eight skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor.</td></tr>
 <tr><td><a href="plugins/docs/index.html">docs</a></td><td>6</td><td>0.1.2</td><td>Six skills for writing documentation that stays accurate: README author, ADR writer, changelog keeper, onboarding doc, API docs extracted from docstrings and JSDoc, and a postmortem writer.</td></tr>
 <tr><td><a href="plugins/github-manager/index.html">github-manager</a></td><td>3</td><td>0.1.2</td><td>Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, and a blameless incident postmortem timeline. Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.</td></tr>
-<tr><td><a href="plugins/m365-governance/index.html">m365-governance</a></td><td>9</td><td>0.2.2</td><td>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, and a quarterly access review pack. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline.</td></tr>
+<tr><td><a href="plugins/m365-governance/index.html">m365-governance</a></td><td>10</td><td>0.3.0</td><td>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline.</td></tr>
 <tr><td><a href="plugins/mac-maintenance/index.html">mac-maintenance</a></td><td>3</td><td>0.1.2</td><td>Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.</td></tr>
 <tr><td><a href="plugins/repo-engineering/index.html">repo-engineering</a></td><td>10</td><td>0.3.1</td><td>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, and check release notes against the commits between two tags.</td></tr>
 <tr><td><a href="plugins/security-basics/index.html">security-basics</a></td><td>6</td><td>0.1.2</td><td>Six lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review and auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.</td></tr>
@@ -1305,6 +1405,8 @@ python3 install.py --user</code></pre>
 <ul><li><a href="plugins/agent-security/agent-config-audit/index.html">agent-config-audit</a>: Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets.</li><li><a href="plugins/agent-security/agent-eval-harness/index.html">agent-eval-harness</a>: Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook.</li><li><a href="plugins/agent-security/agent-threat-model/index.html">agent-threat-model</a>: Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents.</li><li><a href="plugins/agent-security/incident-lookup/index.html">incident-lookup</a>: Look up 80 coded AI-agent security incidents from 2023 to 2026, mapped to OWASP Agentic and LLM Top 10 and MITRE ATLAS, and summarise precedents with sources.</li><li><a href="plugins/agent-security/mcp-server-review/index.html">mcp-server-review</a>: Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line.</li><li><a href="plugins/agent-security/prompt-injection-review/index.html">prompt-injection-review</a>: Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules.</li><li><a href="plugins/agent-security/secure-agent-checklist/index.html">secure-agent-checklist</a>: Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence.</li><li><a href="plugins/agent-security/semgrep-agentic/index.html">semgrep-agentic</a>: Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits.</li></ul>
 <h3 id="aws-security"><a href="plugins/aws-security/index.html">aws-security</a></h3>
 <ul><li><a href="plugins/aws-security/agent-safe-aws-access/index.html">agent-safe-aws-access</a>: Plan least-privilege AWS access for an AI coding agent from a short spec, producing the trust policy, task-scoped permissions, a permission boundary, an SCP backstop, the assume-role command and a kill switch, or review an existing agent role against the same rules.</li><li><a href="plugins/aws-security/aws-account-audit/index.html">aws-account-audit</a>: Audit one AWS account for security gaps by collecting inventory with read-only aws CLI commands and evaluating 17 checks offline (root MFA and keys, CloudTrail, GuardDuty, S3 public access, open security groups, old keys, admin policies, encryption), with severity, evidence and a fix per finding.</li><li><a href="plugins/aws-security/aws-incident-response-runbook/index.html">aws-incident-response-runbook</a>: Write a filled-in AWS incident response runbook for a leaked access key, a compromised EC2 instance, a public S3 bucket, suspicious IAM activity, ransomware against S3 or EBS, or crypto-mining, with read-only inventory first, containment commands that each need confirmation, evidence preservation, recovery and templates; a triage mode picks the scenario from GuardDuty findings.</li><li><a href="plugins/aws-security/aws-spend-guardrails/index.html">aws-spend-guardrails</a>: Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes.</li><li><a href="plugins/aws-security/iam-least-privilege-review/index.html">iam-least-privilege-review</a>: Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document.</li><li><a href="plugins/aws-security/landing-zone-blast-radius/index.html">landing-zone-blast-radius</a>: Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach.</li><li><a href="plugins/aws-security/sandbox-account-guardrail-pack/index.html">sandbox-account-guardrail-pack</a>: Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design.</li><li><a href="plugins/aws-security/scp-guardrails/index.html">scp-guardrails</a>: Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size.</li><li><a href="plugins/aws-security/security-hub-triage/index.html">security-hub-triage</a>: Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports.</li></ul>
+<h3 id="cc-setup-tooling"><a href="plugins/cc-setup-tooling/index.html">cc-setup-tooling</a></h3>
+<ul><li><a href="plugins/cc-setup-tooling/context-budget-audit/index.html">context-budget-audit</a>: Audit what a Claude Code project puts in context on every turn (CLAUDE.md and its imports, AGENTS.md, rules files, skill descriptions, MCP tool schemas from saved tools/list output, hooks), estimate the tokens, rank the biggest items and flag duplicates and stale sections.</li><li><a href="plugins/cc-setup-tooling/hook-author/index.html">hook-author</a>: Write and test a Claude Code hook with cc-hooks: pick the event and the decision (block, warn, allow or modify) from a table, scaffold the hook, its fixtures, a pytest file and the settings block from a short spec, then prove it with cc-hooks test.</li><li><a href="plugins/cc-setup-tooling/permissions-builder/index.html">permissions-builder</a>: Build a least-privilege .claude/settings.json permission set from what a project actually needs: generate MCP rules with claude-mcp-allow, merge them with your own allow, ask and deny lists, put deny first, diff against the current file, then test the result with claude-perm-sim against the commands the team runs.</li><li><a href="plugins/cc-setup-tooling/skill-collision-check/index.html">skill-collision-check</a>: Find installed skills that share a name, shadow each other or overlap so much in description that the wrong one gets picked, across personal, project, managed, plugin and copied folders, and say which one wins.</li><li><a href="plugins/cc-setup-tooling/skill-description-linter/index.html">skill-description-linter</a>: Lint the front matter of your SKILL.md files so each skill is listed and picked correctly: double-quoted description under 600 characters, a verb first, a quoted trigger phrase, Use when and Not for sentences, name equal to the folder, strict-YAML safety and a Limits section, with --fix for the quoting.</li><li><a href="plugins/cc-setup-tooling/skill-portability-check/index.html">skill-portability-check</a>: Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file.</li><li><a href="plugins/cc-setup-tooling/skill-supply-chain-review/index.html">skill-supply-chain-review</a>: Review a third-party skill or plugin before you install it: run skill-scan-gate on the folder, lock it with cc-plugin-lock, read every script for network and shell use with a bundled offline inventory, and write a one-page verdict.</li><li><a href="plugins/cc-setup-tooling/skill-trigger-eval/index.html">skill-trigger-eval</a>: Measure whether a skill&#x27;s description triggers on the prompts it should and stays quiet on the ones it should not, using a labelled prompt set and transparent lexical scoring, and compare two description versions by precision and recall.</li></ul>
 <h3 id="code-quality"><a href="plugins/code-quality/index.html">code-quality</a></h3>
 <ul><li><a href="plugins/code-quality/complexity-report/index.html">complexity-report</a>: Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how.</li><li><a href="plugins/code-quality/dead-code-finder/index.html">dead-code-finder</a>: Find probably-unused functions, classes, methods and exports in a Python or JavaScript/TypeScript tree with a bundled script, confirm each candidate by searching for dynamic use, and propose a safe deletion order.</li><li><a href="plugins/code-quality/error-handling-review/index.html">error-handling-review</a>: Review how a codebase or change handles failures: swallowed exceptions, missing timeouts and retries, errors without context, leaking internals to users, and inconsistent error types across layers; then propose a consistent policy with code examples.</li><li><a href="plugins/code-quality/naming-audit/index.html">naming-audit</a>: Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones.</li><li><a href="plugins/code-quality/refactor-plan/index.html">refactor-plan</a>: Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point.</li><li><a href="plugins/code-quality/review-checklist/index.html">review-checklist</a>: Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict.</li><li><a href="plugins/code-quality/test-gap-finder/index.html">test-gap-finder</a>: Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk.</li><li><a href="plugins/code-quality/type-coverage/index.html">type-coverage</a>: Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold.</li></ul>
 <h3 id="compliance-evidence"><a href="plugins/compliance-evidence/index.html">compliance-evidence</a></h3>
@@ -1320,7 +1422,7 @@ python3 install.py --user</code></pre>
 <h3 id="github-manager"><a href="plugins/github-manager/index.html">github-manager</a></h3>
 <ul><li><a href="plugins/github-manager/incident-postmortem-timeline/index.html">incident-postmortem-timeline</a>: Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions.</li><li><a href="plugins/github-manager/iteration-report/index.html">iteration-report</a>: Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows.</li><li><a href="plugins/github-manager/pr-queue-digest/index.html">pr-queue-digest</a>: Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer.</li></ul>
 <h3 id="m365-governance"><a href="plugins/m365-governance/index.html">m365-governance</a></h3>
-<ul><li><a href="plugins/m365-governance/access-review-pack/index.html">access-review-pack</a>: Build a quarterly Microsoft 365 access review package from read-only Graph exports, listing directory role holders (active and PIM-eligible) with last sign-in, app owners and ownerless apps, owners of sensitive groups, guests per group and expiring app secrets and certificates, with a reviewer checklist and a sign-off CSV.</li><li><a href="plugins/m365-governance/conditional-access-gap-analysis/index.html">conditional-access-gap-analysis</a>: Find gaps, overlaps and exclusion problems in Microsoft Entra Conditional Access from read-only Graph exports, resolving who each policy really covers and checking MFA for all users and admins, legacy authentication, device and risk policies, break-glass and unexplained exclusions, report-only and self-cancelling policies, with a coverage matrix by persona.</li><li><a href="plugins/m365-governance/entra-posture-review/index.html">entra-posture-review</a>: Review a Microsoft Entra ID tenant&#x27;s identity posture from read-only Graph exports, checking Conditional Access basics, security defaults, standing Global Administrators, guests with roles, stale guests, long-lived app secrets, high-risk Graph application permissions, consent and invitation settings and legacy sign-ins.</li><li><a href="plugins/m365-governance/graph-permission-preflight/index.html">graph-permission-preflight</a>: Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set.</li><li><a href="plugins/m365-governance/guest-and-external-sharing-review/index.html">guest-and-external-sharing-review</a>: Review guest accounts and external sharing in Microsoft 365 from read-only exports, reporting guests from blocked domains or in sensitive groups, stale and unaccepted invitations, anyone links and links that never expire, guest resharing and open Teams external access, with a per-guest access map and a draft removal list.</li><li><a href="plugins/m365-governance/intune-baseline-check/index.html">intune-baseline-check</a>: Check a Microsoft Intune estate against a device baseline from read-only Graph exports, reporting non-compliant, stale, unencrypted, jailbroken and outdated devices, personal devices, unassigned compliance policies, platforms missing baseline controls and the no-policy-means-compliant setting, per platform.</li><li><a href="plugins/m365-governance/license-and-service-plan-audit/index.html">license-and-service-plan-audit</a>: Find wasted Microsoft 365 licences from read-only Graph exports, reporting licences on disabled, never-signed-in or inactive accounts, overlapping SKUs, unwanted service plans, group-based licensing errors and unassigned units, with a draft reclaim list per SKU; costs appear only when you supply unit prices.</li><li><a href="plugins/m365-governance/privileged-access-review/index.html">privileged-access-review</a>: Review privileged Microsoft Entra ID role holders from read-only Graph exports and score each admin account, reporting permanent privileged assignments, never-activated PIM eligibility, admins without phishing-resistant MFA, admin accounts used daily, stale or synchronised admins, and service principals and groups in roles, with the evidence per deduction.</li><li><a href="plugins/m365-governance/teams-and-groups-sprawl/index.html">teams-and-groups-sprawl</a>: Report Microsoft Teams and Microsoft 365 group sprawl from read-only Graph exports, finding ownerless and single-owner groups, groups with guests, public and inactive teams, empty groups, naming convention breaks and groups outside the expiration policy, and proposing owners for orphaned groups as a draft.</li></ul>
+<ul><li><a href="plugins/m365-governance/access-review-pack/index.html">access-review-pack</a>: Build a quarterly Microsoft 365 access review package from read-only Graph exports, listing directory role holders (active and PIM-eligible) with last sign-in, app owners and ownerless apps, owners of sensitive groups, guests per group and expiring app secrets and certificates, with a reviewer checklist and a sign-off CSV.</li><li><a href="plugins/m365-governance/conditional-access-gap-analysis/index.html">conditional-access-gap-analysis</a>: Find gaps, overlaps and exclusion problems in Microsoft Entra Conditional Access from read-only Graph exports, resolving who each policy really covers and checking MFA for all users and admins, legacy authentication, device and risk policies, break-glass and unexplained exclusions, report-only and self-cancelling policies, with a coverage matrix by persona.</li><li><a href="plugins/m365-governance/copilot-oversharing-readiness/index.html">copilot-oversharing-readiness</a>: Score a Microsoft 365 tenant&#x27;s readiness for a Copilot rollout against Microsoft&#x27;s oversharing checks and produce a fix list per site owner, from read-only exports of SharePoint sites, sensitivity labels, Everyone grants, sharing links and DLP policies.</li><li><a href="plugins/m365-governance/entra-posture-review/index.html">entra-posture-review</a>: Review a Microsoft Entra ID tenant&#x27;s identity posture from read-only Graph exports, checking Conditional Access basics, security defaults, standing Global Administrators, guests with roles, stale guests, long-lived app secrets, high-risk Graph application permissions, consent and invitation settings and legacy sign-ins.</li><li><a href="plugins/m365-governance/graph-permission-preflight/index.html">graph-permission-preflight</a>: Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set.</li><li><a href="plugins/m365-governance/guest-and-external-sharing-review/index.html">guest-and-external-sharing-review</a>: Review guest accounts and external sharing in Microsoft 365 from read-only exports, reporting guests from blocked domains or in sensitive groups, stale and unaccepted invitations, anyone links and links that never expire, guest resharing and open Teams external access, with a per-guest access map and a draft removal list.</li><li><a href="plugins/m365-governance/intune-baseline-check/index.html">intune-baseline-check</a>: Check a Microsoft Intune estate against a device baseline from read-only Graph exports, reporting non-compliant, stale, unencrypted, jailbroken and outdated devices, personal devices, unassigned compliance policies, platforms missing baseline controls and the no-policy-means-compliant setting, per platform.</li><li><a href="plugins/m365-governance/license-and-service-plan-audit/index.html">license-and-service-plan-audit</a>: Find wasted Microsoft 365 licences from read-only Graph exports, reporting licences on disabled, never-signed-in or inactive accounts, overlapping SKUs, unwanted service plans, group-based licensing errors and unassigned units, with a draft reclaim list per SKU; costs appear only when you supply unit prices.</li><li><a href="plugins/m365-governance/privileged-access-review/index.html">privileged-access-review</a>: Review privileged Microsoft Entra ID role holders from read-only Graph exports and score each admin account, reporting permanent privileged assignments, never-activated PIM eligibility, admins without phishing-resistant MFA, admin accounts used daily, stale or synchronised admins, and service principals and groups in roles, with the evidence per deduction.</li><li><a href="plugins/m365-governance/teams-and-groups-sprawl/index.html">teams-and-groups-sprawl</a>: Report Microsoft Teams and Microsoft 365 group sprawl from read-only Graph exports, finding ownerless and single-owner groups, groups with guests, public and inactive teams, empty groups, naming convention breaks and groups outside the expiration policy, and proposing owners for orphaned groups as a draft.</li></ul>
 <h3 id="mac-maintenance"><a href="plugins/mac-maintenance/index.html">mac-maintenance</a></h3>
 <ul><li><a href="plugins/mac-maintenance/mac-app-leftovers/index.html">mac-app-leftovers</a>: Find what uninstalled apps left behind on a Mac (Application Support and container folders, caches, preferences, saved state, logs, and login items or launch agents that point at nothing), deciding what is installed from app bundles, PATH, Homebrew and Spotlight, and move only the candidates you name into a dated Trash folder.</li><li><a href="plugins/mac-maintenance/mac-cleanup/index.html">mac-cleanup</a>: Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else.</li><li><a href="plugins/mac-maintenance/mac-duplicate-finder/index.html">mac-duplicate-finder</a>: Find byte-for-byte duplicate files in a Mac&#x27;s user folders, report the largest groups and folders that mirror each other, and move verified suffix copies (IMG_1 (1).MOV next to an identical IMG_1.MOV) to a dated Trash folder after a second hash check.</li></ul>
 <h3 id="repo-engineering"><a href="plugins/repo-engineering/index.html">repo-engineering</a></h3>
