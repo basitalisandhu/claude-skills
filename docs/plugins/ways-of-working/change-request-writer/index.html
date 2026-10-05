@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>change-request-writer: Write a CAB-style change record from a saved Terraform plan JSON | Claude Code skills</title>
-<meta name="description" content="Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export. A bundled script counts resources to add, change, destroy and replace, lists them by type, flags IAM, security group, KMS, S3 policy and network changes as needs reviewer, tiers the risk by a stated rule, and prints a Markdown record with summary, scope, risk, rollback, verification, an approvers table and a maintenance window placeholder. Use when asked to write a change request, CAB record, RFC for change or change ticket for an infrastructure change, to say what a plan will destroy or replace, or which changes need a security reviewer. Not for approving changes, running terraform, reviewing the Terraform code itself, or ServiceNow and Jira integration.">
+<title>change-request-writer: Write a CAB-style change record for an infrastructure change | Claude Code skills</title>
+<meta name="description" content="Write a CAB-style change record for an infrastructure change from a saved Terraform plan JSON or gh pr view export: counts of resources to add, change, destroy and replace, IAM, security group, KMS, S3 policy and network changes flagged for a reviewer, a risk tier by a stated rule, and rollback, verification and approvers sections. Use when asked to &quot;write a change request for this plan&quot; or what a plan will destroy or replace. Not for approving changes, running terraform, reviewing the Terraform code, or ServiceNow and Jira integration.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/change-request-writer/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="change-request-writer: Write a CAB-style change record from a saved Terraform plan JSON | Claude Code skills">
-<meta property="og:description" content="Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export. A bundled script counts resources to add, change, destroy and replace, lists them by type, flags IAM, security group, KMS, S3 policy and network changes as needs reviewer, tiers the risk by a stated rule, and prints a Markdown record with summary, scope, risk, rollback, verification, an approvers table and a maintenance window placeholder. Use when asked to write a change request, CAB record, RFC for change or change ticket for an infrastructure change, to say what a plan will destroy or replace, or which changes need a security reviewer. Not for approving changes, running terraform, reviewing the Terraform code itself, or ServiceNow and Jira integration.">
+<meta property="og:title" content="change-request-writer: Write a CAB-style change record for an infrastructure change | Claude Code skills">
+<meta property="og:description" content="Write a CAB-style change record for an infrastructure change from a saved Terraform plan JSON or gh pr view export: counts of resources to add, change, destroy and replace, IAM, security group, KMS, S3 policy and network changes flagged for a reviewer, a risk tier by a stated rule, and rollback, verification and approvers sections. Use when asked to &quot;write a change request for this plan&quot; or what a plan will destroy or replace. Not for approving changes, running terraform, reviewing the Terraform code, or ServiceNow and Jira integration.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/change-request-writer/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "change-request-writer",
- "description": "Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export. A bundled script counts resources to add, change, destroy and replace, lists them by type, flags IAM, security group, KMS, S3 policy and network changes as needs reviewer, tiers the risk by a stated rule, and prints a Markdown record with summary, scope, risk, rollback, verification, an approvers table and a maintenance window placeholder. Use when asked to write a change request, CAB record, RFC for change or change ticket for an infrastructure change, to say what a plan will destroy or replace, or which changes need a security reviewer. Not for approving changes, running terraform, reviewing the Terraform code itself, or ServiceNow and Jira integration.",
+ "description": "Write a CAB-style change record for an infrastructure change from a saved Terraform plan JSON or gh pr view export: counts of resources to add, change, destroy and replace, IAM, security group, KMS, S3 policy and network changes flagged for a reviewer, a risk tier by a stated rule, and rollback, verification and approvers sections. Use when asked to \"write a change request for this plan\" or what a plan will destroy or replace. Not for approving changes, running terraform, reviewing the Terraform code, or ServiceNow and Jira integration.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/change-request-writer/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / change-request-writer</p>
 <h1>Change request writer</h1>
-<p class="lede">Write a CAB-style change record from a saved Terraform plan JSON (terraform show -json plan.out) or a saved gh pr view --json export. A bundled script counts resources to add, change, destroy and replace, lists them by type, flags IAM, security group, KMS, S3 policy and network changes as needs reviewer, tiers the risk by a stated rule, and prints a Markdown record with summary, scope, risk, rollback, verification, an approvers table and a maintenance window placeholder. Use when asked to write a change request, CAB record, RFC for change or change ticket for an infrastructure change, to say what a plan will destroy or replace, or which changes need a security reviewer. Not for approving changes, running terraform, reviewing the Terraform code itself, or ServiceNow and Jira integration.</p>
-<p class="meta">Skill <code>change-request-writer</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/change-request-writer/SKILL.md">plugins/ways-of-working/skills/change-request-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/change-request-writer/SKILL.md">plugins/ways-of-working/skills/change-request-writer/SKILL.md</a>.</p>
+<p class="lede">Write a CAB-style change record for an infrastructure change from a saved Terraform plan JSON or gh pr view export: counts of resources to add, change, destroy and replace, IAM, security group, KMS, S3 policy and network changes flagged for a reviewer, a risk tier by a stated rule, and rollback, verification and approvers sections. Use when asked to &quot;write a change request for this plan&quot; or what a plan will destroy or replace. Not for approving changes, running terraform, reviewing the Terraform code, or ServiceNow and Jira integration.</p>
+<p class="meta">Skill <code>change-request-writer</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/change-request-writer/SKILL.md">plugins/ways-of-working/skills/change-request-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/change-request-writer/SKILL.md">plugins/ways-of-working/skills/change-request-writer/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

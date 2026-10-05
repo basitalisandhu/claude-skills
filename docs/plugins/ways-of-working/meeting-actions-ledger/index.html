@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>meeting-actions-ledger: Build one action ledger across a folder of meeting notes in Markdown | Claude Code skills</title>
-<meta name="description" content="Build one action ledger across a folder of meeting notes in Markdown or plain text. A bundled script reads action lines such as &#x27;- [ ] owner: action (due 2026-10-12)&#x27; or &#x27;Action: ...&#x27;, extracts each action with its owner and due date, merges the same action carried from meeting to meeting into one item, flags overdue items, items with no owner and items carried in three or more meetings, and writes ledger.md and ledger.json with every item cited to its file and line. Use when asked what was agreed across recent meetings, which actions are overdue or keep being carried over, or for the open-actions list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how well people follow up.">
+<title>meeting-actions-ledger: Track the action items agreed across a folder of Markdown or text | Claude Code skills</title>
+<meta name="description" content="Track the action items agreed across a folder of Markdown or text meeting notes in one ledger: each action with owner and due date, the same action carried between meetings merged into one, overdue, unowned and thrice-carried items flagged, every item cited to file and line, written to ledger.md and ledger.json. Use when asked &quot;which actions are overdue?&quot; or for the open list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how people follow up.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="meeting-actions-ledger: Build one action ledger across a folder of meeting notes in Markdown | Claude Code skills">
-<meta property="og:description" content="Build one action ledger across a folder of meeting notes in Markdown or plain text. A bundled script reads action lines such as &#x27;- [ ] owner: action (due 2026-10-12)&#x27; or &#x27;Action: ...&#x27;, extracts each action with its owner and due date, merges the same action carried from meeting to meeting into one item, flags overdue items, items with no owner and items carried in three or more meetings, and writes ledger.md and ledger.json with every item cited to its file and line. Use when asked what was agreed across recent meetings, which actions are overdue or keep being carried over, or for the open-actions list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how well people follow up.">
+<meta property="og:title" content="meeting-actions-ledger: Track the action items agreed across a folder of Markdown or text | Claude Code skills">
+<meta property="og:description" content="Track the action items agreed across a folder of Markdown or text meeting notes in one ledger: each action with owner and due date, the same action carried between meetings merged into one, overdue, unowned and thrice-carried items flagged, every item cited to file and line, written to ledger.md and ledger.json. Use when asked &quot;which actions are overdue?&quot; or for the open list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how people follow up.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "meeting-actions-ledger",
- "description": "Build one action ledger across a folder of meeting notes in Markdown or plain text. A bundled script reads action lines such as '- [ ] owner: action (due 2026-10-12)' or 'Action: ...', extracts each action with its owner and due date, merges the same action carried from meeting to meeting into one item, flags overdue items, items with no owner and items carried in three or more meetings, and writes ledger.md and ledger.json with every item cited to its file and line. Use when asked what was agreed across recent meetings, which actions are overdue or keep being carried over, or for the open-actions list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how well people follow up.",
+ "description": "Track the action items agreed across a folder of Markdown or text meeting notes in one ledger: each action with owner and due date, the same action carried between meetings merged into one, overdue, unowned and thrice-carried items flagged, every item cited to file and line, written to ledger.md and ledger.json. Use when asked \"which actions are overdue?\" or for the open list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how people follow up.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / meeting-actions-ledger</p>
 <h1>Meeting actions ledger</h1>
-<p class="lede">Build one action ledger across a folder of meeting notes in Markdown or plain text. A bundled script reads action lines such as &#x27;- [ ] owner: action (due 2026-10-12)&#x27; or &#x27;Action: ...&#x27;, extracts each action with its owner and due date, merges the same action carried from meeting to meeting into one item, flags overdue items, items with no owner and items carried in three or more meetings, and writes ledger.md and ledger.json with every item cited to its file and line. Use when asked what was agreed across recent meetings, which actions are overdue or keep being carried over, or for the open-actions list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how well people follow up.</p>
-<p class="meta">Skill <code>meeting-actions-ledger</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md">plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md">plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md</a>.</p>
+<p class="lede">Track the action items agreed across a folder of Markdown or text meeting notes in one ledger: each action with owner and due date, the same action carried between meetings merged into one, overdue, unowned and thrice-carried items flagged, every item cited to file and line, written to ledger.md and ledger.json. Use when asked &quot;which actions are overdue?&quot; or for the open list for the next meeting. Not for calendar access, sending reminders, transcribing audio, or judging how people follow up.</p>
+<p class="meta">Skill <code>meeting-actions-ledger</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md">plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md">plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

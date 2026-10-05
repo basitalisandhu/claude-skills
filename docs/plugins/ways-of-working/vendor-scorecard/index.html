@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>vendor-scorecard: Score vendors or tools against weighted criteria from a CSV with one | Claude Code skills</title>
-<meta name="description" content="Score vendors or tools against weighted criteria from a CSV with one row per criterion (criterion, weight, then one column per vendor with scores 1 to 5). A bundled script computes the weighted score and ranking, checks whether the ranking survives each weight being moved one step up or down, flags ties for first and data problems, and writes a Markdown scorecard with a blank decision line. Use when asked to compare vendors, tools or suppliers on agreed criteria, build a selection scorecard, or test whether a shortlist result depends on the weights. Not for deciding which criteria matter, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills covers evidence).">
+<title>vendor-scorecard: Compare vendors | Claude Code skills</title>
+<meta name="description" content="Compare vendors, tools or suppliers on agreed weighted criteria from a CSV (criterion, weight, a 1 to 5 score column per vendor): weighted scores and ranking, whether the ranking survives each weight moved one step, ties for first, data problems, and a Markdown scorecard with a blank decision line. Use when asked to &quot;build a vendor scorecard&quot; or whether a shortlist depends on the weights. Not for choosing the criteria, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/vendor-scorecard/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="vendor-scorecard: Score vendors or tools against weighted criteria from a CSV with one | Claude Code skills">
-<meta property="og:description" content="Score vendors or tools against weighted criteria from a CSV with one row per criterion (criterion, weight, then one column per vendor with scores 1 to 5). A bundled script computes the weighted score and ranking, checks whether the ranking survives each weight being moved one step up or down, flags ties for first and data problems, and writes a Markdown scorecard with a blank decision line. Use when asked to compare vendors, tools or suppliers on agreed criteria, build a selection scorecard, or test whether a shortlist result depends on the weights. Not for deciding which criteria matter, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills covers evidence).">
+<meta property="og:title" content="vendor-scorecard: Compare vendors | Claude Code skills">
+<meta property="og:description" content="Compare vendors, tools or suppliers on agreed weighted criteria from a CSV (criterion, weight, a 1 to 5 score column per vendor): weighted scores and ranking, whether the ranking survives each weight moved one step, ties for first, data problems, and a Markdown scorecard with a blank decision line. Use when asked to &quot;build a vendor scorecard&quot; or whether a shortlist depends on the weights. Not for choosing the criteria, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/vendor-scorecard/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "vendor-scorecard",
- "description": "Score vendors or tools against weighted criteria from a CSV with one row per criterion (criterion, weight, then one column per vendor with scores 1 to 5). A bundled script computes the weighted score and ranking, checks whether the ranking survives each weight being moved one step up or down, flags ties for first and data problems, and writes a Markdown scorecard with a blank decision line. Use when asked to compare vendors, tools or suppliers on agreed criteria, build a selection scorecard, or test whether a shortlist result depends on the weights. Not for deciding which criteria matter, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills covers evidence).",
+ "description": "Compare vendors, tools or suppliers on agreed weighted criteria from a CSV (criterion, weight, a 1 to 5 score column per vendor): weighted scores and ranking, whether the ranking survives each weight moved one step, ties for first, data problems, and a Markdown scorecard with a blank decision line. Use when asked to \"build a vendor scorecard\" or whether a shortlist depends on the weights. Not for choosing the criteria, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/vendor-scorecard/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / vendor-scorecard</p>
 <h1>Vendor scorecard</h1>
-<p class="lede">Score vendors or tools against weighted criteria from a CSV with one row per criterion (criterion, weight, then one column per vendor with scores 1 to 5). A bundled script computes the weighted score and ranking, checks whether the ranking survives each weight being moved one step up or down, flags ties for first and data problems, and writes a Markdown scorecard with a blank decision line. Use when asked to compare vendors, tools or suppliers on agreed criteria, build a selection scorecard, or test whether a shortlist result depends on the weights. Not for deciding which criteria matter, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills covers evidence).</p>
-<p class="meta">Skill <code>vendor-scorecard</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/vendor-scorecard/SKILL.md">plugins/ways-of-working/skills/vendor-scorecard/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/vendor-scorecard/SKILL.md">plugins/ways-of-working/skills/vendor-scorecard/SKILL.md</a>.</p>
+<p class="lede">Compare vendors, tools or suppliers on agreed weighted criteria from a CSV (criterion, weight, a 1 to 5 score column per vendor): weighted scores and ranking, whether the ranking survives each weight moved one step, ties for first, data problems, and a Markdown scorecard with a blank decision line. Use when asked to &quot;build a vendor scorecard&quot; or whether a shortlist depends on the weights. Not for choosing the criteria, pricing negotiation, or security questionnaires and vendor evidence (compliance-evidence-skills).</p>
+<p class="meta">Skill <code>vendor-scorecard</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/vendor-scorecard/SKILL.md">plugins/ways-of-working/skills/vendor-scorecard/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/vendor-scorecard/SKILL.md">plugins/ways-of-working/skills/vendor-scorecard/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

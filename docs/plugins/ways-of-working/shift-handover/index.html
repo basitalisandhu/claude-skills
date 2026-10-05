@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>shift-handover: Write an on-call or shift handover note from saved incident and alert | Claude Code skills</title>
-<meta name="description" content="Write an on-call or shift handover note from saved incident and alert exports: a JSON or CSV of incidents (id, title, status, opened, last update, owner), an optional alert export (name, count, first seen, last seen, silenced until) and optional free-text notes from the outgoing shift. A bundled script groups open incidents by age, flags incidents with no update in N hours or no owner, lists noisy alerts and silences that expire during the next shift, and writes a forward-looking note: what is open, what to watch, what was silenced and until when. Use when asked to prepare a shift or on-call handover, summarise what the next person on call needs to know, or check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline is retrospective), paging people, or silencing alerts.">
+<meta name="description" content="Write an on-call or shift handover note from saved incident and alert exports (JSON or CSV) and the outgoing shift&#x27;s notes: open incidents by age, incidents with no recent update or no owner, noisy alerts and silences that expire next shift, framed as what is open, what to watch and what is silenced until when. Use when asked to &quot;write the on-call handover&quot; or to check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline), paging people, or silencing alerts.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/shift-handover/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="shift-handover: Write an on-call or shift handover note from saved incident and alert | Claude Code skills">
-<meta property="og:description" content="Write an on-call or shift handover note from saved incident and alert exports: a JSON or CSV of incidents (id, title, status, opened, last update, owner), an optional alert export (name, count, first seen, last seen, silenced until) and optional free-text notes from the outgoing shift. A bundled script groups open incidents by age, flags incidents with no update in N hours or no owner, lists noisy alerts and silences that expire during the next shift, and writes a forward-looking note: what is open, what to watch, what was silenced and until when. Use when asked to prepare a shift or on-call handover, summarise what the next person on call needs to know, or check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline is retrospective), paging people, or silencing alerts.">
+<meta property="og:description" content="Write an on-call or shift handover note from saved incident and alert exports (JSON or CSV) and the outgoing shift&#x27;s notes: open incidents by age, incidents with no recent update or no owner, noisy alerts and silences that expire next shift, framed as what is open, what to watch and what is silenced until when. Use when asked to &quot;write the on-call handover&quot; or to check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline), paging people, or silencing alerts.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/shift-handover/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "shift-handover",
- "description": "Write an on-call or shift handover note from saved incident and alert exports: a JSON or CSV of incidents (id, title, status, opened, last update, owner), an optional alert export (name, count, first seen, last seen, silenced until) and optional free-text notes from the outgoing shift. A bundled script groups open incidents by age, flags incidents with no update in N hours or no owner, lists noisy alerts and silences that expire during the next shift, and writes a forward-looking note: what is open, what to watch, what was silenced and until when. Use when asked to prepare a shift or on-call handover, summarise what the next person on call needs to know, or check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline is retrospective), paging people, or silencing alerts.",
+ "description": "Write an on-call or shift handover note from saved incident and alert exports (JSON or CSV) and the outgoing shift's notes: open incidents by age, incidents with no recent update or no owner, noisy alerts and silences that expire next shift, framed as what is open, what to watch and what is silenced until when. Use when asked to \"write the on-call handover\" or to check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline), paging people, or silencing alerts.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/shift-handover/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / shift-handover</p>
 <h1>Shift handover</h1>
-<p class="lede">Write an on-call or shift handover note from saved incident and alert exports: a JSON or CSV of incidents (id, title, status, opened, last update, owner), an optional alert export (name, count, first seen, last seen, silenced until) and optional free-text notes from the outgoing shift. A bundled script groups open incidents by age, flags incidents with no update in N hours or no owner, lists noisy alerts and silences that expire during the next shift, and writes a forward-looking note: what is open, what to watch, what was silenced and until when. Use when asked to prepare a shift or on-call handover, summarise what the next person on call needs to know, or check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline is retrospective), paging people, or silencing alerts.</p>
-<p class="meta">Skill <code>shift-handover</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/shift-handover/SKILL.md">plugins/ways-of-working/skills/shift-handover/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/shift-handover/SKILL.md">plugins/ways-of-working/skills/shift-handover/SKILL.md</a>.</p>
+<p class="lede">Write an on-call or shift handover note from saved incident and alert exports (JSON or CSV) and the outgoing shift&#x27;s notes: open incidents by age, incidents with no recent update or no owner, noisy alerts and silences that expire next shift, framed as what is open, what to watch and what is silenced until when. Use when asked to &quot;write the on-call handover&quot; or to check what is stale before handing over. Not for postmortems or incident timelines (incident-postmortem-timeline), paging people, or silencing alerts.</p>
+<p class="meta">Skill <code>shift-handover</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/shift-handover/SKILL.md">plugins/ways-of-working/skills/shift-handover/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/shift-handover/SKILL.md">plugins/ways-of-working/skills/shift-handover/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

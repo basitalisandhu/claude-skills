@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>weekly-status-rollup: Write one lead&#x27;s weekly status note from saved exports with a bundled | Claude Code skills</title>
-<meta name="description" content="Write one lead&#x27;s weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week&#x27;s note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version. Inputs: git log text from one or more repositories, saved gh pr list and gh issue list JSON, and last week&#x27;s note. Use when asked &quot;write my weekly status&quot;, &quot;what did I ship this week?&quot;, &quot;what keeps carrying over?&quot;, or &quot;give me a standup update from yesterday&#x27;s work&quot;. Not for team-level sprint metrics (use iteration-report), not for the review queue (use pr-queue-digest), not for ranking people by output, and not for repositories you cannot export.">
+<title>weekly-status-rollup: Write one lead&#x27;s weekly update from saved git log text | Claude Code skills</title>
+<meta name="description" content="Write one lead&#x27;s weekly update from saved git log text, gh pr and issue list JSON and last week&#x27;s note: shipped, in review, in progress, blocked and carried over with weeks carried, plus Decisions needed and Risks left for the author, never invented; a daily mode gives a standup version. Use when asked to &quot;write my weekly status&quot; or what keeps carrying over. Not for team sprint metrics (iteration-report), the review queue (pr-queue-digest), ranking people by output, or repositories you cannot export.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/weekly-status-rollup/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="weekly-status-rollup: Write one lead&#x27;s weekly status note from saved exports with a bundled | Claude Code skills">
-<meta property="og:description" content="Write one lead&#x27;s weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week&#x27;s note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version. Inputs: git log text from one or more repositories, saved gh pr list and gh issue list JSON, and last week&#x27;s note. Use when asked &quot;write my weekly status&quot;, &quot;what did I ship this week?&quot;, &quot;what keeps carrying over?&quot;, or &quot;give me a standup update from yesterday&#x27;s work&quot;. Not for team-level sprint metrics (use iteration-report), not for the review queue (use pr-queue-digest), not for ranking people by output, and not for repositories you cannot export.">
+<meta property="og:title" content="weekly-status-rollup: Write one lead&#x27;s weekly update from saved git log text | Claude Code skills">
+<meta property="og:description" content="Write one lead&#x27;s weekly update from saved git log text, gh pr and issue list JSON and last week&#x27;s note: shipped, in review, in progress, blocked and carried over with weeks carried, plus Decisions needed and Risks left for the author, never invented; a daily mode gives a standup version. Use when asked to &quot;write my weekly status&quot; or what keeps carrying over. Not for team sprint metrics (iteration-report), the review queue (pr-queue-digest), ranking people by output, or repositories you cannot export.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/weekly-status-rollup/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "weekly-status-rollup",
- "description": "Write one lead's weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week's note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version. Inputs: git log text from one or more repositories, saved gh pr list and gh issue list JSON, and last week's note. Use when asked \"write my weekly status\", \"what did I ship this week?\", \"what keeps carrying over?\", or \"give me a standup update from yesterday's work\". Not for team-level sprint metrics (use iteration-report), not for the review queue (use pr-queue-digest), not for ranking people by output, and not for repositories you cannot export.",
+ "description": "Write one lead's weekly update from saved git log text, gh pr and issue list JSON and last week's note: shipped, in review, in progress, blocked and carried over with weeks carried, plus Decisions needed and Risks left for the author, never invented; a daily mode gives a standup version. Use when asked to \"write my weekly status\" or what keeps carrying over. Not for team sprint metrics (iteration-report), the review queue (pr-queue-digest), ranking people by output, or repositories you cannot export.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/weekly-status-rollup/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / weekly-status-rollup</p>
 <h1>Weekly status rollup</h1>
-<p class="lede">Write one lead&#x27;s weekly status note from saved exports with a bundled standard-library script that groups work into shipped, in review, in progress, blocked and carried over, counts how many weeks each item has carried over by comparing with last week&#x27;s note, and leaves Decisions needed and Risks as sections for the author to fill, never invented; a daily mode gives a standup-sized version. Inputs: git log text from one or more repositories, saved gh pr list and gh issue list JSON, and last week&#x27;s note. Use when asked &quot;write my weekly status&quot;, &quot;what did I ship this week?&quot;, &quot;what keeps carrying over?&quot;, or &quot;give me a standup update from yesterday&#x27;s work&quot;. Not for team-level sprint metrics (use iteration-report), not for the review queue (use pr-queue-digest), not for ranking people by output, and not for repositories you cannot export.</p>
-<p class="meta">Skill <code>weekly-status-rollup</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md">plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md">plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md</a>.</p>
+<p class="lede">Write one lead&#x27;s weekly update from saved git log text, gh pr and issue list JSON and last week&#x27;s note: shipped, in review, in progress, blocked and carried over with weeks carried, plus Decisions needed and Risks left for the author, never invented; a daily mode gives a standup version. Use when asked to &quot;write my weekly status&quot; or what keeps carrying over. Not for team sprint metrics (iteration-report), the review queue (pr-queue-digest), ranking people by output, or repositories you cannot export.</p>
+<p class="meta">Skill <code>weekly-status-rollup</code> in plugin <a href="../index.html">ways-of-working</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md">plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md">plugins/ways-of-working/skills/weekly-status-rollup/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

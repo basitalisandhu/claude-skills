@@ -4,14 +4,14 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-05T11:43:57Z</updated>
+  <updated>2026-10-05T11:51:45Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
   <entry>
-    <title>ways-of-working 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.0-227c8b6fc917</id>
+    <title>ways-of-working 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.1-3f4a45d535d8</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"/>
-    <updated>2026-10-05T11:43:57Z</updated>
-    <summary>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people. Synced from https://github.com/basitalisandhu/ways-of-working-skills at commit 227c8b6fc917.</summary>
+    <updated>2026-10-05T11:51:45Z</updated>
+    <summary>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people. Synced from https://github.com/basitalisandhu/ways-of-working-skills at commit 3f4a45d535d8.</summary>
   </entry>
   <entry>
     <title>security-basics 0.1.2</title>
