@@ -2,6 +2,8 @@
 
 Six skills for finding the cause of a failure: minimise a bug reproduction, cluster log lines, find flaky tests across JUnit reports, explain a stack trace, read a CPU profile, and work a memory leak checklist.
 
+Find this when you search for: race condition, core dump or segfault, CI fails randomly.
+
 ## Install
 
 ```text

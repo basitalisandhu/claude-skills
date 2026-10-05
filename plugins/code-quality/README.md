@@ -2,6 +2,8 @@
 
 Eight skills for keeping a codebase healthy: a fixed review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.
 
+Find this when you search for: tech debt, code smells, cognitive complexity.
+
 ## Install
 
 ```text

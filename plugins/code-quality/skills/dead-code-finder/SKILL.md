@@ -1,6 +1,6 @@
 ---
 name: dead-code-finder
-description: Find probably-unused functions, classes, methods and exports in a Python or JavaScript/TypeScript tree with a bundled script, confirm each candidate by searching for dynamic use, and propose a safe deletion order. Use when asked to find dead or unused code, shrink a codebase, or prepare a cleanup before a refactor. Not for unused imports or variables inside a function (a linter does that) and not for unused dependencies in package manifests.
+description: "Find probably-unused functions, classes, methods and exports in a Python or JavaScript/TypeScript tree with a bundled script, confirm each candidate by searching for dynamic use, and propose a safe deletion order. Use when asked to find dead or unused code, shrink a codebase, or prepare a cleanup before a refactor. Not for unused imports or variables inside a function (a linter does that) and not for unused dependencies in package manifests."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No network access needed.
 metadata:

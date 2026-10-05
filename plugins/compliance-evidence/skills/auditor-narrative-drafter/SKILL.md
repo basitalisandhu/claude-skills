@@ -1,6 +1,6 @@
 ---
 name: auditor-narrative-drafter
-description: "Draft short control narratives for an ISO 27001 or SOC 2 assessment strictly from a control map, with an inline citation [evidence: file#field] on every sentence that reports evidence, and lint any narrative (drafted or hand-edited) before it reaches the assessor. The linter rejects outcome claims without a citation, citations that do not trace to the control map, claims that disagree with the mapped state, unknown control identifiers, certainty wording such as \"fully compliant\", \"guarantees\" or \"100%\", long lines matching a forbidden-phrases list (to catch pasted framework text), and a missing preparation-for-assessor disclaimer. Use when writing control descriptions, PBC responses or audit narratives from evidence. Not for inventing narratives without evidence, not for policy writing, and never an audit opinion or attestation."
+description: "Draft short ISO 27001 or SOC 2 control narratives strictly from a control map, with an inline [evidence: file#field] citation on every evidence sentence, and lint any narrative for uncited claims, citations that do not trace, contradicted states, certainty wording and pasted framework text. Use when asked to \"write the control narrative for CC6.1\", or for PBC responses and audit narratives from evidence. Not for narratives without evidence, policy writing, or an audit opinion or attestation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads the JSON written by control-map-from-exports; makes no network calls.
 metadata:

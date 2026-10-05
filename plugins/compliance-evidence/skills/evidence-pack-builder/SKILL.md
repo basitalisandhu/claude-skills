@@ -1,6 +1,6 @@
 ---
 name: evidence-pack-builder
-description: Turn a folder of exports already on disk (GitHub, AWS, Microsoft 365 JSON, CSV or text) into an integrity-checked evidence pack for an ISO 27001 or SOC 2 assessment. A bundled script records who collected each file, when, from which system and with which command, computes a SHA-256 per file, writes manifest.json and a readable MANIFEST.md, re-verifies the pack later to catch modified or missing files, and flags evidence older than N days. Use when preparing audit evidence, handing exports to an assessor, answering "can we prove this file was not changed?", or checking which evidence is stale before an audit. Not for deciding whether a control is met (use control-map-from-exports), not for collecting data from live systems, and not an audit or attestation.
+description: "Turn a folder of exports already on disk into an integrity-checked ISO 27001 or SOC 2 evidence pack, recording who collected each file, when, from which system and with which command, with a SHA-256 per file, a manifest and later re-verification that flags changed, missing or stale files. Use when asked \"can we prove this file was not changed?\", or when handing evidence to an assessor. Not for deciding whether a control is met (control-map-from-exports), collecting data from live systems, or an attestation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. The script reads local files only and makes no network calls.
 metadata:

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>scp-guardrails: Generate and lint AWS Organizations service control policies (SCPs) | Claude Code skills</title>
-<meta name="description" content="Generate and lint AWS Organizations service control policies (SCPs). A bundled builder turns a short YAML or JSON spec (allowed regions, protected break-glass roles, deny leaving the organization, protect CloudTrail, GuardDuty, Security Hub and Config, deny root user, deny IAM users outside an identity account, require IMDSv2, deny public S3 ACLs) into deny-list SCP documents packed under the 5120-character limit; a bundled linter checks any SCP for Allow statements in deny-list SCPs, region denies that break global services, NotAction misuse, Principal elements, size and duplicate Sids. Use when writing, reviewing or debugging SCPs, when a region restriction broke IAM or STS, or before attaching a policy to an OU. Not for IAM identity policies (use iam-least-privilege-review) or for deciding the OU layout (landing-zone-blast-radius).">
+<title>scp-guardrails: Build AWS Organizations service control policies from a short spec | Claude Code skills</title>
+<meta name="description" content="Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. Use when asked &quot;why did our region SCP break IAM?&quot;, or when writing, reviewing or attaching an SCP. Not for IAM identity policies (iam-least-privilege-review) or the OU layout (landing-zone-blast-radius).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="scp-guardrails: Generate and lint AWS Organizations service control policies (SCPs) | Claude Code skills">
-<meta property="og:description" content="Generate and lint AWS Organizations service control policies (SCPs). A bundled builder turns a short YAML or JSON spec (allowed regions, protected break-glass roles, deny leaving the organization, protect CloudTrail, GuardDuty, Security Hub and Config, deny root user, deny IAM users outside an identity account, require IMDSv2, deny public S3 ACLs) into deny-list SCP documents packed under the 5120-character limit; a bundled linter checks any SCP for Allow statements in deny-list SCPs, region denies that break global services, NotAction misuse, Principal elements, size and duplicate Sids. Use when writing, reviewing or debugging SCPs, when a region restriction broke IAM or STS, or before attaching a policy to an OU. Not for IAM identity policies (use iam-least-privilege-review) or for deciding the OU layout (landing-zone-blast-radius).">
+<meta property="og:title" content="scp-guardrails: Build AWS Organizations service control policies from a short spec | Claude Code skills">
+<meta property="og:description" content="Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. Use when asked &quot;why did our region SCP break IAM?&quot;, or when writing, reviewing or attaching an SCP. Not for IAM identity policies (iam-least-privilege-review) or the OU layout (landing-zone-blast-radius).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "scp-guardrails",
- "description": "Generate and lint AWS Organizations service control policies (SCPs). A bundled builder turns a short YAML or JSON spec (allowed regions, protected break-glass roles, deny leaving the organization, protect CloudTrail, GuardDuty, Security Hub and Config, deny root user, deny IAM users outside an identity account, require IMDSv2, deny public S3 ACLs) into deny-list SCP documents packed under the 5120-character limit; a bundled linter checks any SCP for Allow statements in deny-list SCPs, region denies that break global services, NotAction misuse, Principal elements, size and duplicate Sids. Use when writing, reviewing or debugging SCPs, when a region restriction broke IAM or STS, or before attaching a policy to an OU. Not for IAM identity policies (use iam-least-privilege-review) or for deciding the OU layout (landing-zone-blast-radius).",
+ "description": "Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. Use when asked \"why did our region SCP break IAM?\", or when writing, reviewing or attaching an SCP. Not for IAM identity policies (iam-least-privilege-review) or the OU layout (landing-zone-blast-radius).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / scp-guardrails</p>
 <h1>SCP guardrails</h1>
-<p class="lede">Generate and lint AWS Organizations service control policies (SCPs). A bundled builder turns a short YAML or JSON spec (allowed regions, protected break-glass roles, deny leaving the organization, protect CloudTrail, GuardDuty, Security Hub and Config, deny root user, deny IAM users outside an identity account, require IMDSv2, deny public S3 ACLs) into deny-list SCP documents packed under the 5120-character limit; a bundled linter checks any SCP for Allow statements in deny-list SCPs, region denies that break global services, NotAction misuse, Principal elements, size and duplicate Sids. Use when writing, reviewing or debugging SCPs, when a region restriction broke IAM or STS, or before attaching a policy to an OU. Not for IAM identity policies (use iam-least-privilege-review) or for deciding the OU layout (landing-zone-blast-radius).</p>
-<p class="meta">Skill <code>scp-guardrails</code> in plugin <a href="../index.html">aws-security</a> 0.2.0, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md">plugins/aws-security/skills/scp-guardrails/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md">plugins/aws-security/skills/scp-guardrails/SKILL.md</a>.</p>
+<p class="lede">Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. Use when asked &quot;why did our region SCP break IAM?&quot;, or when writing, reviewing or attaching an SCP. Not for IAM identity policies (iam-least-privilege-review) or the OU layout (landing-zone-blast-radius).</p>
+<p class="meta">Skill <code>scp-guardrails</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md">plugins/aws-security/skills/scp-guardrails/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md">plugins/aws-security/skills/scp-guardrails/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

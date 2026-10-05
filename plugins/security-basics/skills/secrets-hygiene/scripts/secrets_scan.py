@@ -96,7 +96,7 @@ def iter_files(root: Path, excludes: set[str]):
 
 
 def staged_files(root: Path) -> list[Path]:
-    proc = subprocess.run(["git", "-C", str(root), "diff", "--cached", "--name-only", "--diff-filter=ACMR"], capture_output=True, text=True)
+    proc = subprocess.run(["git", "-C", str(root), "diff", "--cached", "--name-only", "--diff-filter=ACMR"], capture_output=True, text=True, encoding="utf-8", errors="replace")
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or "git diff failed")
     return [root / line for line in proc.stdout.splitlines() if line and (root / line).is_file()]
@@ -141,11 +141,14 @@ def check_env_hygiene(root: Path) -> list[dict]:
         if env.name in {".env.example", ".env.sample", ".env.template", ".env.dist"}:
             continue
         if not ignores_env:
-            out.append({"rule": "env-file-not-ignored", "severity": "high", "file": str(env.relative_to(root)), "line": 0, "evidence": "no .env rule in .gitignore", "fingerprint": hashlib.sha256(f"{env.relative_to(root)}\nenv-file-not-ignored".encode()).hexdigest()[:16]})
+            out.append({"rule": "env-file-not-ignored", "severity": "high", "file": env.relative_to(root).as_posix(), "line": 0, "evidence": "no .env rule in .gitignore", "fingerprint": hashlib.sha256(f"{env.relative_to(root)}\nenv-file-not-ignored".encode()).hexdigest()[:16]})
     return out
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path", nargs="?", default=".")
     ap.add_argument("--staged", action="store_true", help="scan only files staged in git (pre-commit use)")
@@ -172,7 +175,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         if b"\0" in data[:8000]:
             continue
-        rel = str(f.relative_to(root)) if root.is_dir() else str(f)
+        rel = f.relative_to(root).as_posix() if root.is_dir() else str(f)
         findings += scan_text(rel, data.decode("utf-8", errors="replace"))
     findings += check_env_hygiene(root)
     baseline: set[str] = set()

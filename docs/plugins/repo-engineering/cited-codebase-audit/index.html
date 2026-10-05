@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cited-codebase-audit: Audit a whole repository against a fixed checklist | Claude Code skills</title>
-<meta name="description" content="Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve. Starts from a deterministic inventory script. Use when asked to &quot;audit this codebase&quot;, &quot;review the repo health&quot;, &quot;what is wrong with this repository?&quot;, &quot;assess tech debt&quot;, before taking over or acquiring a codebase, or when a previous audit was too vague to act on. Not for reviewing a single diff or pull request (use a code review skill), not a vulnerability scanner, and not for performance profiling.">
+<meta name="description" content="Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. Use when asked to &quot;audit this codebase&quot;, to assess tech debt, or for technical due diligence before taking over or acquiring a codebase. Not for reviewing a single diff, vulnerability scanning, or performance profiling.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/cited-codebase-audit/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="cited-codebase-audit: Audit a whole repository against a fixed checklist | Claude Code skills">
-<meta property="og:description" content="Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve. Starts from a deterministic inventory script. Use when asked to &quot;audit this codebase&quot;, &quot;review the repo health&quot;, &quot;what is wrong with this repository?&quot;, &quot;assess tech debt&quot;, before taking over or acquiring a codebase, or when a previous audit was too vague to act on. Not for reviewing a single diff or pull request (use a code review skill), not a vulnerability scanner, and not for performance profiling.">
+<meta property="og:description" content="Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. Use when asked to &quot;audit this codebase&quot;, to assess tech debt, or for technical due diligence before taking over or acquiring a codebase. Not for reviewing a single diff, vulnerability scanning, or performance profiling.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/cited-codebase-audit/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "cited-codebase-audit",
- "description": "Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve. Starts from a deterministic inventory script. Use when asked to \"audit this codebase\", \"review the repo health\", \"what is wrong with this repository?\", \"assess tech debt\", before taking over or acquiring a codebase, or when a previous audit was too vague to act on. Not for reviewing a single diff or pull request (use a code review skill), not a vulnerability scanner, and not for performance profiling.",
+ "description": "Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. Use when asked to \"audit this codebase\", to assess tech debt, or for technical due diligence before taking over or acquiring a codebase. Not for reviewing a single diff, vulnerability scanning, or performance profiling.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/cited-codebase-audit/",
  "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / cited-codebase-audit</p>
 <h1>Cited codebase audit</h1>
-<p class="lede">Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve. Starts from a deterministic inventory script. Use when asked to &quot;audit this codebase&quot;, &quot;review the repo health&quot;, &quot;what is wrong with this repository?&quot;, &quot;assess tech debt&quot;, before taking over or acquiring a codebase, or when a previous audit was too vague to act on. Not for reviewing a single diff or pull request (use a code review skill), not a vulnerability scanner, and not for performance profiling.</p>
-<p class="meta">Skill <code>cited-codebase-audit</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md">plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md">plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md</a>.</p>
+<p class="lede">Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. Use when asked to &quot;audit this codebase&quot;, to assess tech debt, or for technical due diligence before taking over or acquiring a codebase. Not for reviewing a single diff, vulnerability scanning, or performance profiling.</p>
+<p class="meta">Skill <code>cited-codebase-audit</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md">plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md">plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

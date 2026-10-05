@@ -1,6 +1,6 @@
 ---
 name: repo-onboarding-guide
-description: Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result. Use when asked to "write an onboarding doc", "how do I get started in this repo?", "explain this codebase to a new hire or contractor", "write a getting-started or architecture overview", or to refresh an onboarding guide that has drifted. Not for generating diagrams or a knowledge graph, not for API reference docs, and not for rewriting a README's first screen (use readme-who-what-why).
+description: "Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. Use when asked \"how do I get started in this repo?\" or to write or refresh an onboarding doc for a new hire. Not for diagrams, API reference docs, or a README's first screen (readme-who-what-why)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:
@@ -120,3 +120,4 @@ Exit codes: `onboarding_facts.py` 0 or 2 (bad input); `onboarding_lint.py` 0 whe
 - `docs-truth-check` checks the finished guide's paths, flags, defaults and targets.
 - `cited-codebase-audit` uses a similar inventory (`repo_facts.py`) for audits rather than onboarding.
 - `readme-who-what-why` for the README's first screen.
+- `onboarding-doc` (docs plugin, claude-dev-skills): repo-onboarding-guide cites a path:line fact for every sentence; onboarding-doc is the freehand version for non-code processes and teams.

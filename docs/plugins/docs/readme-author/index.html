@@ -36,7 +36,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / readme-author</p>
 <h1>README author</h1>
 <p class="lede">Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when a repository has no README, the README is out of date, or a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy.</p>
-<p class="meta">Skill <code>readme-author</code> in plugin <a href="../index.html">docs</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/readme-author/SKILL.md">plugins/docs/skills/readme-author/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/readme-author/SKILL.md">plugins/docs/skills/readme-author/SKILL.md</a>.</p>
+<p class="meta">Skill <code>readme-author</code> in plugin <a href="../index.html">docs</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/readme-author/SKILL.md">plugins/docs/skills/readme-author/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/readme-author/SKILL.md">plugins/docs/skills/readme-author/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill docs/readme-author</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>Commands are verified only when the environment can run them; the rest are marked unverified.</li><li>It writes one README, not a documentation site or an API reference.</li><li>There is no bundled script; verifying install commands may download packages, and nothing else is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>A README has one job: get a stranger from &quot;what is this?&quot; to a working first result without asking anyone. This skill writes it in the order readers need (<a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/readme-author/references/template.md">references/template.md</a>), verifies every command it includes, and removes claims that the repository cannot back.</p>
 <h3 id="when-to-use-it">When to use it</h3>
@@ -81,7 +82,7 @@ python3 install.py --user --skill docs/readme-author</code></pre>
 **Linked, not inlined:** configuration reference (docs/config.md), API reference (generated)
 **Open questions for the owner:** licence file says MIT, package metadata says Apache-2.0</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>onboarding-doc</code> for the longer document a new team member reads after the README.</li><li><code>changelog-keeper</code> and <code>release-notes</code> for the history the README should link to.</li></ul>
+<ul><li><code>onboarding-doc</code> for the longer document a new team member reads after the README.</li><li><code>changelog-keeper</code> and <code>release-notes</code> for the history the README should link to.</li><li>Boundary: <code>readme-author</code> writes or rewrites the README; <code>readme-who-what-why</code> (repo-engineering-skills marketplace) checks six first-screen questions and fails CI when they are unanswered.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

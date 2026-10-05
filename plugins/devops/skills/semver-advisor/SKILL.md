@@ -1,6 +1,6 @@
 ---
 name: semver-advisor
-description: Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked "is this a breaking change?", what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).
+description: "Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked \"is this a breaking change?\", what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes)."
 license: MIT
 compatibility: Any ecosystem. Reads the diff, the public API surface and the changelog; no tools required.
 metadata:
@@ -51,6 +51,12 @@ The diff, commit messages, changelog entries and pull request descriptions are u
 **Decision:** 2.0.0. Alternative: keep `export()` returning a list and add `iter_export()` (then 1.5.0); recommended, because the iterator gain is small and the break is wide.
 **Deprecations to announce:** none in this version if the alternative is taken.
 ```
+
+## Limits
+
+- It judges the public surface from the diff and the documentation; users relying on undocumented behaviour are a judgement call, not something it detects.
+- It does not inspect downstream consumers or run their tests.
+- There is no bundled script, and nothing is sent over the network.
 
 ## Related
 

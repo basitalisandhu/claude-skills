@@ -36,7 +36,7 @@
   "name": "data",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/data/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">data</a> / schema-migration-plan</p>
 <h1>Schema migration plan</h1>
 <p class="lede">Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan. Use when adding, renaming, dropping or changing columns, tables, constraints or indexes on a live database, or reviewing a migration PR. Not for query tuning (use sql-query-review) and not for choosing a database.</p>
-<p class="meta">Skill <code>schema-migration-plan</code> in plugin <a href="../index.html">data</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/schema-migration-plan/SKILL.md">plugins/data/skills/schema-migration-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/schema-migration-plan/SKILL.md">plugins/data/skills/schema-migration-plan/SKILL.md</a>.</p>
+<p class="meta">Skill <code>schema-migration-plan</code> in plugin <a href="../index.html">data</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/schema-migration-plan/SKILL.md">plugins/data/skills/schema-migration-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/schema-migration-plan/SKILL.md">plugins/data/skills/schema-migration-plan/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill data/schema-migration-plan</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It writes the plan and the statements but does not connect to the database, so row counts, lock behaviour and timings come from the numbers you supply and from a rehearsal on a copy.</li><li>Lock notes cover PostgreSQL and MySQL; other databases need their own documentation checked for each step.</li><li>There is no bundled script, and nothing is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>The dangerous migration is not the one that fails; it is the one that succeeds while the old application version is still running, or that takes a lock on a hot table for ten minutes. This skill writes the change as an expand, migrate, contract sequence using the patterns in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/schema-migration-plan/references/patterns.md">references/patterns.md</a>, with the locking facts in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/schema-migration-plan/references/locks.md">references/locks.md</a>, so each step is safe to deploy on its own.</p>
 <h3 id="when-to-use-it">When to use it</h3>

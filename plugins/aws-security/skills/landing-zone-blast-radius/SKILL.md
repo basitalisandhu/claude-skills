@@ -1,6 +1,6 @@
 ---
 name: landing-zone-blast-radius
-description: Design an AWS Organizations landing zone with one account per workload and environment, and show the blast radius of each account. A bundled script takes a workload list (name, environment, data classification, internet-facing, cross-account dependencies) and produces the OU tree, account names and root email pattern, the foundation accounts (management, log-archive, security-tooling, shared-services, network), which SCP guardrails attach where, and a table of what a compromise of each account can reach. Use when planning a new AWS organization, splitting a shared account, adding a workload, or explaining why one account per workload matters. Not for auditing an existing account (aws-account-audit) or writing the SCP JSON (scp-guardrails).
+description: "Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. A bundled script turns a workload list into the OU tree, account names, foundation accounts and where SCP guardrails attach. Use when asked \"how should we split our AWS accounts?\", when planning a new organization, splitting a shared account or adding a workload. Not for auditing an existing account (aws-account-audit) or writing SCP JSON (scp-guardrails)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Pure logic; no AWS access.
 metadata:

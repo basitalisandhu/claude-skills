@@ -1,6 +1,6 @@
 ---
 name: restructure-planner
-description: Plan a repository restructure (split a package or a monorepo, merge packages, fix module boundaries) from the real import graph instead of a guess, using a bundled script that reads Python imports with ast and JS or TS imports and requires with regex, then reports the most coupled files, import cycles, files importing from many packages and god modules, and proposes a move plan as a table (file, from, to, reason, blast radius as the number of importers) with the exact git mv commands, which it prints and never runs. Use when asked "how should we split this package?", "untangle this module", "break the import cycle", "where are the module boundaries?", "plan a monorepo split or merge", or before a large refactor that moves files. Not for renaming symbols or rewriting code, not a build or bundler analysis, and not for languages other than Python, JavaScript and TypeScript.
+description: "Plan a repository restructure (split or merge packages, fix module boundaries) from the real import dependency graph of Python, JavaScript and TypeScript files, reporting the most coupled files, import cycles and god modules, and proposing a move plan with blast radius and git mv commands it prints and never runs. Use when asked \"how should we split this package?\" or to break an import cycle before a large refactor. Not for renaming symbols, build or bundler analysis, or other languages."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:

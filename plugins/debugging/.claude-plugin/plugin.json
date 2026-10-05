@@ -1,7 +1,7 @@
 {
   "name": "debugging",
   "displayName": "Debugging",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Six skills for finding the cause of a failure: minimise a bug reproduction, cluster log lines, find flaky tests in JUnit XML, explain a stack trace, summarise a py-spy, pprof or cProfile profile, and work a memory leak checklist.",
   "author": {
     "name": "Muhammad Basit Ali",

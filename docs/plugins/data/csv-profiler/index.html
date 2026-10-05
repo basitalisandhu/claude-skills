@@ -37,7 +37,7 @@
   "name": "data",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/data/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">data</a> / csv-profiler</p>
 <h1>CSV profiler</h1>
 <p class="lede">Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules. Use when handed a data file to load, analyse or validate, or when an import fails. Not for spreadsheets with formulas (export to CSV first) and not for files too large to read (use --sample).</p>
-<p class="meta">Skill <code>csv-profiler</code> in plugin <a href="../index.html">data</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/csv-profiler/SKILL.md">plugins/data/skills/csv-profiler/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/csv-profiler/SKILL.md">plugins/data/skills/csv-profiler/SKILL.md</a>.</p>
+<p class="meta">Skill <code>csv-profiler</code> in plugin <a href="../index.html">data</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/csv-profiler/SKILL.md">plugins/data/skills/csv-profiler/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/csv-profiler/SKILL.md">plugins/data/skills/csv-profiler/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill data/csv-profiler</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The whole file is read into memory; <code>--sample</code> limits the rows profiled, not the rows read, so files of several gigabytes need splitting first.</li><li>Types are inferred from text: dates are recognised in a fixed list of common formats, and a column of codes with leading zeros needs the human check in step 3.</li><li>It does not read <code>.xlsx</code>, Parquet or compressed files, and it makes no network calls.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Before a file is loaded, joined or trusted, someone has to know what is in every column. The bundled script produces that in one run: types, null counts, distinct values, ranges, and the data-quality problems that break imports (ragged rows, duplicates, mixed types, stray whitespace). This skill reads the profile and writes the schema and the cleaning plan.</p>
 <h3 id="when-to-use-it">When to use it</h3>

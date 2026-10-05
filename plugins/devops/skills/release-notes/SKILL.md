@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing.
+description: "Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3; git for reading history (local only, no network). Works without git from a captured log.
 metadata:
@@ -63,7 +63,14 @@ Faster exports and a new webhook retry policy. Upgrading from 1.3 needs one conf
 Thanks to @external-contributor for #398.
 ```
 
+## Limits
+
+- Grouping depends on commit messages: commits without a Conventional Commits prefix are classified by keywords in the subject and can land in the wrong group, which is why step 3 edits the draft.
+- Merge commits are skipped and pull request titles, labels and descriptions are not read.
+- It runs `git log` locally and never contacts GitHub or the network.
+
 ## Related
 
 - `semver-advisor` decides whether this is 1.4.0 or 2.0.0.
 - `changelog-keeper` writes the same content into CHANGELOG.md in the Keep a Changelog format.
+- Boundary: `release-notes` drafts notes from commits; `release-notes-verifier` (repo-engineering-skills marketplace) checks finished notes against the tag range and runs as a CI gate.

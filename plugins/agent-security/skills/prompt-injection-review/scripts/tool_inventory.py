@@ -82,7 +82,7 @@ def scan_file(path: Path, root: Path) -> tuple[list[dict], list[dict], list[dict
     except OSError:
         return tools, readers, descriptions
     lines = text.splitlines()
-    rel = str(path.relative_to(root))
+    rel = path.relative_to(root).as_posix()
     if path.suffix == ".py":
         for i, line in enumerate(lines):
             if any(p.match(line) for p in PY_PATTERNS):

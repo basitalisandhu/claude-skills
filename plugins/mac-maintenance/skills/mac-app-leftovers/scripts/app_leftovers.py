@@ -280,7 +280,9 @@ def startup_leftovers(home: Path, commands: bool, timeout: int) -> dict:
                 continue
             program = plist.get("Program") or (plist.get("ProgramArguments") or [None])[0]
             if program and "/" in str(program) and not Path(str(program)).exists():
-                domain = "system" if system else f"gui/{os.getuid()}"
+                # os.getuid exists only on POSIX; elsewhere leave the uid for the shell to fill in.
+                uid = str(os.getuid()) if hasattr(os, "getuid") else "$(id -u)"
+                domain = "system" if system else f"gui/{uid}"
                 fix = (f"sudo launchctl bootout {domain} {plist_path} && sudo rm {plist_path}" if system
                        else f"launchctl bootout {domain} {plist_path} && rm {plist_path}")
                 out[key].append({"plist": str(plist_path), "program": str(program), "fix": fix})

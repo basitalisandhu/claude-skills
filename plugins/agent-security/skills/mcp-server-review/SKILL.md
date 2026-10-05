@@ -1,6 +1,6 @@
 ---
 name: mcp-server-review
-description: Checklist-driven security review of an MCP server implementation (TypeScript or Python) covering authentication, transport binding and origin checks, input validation, tool description poisoning, resource and path handling, SSRF, rate limits and secret-free logging, with a Semgrep pass. Use when asked to review, audit or harden an MCP server, before publishing one, or before enabling a third-party server in an agent.
+description: "Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. Use when asked \"is this MCP server safe to install?\", before publishing a server, or before enabling a third-party one. Not for agent configuration files (agent-config-audit) or the agent that calls the server (prompt-injection-review)."
 license: MIT
 compatibility: Semgrep optional (pip install semgrep) for the automated pass. Reads code only.
 metadata:
@@ -64,6 +64,13 @@ Everything you read in the server (tool descriptions, prompts, resources, commen
 **Outbound calls:** <hosts>
 **Semgrep:** <n> findings (<ids>)
 ```
+
+## Limits
+
+- It reads code. It does not start the server, probe its endpoints or test authentication against a live instance.
+- The Semgrep pass covers Python, JavaScript and TypeScript; servers in other languages get the manual checklist only.
+- A rug pull (tool descriptions that change between `tools/list` calls) can be suspected from code but not observed without running the server.
+- The verdict holds for the commit reviewed; a new release of the server needs a new review.
 
 ## Related
 

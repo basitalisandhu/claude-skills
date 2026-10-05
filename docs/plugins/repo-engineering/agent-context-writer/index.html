@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>agent-context-writer: Write or refresh AGENTS.md and CLAUDE.md so they hold only what | Claude Code skills</title>
-<meta name="description" content="Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget. Use when asked to create, write, update, shorten or clean up AGENTS.md, CLAUDE.md or another agent context file, after /init produced a long file, or when agents keep ignoring a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (a security review), and not for human onboarding docs.">
+<meta name="description" content="Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. Use when asked to &quot;shorten our CLAUDE.md&quot;, after /init produced a long file, or when agents ignore a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (agent-config-audit), or human onboarding docs.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/agent-context-writer/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="agent-context-writer: Write or refresh AGENTS.md and CLAUDE.md so they hold only what | Claude Code skills">
-<meta property="og:description" content="Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget. Use when asked to create, write, update, shorten or clean up AGENTS.md, CLAUDE.md or another agent context file, after /init produced a long file, or when agents keep ignoring a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (a security review), and not for human onboarding docs.">
+<meta property="og:description" content="Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. Use when asked to &quot;shorten our CLAUDE.md&quot;, after /init produced a long file, or when agents ignore a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (agent-config-audit), or human onboarding docs.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/agent-context-writer/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-context-writer",
- "description": "Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget. Use when asked to create, write, update, shorten or clean up AGENTS.md, CLAUDE.md or another agent context file, after /init produced a long file, or when agents keep ignoring a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (a security review), and not for human onboarding docs.",
+ "description": "Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. Use when asked to \"shorten our CLAUDE.md\", after /init produced a long file, or when agents ignore a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (agent-config-audit), or human onboarding docs.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/agent-context-writer/",
  "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "repo-engineering",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">repo-engineering</a> / agent-context-writer</p>
 <h1>Agent context writer</h1>
-<p class="lede">Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget. Use when asked to create, write, update, shorten or clean up AGENTS.md, CLAUDE.md or another agent context file, after /init produced a long file, or when agents keep ignoring a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (a security review), and not for human onboarding docs.</p>
-<p class="meta">Skill <code>agent-context-writer</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/agent-context-writer/SKILL.md">plugins/repo-engineering/skills/agent-context-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/agent-context-writer/SKILL.md">plugins/repo-engineering/skills/agent-context-writer/SKILL.md</a>.</p>
+<p class="lede">Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. Use when asked to &quot;shorten our CLAUDE.md&quot;, after /init produced a long file, or when agents ignore a bloated context file. Not for auditing agent permissions, hooks or MCP configuration (agent-config-audit), or human onboarding docs.</p>
+<p class="meta">Skill <code>agent-context-writer</code> in plugin <a href="../index.html">repo-engineering</a> 0.3.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/agent-context-writer/SKILL.md">plugins/repo-engineering/skills/agent-context-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/repo-engineering-skills">repo-engineering-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/repo-engineering/skills/agent-context-writer/SKILL.md">plugins/repo-engineering/skills/agent-context-writer/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -91,7 +91,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/agent-context-writer/scripts/context_
 ## Where to look first
 - &lt;task&gt;: start at `&lt;path&gt;`</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>docs-truth-check</code> verifies paths, flags and symbols in AGENTS.md and CLAUDE.md along with the rest of the docs.</li><li><code>readme-who-what-why</code> for the README, which is written for people rather than agents.</li></ul>
+<ul><li><code>docs-truth-check</code> verifies paths, flags and symbols in AGENTS.md and CLAUDE.md along with the rest of the docs.</li><li><code>readme-who-what-why</code> for the README, which is written for people rather than agents.</li><li><code>agent-config-audit</code> (agent-security-skills) audits agent configuration for risk; this skill writes a lean AGENTS.md or CLAUDE.md and does not judge permissions, hooks or MCP servers.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/repo-engineering-skills/issues">repo-engineering-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

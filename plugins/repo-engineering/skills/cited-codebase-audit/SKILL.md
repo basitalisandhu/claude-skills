@@ -1,6 +1,6 @@
 ---
 name: cited-codebase-audit
-description: Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve. Starts from a deterministic inventory script. Use when asked to "audit this codebase", "review the repo health", "what is wrong with this repository?", "assess tech debt", before taking over or acquiring a codebase, or when a previous audit was too vague to act on. Not for reviewing a single diff or pull request (use a code review skill), not a vulnerability scanner, and not for performance profiling.
+description: "Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. Use when asked to \"audit this codebase\", to assess tech debt, or for technical due diligence before taking over or acquiring a codebase. Not for reviewing a single diff, vulnerability scanning, or performance profiling."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:

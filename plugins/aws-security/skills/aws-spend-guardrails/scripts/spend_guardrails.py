@@ -54,13 +54,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path.insert(1, str(HERE.parents[1] / "scp-guardrails" / "scripts"))
 
 from _miniyaml import YAMLError  # noqa: E402
 from _miniyaml import load as yaml_load  # noqa: E402
-from scp_builder import SpecError as BuilderSpecError  # noqa: E402
-from scp_builder import exemption, pack, with_condition  # noqa: E402
-from scp_lint import compact, lint_policy  # noqa: E402
+from _scp_builder import SpecError as BuilderSpecError  # noqa: E402
+from _scp_builder import exemption, pack, with_condition  # noqa: E402
+from _scp_lint import compact, lint_policy  # noqa: E402
 
 LEVELS = ["high", "medium", "low"]
 SCP_LIMIT = 5120

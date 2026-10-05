@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>secrets-hygiene: Scan a repository | Claude Code skills</title>
-<meta name="description" content="Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found. Use when asked to check for secrets, before open-sourcing a repository, to set up a pre-commit hook, or after a credential leak. Not a secret manager and not a replacement for the platform&#x27;s secret scanning (it complements it locally and offline).">
+<title>secrets-hygiene: Find leaked credentials | Claude Code skills</title>
+<meta name="description" content="Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup. Use when asked &quot;did I commit a secret?&quot;, before open-sourcing, to add a pre-commit hook, or after a leak. Not for managing secrets or replacing the platform&#x27;s secret scanning; it complements it offline.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="secrets-hygiene: Scan a repository | Claude Code skills">
-<meta property="og:description" content="Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found. Use when asked to check for secrets, before open-sourcing a repository, to set up a pre-commit hook, or after a credential leak. Not a secret manager and not a replacement for the platform&#x27;s secret scanning (it complements it locally and offline).">
+<meta property="og:title" content="secrets-hygiene: Find leaked credentials | Claude Code skills">
+<meta property="og:description" content="Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup. Use when asked &quot;did I commit a secret?&quot;, before open-sourcing, to add a pre-commit hook, or after a leak. Not for managing secrets or replacing the platform&#x27;s secret scanning; it complements it offline.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "secrets-hygiene",
- "description": "Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found. Use when asked to check for secrets, before open-sourcing a repository, to set up a pre-commit hook, or after a credential leak. Not a secret manager and not a replacement for the platform's secret scanning (it complements it locally and offline).",
+ "description": "Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup. Use when asked \"did I commit a secret?\", before open-sourcing, to add a pre-commit hook, or after a leak. Not for managing secrets or replacing the platform's secret scanning; it complements it offline.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "security-basics",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">security-basics</a> / secrets-hygiene</p>
 <h1>Secrets hygiene</h1>
-<p class="lede">Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found. Use when asked to check for secrets, before open-sourcing a repository, to set up a pre-commit hook, or after a credential leak. Not a secret manager and not a replacement for the platform&#x27;s secret scanning (it complements it locally and offline).</p>
-<p class="meta">Skill <code>secrets-hygiene</code> in plugin <a href="../index.html">security-basics</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/secrets-hygiene/SKILL.md">plugins/security-basics/skills/secrets-hygiene/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/secrets-hygiene/SKILL.md">plugins/security-basics/skills/secrets-hygiene/SKILL.md</a>.</p>
+<p class="lede">Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup. Use when asked &quot;did I commit a secret?&quot;, before open-sourcing, to add a pre-commit hook, or after a leak. Not for managing secrets or replacing the platform&#x27;s secret scanning; it complements it offline.</p>
+<p class="meta">Skill <code>secrets-hygiene</code> in plugin <a href="../index.html">security-basics</a> 0.1.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/secrets-hygiene/SKILL.md">plugins/security-basics/skills/secrets-hygiene/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/secrets-hygiene/SKILL.md">plugins/security-basics/skills/secrets-hygiene/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -88,7 +88,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/secrets-hygiene/scripts/secrets_scan.
 **Baseline:** `.secrets-baseline.json` with 2 accepted fingerprints. **Pre-commit:** installed. **CI:** `--fail-on medium --baseline`.
 **Access review:** provider access log for the key: no unrecognised calls in 90 days.</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>env-diff</code> in devops for template values that look real.</li><li>The agent-security-skills marketplace for scanning agent configuration and instruction files specifically.</li></ul>
+<ul><li><code>env-diff</code> in devops for template values that look real.</li><li>The agent-security-skills marketplace for scanning agent configuration and instruction files specifically.</li><li>Boundary: <code>secrets-hygiene</code> hunts credential-shaped values in the working tree or staged files; <code>env-diff</code> compares key names across env files and never prints a value.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/claude-dev-skills/issues">claude-dev-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

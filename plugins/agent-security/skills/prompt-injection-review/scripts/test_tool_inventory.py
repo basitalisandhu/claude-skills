@@ -47,10 +47,10 @@ class InventoryTests(unittest.TestCase):
     def test_python_and_typescript_tools(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            (root / "agent.py").write_text(PY)
-            (root / "server.ts").write_text(TS)
+            (root / "agent.py").write_text(PY, encoding="utf-8")
+            (root / "server.ts").write_text(TS, encoding="utf-8")
             (root / "node_modules").mkdir()
-            (root / "node_modules" / "x.js").write_text('server.registerTool("ignored", {}, async () => {})')
+            (root / "node_modules" / "x.js").write_text('server.registerTool("ignored", {}, async () => {})', encoding="utf-8")
             inv = ti.inventory(root)
             names = {t["name"]: t for t in inv["tools"]}
             for n in ["get_webpage", "send_email", "list_contacts", "send_money", "delete_file", "search_docs", "post_message"]:

@@ -1,6 +1,6 @@
 ---
 name: semgrep-agentic
-description: "Run the agentic-semgrep-rules pack (36 rules for Python, JavaScript and TypeScript agent code: model output reaching exec, shells, SQL, URLs, file paths and HTML; user input in system prompts; tool parameters reaching shells and paths; MCP servers without auth or bound to every interface; leaked provider keys; unsafe model and config loading) against a repository, fall back to the bundled offline rules, and triage the results. Use when asked to scan agent code for security issues, add agent-security rules to CI, or as the code step of an agent security audit."
+description: "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour."
 license: MIT
 compatibility: Semgrep CLI 1.179 or later (pip install semgrep, or brew install semgrep). Bundled fallback rules run offline with --metrics=off.
 metadata:
@@ -96,6 +96,13 @@ Upstream ids are bare (`llm-output-to-exec-eval`); when Semgrep loads them from 
 Upstream rules with no bundled counterpart, worth knowing by name: `llm-output-to-sql`, `llm-output-to-file-path`, `llm-output-to-html`, `llm-output-to-innerhtml`, `agent-tool-param-to-file-path`, `mcp-tool-param-to-file-path`, `langchain-allow-dangerous-code`, `langchain-allow-dangerous-requests`, `langchain-dangerous-tools`, `langchain-allow-dangerous-deserialization`, `transformers-trust-remote-code`, `yaml-unsafe-load`, `hardcoded-llm-api-key`, `llm-api-key-logged`, `api-key-in-command-line-arg`.
 
 Test the bundled set with `semgrep --metrics=off --test --config rules/agentic-python.yaml rules/tests/agentic-python.py` (and the JavaScript pair); fixtures carry `ruleid` and `ok` annotations, the same convention as upstream.
+
+## Limits
+
+- The rules cover Python, JavaScript and TypeScript, plus JSON agent configuration in the bundled set. Other languages and runtime behaviour are not covered.
+- Pattern matching misses flows that cross files or services and can flag safe code, so every hit needs triage.
+- The bundled fallback has fewer sources and sinks than the upstream pack; the report must say which pack ran.
+- It needs the Semgrep CLI. Without it the skill stops and gives the install command instead of guessing results.
 
 ## Related
 

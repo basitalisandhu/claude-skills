@@ -1,6 +1,6 @@
 ---
 name: secure-agent-checklist
-description: Pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, producing a markdown report with pass, fail or n.a. per item and the evidence behind each verdict. Use before deploying, open-sourcing or demoing an agent, when asked "is this agent safe to ship", or to turn review findings into a go/no-go decision.
+description: "Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked \"is this agent safe to ship?\" or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision."
 license: MIT
 compatibility: No dependencies. Uses the other agent-security skills for evidence when they are available.
 metadata:
@@ -51,6 +51,12 @@ See [references/report-template.md](references/report-template.md). Summary shap
 |---|---|---|---|---|
 | Identity | Each agent has its own credential | fail | OPENAI_API_KEY shared by 3 services (.env.example:4) | Issue one credential per service |
 ```
+
+## Limits
+
+- There is no script. Each verdict rests on the evidence gathered, and an item that cannot be verified is marked fail, not pass.
+- It consumes the component reviews rather than replacing them; a pass is only as strong as the evidence behind it.
+- It covers the eight areas in the checklist. Privacy, legal and product safety reviews are outside it.
 
 ## Related
 

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>iteration-report: Write a team-level iteration or sprint report from saved gh pr list | Claude Code skills</title>
-<meta name="description" content="Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from. Use when asked &quot;write the sprint report&quot;, &quot;what did we ship this iteration?&quot;, &quot;what carried over?&quot;, &quot;what is our cycle time?&quot;, or &quot;summarise the milestone for the stakeholder update&quot;. Not for per-person output, rankings or performance reviews, not for planning the next sprint, and not for teams whose work is tracked outside GitHub.">
+<title>iteration-report: Write a team-level sprint or iteration report from saved gh pull | Claude Code skills</title>
+<meta name="description" content="Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. Use when asked &quot;what did we ship this sprint?&quot;, for a milestone summary or a stakeholder update. Not for per-person output or performance reviews, sprint planning, or work tracked outside GitHub.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/iteration-report/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="iteration-report: Write a team-level iteration or sprint report from saved gh pr list | Claude Code skills">
-<meta property="og:description" content="Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from. Use when asked &quot;write the sprint report&quot;, &quot;what did we ship this iteration?&quot;, &quot;what carried over?&quot;, &quot;what is our cycle time?&quot;, or &quot;summarise the milestone for the stakeholder update&quot;. Not for per-person output, rankings or performance reviews, not for planning the next sprint, and not for teams whose work is tracked outside GitHub.">
+<meta property="og:title" content="iteration-report: Write a team-level sprint or iteration report from saved gh pull | Claude Code skills">
+<meta property="og:description" content="Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. Use when asked &quot;what did we ship this sprint?&quot;, for a milestone summary or a stakeholder update. Not for per-person output or performance reviews, sprint planning, or work tracked outside GitHub.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/iteration-report/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "iteration-report",
- "description": "Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from. Use when asked \"write the sprint report\", \"what did we ship this iteration?\", \"what carried over?\", \"what is our cycle time?\", or \"summarise the milestone for the stakeholder update\". Not for per-person output, rankings or performance reviews, not for planning the next sprint, and not for teams whose work is tracked outside GitHub.",
+ "description": "Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. Use when asked \"what did we ship this sprint?\", for a milestone summary or a stakeholder update. Not for per-person output or performance reviews, sprint planning, or work tracked outside GitHub.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/iteration-report/",
  "codeRepository": "https://github.com/basitalisandhu/github-manager-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "github-manager",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/github-manager/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">github-manager</a> / iteration-report</p>
 <h1>Iteration report</h1>
-<p class="lede">Write a team-level iteration or sprint report from saved gh pr list, gh issue list and milestone exports, with a bundled script that lists what shipped (merged PRs with the issues they close), what carried over, what was newly opened, what was closed as not planned and which PRs merged outside the window, and computes cycle time (median and p90, from first commit or from PR creation, stated) and review turnaround (median), every number followed by the PR or issue rows it came from. Use when asked &quot;write the sprint report&quot;, &quot;what did we ship this iteration?&quot;, &quot;what carried over?&quot;, &quot;what is our cycle time?&quot;, or &quot;summarise the milestone for the stakeholder update&quot;. Not for per-person output, rankings or performance reviews, not for planning the next sprint, and not for teams whose work is tracked outside GitHub.</p>
-<p class="meta">Skill <code>iteration-report</code> in plugin <a href="../index.html">github-manager</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/iteration-report/SKILL.md">plugins/github-manager/skills/iteration-report/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/iteration-report/SKILL.md">plugins/github-manager/skills/iteration-report/SKILL.md</a>.</p>
+<p class="lede">Write a team-level sprint or iteration report from saved gh pull request, issue and milestone exports, listing what shipped, carried over, was opened or was closed as not planned, with cycle time (median and p90) and review turnaround, every number cited to its rows. Use when asked &quot;what did we ship this sprint?&quot;, for a milestone summary or a stakeholder update. Not for per-person output or performance reviews, sprint planning, or work tracked outside GitHub.</p>
+<p class="meta">Skill <code>iteration-report</code> in plugin <a href="../index.html">github-manager</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/github-manager-skills/blob/main/plugins/github-manager/skills/iteration-report/SKILL.md">plugins/github-manager/skills/iteration-report/SKILL.md</a> in <a href="https://github.com/basitalisandhu/github-manager-skills">github-manager-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/github-manager/skills/iteration-report/SKILL.md">plugins/github-manager/skills/iteration-report/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -99,7 +99,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/iteration-report/scripts/iteration_re
 
 ### Shipped / Carried over / Completed / Newly opened (tables with links)</code></pre>
 <h3 id="related">Related</h3>
-<ul><li><code>pr-queue-digest</code> for what is stuck right now.</li><li><code>incident-postmortem-timeline</code> when an incident took part of the iteration.</li></ul>
+<ul><li><code>pr-queue-digest</code> for what is stuck right now.</li><li><code>incident-postmortem-timeline</code> when an incident took part of the iteration.</li><li><code>weekly-status-rollup</code> (ways-of-working-skills): weekly-status-rollup is one lead&#x27;s note; iteration-report is team metrics for a sprint or milestone.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/github-manager-skills/issues">github-manager-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

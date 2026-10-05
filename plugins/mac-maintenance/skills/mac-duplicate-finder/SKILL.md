@@ -1,6 +1,6 @@
 ---
 name: mac-duplicate-finder
-description: Find byte-for-byte duplicate files in a Mac's user folders with a bundled script (size grouping, then partial and full hashing), report the largest groups and which folders mirror each other, and single out "suffix copies" (IMG_1 (1).MOV next to an identical IMG_1.MOV) that can be moved to a dated Trash folder after a second hash check, with the original untouched. Use when asked to find duplicate files, photos or videos, when phone exports or backup folders seem to repeat each other, when a cleanup needs to know what is wasted in Desktop, Documents, Pictures or Downloads, or when someone wants "the (1) copies gone". Not for near-duplicates (resized, re-encoded or HEIC versus JPEG), not for the Photos library package, and not for deleting anything outright.
+description: "Find byte-for-byte duplicate files in a Mac's user folders, report the largest groups and folders that mirror each other, and move verified suffix copies (IMG_1 (1).MOV next to an identical IMG_1.MOV) to a dated Trash folder after a second hash check. Use when asked to \"find duplicate photos\", when phone exports or backups repeat each other, or to see what is wasted in Desktop, Documents, Pictures or Downloads. Not for near-duplicates such as resized or re-encoded images, the Photos library, or deleting anything outright."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access. Works on any platform; the Trash move is a plain file move.
 metadata:

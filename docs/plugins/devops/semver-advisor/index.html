@@ -36,7 +36,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / semver-advisor</p>
 <h1>Semver advisor</h1>
 <p class="lede">Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked &quot;is this a breaking change?&quot;, what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).</p>
-<p class="meta">Skill <code>semver-advisor</code> in plugin <a href="../index.html">devops</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a>.</p>
+<p class="meta">Skill <code>semver-advisor</code> in plugin <a href="../index.html">devops</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill devops/semver-advisor</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It judges the public surface from the diff and the documentation; users relying on undocumented behaviour are a judgement call, not something it detects.</li><li>It does not inspect downstream consumers or run their tests.</li><li>There is no bundled script, and nothing is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Semantic versioning is a promise about compatibility, and the hard part is deciding what &quot;compatible&quot; means for the thing being released: a library&#x27;s public API, a CLI&#x27;s flags and output, a service&#x27;s HTTP contract, a configuration file, a database schema, a Docker image. This skill applies the decision table in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/references/decision-table.md">references/decision-table.md</a> to the real diff and states the version with the evidence.</p>
 <h3 id="when-to-use-it">When to use it</h3>

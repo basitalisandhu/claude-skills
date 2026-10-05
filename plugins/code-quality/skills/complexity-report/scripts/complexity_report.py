@@ -274,7 +274,7 @@ def analyse(root: Path, excludes: set[str]) -> dict:
     for f in functions:
         if root.is_dir():
             try:
-                f["file"] = str(Path(f["file"]).relative_to(root))
+                f["file"] = Path(f["file"]).relative_to(root).as_posix()
             except ValueError:
                 pass
     return {"version": VERSION, "root": str(root), "files_scanned": files, "functions": functions, "parse_errors": errors}
@@ -285,6 +285,9 @@ def grade(c: int) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")

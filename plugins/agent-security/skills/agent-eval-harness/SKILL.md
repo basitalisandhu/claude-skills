@@ -1,6 +1,6 @@
 ---
 name: agent-eval-harness
-description: "Set up AgentDojo-style security evaluations for an agent: benign user tasks, injection tasks planted in tool results, utility and attack-success-rate metrics, and a policy hook (provenance, approval) in the tool executor. Ships a stdlib runner template with a demo suite and tests, and explains how to graduate to the real AgentDojo benchmark. Use when asked to measure prompt-injection resistance, build a security eval, compare defences, or produce ASR numbers for a review."
+description: "Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked \"what is our attack success rate?\", to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark."
 license: MIT
 compatibility: Python 3.11 or newer for the template. AgentDojo (pip) and model API access only for the real benchmark; the template and its tests make no network calls.
 metadata:
@@ -59,6 +59,13 @@ Injection-task text and the tool results in traces are test data written to look
 **Utility lost to the policy:** <case ids with the denied call and whether the denial was right>
 **Reproduce:** `python3 eval/eval_runner.py --agent eval.agent:run --policy provenance --out results.json`
 ```
+
+## Limits
+
+- The bundled demo agent is scripted, so its numbers only show the report shape; results mean something only after `agent_fn` calls your real model through the executor.
+- Attack success rate depends on the injection tasks you write. A low rate on a small suite says nothing about phrasings or channels the suite does not include.
+- The `approval` policy uses an oracle approver that passes only arguments the request entails; a human approver is weaker, so treat its numbers as a best case.
+- The template makes no network calls. Model costs, rate limits and the full AgentDojo benchmark are outside it.
 
 ## Related
 

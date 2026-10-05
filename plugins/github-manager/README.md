@@ -9,3 +9,5 @@ Three engineering manager skills that compute from exported GitHub data, each wi
 | `incident-postmortem-timeline` | `skills/incident-postmortem-timeline/scripts/postmortem.py` | build a blameless timeline of an incident issue with detected, acknowledged, mitigated and resolved phases, people as roles, questions for the review and a cited postmortem skeleton |
 
 Requirements: Python 3.11 or newer on `PATH` as `python3`, and the gh CLI for the export step. The scripts read saved JSON only: no network access, no third-party packages. Team level only: no per-person scoring.
+
+Use it when you want to find stale PRs and stale drafts before standup (`pr-queue-digest`), or a cycle time to merge that stands in for the DORA metrics' lead time for changes up to the merge (`iteration-report`; deployment frequency, change failure rate and time to restore are not computed). Issue triage is not covered: the pack reads issues only for iteration reports and incident timelines.

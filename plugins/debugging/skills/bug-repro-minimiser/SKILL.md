@@ -55,6 +55,12 @@ See [references/report-template.md](references/report-template.md). Summary shap
 **Narrowed to:** orders created before 2024-03 have no `discount` key (bisect: commit a1b2c3d introduced the read)
 ```
 
+## Limits
+
+- It needs an environment where the code can run; a report that never reproduces ends with the list of variables ruled out, not a reproduction.
+- `git bisect` helps only for regressions with history available, and timing-dependent races may need many runs before they show.
+- There is no bundled script; nothing is sent over the network unless the reproduction itself calls a service, which step 3 replaces with a stub.
+
 ## Related
 
 - `stack-trace-explainer` to read the trace the reproduction produces.

@@ -2,6 +2,8 @@
 
 Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference, regex building with test cases, and OpenAPI 3 contract review.
 
+Find this when you search for: zero-downtime migration, ReDoS, validate JSON against a schema.
+
 ## Install
 
 ```text

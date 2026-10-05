@@ -175,6 +175,9 @@ def render_text(tok: dict, findings: list[dict], now: dt.datetime) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("token", help="the token, or '-' to read it from stdin")
     ap.add_argument("--json", action="store_true")

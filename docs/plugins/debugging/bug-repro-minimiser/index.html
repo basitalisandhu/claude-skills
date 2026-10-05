@@ -36,7 +36,7 @@
   "name": "debugging",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/debugging/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">debugging</a> / bug-repro-minimiser</p>
 <h1>Bug reproduction minimiser</h1>
 <p class="lede">Turn a vague bug report into the smallest reliable reproduction: a single command or test that fails every time, with the environment, input and expected versus actual result pinned down. Use when a bug report says &quot;sometimes&quot;, &quot;on my machine&quot; or &quot;it just crashes&quot;, before any fix is attempted, or when a fix needs a regression test. Not for performance regressions (use perf-profile-reader) and not a debugger tutorial.</p>
-<p class="meta">Skill <code>bug-repro-minimiser</code> in plugin <a href="../index.html">debugging</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/bug-repro-minimiser/SKILL.md">plugins/debugging/skills/bug-repro-minimiser/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/bug-repro-minimiser/SKILL.md">plugins/debugging/skills/bug-repro-minimiser/SKILL.md</a>.</p>
+<p class="meta">Skill <code>bug-repro-minimiser</code> in plugin <a href="../index.html">debugging</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/bug-repro-minimiser/SKILL.md">plugins/debugging/skills/bug-repro-minimiser/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/bug-repro-minimiser/SKILL.md">plugins/debugging/skills/bug-repro-minimiser/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill debugging/bug-repro-minimiser</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It needs an environment where the code can run; a report that never reproduces ends with the list of variables ruled out, not a reproduction.</li><li><code>git bisect</code> helps only for regressions with history available, and timing-dependent races may need many runs before they show.</li><li>There is no bundled script; nothing is sent over the network unless the reproduction itself calls a service, which step 3 replaces with a stub.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>A bug that cannot be reproduced on demand cannot be fixed with confidence or kept fixed. This skill reduces a report to a minimal, deterministic reproduction by removing one variable at a time, and ends with a failing test that becomes the regression test for the fix. The report template is in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/bug-repro-minimiser/references/report-template.md">references/report-template.md</a>.</p>
 <h3 id="when-to-use-it">When to use it</h3>

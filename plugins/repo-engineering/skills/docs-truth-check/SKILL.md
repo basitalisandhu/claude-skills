@@ -1,6 +1,6 @@
 ---
 name: docs-truth-check
-description: Verify that a repository's README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree. Use when asked "are the docs still accurate?", "is the README out of date?", "check the docs against the code", after renaming files, flags or functions, before a release, when reviewing a pull request that changes a CLI or a public name, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs from scratch (use readme-who-what-why or a writing skill), and not for checking external URLs (no network).
+description: "Verify that a repository's README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. Use when asked \"is the README out of date?\", after renaming files, flags or functions, before a release, or to add a docs drift gate to CI. Not for judging prose quality or rewriting docs (readme-who-what-why), or checking external URLs."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:

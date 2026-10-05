@@ -1,6 +1,6 @@
 ---
 name: agent-threat-model
-description: Write a system description of an LLM-agent codebase in the agent-threat-model YAML format (principals, agents, channels, tools, data stores, controls), validate it with atm validate, run atm analyse for a STRIDE and OWASP threat model with residual risk scoring, then interpret and summarise the result with incident precedents. Use when asked for a threat model, risk assessment, attack surface or security architecture review of an agent, or at the start of a design review.
+description: "Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist)."
 license: MIT
 compatibility: Python 3.11 or newer. The atm CLI (pipx or uvx; from PyPI as agent-threat-model, or from git+https://github.com/basitalisandhu/agent-threat-model while PyPI publication is pending) for validation and analysis; the draft works without it.
 metadata:
@@ -82,6 +82,13 @@ The scanner reads source and configuration, and you open files to correct the dr
 **Top three controls to add:** 1. … 2. … 3. … (expected score after: <n>, from atm diff)
 **Dropped threats:** <id: reason> …
 ```
+
+## Limits
+
+- The scanner finds tools, channels and stores through framework and SDK patterns. Tools your own code defines without a framework are missed and must be added by hand.
+- Autonomy, trust, sensitivity and the controls in place are guesses until a person confirms them; the analysis is only as true as the description.
+- `atm` applies a fixed catalogue of 30 threats and 29 controls. Threats outside the catalogue only come from the manual interpretation step.
+- Without the `atm` CLI the analysis is done by hand from the catalogue, and the report must say the automated run was skipped.
 
 ## Related
 

@@ -2,6 +2,8 @@
 
 Six lightweight security skills for everyday development: a secrets scan, an audit report reader, an HTTP security header check, a JWT inspector, a CORS review and an auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.
 
+Find this when you search for: OWASP Top 10, npm audit fix.
+
 ## Install
 
 ```text

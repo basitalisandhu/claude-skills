@@ -1,6 +1,6 @@
 ---
 name: adr-writer
-description: Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes.
+description: "Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes."
 license: MIT
 compatibility: Any project. Stores records under docs/adr/ (or the directory the project already uses).
 metadata:
@@ -66,7 +66,14 @@ We will use option 2: ...
 - Revisit when: audit volume exceeds 5,000 events/s or a second consumer needs the stream (then an ADR for option 3)
 ```
 
+## Limits
+
+- It records a decision; it does not make one. The options and trade-offs are only as complete as the evidence gathered, and retroactive records are marked as reconstructed.
+- It writes Markdown files under `docs/adr/` (or the project's existing directory) and does not update other documents that reference the decision.
+- There is no bundled script, and nothing is sent over the network.
+
 ## Related
 
 - `postmortem-writer` often produces a decision that deserves an ADR.
 - `semver-advisor` when the decision changes a public contract.
+- Boundary: an architecture choice with options goes to `adr-writer` once an RFC is accepted; operational decisions with a review date go to `decision-log` (ways-of-working-skills marketplace); undocumented past decisions go to `adr-miner` (repo-engineering-skills marketplace).

@@ -2,6 +2,8 @@
 
 Nine Microsoft 365 governance skills for Claude Code: a Graph permission preflight for apps and connectors, an Entra ID posture review, a Conditional Access gap analysis, a privileged access review, a guest and external sharing review, a licence and service plan audit, an Intune baseline check, a Teams and groups sprawl report, and a quarterly access review pack.
 
+Use it when you are getting a tenant ready for Copilot oversharing concerns (`guest-and-external-sharing-review` covers tenant sharing settings, anyone links and guests; per-site and per-file permissions are not covered, so a full SharePoint site permissions audit is out of scope), or when you want the identity side of Microsoft Secure Score checked from exports (`entra-posture-review` checks many of the same controls; it does not read the score itself).
+
 ## Install
 
 ```text
@@ -16,7 +18,7 @@ Skills then appear as `/m365-governance:<skill>`. Scripts need Python 3.11 or ne
 | Skill | Triggers on | Produces |
 |---|---|---|
 | `graph-permission-preflight` | an app, connector or MCP server asks for Graph permissions | `permission_preflight.py` findings, consent table and a least-privilege replacement set |
-| `entra-posture-review` | review or baseline an Entra ID tenant | `entra_posture.py` findings (23 checks) with evidence, portal path and Graph call |
+| `entra-posture-review` | review or baseline an Entra ID tenant | `entra_posture.py` findings (24 checks, including `ROLE-DISABLED-HOLDER`) with evidence and portal guidance |
 | `intune-baseline-check` | device compliance, stale devices, baseline evidence | `intune_baseline.py` per-platform summary and findings (15 checks) |
 | `teams-and-groups-sprawl` | ownerless teams, guests in groups, naming and expiration | `groups_sprawl.py` findings and a draft cleanup list with proposed owners |
 | `access-review-pack` | quarterly access review, privileged access recertification | `access_review_pack.py` reviewer checklist (Markdown) and sign-off CSV |

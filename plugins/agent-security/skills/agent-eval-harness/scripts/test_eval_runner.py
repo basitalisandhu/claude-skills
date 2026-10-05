@@ -62,7 +62,7 @@ class CliTests(unittest.TestCase):
                 rc = er.main(["--demo", "--out", str(path)])
             self.assertEqual(rc, 0)
             self.assertIn("naive", out.getvalue())
-            data = json.loads(path.read_text())
+            data = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(len(data), len(er.AGENTS) * len(er.POLICIES))
             out = io.StringIO()
             with redirect_stdout(out):

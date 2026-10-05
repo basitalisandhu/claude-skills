@@ -146,7 +146,7 @@ def detect(root: Path) -> dict:
     signals: dict[str, set[str]] = {"approval": set(), "sandbox": set(), "limits": set(), "kill": set(), "audit": set(), "credential-broker": set()}
     files = 0
     for p in iter_files(root):
-        rel = str(p.relative_to(root))
+        rel = p.relative_to(root).as_posix()
         text = read(p)
         if not text:
             continue

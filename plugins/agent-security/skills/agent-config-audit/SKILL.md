@@ -1,6 +1,6 @@
 ---
 name: agent-config-audit
-description: Audit AI-agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt-injection in instruction files. Use when asked to review, harden or sanity-check .claude/ settings, CLAUDE.md, .cursor/ rules, .mcp.json, claude_desktop_config.json, hooks, skills or plugins, or before enabling a cloned repository's agent config. Runs a stdlib Python scanner and explains each finding.
+description: "Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to \"check my .claude settings\", to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No network access needed.
 metadata:
@@ -82,3 +82,4 @@ Use `--format markdown --output agent-config-audit.md` when the user wants a fil
 
 - `secure-agent-checklist` for the pre-ship review that uses these findings as evidence.
 - `semgrep-agentic` for the same configuration checks as Semgrep rules in CI.
+- `agent-context-writer` (repo-engineering-skills) writes a lean AGENTS.md or CLAUDE.md; this skill audits agent configuration for risk and does not write it.

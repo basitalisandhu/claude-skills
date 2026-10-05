@@ -1,6 +1,6 @@
 ---
 name: adr-miner
-description: Recover architecture decisions that were made but never written down, by mining git history (commit messages with decision phrases such as switch to, replace, adopt, drop, migrate, deprecate, in favour of), configuration changes (a dependency swapped in a manifest, a Dockerfile base image changed, CI files added or removed) and TODO or NOTE comments that carry a rationale, then drafting MADR stubs with status proposed that cite the commit SHA for every line; a second script lints an existing docs/adr folder for numbering gaps, duplicate numbers, missing or unknown status and broken superseded links. Use when asked "why did we switch to X?", "write ADRs for decisions we already made", "backfill our architecture decision records", "document the history of this codebase", or "check our ADR folder". Not for recording a decision being made right now from scratch (write that ADR directly), and not a changelog generator.
+description: "Recover architecture decisions that were made but never written down by mining git history, manifest and config changes and rationale comments, then draft MADR stubs (status proposed) that cite a commit SHA on every line; a second script lints an existing docs/adr folder for numbering, status and superseded-link problems. Use when asked \"why did we switch to X?\" or to backfill ADRs. Not for recording a decision being made now (adr-writer, or decision-log for operational decisions) or generating a changelog."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3, and git. Standard library only, no network access.
 metadata:
@@ -117,3 +117,4 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
 
 - `release-notes-verifier` uses the same git history to check what a release says against what changed.
 - `repo-onboarding-guide` can link the accepted ADRs from its "where things live" section.
+- `adr-writer` (docs plugin, claude-dev-skills) and `decision-log` (ways-of-working-skills): an architecture choice with options goes to adr-writer once an RFC is accepted; operational decisions with a review date go to decision-log; undocumented past decisions go to adr-miner.

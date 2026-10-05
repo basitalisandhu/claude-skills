@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>semgrep-agentic: Run the agentic-semgrep-rules pack | Claude Code skills</title>
-<meta name="description" content="Run the agentic-semgrep-rules pack (36 rules for Python, JavaScript and TypeScript agent code: model output reaching exec, shells, SQL, URLs, file paths and HTML; user input in system prompts; tool parameters reaching shells and paths; MCP servers without auth or bound to every interface; leaked provider keys; unsafe model and config loading) against a repository, fall back to the bundled offline rules, and triage the results. Use when asked to scan agent code for security issues, add agent-security rules to CI, or as the code step of an agent security audit.">
+<title>semgrep-agentic: Scan Python | Claude Code skills</title>
+<meta name="description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="semgrep-agentic: Run the agentic-semgrep-rules pack | Claude Code skills">
-<meta property="og:description" content="Run the agentic-semgrep-rules pack (36 rules for Python, JavaScript and TypeScript agent code: model output reaching exec, shells, SQL, URLs, file paths and HTML; user input in system prompts; tool parameters reaching shells and paths; MCP servers without auth or bound to every interface; leaked provider keys; unsafe model and config loading) against a repository, fall back to the bundled offline rules, and triage the results. Use when asked to scan agent code for security issues, add agent-security rules to CI, or as the code step of an agent security audit.">
+<meta property="og:title" content="semgrep-agentic: Scan Python | Claude Code skills">
+<meta property="og:description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "semgrep-agentic",
- "description": "Run the agentic-semgrep-rules pack (36 rules for Python, JavaScript and TypeScript agent code: model output reaching exec, shells, SQL, URLs, file paths and HTML; user input in system prompts; tool parameters reaching shells and paths; MCP servers without auth or bound to every interface; leaked provider keys; unsafe model and config loading) against a repository, fall back to the bundled offline rules, and triage the results. Use when asked to scan agent code for security issues, add agent-security rules to CI, or as the code step of an agent security audit.",
+ "description": "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / semgrep-agentic</p>
 <h1>Semgrep for agentic code</h1>
-<p class="lede">Run the agentic-semgrep-rules pack (36 rules for Python, JavaScript and TypeScript agent code: model output reaching exec, shells, SQL, URLs, file paths and HTML; user input in system prompts; tool parameters reaching shells and paths; MCP servers without auth or bound to every interface; leaked provider keys; unsafe model and config loading) against a repository, fall back to the bundled offline rules, and triage the results. Use when asked to scan agent code for security issues, add agent-security rules to CI, or as the code step of an agent security audit.</p>
-<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
+<p class="lede">Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.</p>
+<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill agent-security/semgrep-agentic</code></pre>
 <p>The <code>agent-security</code> plugin also ships hooks, commands, agents and an MCP server at plugin level. Install the plugin from the marketplace to get them.</p>
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The rules cover Python, JavaScript and TypeScript, plus JSON agent configuration in the bundled set. Other languages and runtime behaviour are not covered.</li><li>Pattern matching misses flows that cross files or services and can flag safe code, so every hit needs triage.</li><li>The bundled fallback has fewer sources and sinks than the upstream pack; the report must say which pack ran.</li><li>It needs the Semgrep CLI. Without it the skill stops and gives the install command instead of guessing results.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Static rules catch the code patterns behind most agent incidents: model output executed or injected into shells, SQL, URLs, paths and HTML; untrusted text interpolated into the system prompt; tool parameters that let the model run anything; MCP servers reachable without authentication; provider keys hard-coded or logged; models and configs loaded unsafely. The pack that does this is <a href="https://github.com/basitalisandhu/agentic-semgrep-rules">agentic-semgrep-rules</a>: 36 rules, each with tested fixtures and CWE and OWASP LLM Top 10 mappings. This skill runs that pack, falls back to a small bundled set when the network is unavailable, and triages what comes back.</p>
 <h3 id="when-to-use-it">When to use it</h3>

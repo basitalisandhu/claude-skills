@@ -47,16 +47,13 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SKILLS = HERE.parents[1]
 sys.path.insert(0, str(HERE))
-sys.path.insert(1, str(SKILLS / "scp-guardrails" / "scripts"))
-sys.path.insert(2, str(SKILLS / "aws-spend-guardrails" / "scripts"))
 
-import scp_builder  # noqa: E402
-import spend_guardrails  # noqa: E402
+import _scp_builder as scp_builder  # noqa: E402
+import _spend_guardrails as spend_guardrails  # noqa: E402
 from _miniyaml import YAMLError  # noqa: E402
 from _miniyaml import load as yaml_load  # noqa: E402
-from scp_lint import compact, lint_policy  # noqa: E402
+from _scp_lint import compact, lint_policy  # noqa: E402
 
 SPEC_KEYS = {"sandbox_name", "allowed_regions", "protected_roles", "log_archive_account", "owner_tag_key", "ttl_tag_key",
              "default_ttl_days", "max_ttl_days", "grace_days", "sweep_schedule", "sweep_timezone", "contacts", "budget", "spend"}

@@ -36,7 +36,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / refactor-plan</p>
 <h1>Refactor plan</h1>
 <p class="lede">Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or &quot;clean up&quot; code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.</p>
-<p class="meta">Skill <code>refactor-plan</code> in plugin <a href="../index.html">code-quality</a> 0.1.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a>.</p>
+<p class="meta">Skill <code>refactor-plan</code> in plugin <a href="../index.html">code-quality</a> 0.1.2, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -56,7 +56,8 @@
 cd claude-skills
 python3 install.py --user --skill code-quality/refactor-plan</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>It plans the steps; it does not prove that behaviour is preserved. The tests in the safety net decide that, and characterisation tests cover only the inputs chosen for them.</li><li>The before and after numbers come from the code-quality scripts, which measure Python and JavaScript/TypeScript; for other languages record what the language&#x27;s own tools report.</li><li>There is no bundled script; executing the plan runs only the project&#x27;s own tests, and nothing is sent over the network.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>A refactor that is done in one large commit cannot be reviewed or rolled back. This skill turns &quot;clean this up&quot; into an ordered list of small, behaviour-preserving steps, each with the test that proves nothing changed, and writes it down before any code moves. The plan template is in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/references/plan-template.md">references/plan-template.md</a>; the catalogue of safe moves is in <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/references/moves.md">references/moves.md</a>.</p>
 <h3 id="when-to-use-it">When to use it</h3>

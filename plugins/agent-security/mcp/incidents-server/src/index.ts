@@ -16,7 +16,7 @@ import { z } from "zod";
 import { FILTER_FIELDS, STATS_FIELDS, getIncident, loadDataset, primaryUrl, searchIncidents, stats, type Dataset } from "./data.js";
 
 export const SERVER_NAME = "agent-incidents";
-export const SERVER_VERSION = "0.1.1";
+export const SERVER_VERSION = "0.1.2";
 
 function json(value: unknown) {
   return { content: [{ type: "text" as const, text: JSON.stringify(value, null, 1) }] };

@@ -37,7 +37,7 @@
   "name": "data",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/data/"
  },
- "version": "0.1.1"
+ "version": "0.1.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">data</a> / api-contract-review</p>
 <h1>API contract review</h1>
 <p class="lede">Lint an OpenAPI 3.x document (YAML or JSON) with a bundled script for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies; then review the contract for consistency, versioning and client friendliness. Use when designing or reviewing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API.</p>
-<p class="meta">Skill <code>api-contract-review</code> in plugin <a href="../index.html">data</a> 0.1.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a>.</p>
+<p class="meta">Skill <code>api-contract-review</code> in plugin <a href="../index.html">data</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -57,7 +57,8 @@
 cd claude-skills
 python3 install.py --user --skill data/api-contract-review</code></pre>
 
-
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul><li>The linter reads OpenAPI 3.0 and 3.1 in a single file; Swagger 2.0 is reported as unsupported, and only <code>#/components/</code> references are resolved, so references to other files or URLs are not followed.</li><li>The bundled YAML reader handles the subset real specs use (anchors, block scalars, flow collections) and stops with a line number on anything else, such as complex keys.</li><li>It checks the document, not the running API; matching the server to the spec needs contract tests. It never contacts the network, including the server URLs in the spec.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>An OpenAPI document is the contract that clients, mocks, documentation and tests are generated from; every gap in it becomes a support ticket. The bundled linter finds the mechanical gaps with one id each; this skill then reviews what a linter cannot judge: whether the resources, verbs, errors and versioning form a consistent API.</p>
 <h3 id="when-to-use-it">When to use it</h3>

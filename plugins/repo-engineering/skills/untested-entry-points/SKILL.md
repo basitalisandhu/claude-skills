@@ -1,6 +1,6 @@
 ---
 name: untested-entry-points
-description: Find public functions, classes and CLI entry points that no test mentions, using a bundled script that parses Python with ast and JS or TS exports with regex, maps each unit to the test files that reference it by name, ranks the untested ones (entry points first, then by size and fan-in), and writes characterisation test stubs in the project's framework (pytest, unittest, jest, vitest, node:test). Use when asked "what is untested?", "where should I add tests first?", "pin current behaviour before a refactor", "write characterisation tests", or before changing legacy code. Not a coverage tool (it never runs tests), and not for module-level gap lists or CI coverage ratchets.
+description: "Find public functions, classes and CLI entry points that no test mentions in Python, JavaScript and TypeScript code, rank them (entry points first, then size and fan-in), and write characterisation test stubs in the project's framework. Use when asked \"what is untested?\", where to add tests first, or to pin behaviour before a refactor. Not for measuring coverage (it never runs tests), module-level gap lists or coverage ratchets (test-gap-finder)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network access.
 metadata:
@@ -82,3 +82,4 @@ Frameworks are detected from the project: pytest when configured or imported, ot
 
 - `cited-codebase-audit` uses this view for its `test-coverage` category.
 - For module-level gaps and a coverage ratchet, the `code-quality` plugin in [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills) has a module-level finder.
+- `test-gap-finder` (code-quality plugin, claude-dev-skills): test-gap-finder maps modules to test files; untested-entry-points names the public functions no test mentions and writes characterisation stubs.
