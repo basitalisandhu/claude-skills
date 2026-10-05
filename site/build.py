@@ -38,6 +38,48 @@ STOP_WORDS = {"a", "an", "and", "as", "at", "by", "for", "from", "in", "into", "
 MIT_URL = "https://opensource.org/licenses/MIT"
 e = html.escape
 
+GUIDE_SLUG = "install-claude-code-skills"
+GUIDE_REL = f"guide/{GUIDE_SLUG}/"
+
+# Questions shown on the index page and published as FAQPage structured data.
+# Google requires the marked-up answers to be visible on the page, so one list feeds both.
+FAQS = [
+    ("What is this repository?",
+     "It is one repository with every Claude Code skill maintained by {name}, and it is also a single Claude Code "
+     "plugin marketplace. Each skill is a SKILL.md file, and most bundle a small Python script."),
+    ("How do I install the skills?",
+     "In Claude Code, run /plugin marketplace add {owner}/{repo} and then /plugin install <plugin>@{market}. "
+     "Or clone the repository and run python3 install.py --user to copy every skill into ~/.claude/skills/. "
+     "The install guide on this site covers both routes and a third one for other agents."),
+    ("Is anything sent anywhere?",
+     "No. install.py, the validator and the site builder make no network calls, and the installer sends no "
+     "telemetry. Only the daily sync clones the public source repositories from GitHub. What a skill's own "
+     "script does is described on that skill's page."),
+    ("Where do I report a bug in a skill?",
+     "Open an issue in the skill's source repository. Each skill page and each row of the catalog links to it. "
+     "Problems with the installer or the site go to the issues of {repo} on GitHub."),
+    ("How does the catalog stay in sync with the source repositories?",
+     "Skills are edited in their source repositories. A workflow in this repository copies them in every day, "
+     "regenerates the catalog and the site, and records the source commit of each plugin in SOURCES.json."),
+    ("Can other agents use these skills?",
+     "Agents that read the open Agent Skills format can use them, because every skill is a folder with a "
+     "SKILL.md that has name and description front matter. The command npx skills add {owner}/{repo} found all "
+     "87 skills on 2026-10-04. This repository tests them with Claude Code only."),
+    ("What licence are the skills under?",
+     "MIT. The vendored plugins are MIT too, by the same author."),
+]
+
+
+def faq_items(s: "Site") -> list[tuple[str, str]]:
+    fmt = {"name": H.OWNER_NAME, "owner": H.OWNER, "repo": H.REPO_NAME, "market": H.MARKETPLACE_NAME}
+    return [(q, a.format(**fmt)) for q, a in FAQS]
+
+
+def load_content(name: str) -> tuple[dict[str, str], str]:
+    """Read site/content/<name>.md (next to this script, like style.css) and return its front matter and Markdown body."""
+    text = (SITE_DIR / "content" / f"{name}.md").read_text(encoding="utf-8")
+    return md.split_front_matter(text)
+
 
 # ---------------------------------------------------------------- helpers
 
@@ -170,6 +212,8 @@ def write(out: Path, rel: str, text: str, written: list[Path]) -> None:
 
 def build_index(s: Site) -> str:
     c = s.catalog["counts"]
+    faqs = faq_items(s)
+    faq_html = "\n".join(f"<h3>{e(q)}</h3>\n<p>{e(a)}</p>" for q, a in faqs)
     rows = []
     for p in s.plugins:
         rows.append(f"<tr><td><a href=\"plugins/{e(p['name'])}/index.html\">{e(p['name'])}</a></td>"
@@ -181,7 +225,7 @@ def build_index(s: Site) -> str:
             f"{e(H.one_line(sk['description']))}</li>" for sk in s.by_plugin.get(p["name"], []))
         sections.append(f"<h3 id=\"{e(p['name'])}\"><a href=\"plugins/{e(p['name'])}/index.html\">{e(p['name'])}</a></h3>\n<ul>{items}</ul>")
     body = f"""<h1>{e(s.headline())}</h1>
-<p class="lede">One repository with every Claude Code skill maintained by {H.OWNER_NAME}: {c['skills']} skills in {c['plugins']} plugins, synced daily from {len({p['source_repo'] for p in s.plugins})} source repositories. It is also a single Claude Code plugin marketplace.</p>
+<p class="lede">One repository with every Claude Code skill maintained by {H.OWNER_NAME}: {c['skills']} skills in {c['plugins']} plugins, synced daily from {len({p['source_repo'] for p in s.plugins})} source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/{GUIDE_SLUG}/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add {H.OWNER}/{H.REPO_NAME}
@@ -196,6 +240,8 @@ python3 install.py --user</code></pre>
 </tbody></table>
 <h2 id="skills">All skills</h2>
 {chr(10).join(sections)}
+<h2 id="questions">Questions</h2>
+{faq_html}
 <p class="meta">Machine-readable: <a href="llms.txt">llms.txt</a>, <a href="llms-full.txt">llms-full.txt</a>, <a href="feed.xml">feed.xml</a>, <a href="{H.REPO_URL}/blob/main/catalog.json">catalog.json</a>.</p>"""
     ld = {
         "@context": "https://schema.org",
@@ -213,10 +259,25 @@ python3 install.py --user</code></pre>
             }} for i, sk in enumerate(s.skills)
         ],
     }
+    faq_ld = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+                       for q, a in faqs],
+    }
     desc = (f"{c['skills']} Claude Code skills in {c['plugins']} plugins in one repository and one plugin "
             f"marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.")
     return page(rel="", depth=0, title=s.headline(), description=desc, body=body,
-                extra_head=jsonld(ld) + "\n")
+                extra_head=jsonld(ld) + "\n" + jsonld(faq_ld) + "\n")
+
+
+def build_guide(s: Site) -> str:
+    meta, body_md = load_content(GUIDE_SLUG)
+    title = meta["title"]
+    body = f"""<p class="crumbs"><a href="../../index.html">Home</a> / Guide</p>
+{md.convert(body_md)}"""
+    return page(rel=GUIDE_REL, depth=2, title=title, description=meta["description"], body=body,
+                og_type="article")
 
 
 def build_plugin(s: Site, p: dict) -> str:
@@ -317,7 +378,7 @@ def build_404() -> str:
 
 
 def build_sitemap(s: Site) -> str:
-    urls = [(H.SITE_URL, date_of(s.latest()))]
+    urls = [(H.SITE_URL, date_of(s.latest())), (H.SITE_URL + GUIDE_REL, date_of(s.latest()))]
     for p in s.plugins:
         urls.append((H.site_plugin_url(p["name"]), date_of(s.synced(p["name"]))))
         for sk in s.by_plugin.get(p["name"], []):
@@ -341,6 +402,7 @@ def build_llms(s: Site) -> str:
            f"({H.REPO_URL}) that is also a Claude Code plugin marketplace named `{H.MARKETPLACE_NAME}`.", "",
            f"Install with `/plugin marketplace add {H.OWNER}/{H.REPO_NAME}` then `/plugin install <plugin>@{H.MARKETPLACE_NAME}`, "
            f"or clone the repository and run `python3 install.py --user` to copy every skill into `~/.claude/skills/`. "
+           f"A step-by-step guide is at {H.SITE_URL}{GUIDE_REL}. "
            f"Each skill is a SKILL.md file with optional standard-library scripts. Skills are edited in their source "
            f"repositories and synced here daily.", ""]
     for p in s.plugins:
@@ -348,7 +410,10 @@ def build_llms(s: Site) -> str:
         for sk in s.by_plugin.get(p["name"], []):
             out.append(f"- [{sk['name']}]({H.site_skill_url(p['name'], sk['name'])}): {H.one_line(sk['description'])}")
         out.append("")
-    out += ["## Optional", "",
+    out += ["## Guides", "",
+            f"- [How to install Claude Code skills (three ways)]({H.SITE_URL}{GUIDE_REL}): marketplace, clone and install.py, "
+            f"or npx skills add, with troubleshooting and uninstall steps", "",
+            "## Optional", "",
             f"- [llms-full.txt]({H.SITE_URL}llms-full.txt): the full text of every SKILL.md",
             f"- [catalog.json]({H.REPO_URL}/blob/main/catalog.json): machine-readable catalog",
             f"- [SOURCES.json]({H.REPO_URL}/blob/main/SOURCES.json): source repository and commit for each plugin", ""]
@@ -406,6 +471,7 @@ def build(root: Path, out: Path) -> list[Path]:
         write(out, f"plugins/{p['name']}/index.html", build_plugin(s, p), written)
         for sk in s.by_plugin.get(p["name"], []):
             write(out, f"plugins/{p['name']}/{sk['name']}/index.html", build_skill(s, p, sk), written)
+    write(out, GUIDE_REL + "index.html", build_guide(s), written)
     write(out, "404.html", build_404(), written)
     write(out, "sitemap.xml", build_sitemap(s), written)
     write(out, "robots.txt", build_robots(), written)

@@ -2,7 +2,7 @@
 
 > 87 Claude Code skills in 13 plugins by Muhammad Basit Ali, in one repository (https://github.com/basitalisandhu/claude-skills) that is also a Claude Code plugin marketplace named `claude-skills`.
 
-Install with `/plugin marketplace add basitalisandhu/claude-skills` then `/plugin install <plugin>@claude-skills`, or clone the repository and run `python3 install.py --user` to copy every skill into `~/.claude/skills/`. Each skill is a SKILL.md file with optional standard-library scripts. Skills are edited in their source repositories and synced here daily.
+Install with `/plugin marketplace add basitalisandhu/claude-skills` then `/plugin install <plugin>@claude-skills`, or clone the repository and run `python3 install.py --user` to copy every skill into `~/.claude/skills/`. A step-by-step guide is at https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/. Each skill is a SKILL.md file with optional standard-library scripts. Skills are edited in their source repositories and synced here daily.
 
 ## agent-security
 
@@ -155,6 +155,10 @@ Six lightweight security skills for everyday development: secrets hygiene scan, 
 - [http-security-headers](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/http-security-headers/): Check the security headers of a captured HTTP response (saved from curl or the browser) with a bundled script that grades HSTS, Content-Security-Policy, X-Content-Type-Options, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, information disclosure and caching, then produce the header set for the web server or framework.
 - [jwt-inspector](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/): Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens.
 - [secrets-hygiene](https://basitalisandhu.github.io/claude-skills/plugins/security-basics/secrets-hygiene/): Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found.
+
+## Guides
+
+- [How to install Claude Code skills (three ways)](https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/): marketplace, clone and install.py, or npx skills add, with troubleshooting and uninstall steps
 
 ## Optional
 

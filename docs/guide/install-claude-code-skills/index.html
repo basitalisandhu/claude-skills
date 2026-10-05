@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to install Claude Code skills (three ways)</title>
+<meta name="description" content="Install Claude Code skills from this repository as a plugin marketplace, by cloning and running install.py, or with npx skills add. Includes troubleshooting and uninstall steps.">
+<link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Claude Code skills">
+<meta property="og:title" content="How to install Claude Code skills (three ways)">
+<meta property="og:description" content="Install Claude Code skills from this repository as a plugin marketplace, by cloning and running install.py, or with npx skills add. Includes troubleshooting and uninstall steps.">
+<meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="../../style.css">
+<link rel="alternate" type="application/atom+xml" title="Claude Code skills releases" href="../../feed.xml">
+</head>
+<body>
+<header class="top"><nav><a class="home" href="../../index.html">Claude Code skills</a><a href="../../index.html#plugins">Plugins</a><a href="../../llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
+<main>
+<p class="crumbs"><a href="../../index.html">Home</a> / Guide</p>
+<h1 id="how-to-install-claude-code-skills-three-ways">How to install Claude Code skills (three ways)</h1>
+<p>This guide shows three ways to install the skills in this repository: through the Claude Code plugin marketplace, by cloning the repository and running <code>install.py</code>, and with the <code>npx skills</code> command for other agents. It ends with troubleshooting and a list of what the installer does not do.</p>
+<h2 id="what-a-skill-is">What a skill is</h2>
+<p>A skill is a folder with a file named <code>SKILL.md</code>. The file starts with YAML front matter that has a <code>name</code> and a <code>description</code>, followed by instructions in Markdown. The folder can also hold scripts and reference files. Claude Code reads the description to decide when a skill is relevant and loads the rest only when it is used. The same layout is the Agent Skills format, which other agents also read.</p>
+<p>Claude Code finds skills in three places:</p>
+<ul><li><strong>Personal skills</strong> live in <code>~/.claude/skills/&lt;name&gt;/SKILL.md</code> and are available in every project.</li><li><strong>Project skills</strong> live in <code>.claude/skills/&lt;name&gt;/SKILL.md</code> inside a repository and are available in that project.</li><li><strong>Plugin skills</strong> ship inside a plugin and load when you install and enable the plugin.</li></ul>
+<p>The folder name must be the same as the <code>name</code> in the front matter.</p>
+<h2 id="route-1-the-plugin-marketplace">Route 1: the plugin marketplace</h2>
+<p>This is the route I recommend. In Claude Code, add this repository as a marketplace:</p>
+<pre><code class="language-text">/plugin marketplace add basitalisandhu/claude-skills</code></pre>
+<p>Then install a plugin from it. The marketplace is named <code>claude-skills</code>, so the plugin name is followed by <code>@claude-skills</code>:</p>
+<pre><code class="language-text">/plugin install aws-security@claude-skills</code></pre>
+<p>Replace <code>aws-security</code> with any plugin from the <a href="../../index.html#plugins">plugin list</a>. Run <code>/plugin</code> to open the plugin manager and see what is installed. To refresh the catalog and pick up new versions, run:</p>
+<pre><code class="language-text">/plugin marketplace update claude-skills</code></pre>
+<p>This route also loads plugin-level hooks, commands, agents and MCP servers when a plugin ships them, and it keeps <code>${CLAUDE_PLUGIN_ROOT}</code> script paths working.</p>
+<h2 id="route-2-clone-and-run-installpy">Route 2: clone and run install.py</h2>
+<p>Clone the repository and run the installer. It needs Python 3.10 or newer and nothing else.</p>
+<pre><code class="language-bash">git clone https://github.com/basitalisandhu/claude-skills
+cd claude-skills
+python3 install.py --user</code></pre>
+<p><code>--user</code> copies every skill into <code>~/.claude/skills/</code>. These flags change what it does:</p>
+<table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>python3 install.py --project</code></td><td>Copies into <code>./.claude/skills/</code> of the directory you run it from</td></tr><tr><td><code>python3 install.py --list</code></td><td>Lists plugins and skills, with the name each installs as</td></tr><tr><td><code>python3 install.py --user --only &lt;plugin&gt;</code></td><td>One plugin; repeat <code>--only</code> for more</td></tr><tr><td><code>python3 install.py --user --skill &lt;plugin&gt;/&lt;skill&gt;</code></td><td>One skill; repeat for more</td></tr><tr><td><code>python3 install.py --user --dry-run</code></td><td>Shows what would happen and writes nothing</td></tr><tr><td><code>python3 install.py --user --force</code></td><td>Also overwrites skill folders the script did not write</td></tr><tr><td><code>python3 install.py --user --prefix</code></td><td>Installs every skill as <code>&lt;plugin&gt;-&lt;skill&gt;</code></td></tr><tr><td><code>python3 install.py --user --uninstall</code></td><td>Removes exactly the files the script wrote</td></tr></tbody></table>
+<p>To update, run <code>git pull</code> in the clone and run the same command again. The copy route installs skills only. Hooks, commands, agents and MCP servers need route 1.</p>
+<h2 id="route-3-npx-skills-add">Route 3: npx skills add</h2>
+<p>Other agents that read the Agent Skills format can install from this repository with the <code>skills</code> command line tool:</p>
+<pre><code class="language-bash">npx skills add basitalisandhu/claude-skills</code></pre>
+<p>On 2026-10-04 the tool found all 87 skills in this repository. I have not tested it with every agent it supports, so check the result in the agent you use.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="a-skill-does-not-show-up">A skill does not show up</h3>
+<p>Check these in order:</p>
+<ul><li>The <code>name</code> in <code>SKILL.md</code> must be the same as the name of its folder.</li><li>The front matter must be strict YAML. A description that contains a colon must be wrapped in double quotes, or some parsers reject the file.</li><li>Run <code>python3 install.py --list</code> in the clone. It prints the name each skill installs as, so you can see whether it is in the catalog at all.</li><li>Start a new Claude Code session. Skills are read when a session starts.</li></ul>
+<h3 id="two-skills-have-the-same-name">Two skills have the same name</h3>
+<p>If two plugins ever ship a skill with the same name, the first in plugin name order installs under the plain name and the second as <code>&lt;plugin&gt;-&lt;skill&gt;</code>, and the script says so. To avoid any clash, pass <code>--prefix</code> and every skill installs as <code>&lt;plugin&gt;-&lt;skill&gt;</code>. Today every skill name here is unique, and <code>scripts/validate.py</code> fails the build if that changes.</p>
+<p>If a skill folder already exists and <code>install.py</code> did not write it, the script skips it. Pass <code>--force</code> to overwrite it.</p>
+<h3 id="uninstall">Uninstall</h3>
+<p>For the marketplace route, run <code>/plugin uninstall &lt;plugin&gt;@claude-skills</code> and, to drop the catalog, <code>/plugin marketplace remove claude-skills</code>. For the copy route, run <code>python3 install.py --user --uninstall</code> (or <code>--project --uninstall</code>). The script writes <code>.claude-skills-manifest.json</code> in the target folder and removes only the files listed there, so skills you wrote yourself stay.</p>
+<h2 id="what-this-does-not-do">What this does not do</h2>
+<ul><li>It makes no network calls. <code>install.py</code> only copies files from your clone.</li><li>It sends no telemetry and collects no data.</li><li>It does not change your Claude Code settings. It does not edit <code>settings.json</code>, permissions or hooks.</li><li>It does not install plugin-level hooks, commands, agents or MCP servers. Use route 1 for those.</li></ul>
+<p>Report a problem with a skill in the issues of its source repository, which each skill page links. Problems with the installer go to <a href="https://github.com/basitalisandhu/claude-skills/issues">this repository&#x27;s issues</a>.</p>
+</main>
+<footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
+</body>
+</html>
