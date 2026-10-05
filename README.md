@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![123 skills in 16 plugins](https://img.shields.io/badge/skills-123%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![125 skills in 16 plugins](https://img.shields.io/badge/skills-125%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**123 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**125 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,7 +81,7 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**123 skills in 16 plugins.** 168 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**125 skills in 16 plugins.** 170 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
 
 ### agent-identity-governance
 
@@ -270,7 +270,7 @@ Version 0.1.2. Source: [mac-maintenance-skills](https://github.com/basitalisandh
 
 ### repo-engineering
 
-Version 0.3.1. Source: [repo-engineering-skills](https://github.com/basitalisandhu/repo-engineering-skills). Install: `/plugin install repo-engineering@claude-skills`.
+Version 0.4.0. Source: [repo-engineering-skills](https://github.com/basitalisandhu/repo-engineering-skills). Install: `/plugin install repo-engineering@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -278,11 +278,13 @@ Version 0.3.1. Source: [repo-engineering-skills](https://github.com/basitalisand
 | agent-context-writer | Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/agent-context-writer/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/agent-context-writer/SKILL.md) |
 | cited-codebase-audit | Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/cited-codebase-audit/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/cited-codebase-audit/SKILL.md) |
 | docs-truth-check | Verify that a repository's README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/docs-truth-check/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/docs-truth-check/SKILL.md) |
+| plan-grill | Stress-test an implementation plan before anyone writes code: put a fixed set of questions to the author (scope, interfaces, data, failure modes, rollout, tests, open questions), fold the answers into the plan, then run a bundled script that checks the Markdown for the required sections, placeholders, a missing rollback and questions with no owner or answer, listing each gap with its line. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/plan-grill/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/plan-grill/SKILL.md) |
 | readme-who-what-why | Check whether a README's first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/readme-who-what-why/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/readme-who-what-why/SKILL.md) |
 | release-notes-verifier | Check a release's notes against what changed between two tags, flagging notes that match no commit, commits with no note (chores excluded by a pattern), manifest versions that disagree with the tag, and missing compare links; pull request titles are read only when asked. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/release-notes-verifier/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/release-notes-verifier/SKILL.md) |
 | repo-hygiene-bundle | Run one offline hygiene pass over a repository and report findings with severity as a table, JSON or SARIF with a CI exit code, covering manifests without lockfiles, lockfile drift, version splits across workspaces, missing licence or SPDX fields, redacted secret-shaped strings, actions pinned by tag, write-all workflows, missing SECURITY.md, and large or built files. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/repo-hygiene-bundle/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-hygiene-bundle/SKILL.md) |
 | repo-onboarding-guide | Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/repo-onboarding-guide/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/repo-onboarding-guide/SKILL.md) |
 | restructure-planner | Plan a repository restructure (split or merge packages, fix module boundaries) from the real import dependency graph of Python, JavaScript and TypeScript files, reporting the most coupled files, import cycles and god modules, and proposing a move plan with blast radius and git mv commands it prints and never runs. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/restructure-planner/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/restructure-planner/SKILL.md) |
+| stale-branch-sweep | Clean up a repository's branch list safely: a bundled script joins saved gh and git exports (the remote's branches, for-each-ref dates and committers, merged refs, pull requests) and reports merged branches never deleted, branches idle for N days, branches with an open PR and protected ones, with the last committer as owner, then writes the exact git push --delete commands as a list to review and never runs them. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/stale-branch-sweep/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/stale-branch-sweep/SKILL.md) |
 | untested-entry-points | Find public functions, classes and CLI entry points that no test mentions in Python, JavaScript and TypeScript code, rank them (entry points first, then size and fan-in), and write characterisation test stubs in the project's framework. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/untested-entry-points/) · [source](https://github.com/basitalisandhu/repo-engineering-skills/blob/main/plugins/repo-engineering/skills/untested-entry-points/SKILL.md) |
 
 ### security-basics
@@ -334,11 +336,11 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->103 of the 123 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->105 of the 125 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->123 of the 123 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->125 of the 125 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 

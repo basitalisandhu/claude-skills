@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code skills: 123 skills in 16 plugins, one repository</title>
-<meta name="description" content="123 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<title>Claude Code skills: 125 skills in 16 plugins, one repository</title>
+<meta name="description" content="125 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="Claude Code skills: 123 skills in 16 plugins, one repository">
-<meta property="og:description" content="123 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
+<meta property="og:title" content="Claude Code skills: 125 skills in 16 plugins, one repository">
+<meta property="og:description" content="125 Claude Code skills in 16 plugins in one repository and one plugin marketplace: security, AWS, Microsoft 365, compliance, GitHub, development and Mac maintenance.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
@@ -18,9 +18,9 @@
 {
  "@context": "https://schema.org",
  "@type": "ItemList",
- "name": "Claude Code skills: 123 skills in 16 plugins, one repository",
+ "name": "Claude Code skills: 125 skills in 16 plugins, one repository",
  "url": "https://basitalisandhu.github.io/claude-skills/",
- "numberOfItems": 123,
+ "numberOfItems": 125,
  "itemListElement": [
   {
    "@type": "ListItem",
@@ -1105,6 +1105,17 @@
    "position": 99,
    "item": {
     "@type": "SoftwareSourceCode",
+    "name": "plan-grill",
+    "description": "Stress-test an implementation plan before anyone writes code: put a fixed set of questions to the author (scope, interfaces, data, failure modes, rollout, tests, open questions), fold the answers into the plan, then run a bundled script that checks the Markdown for the required sections, placeholders, a missing rollback and questions with no owner or answer, listing each gap with its line. Use when asked to \"grill this plan\" or before approving a design for implementation. Not for tracking a proposal's status over time (rfc-lifecycle in ways-of-working-skills).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/plan-grill/",
+    "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 100,
+   "item": {
+    "@type": "SoftwareSourceCode",
     "name": "readme-who-what-why",
     "description": "Check whether a README's first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text. Use when asked to \"review my README\", before publishing or announcing a repository, or to add a README gate to CI. Not for checking whether README commands still work (docs-truth-check), writing a README from scratch (readme-author), or long-form documentation.",
     "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/readme-who-what-why/",
@@ -1113,7 +1124,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 100,
+   "position": 101,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "release-notes-verifier",
@@ -1124,7 +1135,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 101,
+   "position": 102,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-hygiene-bundle",
@@ -1135,7 +1146,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 102,
+   "position": 103,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "repo-onboarding-guide",
@@ -1146,7 +1157,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 103,
+   "position": 104,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "restructure-planner",
@@ -1157,7 +1168,18 @@
   },
   {
    "@type": "ListItem",
-   "position": 104,
+   "position": 105,
+   "item": {
+    "@type": "SoftwareSourceCode",
+    "name": "stale-branch-sweep",
+    "description": "Clean up a repository's branch list safely: a bundled script joins saved gh and git exports (the remote's branches, for-each-ref dates and committers, merged refs, pull requests) and reports merged branches never deleted, branches idle for N days, branches with an open PR and protected ones, with the last committer as owner, then writes the exact git push --delete commands as a list to review and never runs them. Use when asked \"which branches can we delete?\" or before archiving a repository. Not for a whole-repository hygiene pass (repo-hygiene-bundle).",
+    "url": "https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/stale-branch-sweep/",
+    "codeRepository": "https://github.com/basitalisandhu/repo-engineering-skills"
+   }
+  },
+  {
+   "@type": "ListItem",
+   "position": 106,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "untested-entry-points",
@@ -1168,7 +1190,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 105,
+   "position": 107,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "auth-flow-review",
@@ -1179,7 +1201,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 106,
+   "position": 108,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "cors-review",
@@ -1190,7 +1212,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 107,
+   "position": 109,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "dependency-audit-reader",
@@ -1201,7 +1223,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 108,
+   "position": 110,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "diff-security-review",
@@ -1212,7 +1234,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 109,
+   "position": 111,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "http-security-headers",
@@ -1223,7 +1245,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 110,
+   "position": 112,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "jwt-inspector",
@@ -1234,7 +1256,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 111,
+   "position": 113,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "secrets-hygiene",
@@ -1245,7 +1267,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 112,
+   "position": 114,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "change-request-writer",
@@ -1256,7 +1278,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 113,
+   "position": 115,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "decision-log",
@@ -1267,7 +1289,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 114,
+   "position": 116,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "focus-plan",
@@ -1278,7 +1300,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 115,
+   "position": 117,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "meeting-actions-ledger",
@@ -1289,7 +1311,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 116,
+   "position": 118,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "one-on-one-ledger",
@@ -1300,7 +1322,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 117,
+   "position": 119,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "rfc-lifecycle",
@@ -1311,7 +1333,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 118,
+   "position": 120,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-exception-register",
@@ -1322,7 +1344,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 119,
+   "position": 121,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "risk-register-refresh",
@@ -1333,7 +1355,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 120,
+   "position": 122,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "shift-handover",
@@ -1344,7 +1366,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 121,
+   "position": 123,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "vendor-scorecard",
@@ -1355,7 +1377,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 122,
+   "position": 124,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "weekly-status-rollup",
@@ -1366,7 +1388,7 @@
   },
   {
    "@type": "ListItem",
-   "position": 123,
+   "position": 125,
    "item": {
     "@type": "SoftwareSourceCode",
     "name": "working-agreement-check",
@@ -1446,8 +1468,8 @@
 <body>
 <header class="top"><nav><a class="home" href="index.html">Claude Code skills</a><a href="index.html#plugins">Plugins</a><a href="llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
 <main>
-<h1>Claude Code skills: 123 skills in 16 plugins, one repository</h1>
-<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 123 skills in 16 plugins, synced daily from 11 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
+<h1>Claude Code skills: 125 skills in 16 plugins, one repository</h1>
+<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 125 skills in 16 plugins, synced daily from 11 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -1471,7 +1493,7 @@ python3 install.py --user</code></pre>
 <tr><td><a href="plugins/github-manager/index.html">github-manager</a></td><td>4</td><td>0.2.0</td><td>Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, a blameless incident postmortem timeline, and an issue triage digest (unlabelled, unanswered, possible duplicates, stale, popular, suggested labels). Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring.</td></tr>
 <tr><td><a href="plugins/m365-governance/index.html">m365-governance</a></td><td>10</td><td>0.3.0</td><td>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline.</td></tr>
 <tr><td><a href="plugins/mac-maintenance/index.html">mac-maintenance</a></td><td>3</td><td>0.1.2</td><td>Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.</td></tr>
-<tr><td><a href="plugins/repo-engineering/index.html">repo-engineering</a></td><td>10</td><td>0.3.1</td><td>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, and check release notes against the commits between two tags.</td></tr>
+<tr><td><a href="plugins/repo-engineering/index.html">repo-engineering</a></td><td>12</td><td>0.4.0</td><td>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, check release notes against the commits between two tags, sweep stale branches with delete commands printed for review, and check an implementation plan for required sections and unanswered questions.</td></tr>
 <tr><td><a href="plugins/security-basics/index.html">security-basics</a></td><td>7</td><td>0.2.0</td><td>Seven lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a security review of a diff. Agent and MCP security lives in the agent-security-skills marketplace.</td></tr>
 <tr><td><a href="plugins/ways-of-working/index.html">ways-of-working</a></td><td>12</td><td>0.2.1</td><td>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people.</td></tr>
 </tbody></table>
@@ -1503,7 +1525,7 @@ python3 install.py --user</code></pre>
 <h3 id="mac-maintenance"><a href="plugins/mac-maintenance/index.html">mac-maintenance</a></h3>
 <ul><li><a href="plugins/mac-maintenance/mac-app-leftovers/index.html">mac-app-leftovers</a>: Find what uninstalled apps left behind on a Mac (Application Support and container folders, caches, preferences, saved state, logs, and login items or launch agents that point at nothing), deciding what is installed from app bundles, PATH, Homebrew and Spotlight, and move only the candidates you name into a dated Trash folder.</li><li><a href="plugins/mac-maintenance/mac-cleanup/index.html">mac-cleanup</a>: Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else.</li><li><a href="plugins/mac-maintenance/mac-duplicate-finder/index.html">mac-duplicate-finder</a>: Find byte-for-byte duplicate files in a Mac&#x27;s user folders, report the largest groups and folders that mirror each other, and move verified suffix copies (IMG_1 (1).MOV next to an identical IMG_1.MOV) to a dated Trash folder after a second hash check.</li></ul>
 <h3 id="repo-engineering"><a href="plugins/repo-engineering/index.html">repo-engineering</a></h3>
-<ul><li><a href="plugins/repo-engineering/adr-miner/index.html">adr-miner</a>: Recover architecture decisions that were made but never written down by mining git history, manifest and config changes and rationale comments, then draft MADR stubs (status proposed) that cite a commit SHA on every line; a second script lints an existing docs/adr folder for numbering, status and superseded-link problems.</li><li><a href="plugins/repo-engineering/agent-context-writer/index.html">agent-context-writer</a>: Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget.</li><li><a href="plugins/repo-engineering/cited-codebase-audit/index.html">cited-codebase-audit</a>: Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve.</li><li><a href="plugins/repo-engineering/docs-truth-check/index.html">docs-truth-check</a>: Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree.</li><li><a href="plugins/repo-engineering/readme-who-what-why/index.html">readme-who-what-why</a>: Check whether a README&#x27;s first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text.</li><li><a href="plugins/repo-engineering/release-notes-verifier/index.html">release-notes-verifier</a>: Check a release&#x27;s notes against what changed between two tags, flagging notes that match no commit, commits with no note (chores excluded by a pattern), manifest versions that disagree with the tag, and missing compare links; pull request titles are read only when asked.</li><li><a href="plugins/repo-engineering/repo-hygiene-bundle/index.html">repo-hygiene-bundle</a>: Run one offline hygiene pass over a repository and report findings with severity as a table, JSON or SARIF with a CI exit code, covering manifests without lockfiles, lockfile drift, version splits across workspaces, missing licence or SPDX fields, redacted secret-shaped strings, actions pinned by tag, write-all workflows, missing SECURITY.md, and large or built files.</li><li><a href="plugins/repo-engineering/repo-onboarding-guide/index.html">repo-onboarding-guide</a>: Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact.</li><li><a href="plugins/repo-engineering/restructure-planner/index.html">restructure-planner</a>: Plan a repository restructure (split or merge packages, fix module boundaries) from the real import dependency graph of Python, JavaScript and TypeScript files, reporting the most coupled files, import cycles and god modules, and proposing a move plan with blast radius and git mv commands it prints and never runs.</li><li><a href="plugins/repo-engineering/untested-entry-points/index.html">untested-entry-points</a>: Find public functions, classes and CLI entry points that no test mentions in Python, JavaScript and TypeScript code, rank them (entry points first, then size and fan-in), and write characterisation test stubs in the project&#x27;s framework.</li></ul>
+<ul><li><a href="plugins/repo-engineering/adr-miner/index.html">adr-miner</a>: Recover architecture decisions that were made but never written down by mining git history, manifest and config changes and rationale comments, then draft MADR stubs (status proposed) that cite a commit SHA on every line; a second script lints an existing docs/adr folder for numbering, status and superseded-link problems.</li><li><a href="plugins/repo-engineering/agent-context-writer/index.html">agent-context-writer</a>: Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn from the code, and lint them for lines that restate manifests, scripts, dependency lists or directory trees, paths that do not exist, generic advice and length over a budget.</li><li><a href="plugins/repo-engineering/cited-codebase-audit/index.html">cited-codebase-audit</a>: Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code, test coverage, secrets and config, CI health) where every finding cites a path:line with a quoted snippet, and a bundled validator rejects findings whose citation does not resolve.</li><li><a href="plugins/repo-engineering/docs-truth-check/index.html">docs-truth-check</a>: Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, checking file paths, links, CLI flags and defaults, environment variables, symbol names, config keys, npm and make targets and version strings against the working tree.</li><li><a href="plugins/repo-engineering/plan-grill/index.html">plan-grill</a>: Stress-test an implementation plan before anyone writes code: put a fixed set of questions to the author (scope, interfaces, data, failure modes, rollout, tests, open questions), fold the answers into the plan, then run a bundled script that checks the Markdown for the required sections, placeholders, a missing rollback and questions with no owner or answer, listing each gap with its line.</li><li><a href="plugins/repo-engineering/readme-who-what-why/index.html">readme-who-what-why</a>: Check whether a README&#x27;s first screen answers six questions (what it is, who it is for, why it exists, how to install, one example, where to ask), flag hype words, list the gaps as a to-do list, then fix them with verified text.</li><li><a href="plugins/repo-engineering/release-notes-verifier/index.html">release-notes-verifier</a>: Check a release&#x27;s notes against what changed between two tags, flagging notes that match no commit, commits with no note (chores excluded by a pattern), manifest versions that disagree with the tag, and missing compare links; pull request titles are read only when asked.</li><li><a href="plugins/repo-engineering/repo-hygiene-bundle/index.html">repo-hygiene-bundle</a>: Run one offline hygiene pass over a repository and report findings with severity as a table, JSON or SARIF with a CI exit code, covering manifests without lockfiles, lockfile drift, version splits across workspaces, missing licence or SPDX fields, redacted secret-shaped strings, actions pinned by tag, write-all workflows, missing SECURITY.md, and large or built files.</li><li><a href="plugins/repo-engineering/repo-onboarding-guide/index.html">repo-onboarding-guide</a>: Write an onboarding guide for a repository (how to run and test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every command, path, variable, service or owner matches a fact.</li><li><a href="plugins/repo-engineering/restructure-planner/index.html">restructure-planner</a>: Plan a repository restructure (split or merge packages, fix module boundaries) from the real import dependency graph of Python, JavaScript and TypeScript files, reporting the most coupled files, import cycles and god modules, and proposing a move plan with blast radius and git mv commands it prints and never runs.</li><li><a href="plugins/repo-engineering/stale-branch-sweep/index.html">stale-branch-sweep</a>: Clean up a repository&#x27;s branch list safely: a bundled script joins saved gh and git exports (the remote&#x27;s branches, for-each-ref dates and committers, merged refs, pull requests) and reports merged branches never deleted, branches idle for N days, branches with an open PR and protected ones, with the last committer as owner, then writes the exact git push --delete commands as a list to review and never runs them.</li><li><a href="plugins/repo-engineering/untested-entry-points/index.html">untested-entry-points</a>: Find public functions, classes and CLI entry points that no test mentions in Python, JavaScript and TypeScript code, rank them (entry points first, then size and fan-in), and write characterisation test stubs in the project&#x27;s framework.</li></ul>
 <h3 id="security-basics"><a href="plugins/security-basics/index.html">security-basics</a></h3>
 <ul><li><a href="plugins/security-basics/auth-flow-review/index.html">auth-flow-review</a>: Find the weaknesses in an application&#x27;s login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow.</li><li><a href="plugins/security-basics/cors-review/index.html">cors-review</a>: Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use.</li><li><a href="plugins/security-basics/dependency-audit-reader/index.html">dependency-audit-reader</a>: Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates.</li><li><a href="plugins/security-basics/diff-security-review/index.html">diff-security-review</a>: Review a change for what it adds to the attack surface before it merges: a bundled script scans only the added lines of a saved git or gh diff for new network calls, shell and process execution, unsafe deserialisation, SQL built from strings, credential-shaped literals, disabled TLS checks and new permissions in workflows and manifests, with file and line.</li><li><a href="plugins/security-basics/http-security-headers/index.html">http-security-headers</a>: Grade the security headers of a saved HTTP response (HSTS, CSP, nosniff, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, disclosure, caching) with a bundled script, then write the header set for the server or framework.</li><li><a href="plugins/security-basics/jwt-inspector/index.html">jwt-inspector</a>: Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens.</li><li><a href="plugins/security-basics/secrets-hygiene/index.html">secrets-hygiene</a>: Find leaked credentials (cloud and SaaS keys, private keys, tokens, connection strings, high-entropy assignments) in a repository, directory or staged files with a bundled script that redacts them, check .env files are ignored, keep a baseline of accepted findings, and guide rotation and cleanup.</li></ul>
 <h3 id="ways-of-working"><a href="plugins/ways-of-working/index.html">ways-of-working</a></h3>

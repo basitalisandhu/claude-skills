@@ -106,5 +106,6 @@ A line containing `hygiene: ignore` is skipped by the secret check, for document
 ## Related
 
 - `cited-codebase-audit` for a broader audit whose findings cite lines; its `ci-health` and `secrets-config` categories can start from this report.
+- `stale-branch-sweep`: reports merged and idle remote branches with delete commands for review; this skill does not look at branches.
 - Anthropic's `claude-security` plugin covers vulnerability scanning of code; this skill covers repository hygiene around it.
 - `github-actions-author` (devops plugin, claude-dev-skills): github-actions-author writes and lints one workflow; repo-hygiene-bundle only flags unpinned actions and write-all permissions across the repository.

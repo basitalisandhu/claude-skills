@@ -18,7 +18,7 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 134
+## Skills that point at a skill in another plugin: 135
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
@@ -158,11 +158,12 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `github-manager/incident-postmortem-timeline -> docs/postmortem-writer`
 - `github-manager/iteration-report -> ways-of-working/weekly-status-rollup`
 
-### repo-engineering (8)
+### repo-engineering (9)
 
 - `repo-engineering/adr-miner -> docs/adr-writer`
 - `repo-engineering/adr-miner -> ways-of-working/decision-log`
 - `repo-engineering/agent-context-writer -> agent-security/agent-config-audit`
+- `repo-engineering/plan-grill -> ways-of-working/rfc-lifecycle`
 - `repo-engineering/readme-who-what-why -> docs/readme-author`
 - `repo-engineering/release-notes-verifier -> devops/release-notes`
 - `repo-engineering/repo-hygiene-bundle -> devops/github-actions-author`

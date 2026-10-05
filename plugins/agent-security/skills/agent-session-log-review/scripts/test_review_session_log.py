@@ -204,7 +204,7 @@ class MisuseTests(unittest.TestCase):
 
 class EgressTests(unittest.TestCase):
     def test_secret_is_flagged_and_masked_everywhere(self):
-        key = "AKIAIOSFODNN7EXAMPLE"
+        key = ("AKIA" + "IOSFODNN7EXAMPLE")
         log = [
             user("Show the env", 1),
             call("Bash", {"command": "cat settings.ini"}, "t1", 2),

@@ -3,9 +3,9 @@
 
 For each column: inferred type (integer, number, boolean, date, datetime, string, empty), null count (empty,
 NULL, null, NA, N/A, None, -), distinct count, min and max (numeric or lexical), mean for numbers, mean length
-for strings, the most common values, and whether the column is unique (a candidate key). File-level: delimiter
-(sniffed unless --delimiter is given), header, row count, blank rows, ragged rows (wrong field count), duplicate
-rows, and columns that are entirely empty or constant.
+for strings, the most common values, and whether the column is unique (a candidate key). File-level: dialect
+(delimiter, quotechar, doublequote, line terminator CRLF/LF/mixed, BOM), header, row count, blank rows, ragged
+rows (wrong field count), duplicate rows, and columns that are entirely empty or constant.
 
 Usage:
     csv_profiler.py FILE [--json] [--delimiter ,] [--no-header] [--sample N] [--encoding utf-8] [--top N]
@@ -32,6 +32,47 @@ INT_RE = re.compile(r"^[-+]?\d{1,3}(,\d{3})+$|^[-+]?\d+$")
 NUM_RE = re.compile(r"^[-+]?(\d{1,3}(,\d{3})+|\d+)?(\.\d+)?([eE][-+]?\d+)?$")
 DATE_FORMATS = ["%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y", "%Y/%m/%d", "%d-%m-%Y", "%d.%m.%Y", "%Y%m%d", "%b %d %Y", "%d %b %Y"]
 DATETIME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?$")
+BOM_UTF8 = b"\xef\xbb\xbf"
+
+
+def detect_bom(raw: bytes) -> bool:
+    """Return True when the first bytes are a UTF-8 BOM."""
+    return raw.startswith(BOM_UTF8)
+
+
+def detect_line_terminator(raw: bytes) -> str:
+    """Return CRLF, LF, mixed or unknown from the raw first bytes.
+
+    The scan runs on bytes on purpose: path.read_text() uses universal
+    newlines and would turn CRLF into LF before we could see it.
+    """
+    has_crlf = b"\r\n" in raw
+    has_lone_lf = b"\n" in raw.replace(b"\r\n", b"")
+    if has_crlf and has_lone_lf:
+        return "mixed"
+    if has_crlf:
+        return "CRLF"
+    if has_lone_lf:
+        return "LF"
+    return "unknown"
+
+
+def has_escaped_quote(text: str, quotechar: str, delimiter: str) -> bool:
+    """Return True when text contains a doubled quotechar inside a non-empty field.
+
+    A doubled quotechar is an escape when there is field content around it,
+    and is an empty field when it is alone between delimiters or line ends.
+    """
+    skip_chars = frozenset({delimiter, "\n", "\r"})
+    pair = quotechar * 2
+    idx = text.find(pair)
+    while idx != -1:
+        before = text[idx - 1] if idx > 0 else "\n"
+        after = text[idx + 2] if idx + 2 < len(text) else "\n"
+        if skip_chars.isdisjoint((before, after)):
+            return True
+        idx = text.find(pair, idx + 2)
+    return False
 
 
 def classify(value: str) -> str:
@@ -96,16 +137,26 @@ def profile_column(name: str, values: list[str], top: int) -> dict:
 
 
 def profile(path: Path, delimiter: str | None, has_header: bool, sample: int | None, encoding: str, top: int) -> dict:
-    text = path.read_text(encoding=encoding, errors="replace")
+    raw = path.read_bytes()
+    head = raw[:65536]
+    text = raw.decode(encoding, errors="replace")
     if not text.strip():
         raise ValueError("file is empty")
-    if delimiter is None:
-        try:
-            dialect = csv.Sniffer().sniff(text[:65536], delimiters=",;\t|")
+    quotechar = '"'
+    try:
+        dialect = csv.Sniffer().sniff(text[:65536], delimiters=",;\t|")
+        quotechar = dialect.quotechar
+        if delimiter is None:
             delimiter = dialect.delimiter
-        except csv.Error:
+    except csv.Error:
+        if delimiter is None:
             delimiter = "\t" if text.count("\t") > text.count(",") else ","
+    bom = detect_bom(head)
+    if bom:
+        text = text.lstrip("\ufeff")
+    line_terminator = detect_line_terminator(head)
     rows = list(csv.reader(text.splitlines(), delimiter=delimiter))
+    doublequote = has_escaped_quote(text, quotechar, delimiter)
     blank = sum(1 for r in rows if not any(c.strip() for c in r))
     rows = [r for r in rows if any(c.strip() for c in r)]
     if not rows:
@@ -124,6 +175,10 @@ def profile(path: Path, delimiter: str | None, has_header: bool, sample: int | N
         values = [r[i] if i < len(r) else "" for r in data]
         columns.append(profile_column(name or f"col{i + 1}", values, top))
     warnings: list[str] = []
+    if bom:
+        warnings.append("UTF-8 BOM detected at the start of the file")
+    if line_terminator == "mixed":
+        warnings.append("mixed line endings detected (CRLF and LF)")
     if ragged:
         warnings.append(f"{len(ragged)} rows have a field count different from the header (first at line {ragged[0]})")
     if dup_rows:
@@ -144,14 +199,30 @@ def profile(path: Path, delimiter: str | None, has_header: bool, sample: int | N
             warnings.append(f"column {c['name']} has {c['leading_or_trailing_space']} values with leading or trailing whitespace")
         if 0 < c["null_percent"] and c["null_percent"] >= 50:
             warnings.append(f"column {c['name']} is {c['null_percent']}% null")
-    return {"version": VERSION, "file": str(path), "delimiter": delimiter, "header": has_header, "rows": len(data), "columns_count": width,
-            "ragged_rows": ragged[:20], "duplicate_rows": dup_rows, "blank_rows": blank, "candidate_keys": [c["name"] for c in columns if c["unique"]],
+    dialect_info = {
+        "delimiter": delimiter,
+        "quotechar": quotechar,
+        "line_terminator": line_terminator,
+        "bom": bom,
+    }
+    if doublequote:
+        dialect_info["doublequote"] = True
+    return {"version": VERSION, "file": str(path), "delimiter": delimiter, "dialect": dialect_info,
+            "header": has_header, "rows": len(data), "columns_count": width, "ragged_rows": ragged[:20],
+            "duplicate_rows": dup_rows, "blank_rows": blank, "candidate_keys": [c["name"] for c in columns if c["unique"]],
             "columns": columns, "warnings": warnings}
 
 
 def render_text(p: dict) -> str:
     d = {"\t": "TAB"}.get(p["delimiter"], p["delimiter"])
     lines = [f"csv-profiler {p['version']}: {p['file']}: {p['rows']} rows x {p['columns_count']} columns, delimiter '{d}', header={'yes' if p['header'] else 'no'}"]
+    dq = p["dialect"].get("doublequote")
+    parts = [f"quotechar={p['dialect']['quotechar']!r}"]
+    if dq is not None:
+        parts.append(f"doublequote={dq}")
+    parts.append(f"line_terminator={p['dialect']['line_terminator']}")
+    parts.append(f"bom={p['dialect']['bom']}")
+    lines.append("dialect: " + ", ".join(parts))
     if p["candidate_keys"]:
         lines.append("candidate keys (unique, non-null): " + ", ".join(p["candidate_keys"]))
     lines.append(f"{'column':<24} {'type':<9} {'nulls':>6} {'distinct':>8}  range / stats")
