@@ -24,6 +24,8 @@ Why one repository: one clone, one marketplace to add, one place to search. The 
 
 ## Install
 
+New to skills? The [install guide](https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/) walks through all three routes and common problems.
+
 ### 1. As a plugin marketplace (recommended)
 
 In Claude Code:

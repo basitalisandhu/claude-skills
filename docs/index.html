@@ -982,12 +982,76 @@
  ]
 }
 </script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "What is this repository?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "It is one repository with every Claude Code skill maintained by Muhammad Basit Ali, and it is also a single Claude Code plugin marketplace. Each skill is a SKILL.md file, and most bundle a small Python script."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How do I install the skills?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "In Claude Code, run /plugin marketplace add basitalisandhu/claude-skills and then /plugin install <plugin>@claude-skills. Or clone the repository and run python3 install.py --user to copy every skill into ~/.claude/skills/. The install guide on this site covers both routes and a third one for other agents."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is anything sent anywhere?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. install.py, the validator and the site builder make no network calls, and the installer sends no telemetry. Only the daily sync clones the public source repositories from GitHub. What a skill's own script does is described on that skill's page."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Where do I report a bug in a skill?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Open an issue in the skill's source repository. Each skill page and each row of the catalog links to it. Problems with the installer or the site go to the issues of claude-skills on GitHub."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "How does the catalog stay in sync with the source repositories?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Skills are edited in their source repositories. A workflow in this repository copies them in every day, regenerates the catalog and the site, and records the source commit of each plugin in SOURCES.json."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Can other agents use these skills?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Agents that read the open Agent Skills format can use them, because every skill is a folder with a SKILL.md that has name and description front matter. The command npx skills add basitalisandhu/claude-skills found all 87 skills on 2026-10-04. This repository tests them with Claude Code only."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "What licence are the skills under?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "MIT. The vendored plugins are MIT too, by the same author."
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
 <header class="top"><nav><a class="home" href="index.html">Claude Code skills</a><a href="index.html#plugins">Plugins</a><a href="llms.txt">llms.txt</a><a href="https://github.com/basitalisandhu/claude-skills">GitHub</a></nav></header>
 <main>
 <h1>Claude Code skills: 87 skills in 13 plugins, one repository</h1>
-<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 87 skills in 13 plugins, synced daily from 8 source repositories. It is also a single Claude Code plugin marketplace.</p>
+<p class="lede">One repository with every Claude Code skill maintained by Muhammad Basit Ali: 87 skills in 13 plugins, synced daily from 8 source repositories. It is also a single Claude Code plugin marketplace. New to skills? Read <a href="guide/install-claude-code-skills/index.html">how to install Claude Code skills (three ways)</a>.</p>
 <h2 id="install">Install</h2>
 <p>Add the marketplace in Claude Code, then install the plugins you want:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -1039,6 +1103,21 @@ python3 install.py --user</code></pre>
 <ul><li><a href="plugins/repo-engineering/adr-miner/index.html">adr-miner</a>: Recover architecture decisions that were made but never written down, by mining git history (commit messages with decision phrases such as switch to, replace, adopt, drop, migrate, deprecate, in favour of), configuration changes (a dependency swapped in a manifest, a Dockerfile base image changed, CI files added or removed) and TODO or NOTE comments that carry a rationale, then drafting MADR stubs with status proposed that cite the commit SHA for every line; a second script lints an existing docs/adr folder for numbering gaps, duplicate numbers, missing or unknown status and broken superseded links.</li><li><a href="plugins/repo-engineering/agent-context-writer/index.html">agent-context-writer</a>: Write or refresh AGENTS.md and CLAUDE.md so they hold only what an agent cannot learn by reading the code (commands that are in no manifest, conventions, forbidden actions, environment setup, where to look first), and lint the result with a bundled script that flags lines restating package.json scripts, pyproject scripts, Makefile or justfile targets, dependency lists, pinned runtime versions or directory trees, paths that do not exist, generic advice, and length over a budget.</li><li><a href="plugins/repo-engineering/cited-codebase-audit/index.html">cited-codebase-audit</a>: Audit a whole repository against a fixed checklist (structure, entry points, dependency hygiene, dead code candidates, test coverage of entry points, secrets and config handling, CI health) where every finding must cite a path:line with a quoted snippet, and a bundled validator rejects any finding whose citation does not resolve.</li><li><a href="plugins/repo-engineering/docs-truth-check/index.html">docs-truth-check</a>: Verify that a repository&#x27;s README, docs/, AGENTS.md and CLAUDE.md still match the code, using a deterministic script that checks file paths, relative links, CLI flags and their documented defaults, environment variables, function and class names, config keys, npm and make targets, and version strings against the working tree.</li><li><a href="plugins/repo-engineering/readme-who-what-why/index.html">readme-who-what-why</a>: Check whether a README answers six questions in its first screen (what it is in one sentence, who it is for, why it exists or what it replaces, how to install in one block, how to run one example, where to ask) with a bundled script that scores presence and position of each, flags hype words, and prints the gaps as a to-do list; then fix the gaps with verified text.</li><li><a href="plugins/repo-engineering/release-notes-verifier/index.html">release-notes-verifier</a>: Check a release&#x27;s notes against what actually changed, with a bundled script that reads the commits between two tags (and, only when asked, pull request titles through a read-only gh call) and compares them with the CHANGELOG section or a release notes file, flagging notes that match no commit, commits with no note (chores excluded by a configurable pattern), manifest versions that disagree with the tag, and missing compare or reference links.</li><li><a href="plugins/repo-engineering/repo-hygiene-bundle/index.html">repo-hygiene-bundle</a>: Run one offline hygiene pass over a repository with a bundled script and report each finding with a severity, as a table, JSON or SARIF, with an exit code for CI.</li><li><a href="plugins/repo-engineering/repo-onboarding-guide/index.html">repo-onboarding-guide</a>: Write an onboarding guide for a repository (how to run it, how to test it, where things live, which services it needs, who owns what) only from facts a bundled script extracted with a path:line citation each, then lint the guide so every sentence that names a command, path, variable, service or owner matches a fact, and run docs-truth-check on the result.</li><li><a href="plugins/repo-engineering/restructure-planner/index.html">restructure-planner</a>: Plan a repository restructure (split a package or a monorepo, merge packages, fix module boundaries) from the real import graph instead of a guess, using a bundled script that reads Python imports with ast and JS or TS imports and requires with regex, then reports the most coupled files, import cycles, files importing from many packages and god modules, and proposes a move plan as a table (file, from, to, reason, blast radius as the number of importers) with the exact git mv commands, which it prints and never runs.</li><li><a href="plugins/repo-engineering/untested-entry-points/index.html">untested-entry-points</a>: Find public functions, classes and CLI entry points that no test mentions, using a bundled script that parses Python with ast and JS or TS exports with regex, maps each unit to the test files that reference it by name, ranks the untested ones (entry points first, then by size and fan-in), and writes characterisation test stubs in the project&#x27;s framework (pytest, unittest, jest, vitest, node:test).</li></ul>
 <h3 id="security-basics"><a href="plugins/security-basics/index.html">security-basics</a></h3>
 <ul><li><a href="plugins/security-basics/auth-flow-review/index.html">auth-flow-review</a>: Review an application&#x27;s authentication and session design against a checklist covering password handling, login and logout, session cookies and tokens, OAuth and OIDC flows (authorization code with PKCE, state, redirect URI validation), multi-factor, password reset, account enumeration, rate limiting, remember-me and device trust, and logging; then produce findings with severity and the corrected flow.</li><li><a href="plugins/security-basics/cors-review/index.html">cors-review</a>: Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use.</li><li><a href="plugins/security-basics/dependency-audit-reader/index.html">dependency-audit-reader</a>: Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates.</li><li><a href="plugins/security-basics/http-security-headers/index.html">http-security-headers</a>: Check the security headers of a captured HTTP response (saved from curl or the browser) with a bundled script that grades HSTS, Content-Security-Policy, X-Content-Type-Options, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, information disclosure and caching, then produce the header set for the web server or framework.</li><li><a href="plugins/security-basics/jwt-inspector/index.html">jwt-inspector</a>: Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens.</li><li><a href="plugins/security-basics/secrets-hygiene/index.html">secrets-hygiene</a>: Scan a repository, a directory or the files staged for commit for leaked credentials (cloud and SaaS API keys, private keys, tokens, connection strings with passwords, high-entropy assignments) with a bundled script that redacts what it finds, check that .env files are ignored, maintain a baseline of accepted findings, and walk the rotation and history cleanup when something real is found.</li></ul>
+<h2 id="questions">Questions</h2>
+<h3>What is this repository?</h3>
+<p>It is one repository with every Claude Code skill maintained by Muhammad Basit Ali, and it is also a single Claude Code plugin marketplace. Each skill is a SKILL.md file, and most bundle a small Python script.</p>
+<h3>How do I install the skills?</h3>
+<p>In Claude Code, run /plugin marketplace add basitalisandhu/claude-skills and then /plugin install &lt;plugin&gt;@claude-skills. Or clone the repository and run python3 install.py --user to copy every skill into ~/.claude/skills/. The install guide on this site covers both routes and a third one for other agents.</p>
+<h3>Is anything sent anywhere?</h3>
+<p>No. install.py, the validator and the site builder make no network calls, and the installer sends no telemetry. Only the daily sync clones the public source repositories from GitHub. What a skill&#x27;s own script does is described on that skill&#x27;s page.</p>
+<h3>Where do I report a bug in a skill?</h3>
+<p>Open an issue in the skill&#x27;s source repository. Each skill page and each row of the catalog links to it. Problems with the installer or the site go to the issues of claude-skills on GitHub.</p>
+<h3>How does the catalog stay in sync with the source repositories?</h3>
+<p>Skills are edited in their source repositories. A workflow in this repository copies them in every day, regenerates the catalog and the site, and records the source commit of each plugin in SOURCES.json.</p>
+<h3>Can other agents use these skills?</h3>
+<p>Agents that read the open Agent Skills format can use them, because every skill is a folder with a SKILL.md that has name and description front matter. The command npx skills add basitalisandhu/claude-skills found all 87 skills on 2026-10-04. This repository tests them with Claude Code only.</p>
+<h3>What licence are the skills under?</h3>
+<p>MIT. The vendored plugins are MIT too, by the same author.</p>
 <p class="meta">Machine-readable: <a href="llms.txt">llms.txt</a>, <a href="llms-full.txt">llms-full.txt</a>, <a href="feed.xml">feed.xml</a>, <a href="https://github.com/basitalisandhu/claude-skills/blob/main/catalog.json">catalog.json</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
