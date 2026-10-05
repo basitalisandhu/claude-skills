@@ -30,6 +30,15 @@
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/dead-code-finder/</loc><lastmod>2026-10-05</lastmod></url>
@@ -82,6 +91,7 @@
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/access-review-pack/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/conditional-access-gap-analysis/</loc><lastmod>2026-10-05</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/copilot-oversharing-readiness/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/entra-posture-review/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/graph-permission-preflight/</loc><lastmod>2026-10-05</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/guest-and-external-sharing-review/</loc><lastmod>2026-10-05</lastmod></url>

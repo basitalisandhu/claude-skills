@@ -111,6 +111,37 @@
       ]
     },
     {
+      "name": "cc-setup-tooling",
+      "source": "./plugins/cc-setup-tooling",
+      "description": "Eight skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Muhammad Basit Ali",
+        "url": "https://github.com/basitalisandhu"
+      },
+      "homepage": "https://github.com/basitalisandhu/claude-code-tooling-skills",
+      "repository": "https://github.com/basitalisandhu/claude-code-tooling-skills",
+      "license": "MIT",
+      "keywords": [
+        "claude-code",
+        "skills",
+        "skill-supply-chain",
+        "skill-lint",
+        "trigger-evaluation",
+        "context-budget",
+        "permissions",
+        "hooks",
+        "skill-collisions",
+        "portability"
+      ],
+      "category": "development",
+      "tags": [
+        "security",
+        "developer-tools",
+        "agent-configuration"
+      ]
+    },
+    {
       "name": "code-quality",
       "source": "./plugins/code-quality",
       "description": "Review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage and test gap finder.",
@@ -310,8 +341,8 @@
     {
       "name": "m365-governance",
       "source": "./plugins/m365-governance",
-      "description": "Nine Microsoft 365 governance skills: Graph permission preflight, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and groups sprawl, access review pack. Read-only exports, offline evaluation.",
-      "version": "0.2.2",
+      "description": "Ten Microsoft 365 governance skills: Graph permission preflight, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and groups sprawl, access review pack, Copilot oversharing readiness. Read-only exports, offline evaluation.",
+      "version": "0.3.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -327,7 +358,8 @@
         "conditional-access",
         "access-review",
         "teams",
-        "governance"
+        "governance",
+        "copilot"
       ],
       "category": "security",
       "tags": [

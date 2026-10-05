@@ -28,6 +28,15 @@
       "upstream_version": "0.2.1",
       "content_sha256": "0fd15fb772f94d5c0868bc919076a03e2258723ccf71f6bed15981b137d8f9d3"
     },
+    "cc-setup-tooling": {
+      "repo": "claude-code-tooling-skills",
+      "url": "https://github.com/basitalisandhu/claude-code-tooling-skills",
+      "path": "plugins/cc-setup-tooling",
+      "commit": "77944fe5134f45276587f74e91e07e18322f792d",
+      "synced_at": "2026-10-05T12:05:55Z",
+      "upstream_version": "0.1.0",
+      "content_sha256": "f13e8770b3d2cb90c2c961bec87a5d50f006cdfe62c122714116c2ca6a539704"
+    },
     "code-quality": {
       "repo": "claude-dev-skills",
       "url": "https://github.com/basitalisandhu/claude-dev-skills",
@@ -95,10 +104,10 @@
       "repo": "m365-governance-skills",
       "url": "https://github.com/basitalisandhu/m365-governance-skills",
       "path": "plugins/m365-governance",
-      "commit": "46ad5a427b85e75f6da736d3a8851103c1ca4d4f",
-      "synced_at": "2026-10-05T11:43:57Z",
-      "upstream_version": "0.2.2",
-      "content_sha256": "a726c09d801cb4de0b7e04601e6fdaf32d99e9f79affaaaae0d7132d2c3bfad8"
+      "commit": "f489c69e5068785710770ccea38c9063b8e4f3b8",
+      "synced_at": "2026-10-05T12:05:55Z",
+      "upstream_version": "0.3.0",
+      "content_sha256": "b7cb83c7d295aca1049fecc2a6e4ff5985def5fac7c735d8a5f1f71d6ac5d4fd"
     },
     "mac-maintenance": {
       "repo": "mac-maintenance-skills",

@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![107 skills in 15 plugins](https://img.shields.io/badge/skills-107%20in%2015%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![116 skills in 16 plugins](https://img.shields.io/badge/skills-116%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**107 skills in 15 plugins, from 10 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**116 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,7 +81,7 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**107 skills in 15 plugins.** 143 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**116 skills in 16 plugins.** 158 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
 
 ### agent-identity-governance
 
@@ -128,6 +128,21 @@ Version 0.2.1. Source: [aws-security-skills](https://github.com/basitalisandhu/a
 | sandbox-account-guardrail-pack | Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md) |
 | scp-guardrails | Build AWS Organizations service control policies from a short spec (region allowlist, break-glass roles, protected logging and detection, no root user, IMDSv2, no public S3 ACLs) packed under the 5120-character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md) |
 | security-hub-triage | Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md) |
+
+### cc-setup-tooling
+
+Version 0.1.0. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
+
+| Skill | What it does | Scripts | Links |
+| --- | --- | --- | --- |
+| context-budget-audit | Audit what a Claude Code project puts in context on every turn (CLAUDE.md and its imports, AGENTS.md, rules files, skill descriptions, MCP tool schemas from saved tools/list output, hooks), estimate the tokens, rank the biggest items and flag duplicates and stale sections. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/context-budget-audit/SKILL.md) |
+| hook-author | Write and test a Claude Code hook with cc-hooks: pick the event and the decision (block, warn, allow or modify) from a table, scaffold the hook, its fixtures, a pytest file and the settings block from a short spec, then prove it with cc-hooks test. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/hook-author/SKILL.md) |
+| permissions-builder | Build a least-privilege .claude/settings.json permission set from what a project actually needs: generate MCP rules with claude-mcp-allow, merge them with your own allow, ask and deny lists, put deny first, diff against the current file, then test the result with claude-perm-sim against the commands the team runs. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/permissions-builder/SKILL.md) |
+| skill-collision-check | Find installed skills that share a name, shadow each other or overlap so much in description that the wrong one gets picked, across personal, project, managed, plugin and copied folders, and say which one wins. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-collision-check/SKILL.md) |
+| skill-description-linter | Lint the front matter of your SKILL.md files so each skill is listed and picked correctly: double-quoted description under 600 characters, a verb first, a quoted trigger phrase, Use when and Not for sentences, name equal to the folder, strict-YAML safety and a Limits section, with --fix for the quoting. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-description-linter/SKILL.md) |
+| skill-portability-check | Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md) |
+| skill-supply-chain-review | Review a third-party skill or plugin before you install it: run skill-scan-gate on the folder, lock it with cc-plugin-lock, read every script for network and shell use with a bundled offline inventory, and write a one-page verdict. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-supply-chain-review/SKILL.md) |
+| skill-trigger-eval | Measure whether a skill's description triggers on the prompts it should and stays quiet on the ones it should not, using a labelled prompt set and transparent lexical scoring, and compare two description versions by precision and recall. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-trigger-eval/SKILL.md) |
 
 ### code-quality
 
@@ -222,12 +237,13 @@ Version 0.1.2. Source: [github-manager-skills](https://github.com/basitalisandhu
 
 ### m365-governance
 
-Version 0.2.2. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
+Version 0.3.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | access-review-pack | Build a quarterly Microsoft 365 access review package from read-only Graph exports, listing directory role holders (active and PIM-eligible) with last sign-in, app owners and ownerless apps, owners of sensitive groups, guests per group and expiring app secrets and certificates, with a reviewer checklist and a sign-off CSV. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/access-review-pack/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/access-review-pack/SKILL.md) |
 | conditional-access-gap-analysis | Find gaps, overlaps and exclusion problems in Microsoft Entra Conditional Access from read-only Graph exports, resolving who each policy really covers and checking MFA for all users and admins, legacy authentication, device and risk policies, break-glass and unexplained exclusions, report-only and self-cancelling policies, with a coverage matrix by persona. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/conditional-access-gap-analysis/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/conditional-access-gap-analysis/SKILL.md) |
+| copilot-oversharing-readiness | Score a Microsoft 365 tenant's readiness for a Copilot rollout against Microsoft's oversharing checks and produce a fix list per site owner, from read-only exports of SharePoint sites, sensitivity labels, Everyone grants, sharing links and DLP policies. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/copilot-oversharing-readiness/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/copilot-oversharing-readiness/SKILL.md) |
 | entra-posture-review | Review a Microsoft Entra ID tenant's identity posture from read-only Graph exports, checking Conditional Access basics, security defaults, standing Global Administrators, guests with roles, stale guests, long-lived app secrets, high-risk Graph application permissions, consent and invitation settings and legacy sign-ins. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/entra-posture-review/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/entra-posture-review/SKILL.md) |
 | graph-permission-preflight | Check the Microsoft Graph permissions an app, connector or MCP server requests or holds against a needs manifest, flag high-risk, .All, write-where-read-suffices and unused grants, and propose a least-privilege set. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/graph-permission-preflight/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/graph-permission-preflight/SKILL.md) |
 | guest-and-external-sharing-review | Review guest accounts and external sharing in Microsoft 365 from read-only exports, reporting guests from blocked domains or in sensitive groups, stale and unaccepted invitations, anyone links and links that never expire, guest resharing and open Teams external access, with a per-guest access map and a draft removal list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/guest-and-external-sharing-review/) · [source](https://github.com/basitalisandhu/m365-governance-skills/blob/main/plugins/m365-governance/skills/guest-and-external-sharing-review/SKILL.md) |
@@ -311,11 +327,11 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->87 of the 107 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->96 of the 116 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->107 of the 107 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->116 of the 116 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 

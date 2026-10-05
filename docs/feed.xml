@@ -4,8 +4,22 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-05T11:59:40Z</updated>
+  <updated>2026-10-05T12:05:55Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
+  <entry>
+    <title>m365-governance 0.3.0</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.3.0-f489c69e5068</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
+    <updated>2026-10-05T12:05:55Z</updated>
+    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit f489c69e5068.</summary>
+  </entry>
+  <entry>
+    <title>cc-setup-tooling 0.1.0</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/#v0.1.0-77944fe5134f</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/"/>
+    <updated>2026-10-05T12:05:55Z</updated>
+    <summary>Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network. Synced from https://github.com/basitalisandhu/claude-code-tooling-skills at commit 77944fe5134f.</summary>
+  </entry>
   <entry>
     <title>agent-identity-governance 0.1.0</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/#v0.1.0-6e1ccd045ee1</id>
@@ -40,13 +54,6 @@
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/"/>
     <updated>2026-10-05T11:43:57Z</updated>
     <summary>Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list. Synced from https://github.com/basitalisandhu/mac-maintenance-skills at commit 2424fc9991b7.</summary>
-  </entry>
-  <entry>
-    <title>m365-governance 0.2.2</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.2.2-46ad5a427b85</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
-    <updated>2026-10-05T11:43:57Z</updated>
-    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, and a quarterly access review pack. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit 46ad5a427b85.</summary>
   </entry>
   <entry>
     <title>github-manager 0.1.2</title>
