@@ -16,7 +16,7 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ### Changed
 
-- The README intro, the design-rule counts and the install guide take their numbers from `catalog.json` at sync or build time (`<!-- counts:start -->` spans and `{{skills}}` and `{{plugins}}` template variables), so they read 96 skills in 14 plugins today and stay current.
+- The README intro, the design-rule counts and the install guide take their numbers from `catalog.json` at sync or build time (`<!-- counts:start -->` spans and `{{skills}}` and `{{plugins}}` template variables), so they read the current skill and plugin counts (from catalog.json) today and stay current.
 
 ## [0.1.0] - 2026-10-04
 
