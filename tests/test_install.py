@@ -155,6 +155,39 @@ def test_list_needs_no_target(env, capsys):
     assert "4 skills in 2 plugins" in out
 
 
+def test_list_default_text_is_unchanged(env, capsys):
+    assert run(env, "--list") == 0
+    assert capsys.readouterr().out == (
+        "alpha\n  one\n  shared\nbeta\n  shared  (installs as beta-shared)\n  two\n"
+        "4 skills in 2 plugins\n"
+    )
+
+
+def test_list_json_preserves_collision_names_and_filtering(env, capsys):
+    assert run(env, "--list", "--json", "--only", "beta") == 0
+    assert json.loads(capsys.readouterr().out) == {
+        "plugins": [{
+            "name": "beta",
+            "skills": [
+                {"name": "shared", "install_name": "beta-shared"},
+                {"name": "two", "install_name": "two"},
+            ],
+        }],
+    }
+    assert not env["user"].exists()
+    assert run(env, "--list", "--json", "--prefix", "--skill", "alpha/one") == 0
+    assert json.loads(capsys.readouterr().out)["plugins"][0]["skills"] == [
+        {"name": "one", "install_name": "alpha-one"},
+    ]
+
+
+def test_json_without_list_is_rejected_without_installing(env):
+    with pytest.raises(SystemExit) as error:
+        run(env, "--user", "--json")
+    assert error.value.code == 2
+    assert not env["user"].exists()
+
+
 def test_requires_a_target(env):
     with pytest.raises(SystemExit):
         run(env)
