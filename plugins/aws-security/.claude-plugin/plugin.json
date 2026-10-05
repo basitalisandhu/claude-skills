@@ -1,8 +1,8 @@
 {
   "name": "aws-security",
   "displayName": "AWS Security",
-  "version": "0.2.1",
-  "description": "AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails and a sandbox OU guardrail pack. Scripts are standard-library Python and work offline on specs and saved aws CLI output.",
+  "version": "0.3.0",
+  "description": "AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, a sandbox OU guardrail pack and an audit of what an agent role session did, from CloudTrail. Scripts are standard-library Python and work offline on specs and saved aws CLI output.",
   "author": {
     "name": "Muhammad Basit Ali",
     "url": "https://github.com/basitalisandhu"
@@ -10,5 +10,5 @@
   "homepage": "https://github.com/basitalisandhu/aws-security-skills",
   "repository": "https://github.com/basitalisandhu/aws-security-skills",
   "license": "MIT",
-  "keywords": ["aws", "aws-security", "cloud-security", "iam", "least-privilege", "scp", "aws-organizations", "security-hub", "guardduty", "landing-zone", "incident-response", "ai-agents", "budgets", "sandbox"]
+  "keywords": ["aws", "aws-security", "cloud-security", "iam", "least-privilege", "scp", "aws-organizations", "security-hub", "guardduty", "landing-zone", "incident-response", "ai-agents", "budgets", "sandbox", "cloudtrail"]
 }

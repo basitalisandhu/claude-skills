@@ -1,8 +1,8 @@
 {
   "name": "agent-security",
   "displayName": "Agent Security",
-  "version": "0.1.2",
-  "description": "Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, and scan with Semgrep. Includes guard hooks for Bash and an optional incident-database MCP server.",
+  "version": "0.2.0",
+  "description": "Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, scan with Semgrep, and review agent session logs for injection, misuse, egress and loops. Includes guard hooks for Bash and an optional incident-database MCP server.",
   "author": {
     "name": "Muhammad Basit Ali",
     "url": "https://github.com/basitalisandhu"
@@ -10,5 +10,5 @@
   "homepage": "https://github.com/basitalisandhu/agent-security-skills",
   "repository": "https://github.com/basitalisandhu/agent-security-skills",
   "license": "MIT",
-  "keywords": ["security", "ai-security", "agent-security", "llm-security", "mcp", "prompt-injection", "threat-model", "semgrep"]
+  "keywords": ["security", "ai-security", "agent-security", "llm-security", "mcp", "prompt-injection", "threat-model", "semgrep", "session-log", "audit-log"]
 }

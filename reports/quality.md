@@ -18,7 +18,7 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 125
+## Skills that point at a skill in another plugin: 134
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
@@ -61,13 +61,15 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `agent-identity-governance/nhi-inventory -> m365-governance/graph-permission-preflight`
 - `agent-identity-governance/nhi-inventory -> m365-governance/privileged-access-review`
 
-### agent-security (1)
+### agent-security (2)
 
 - `agent-security/agent-config-audit -> repo-engineering/agent-context-writer`
+- `agent-security/agent-session-log-review -> aws-security/aws-agent-session-audit`
 
-### aws-security (1)
+### aws-security (2)
 
 - `aws-security/aws-account-audit -> compliance-evidence/aws-identity-and-logging-evidence`
+- `aws-security/aws-agent-session-audit -> agent-security/agent-session-log-review`
 
 ### cc-setup-tooling (8)
 
@@ -80,19 +82,23 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `cc-setup-tooling/skill-supply-chain-review -> agent-security/agent-config-audit`
 - `cc-setup-tooling/skill-trigger-eval -> ways-of-working/decision-log`
 
-### code-quality (7)
+### code-quality (8)
 
 - `code-quality/complexity-report -> debugging/perf-profile-reader`
 - `code-quality/error-handling-review -> debugging/log-triage`
 - `code-quality/error-handling-review -> debugging/stack-trace-explainer`
 - `code-quality/error-handling-review -> docs/postmortem-writer`
+- `code-quality/review-checklist -> security-basics/diff-security-review`
 - `code-quality/review-checklist -> security-basics/secrets-hygiene`
 - `code-quality/test-gap-finder -> debugging/flaky-test-hunter`
 - `code-quality/test-gap-finder -> repo-engineering/untested-entry-points`
 
-### compliance-evidence (1)
+### compliance-evidence (4)
 
 - `compliance-evidence/aws-identity-and-logging-evidence -> aws-security/aws-account-audit`
+- `compliance-evidence/essential-eight-evidence-map -> m365-governance/conditional-access-gap-analysis`
+- `compliance-evidence/essential-eight-evidence-map -> m365-governance/intune-baseline-check`
+- `compliance-evidence/essential-eight-evidence-map -> m365-governance/privileged-access-review`
 
 ### data (7)
 
@@ -110,7 +116,7 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `debugging/log-triage -> code-quality/error-handling-review`
 - `debugging/perf-profile-reader -> code-quality/complexity-report`
 
-### devops (12)
+### devops (13)
 
 - `devops/cron-doctor -> debugging/log-triage`
 - `devops/dockerfile-hardening -> security-basics/secrets-hygiene`
@@ -123,6 +129,7 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `devops/semver-advisor -> data/api-contract-review`
 - `devops/semver-advisor -> docs/api-docs-from-code`
 - `devops/semver-advisor -> docs/changelog-keeper`
+- `devops/terraform-apply-gate -> ways-of-working/change-request-writer`
 - `devops/terraform-review -> security-basics/secrets-hygiene`
 
 ### docs (18)
@@ -162,9 +169,11 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `repo-engineering/repo-onboarding-guide -> docs/onboarding-doc`
 - `repo-engineering/untested-entry-points -> code-quality/test-gap-finder`
 
-### security-basics (2)
+### security-basics (4)
 
 - `security-basics/dependency-audit-reader -> devops/release-notes`
+- `security-basics/diff-security-review -> code-quality/review-checklist`
+- `security-basics/diff-security-review -> devops/github-actions-author`
 - `security-basics/secrets-hygiene -> devops/env-diff`
 
 ### ways-of-working (19)

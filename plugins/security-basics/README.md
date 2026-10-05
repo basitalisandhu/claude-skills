@@ -1,8 +1,8 @@
 # Security Basics
 
-Six lightweight security skills for everyday development: a secrets scan, an audit report reader, an HTTP security header check, a JWT inspector, a CORS review and an auth flow review. Agent and MCP security lives in the agent-security-skills marketplace.
+Seven lightweight security skills for everyday development: a secrets scan, an audit report reader, an HTTP security header check, a JWT inspector, a CORS review, an auth flow review and a security review of a diff. Agent and MCP security lives in the agent-security-skills marketplace.
 
-Find this when you search for: OWASP Top 10, npm audit fix.
+Find this when you search for: OWASP Top 10, npm audit fix, security review of a pull request.
 
 ## Install
 
@@ -23,5 +23,6 @@ Skills then appear as `/security-basics:<skill>`. Scripts need Python 3.11 or ne
 | `jwt-inspector` | what is in this token, is our JWT setup safe | `jwt_inspect.py` decoded claims (unverified) and findings |
 | `cors-review` | CORS error, allow the frontend, permissive policy | checklist findings and the allowlist configuration |
 | `auth-flow-review` | design login, review auth, account takeover | per-flow findings with severity and corrected flows |
+| `diff-security-review` | is this PR safe security-wise, pre-merge security pass | `diff_security_scan.py` findings on added lines, read with the code around them |
 
 Tests for every script live in the repository's `tests/` directory; run `python3 -m pytest -q` at the repository root.

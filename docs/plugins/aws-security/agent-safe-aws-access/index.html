@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.2.1"
+ "version": "0.3.0"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / agent-safe-aws-access</p>
 <h1>Agent-safe AWS access</h1>
 <p class="lede">Plan least-privilege AWS access for an AI coding agent from a short spec, producing the trust policy, task-scoped permissions, a permission boundary, an SCP backstop, the assume-role command and a kill switch, or review an existing agent role against the same rules. Use when asked to &quot;give my coding agent access to our AWS account&quot;, when an agent will deploy or run anything there, or when auditing an agent role. Not for human IAM users (iam-least-privilege-review) or organization-wide SCP design (scp-guardrails).</p>
-<p class="meta">Skill <code>agent-safe-aws-access</code> in plugin <a href="../index.html">aws-security</a> 0.2.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/agent-safe-aws-access/SKILL.md">plugins/aws-security/skills/agent-safe-aws-access/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/agent-safe-aws-access/SKILL.md">plugins/aws-security/skills/agent-safe-aws-access/SKILL.md</a>.</p>
+<p class="meta">Skill <code>agent-safe-aws-access</code> in plugin <a href="../index.html">aws-security</a> 0.3.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/agent-safe-aws-access/SKILL.md">plugins/aws-security/skills/agent-safe-aws-access/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/agent-safe-aws-access/SKILL.md">plugins/aws-security/skills/agent-safe-aws-access/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -87,7 +87,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/agent-safe-aws-access/scripts/agent_a
 <h3 id="interpreting-the-output">Interpreting the output</h3>
 <ul><li><code>plan</code>: sizes of each document in compact form (managed policies are limited to 6144 characters, SCPs to 5120), warnings (the execution role decides what a deployed stack can delete; Lambda inventory returns environment variables), and the self-review, which should be empty.</li><li><code>review</code>: one finding per line with severity, id, where (policy and statement) and message. <code>AGENT-EFFECTIVE-RISK</code> means the role&#x27;s own policies allow a category of action (IAM changes, Organizations changes, logging tampering, billing, destructive deletes) and no boundary blocks it; fix those first. <code>AGENT-BOUNDARY-GAP</code> means the boundary would not stop a later policy change from granting that category. Trust findings explain why sessions cannot be attributed to the agent and operator.</li></ul>
 <h3 id="related">Related</h3>
-<ul><li><code>scp-guardrails</code> to lint <code>sandbox-scp.json</code> and build the rest of the organization&#x27;s SCPs.</li><li><code>sandbox-account-guardrail-pack</code> for the sandbox OU the agent should work in.</li><li><code>aws-incident-response-runbook</code> if an agent session did something it should not have.</li></ul>
+<ul><li><code>scp-guardrails</code> to lint <code>sandbox-scp.json</code> and build the rest of the organization&#x27;s SCPs.</li><li><code>sandbox-account-guardrail-pack</code> for the sandbox OU the agent should work in.</li><li><code>aws-incident-response-runbook</code> if an agent session did something it should not have.</li><li><code>aws-agent-session-audit</code> to check from CloudTrail what an agent session did with the role this skill plans.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/aws-security-skills/issues">aws-security-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
