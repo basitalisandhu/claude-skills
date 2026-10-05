@@ -4,7 +4,7 @@ description: Install Claude Code skills from this repository as a plugin marketp
 ---
 # How to install Claude Code skills (three ways)
 
-This guide shows three ways to install the skills in this repository: through the Claude Code plugin marketplace, by cloning the repository and running `install.py`, and with the `npx skills` command for other agents. It ends with troubleshooting and a list of what the installer does not do.
+This guide shows three ways to install the {{skills}} skills in {{plugins}} plugins in this repository: through the Claude Code plugin marketplace, by cloning the repository and running `install.py`, and with the `npx skills` command for other agents. It ends with troubleshooting and a list of what the installer does not do.
 
 ## What a skill is
 
@@ -73,7 +73,11 @@ Other agents that read the Agent Skills format can install from this repository 
 npx skills add basitalisandhu/claude-skills
 ```
 
-On 2026-10-04 the tool found all 87 skills in this repository. I have not tested it with every agent it supports, so check the result in the agent you use.
+On 2026-10-04 the tool found every skill in this repository. I have not tested it with every agent it supports, so check the result in the agent you use.
+
+## Skills refer to each other across plugins
+
+Some skills point at a skill that lives in a different plugin, for example "hand this to `other-skill`". If you install only one plugin, that name does not exist on your machine. Install the sibling plugin as well, or give `install.py` several plugins: `python3 install.py --user --only plugin-a --only plugin-b`. The file `reports/quality.md` in the repository lists every cross-plugin pointer.
 
 ## Troubleshooting
 

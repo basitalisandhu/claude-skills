@@ -1,0 +1,4 @@
+# Keep LF everywhere so the SHA-256 content hashes in SOURCES.json match on Windows checkouts.
+* text=auto eol=lf
+*.png binary
+*.ico binary
