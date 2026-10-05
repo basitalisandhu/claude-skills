@@ -22,6 +22,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: ["3.10", "3.12"]
+        include:
+          # install.py claims Windows support, so run the tests there too (tests/ only).
+          - os: windows-latest
+            python: "3.12"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -29,12 +33,17 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python }}
+      # Windows-specific skip: validate.py and the site build read the whole tree through git and
+      # POSIX paths, so they run on Linux and macOS only. The Windows leg runs tests/ and nothing else.
       - name: Structure, front matter, generated files and house rules
+        if: runner.os != 'Windows'
         run: python3 scripts/validate.py
       - name: Site is up to date and every internal link resolves
+        if: runner.os != 'Windows'
         run: python3 site/build.py --check
-      - run: python3 -m pip install pytest
-      - run: python3 -m pytest -q
+      - run: python -m pip install pytest
+      - name: Tests (tests/ only on Windows)
+        run: python -m pytest -q tests/
 
   claude-plugin-validate:
     name: claude plugin validate --strict

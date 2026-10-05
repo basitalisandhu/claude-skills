@@ -63,8 +63,8 @@ FAQS = [
      "regenerates the catalog and the site, and records the source commit of each plugin in SOURCES.json."),
     ("Can other agents use these skills?",
      "Agents that read the open Agent Skills format can use them, because every skill is a folder with a "
-     "SKILL.md that has name and description front matter. The command npx skills add {owner}/{repo} found all "
-     "87 skills on 2026-10-04. This repository tests them with Claude Code only."),
+     "SKILL.md that has name and description front matter. The command npx skills add {owner}/{repo} found every "
+     "skill on 2026-10-04. This repository tests them with Claude Code only."),
     ("What licence are the skills under?",
      "MIT. The vendored plugins are MIT too, by the same author."),
 ]
@@ -275,7 +275,7 @@ def build_guide(s: Site) -> str:
     meta, body_md = load_content(GUIDE_SLUG)
     title = meta["title"]
     body = f"""<p class="crumbs"><a href="../../index.html">Home</a> / Guide</p>
-{md.convert(body_md)}"""
+{md.convert(H.render_template(body_md, s.catalog))}"""
     return page(rel=GUIDE_REL, depth=2, title=title, description=meta["description"], body=body,
                 og_type="article")
 

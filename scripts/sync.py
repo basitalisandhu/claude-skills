@@ -11,7 +11,7 @@ over https for each source repository), unless --source-dir points at local clon
     python3 scripts/sync.py --offline           # regenerate derived files from plugins/ as they are
 
 Derived files: SOURCES.json, catalog.json, .claude-plugin/marketplace.json, the README
-catalog block and docs/ (the site). A plugin's commit and synced_at only change when its
+catalog block and counts, reports/quality.md and docs/ (the site). A plugin's commit and synced_at only change when its
 content or its marketplace entry changed, so a run with no upstream change is a no-op.
 """
 
@@ -150,6 +150,8 @@ def stage_derived(root: Path, stage: Path) -> None:
     (stage / "catalog.json").write_text(H.dumps(catalog), encoding="utf-8")
     readme = (root / "README.md").read_text(encoding="utf-8")
     (stage / "README.md").write_text(H.render_readme(readme, catalog), encoding="utf-8")
+    (stage / H.QUALITY_REPORT).parent.mkdir(parents=True, exist_ok=True)
+    (stage / H.QUALITY_REPORT).write_text(H.render_quality_report(H.quality_findings(stage)), encoding="utf-8")
     sys.path.insert(0, str(root / "site"))
     import build as site_build  # noqa: E402  (site/build.py)
     site_build.build(stage, stage / "docs")
@@ -164,7 +166,7 @@ def all_files(base: Path) -> set[str]:
 def diff(root: Path, stage: Path) -> list[str]:
     """Paths that differ between the working tree and the staged result."""
     out = []
-    for rel in ("SOURCES.json", "catalog.json", "README.md", ".claude-plugin/marketplace.json"):
+    for rel in ("SOURCES.json", "catalog.json", "README.md", ".claude-plugin/marketplace.json", H.QUALITY_REPORT):
         a, b = root / rel, stage / rel
         if not a.exists() or not filecmp.cmp(a, b, shallow=False):
             out.append(rel)
@@ -183,12 +185,19 @@ def apply(root: Path, stage: Path) -> None:
         if (root / top).exists():
             shutil.rmtree(root / top)
         shutil.copytree(stage / top, root / top)
-    for rel in ("SOURCES.json", "catalog.json", "README.md", ".claude-plugin/marketplace.json"):
+    for rel in ("SOURCES.json", "catalog.json", "README.md", ".claude-plugin/marketplace.json", H.QUALITY_REPORT):
         (root / rel).parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(stage / rel, root / rel)
 
 
-def summary(changes: list[dict]) -> str:
+def summary(changes: list[dict], quality: list[str] | None = None) -> str:
+    text = plugin_summary(changes)
+    if quality:
+        text += "\nQuality notes after this sync (full lists in `reports/quality.md`):\n\n" + "\n".join(f"- {q}" for q in quality) + "\n"
+    return text
+
+
+def plugin_summary(changes: list[dict]) -> str:
     if not changes:
         return "No plugin changed upstream.\n"
     lines = ["Plugins whose source changed since the last sync:", ""]
@@ -204,7 +213,7 @@ def summary(changes: list[dict]) -> str:
             lines.append(f"- `{c['plugin']}` from [{c['repo']}]({url}): marketplace entry or content changed at {c['new'][:7]}")
         else:
             lines.append(f"- `{c['plugin']}` from [{c['repo']}]({url}): added at {c['new'][:7]}, version {c['version']}")
-    lines += ["", "Regenerated: SOURCES.json, catalog.json, .claude-plugin/marketplace.json, the README catalog block and docs/.",
+    lines += ["", "Regenerated: SOURCES.json, catalog.json, .claude-plugin/marketplace.json, the README catalog block and counts, reports/quality.md and docs/.",
               "Review the plugin diffs before merging. Skills are edited in their source repositories, not here.", ""]
     return "\n".join(lines)
 
@@ -234,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
         stage_derived(root, stage)
         changed = diff(root, stage)
         if args.summary:
-            args.summary.write_text(summary(changes), encoding="utf-8")
+            args.summary.write_text(summary(changes, H.quality_summary(H.quality_findings(stage))), encoding="utf-8")
         if args.check:
             if changed:
                 print(f"sync --check: {len(changed)} path(s) would change, for example:")

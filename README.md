@@ -5,7 +5,7 @@
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
 <!-- count-badge:start -->[![96 skills in 14 plugins](https://img.shields.io/badge/skills-96%20in%2014%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-**87 skills in 13 plugins, from 8 source repositories, as of 2026-10-04.**
+<!-- counts:start -->**96 skills in 14 plugins, from 9 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -13,7 +13,7 @@ Browse the skills on the site: <https://basitalisandhu.github.io/claude-skills/>
 
 ## What it is
 
-- A copy of the plugin folders from 8 source repositories, under `plugins/<plugin>/`.
+- A copy of the plugin folders from the source repositories listed below, under `plugins/<plugin>/`.
 - A marketplace file, `.claude-plugin/marketplace.json`, named `claude-skills`.
 - `install.py`, which copies skills into a Claude Code skills folder without the plugin system.
 - `catalog.json` and `SOURCES.json`, which say what is here and which commit it came from.
@@ -293,16 +293,16 @@ Version 0.1.0. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- 67 of the 87 skills bundle scripts. Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->76 of the 96 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- 50 of the 87 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 37 do not have that section yet.
+- <!-- counts-limits:start -->59 of the 96 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 37 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 
 **Why not one plugin with every skill?**
-Plugins are the unit you install and enable. Thirteen plugins let you load AWS skills without Mac maintenance skills. One marketplace keeps them easy to find.
+Plugins are the unit you install and enable. Separate plugins let you load AWS skills without Mac maintenance skills. One marketplace keeps them easy to find.
 
 **Why copies rather than git submodules?**
 A submodule needs `git clone --recursive`; a plain clone would leave `plugins/` empty, for the marketplace and for `install.py`. Copies work with any clone, and `SOURCES.json` keeps the provenance: source repository, commit and content hash for each plugin.
@@ -310,11 +310,14 @@ A submodule needs `git clone --recursive`; a plain clone would leave `plugins/` 
 **How do I report a bug in a skill?**
 Open an issue in the skill's source repository. Each skill page on the site and each row in the catalog links to it. See [SECURITY.md](SECURITY.md) for security problems.
 
+**Why do some skills name skills I did not install?**
+Skills refer to each other across plugins. A skill in one plugin may say "see `other-skill`" when the other skill lives in a different plugin, so a single-plugin install leaves that name dangling. Install the sibling plugin as well (`/plugin install <plugin>@claude-skills`), or run `python3 install.py --user --only plugin-a --only plugin-b` with several plugins. `reports/quality.md` lists every cross-plugin pointer.
+
 **Does it work with other agents that read SKILL.md?**
 The skills use the open Agent Skills format: a folder with a `SKILL.md` that has `name` and `description` front matter. This repository checks them with Claude Code's plugin validator only. Other agents that read the format can install them with `npx skills add basitalisandhu/claude-skills`.
 
 **Is anything sent anywhere?**
-`install.py`, `scripts/validate.py` and `site/build.py` make no network calls. `scripts/sync.py` clones the 8 public source repositories from GitHub, and nothing else. The skills' own network use is described under [Design rules](#design-rules-the-skills-follow).
+`install.py`, `scripts/validate.py` and `site/build.py` make no network calls. `scripts/sync.py` clones the public source repositories from GitHub, and nothing else. The skills' own network use is described under [Design rules](#design-rules-the-skills-follow).
 
 ## Related repositories
 
@@ -328,6 +331,7 @@ Source repositories:
 - [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills)
 - [mac-maintenance-skills](https://github.com/basitalisandhu/mac-maintenance-skills)
 - [repo-engineering-skills](https://github.com/basitalisandhu/repo-engineering-skills)
+- [ways-of-working-skills](https://github.com/basitalisandhu/ways-of-working-skills)
 
 Tools for Claude Code configuration:
 

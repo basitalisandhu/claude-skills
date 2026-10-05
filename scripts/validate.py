@@ -4,6 +4,7 @@ generated files and house rules. Standard library only, offline.
 
     python3 scripts/validate.py
     python3 scripts/validate.py --allow-duplicate some-skill   # tolerate one known duplicate name
+    python3 scripts/validate.py --strict-quality               # soft quality notes become errors
 
 Vendored plugin content (plugins/) and the generated site (docs/) are exempt from the
 house-style checks; their counts are reported so a change upstream is visible.
@@ -284,6 +285,68 @@ def check_generated(root: Path) -> tuple[list[str], list[str]]:
     return catalog_problems, readme_problems
 
 
+def check_quality_report(root: Path) -> list[str]:
+    path = root / H.QUALITY_REPORT
+    want = H.render_quality_report(H.quality_findings(root))
+    if not path.is_file() or path.read_text(encoding="utf-8") != want:
+        return [f"{H.QUALITY_REPORT} is missing or stale; run python3 scripts/sync.py --offline"]
+    return []
+
+
+NUMBER_WORDS = {"ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+                "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20}
+COUNT_PHRASE_RE = re.compile(r"(?<![\w.%-])(\d+|" + "|".join(NUMBER_WORDS) + r")\s+(skills|plugins)\b", re.I)
+GENERATED_SPAN_RE = re.compile(r"<!--\s*(catalog|count-badge|" + "|".join(H.COUNT_SPANS) + r"):start\s*-->.*?<!--\s*\1:end\s*-->", re.S)
+
+
+def hand_written_count_problems(root: Path) -> list[str]:
+    """Hand-written "N skills" or "N plugins" phrases that disagree with catalog.json."""
+    catalog = H.load_json(root / "catalog.json") or {}
+    counts = catalog.get("counts", {})
+    sources: list[tuple[str, str]] = []
+    readme = root / "README.md"
+    if readme.is_file():
+        sources.append(("README.md", GENERATED_SPAN_RE.sub("", readme.read_text(encoding="utf-8"))))
+    for page in sorted((root / "site" / "content").glob("*.md")):
+        sources.append((page.relative_to(root).as_posix(), page.read_text(encoding="utf-8")))
+    changelog = root / "CHANGELOG.md"
+    if changelog.is_file():
+        text = changelog.read_text(encoding="utf-8")
+        m = re.search(r"^## \[Unreleased\].*?(?=^## \[|\Z)", text, re.S | re.M)
+        if m:
+            sources.append(("CHANGELOG.md (Unreleased)", m.group(0)))
+    problems = []
+    for name, text in sources:
+        for line_no, line in enumerate(text.split("\n"), start=1):
+            for m in COUNT_PHRASE_RE.finditer(line):
+                raw = m.group(1).lower()
+                n = NUMBER_WORDS.get(raw) or int(raw)
+                kind = m.group(2).lower()
+                if n != counts.get(kind):
+                    problems.append(f"{name}:{line_no}: says {m.group(0)!r} but catalog.json has {counts.get(kind)} {kind}; "
+                                    "use a generated count span or a {{" + kind + "}} template variable")
+    return problems
+
+
+def check_quality(root: Path, strict: bool) -> tuple[list[tuple[str, list[str], list[str]]], dict]:
+    """Soft quality rules as notes, or as problems when strict. Plus cross-plugin pointer counts."""
+    findings = H.quality_findings(root)
+    out = []
+    for key, label in H.QUALITY_RULES:
+        paths = findings[key]
+        line = f"{len(paths)} file(s)" + (f"; first five: {', '.join(paths[:5])}" if paths else "")
+        name = f"quality: {label}"
+        if strict:
+            out.append((name, [f"{p}: {label}" for p in paths], []))
+        else:
+            out.append((name, [], [line + f" (full list in {H.QUALITY_REPORT})"] if paths else [line]))
+    cross = findings["cross"]
+    summary = ", ".join(f"{p} {len(v)}" for p, v in sorted(cross.items())) or "none"
+    out.append(("cross-plugin pointers", [],
+                [f"{sum(len(v) for v in cross.values())} across plugins ({summary}); full list in {H.QUALITY_REPORT}"]))
+    return out, findings
+
+
 def house_rules(root: Path, files: list[str]) -> list[tuple[str, list[str], list[str]]]:
     em, models, secrets = [], [], []
     vendored_em = vendored_models = 0
@@ -327,6 +390,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--allow-duplicate", action="append", default=[], metavar="NAME",
                     help="tolerate this duplicate skill name (local use only, never in CI)")
+    ap.add_argument("--strict-quality", action="store_true",
+                    help="report the soft quality rules (long or incomplete descriptions, missing Limits) as errors")
     ap.add_argument("--root", type=Path, default=H.ROOT, help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
     root = args.root.resolve()
@@ -340,6 +405,10 @@ def main(argv: list[str] | None = None) -> int:
     cat, readme = check_generated(root)
     report.add("catalog.json matches the tree", cat)
     report.add("README catalog block matches catalog.json", readme)
+    report.add("quality report matches plugins/", check_quality_report(root))
+    report.add("hand-written skill and plugin counts match catalog.json", hand_written_count_problems(root))
+    for name, problems, extra in check_quality(root, args.strict_quality)[0]:
+        report.add(name, problems, extra)
     for name, problems, extra in house_rules(root, repo_files(root)):
         report.add(name, problems, extra)
     return report.print()
