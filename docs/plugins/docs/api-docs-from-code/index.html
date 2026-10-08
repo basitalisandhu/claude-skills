@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>api-docs-from-code: Generate an API reference from source | Claude Code skills</title>
-<meta name="description" content="Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc blocks into Markdown or JSON, lists undocumented public symbols, and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to document a module or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc when the project already uses them.">
+<meta name="description" content="Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to &quot;document this module&quot; or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/docs/api-docs-from-code/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="api-docs-from-code: Generate an API reference from source | Claude Code skills">
-<meta property="og:description" content="Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc blocks into Markdown or JSON, lists undocumented public symbols, and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to document a module or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc when the project already uses them.">
+<meta property="og:description" content="Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to &quot;document this module&quot; or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/docs/api-docs-from-code/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "api-docs-from-code",
- "description": "Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc blocks into Markdown or JSON, lists undocumented public symbols, and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to document a module or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc when the project already uses them.",
+ "description": "Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to \"document this module\" or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/api-docs-from-code/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / api-docs-from-code</p>
 <h1>API docs from code</h1>
-<p class="lede">Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc blocks into Markdown or JSON, lists undocumented public symbols, and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to document a module or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc when the project already uses them.</p>
-<p class="meta">Skill <code>api-docs-from-code</code> in plugin <a href="../index.html">docs</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/api-docs-from-code/SKILL.md">plugins/docs/skills/api-docs-from-code/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/api-docs-from-code/SKILL.md">plugins/docs/skills/api-docs-from-code/SKILL.md</a>.</p>
+<p class="lede">Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to &quot;document this module&quot; or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used.</p>
+<p class="meta">Skill <code>api-docs-from-code</code> in plugin <a href="../index.html">docs</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/api-docs-from-code/SKILL.md">plugins/docs/skills/api-docs-from-code/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/api-docs-from-code/SKILL.md">plugins/docs/skills/api-docs-from-code/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

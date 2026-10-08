@@ -1,7 +1,7 @@
 {
   "name": "agent-identity-governance",
   "displayName": "Agent Identity Governance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent's actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network.",
   "author": {
     "name": "Muhammad Basit Ali",

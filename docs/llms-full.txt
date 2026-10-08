@@ -9,7 +9,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: agent-action-timeline
-description: "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked 'what did this agent do last week?', during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity."
+description: "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked \"what did this agent do last week?\", during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:
@@ -112,7 +112,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: agent-kill-switch-runbook
-description: "Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. Checks every credential and assignment in the inventory has a step. Use when asked 'how do we turn this agent off?', before an agent goes live, or in an incident. Not for running the steps (it changes nothing) or for offboarding a human account."
+description: "Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. Checks every credential and assignment in the inventory has a step. Use when asked \"how do we turn this agent off?\", before an agent goes live, or in an incident. Not for running the steps (it changes nothing) or for offboarding a human account."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls and runs no command it prints. The Azure CLI, AWS CLI and GitHub CLI are needed by the person running the runbook.
 metadata:
@@ -217,7 +217,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: agent-recertification
-description: "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked 'prepare the agent access review for this quarter' or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank."
+description: "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked \"prepare the agent access review for this quarter\" or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc) for the users export only.
 metadata:
@@ -326,7 +326,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: connector-register
-description: "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked 'which MCP servers are we actually running?' or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit)."
+description: "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked \"which MCP servers are we actually running?\" or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls and starts no server. Saving tools/list output is a separate step run by a person.
 metadata:
@@ -438,7 +438,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: credential-expiry-radar
-description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked 'which app secrets expire this month?', before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response)."
+description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked \"which app secrets expire this month?\", before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:
@@ -547,7 +547,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: entra-agent-id-review
-description: "Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked 'what can our agent apps do in Entra?' or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight)."
+description: "Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked \"what can our agent apps do in Entra?\" or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc) or any Graph client for the export step only.
 metadata:
@@ -663,7 +663,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: leaked-credential-response
-description: "Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. Reads the identity's inventory record and saved audit exports. Use when a key or token turns up in a commit, transcript, log or ticket, or when asked 'was this leaked key used?'. Not for scanning code for secrets, for rotating keys itself, or for audit evidence outside an incident (evidence-pack-builder)."
+description: "Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. Reads the identity's inventory record and saved audit exports. Use when a key or token turns up in a commit, transcript, log or ticket, or when asked \"was this leaked key used?\". Not for scanning code for secrets, for rotating keys itself, or for audit evidence outside an incident (evidence-pack-builder)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:
@@ -765,7 +765,7 @@ Source: https://github.com/basitalisandhu/agent-identity-governance-skills/blob/
 
 ---
 name: nhi-inventory
-description: "List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked 'which agent identities have no owner?', before an access review, or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review)."
+description: "List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked \"which agent identities have no owner?\", before an access review, or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:
@@ -3402,7 +3402,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/co
 
 ---
 name: complexity-report
-description: "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code."
+description: "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked \"which code is most complex?\", where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No network access needed.
 metadata:
@@ -3479,7 +3479,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/co
 
 ---
 name: dead-code-finder
-description: "Find probably-unused functions, classes, methods and exports in a Python or JavaScript/TypeScript tree with a bundled script, confirm each candidate by searching for dynamic use, and propose a safe deletion order. Use when asked to find dead or unused code, shrink a codebase, or prepare a cleanup before a refactor. Not for unused imports or variables inside a function (a linter does that) and not for unused dependencies in package manifests."
+description: "Shrink a codebase safely: a bundled script lists probably-unused functions, classes, unused methods and exports in a Python or JavaScript/TypeScript tree, each candidate is confirmed by searching for dynamic use, and the skill proposes a safe order to remove them. Use when asked to find dead or unused code, \"what can be deleted safely\", or to prepare a cleanup before a refactor. Not for unused imports or variables inside a function (a linter does that) and not for unused dependencies in package manifests."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No network access needed.
 metadata:
@@ -3855,7 +3855,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/co
 
 ---
 name: test-gap-finder
-description: "Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that)."
+description: "Find the source modules that have no tests and prioritise which to cover first by risk: a bundled script maps modules to their tests by naming convention and imports and shows what is missing. Use when asked \"what is untested?\", where to add tests first, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Supports Python, JavaScript, TypeScript, Go, Ruby and Rust layouts.
 metadata:
@@ -3929,7 +3929,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/co
 
 ---
 name: type-coverage
-description: "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that)."
+description: "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked \"how well typed is this code?\", where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Optional mypy, pyright or tsc for the follow-up checks.
 metadata:
@@ -4844,7 +4844,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: api-contract-review
-description: "Lint an OpenAPI 3.x document (YAML or JSON) with a bundled script for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies; then review the contract for consistency, versioning and client friendliness. Use when designing or reviewing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API."
+description: "Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to \"review this OpenAPI spec\", when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 (bundled YAML reader). OpenAPI 3.0 and 3.1; Swagger 2.0 is reported as unsupported.
 metadata:
@@ -4924,7 +4924,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: csv-profiler
-description: "Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules. Use when handed a data file to load, analyse or validate, or when an import fails. Not for spreadsheets with formulas (export to CSV first) and not for files too large to read (use --sample)."
+description: "Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules. Use when asked to \"summarise this CSV file\", when handed a data file to load, analyse or validate, or when an import fails. Not for spreadsheets with formulas (export to CSV first) and not for files too large to read (use --sample)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Files up to a few hundred MB; use --sample for larger ones.
 metadata:
@@ -5001,7 +5001,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: json-schema-author
-description: "Write a JSON Schema (draft 2020-12) for an API payload, configuration file or event by inferring a draft from sample documents with a bundled script (types, required fields, nullability, formats, enums, bounds) and then hand-finishing it: tightening constraints, adding descriptions and examples, and deciding additionalProperties and versioning. Use when asked to validate JSON, document a payload, or create a schema from examples. Not for OpenAPI documents as a whole (use api-contract-review) and not for XML or protobuf."
+description: "Write a JSON Schema (draft 2020-12) for an API payload, configuration file or event by inferring a draft from sample documents with a bundled script (types, required fields, nullability, formats, enums, bounds) and then hand-finishing it: tighter constraints, descriptions, examples, additionalProperties and versioning. Use when asked to \"write a JSON Schema\", to validate JSON, document a payload, or create a schema from examples. Not for OpenAPI documents as a whole (use api-contract-review) and not for XML or protobuf."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for inference. A validator (python-jsonschema, ajv) is optional for the verification step.
 metadata:
@@ -5078,7 +5078,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: regex-builder
-description: "Build, explain and test regular expressions against labelled cases with a bundled script that reports which cases match, the captured groups, and warnings for patterns that can backtrack catastrophically, with timing on adversarial inputs. Use when asked to write a regex, to check why one does not match, to extract fields from text, or to review a regex used on untrusted input. Not for parsing structured formats (JSON, HTML, URLs: use a parser) and not for full-text search."
+description: "Write and test regular expressions that match what they should and nothing else: a bundled script runs a pattern against labelled cases, shows each match and captured group, and warns on patterns that can backtrack catastrophically, with timing on adversarial inputs. Use when asked to write a regex (phone numbers, dates, log lines), \"why does my pattern not match\", to extract fields from text, or to check a regex used on user input. Not for parsing structured formats (JSON, HTML, URLs: use a parser) and not for full-text search."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Python re dialect; notes for JavaScript and PCRE differences included.
 metadata:
@@ -5153,7 +5153,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: schema-migration-plan
-description: "Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan. Use when adding, renaming, dropping or changing columns, tables, constraints or indexes on a live database, or reviewing a migration PR. Not for query tuning (use sql-query-review) and not for choosing a database."
+description: "Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan. Use when asked \"how do I rename this column safely?\", when changing columns, tables, constraints or indexes on a live database, or reviewing a migration PR. Not for query tuning (use sql-query-review) and not for choosing a database."
 license: MIT
 compatibility: PostgreSQL and MySQL notes included; the pattern applies to any relational database with online traffic.
 metadata:
@@ -5229,7 +5229,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/da
 
 ---
 name: sql-query-review
-description: "Review SQL queries, ORM-generated SQL and query plans for correctness and performance: injection, implicit casts, NULL logic, non-sargable predicates, missing indexes, N+1 patterns, unbounded result sets, lock contention and transaction scope, using a fixed checklist and EXPLAIN reading notes for PostgreSQL, MySQL and SQLite. Use when asked why a query is slow, to review a query or migration, or to check ORM output. Not for schema design from scratch (use schema-migration-plan for changes) and not a replacement for a database profiler."
+description: "Review SQL queries, ORM-generated SQL and query plans for correctness and performance: injection, implicit casts, NULL logic, non-sargable predicates, missing indexes, N+1 patterns, unbounded result sets, lock contention and transaction scope, using a fixed checklist and EXPLAIN reading notes for PostgreSQL, MySQL and SQLite. Use when asked \"why is this query slow?\", to review a query or migration, or to check ORM output. Not for schema design from scratch (use schema-migration-plan for changes) and not a replacement for a database profiler."
 license: MIT
 compatibility: PostgreSQL, MySQL/MariaDB and SQLite dialect notes included; the procedure applies to any SQL database.
 metadata:
@@ -5515,7 +5515,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: memory-leak-checklist
-description: "Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime's heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader)."
+description: "Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime's heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when asked \"why does memory keep growing?\", or when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader)."
 license: MIT
 compatibility: Any runtime; tool commands given for Python, Node.js, Go, Java and .NET.
 metadata:
@@ -5580,7 +5580,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: perf-profile-reader
-description: "Summarise a captured CPU profile (py-spy collapsed stacks or dump, Go pprof text, Python cProfile output) into the few functions that hold the time, separate busy from waiting, and name the optimisation to try first, using a bundled script. Use when someone has a profile and asks where the time goes, or before optimising anything. Not for taking the profile (instructions are included) and not for memory profiles (use memory-leak-checklist)."
+description: "Summarise a captured CPU profile (py-spy collapsed stacks or dump, Go pprof text, Python cProfile output) into the few functions that hold the time, separate busy from waiting, and name the optimisation to try first, using a bundled script. Use when someone has a profile and asks \"where does the time go?\", or before optimising anything. Not for taking the profile (instructions are included) and not for memory profiles (use memory-leak-checklist)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads text produced by py-spy, go tool pprof, cProfile or pstats; no profiler is required to read an existing capture.
 metadata:
@@ -5661,7 +5661,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: stack-trace-explainer
-description: "Read a stack trace or crash report from any mainstream runtime (Python, JavaScript and Node, Java and JVM, Go, Rust, .NET, Ruby, PHP), identify the frame where the fault lives versus where it surfaced, explain the error type, and propose the next diagnostic step. Use when someone pastes a trace and asks what it means or where to look. Not for performance traces or profiles (use perf-profile-reader) and not for logs without a trace (use log-triage)."
+description: "Read a stack trace or crash report from any mainstream runtime (Python, JavaScript and Node, Java and JVM, Go, Rust, .NET, Ruby, PHP), identify the frame where the fault lives versus where it surfaced, explain the error type, and propose the next diagnostic step. Use when someone pastes a trace and asks \"what does this error mean?\" or where to look. Not for performance traces or profiles (use perf-profile-reader) and not for logs without a trace (use log-triage)."
 license: MIT
 compatibility: Any language. Works from a pasted trace; reading the referenced source files improves the answer.
 metadata:
@@ -5728,7 +5728,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: cron-doctor
-description: "Diagnose a crontab with a bundled script that validates every schedule, explains it in words, computes the next runs, and flags jobs with no output redirection, unescaped percent signs, PATH assumptions, day-of-month plus day-of-week confusion, DST-sensitive hours, overlapping frequent jobs and duplicates; then fix the entries and add locking and logging. Use when a cron job did not run, ran twice, ran at the wrong time, or when writing a new schedule. Not for Kubernetes CronJobs beyond the schedule field, and not for systemd timers except as the suggested replacement."
+description: "Make cron jobs run when they should: a bundled script validates every crontab line, explains each schedule in plain words with its next runs, and flags missing output redirection, unescaped percent signs, PATH assumptions, day-of-month plus day-of-week confusion, DST-sensitive hours, overlaps and duplicates; then the entries are fixed with locking and logging. Use when a cron job did not run, ran twice or at the wrong time, to check or \"review my crontab\", or to write a new cron schedule. Not for Kubernetes CronJobs beyond the schedule field, or for systemd timers."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Works on `crontab -l` output, /etc/crontab and /etc/cron.d files.
 metadata:
@@ -5802,7 +5802,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: dockerfile-hardening
-description: "Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking."
+description: "Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to \"review my Dockerfile\", to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for the linter. Docker is only needed to build and verify the result.
 metadata:
@@ -5959,7 +5959,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: github-actions-author
-description: "Write or review GitHub Actions workflows with least-privilege permissions, SHA-pinned actions, timeouts, concurrency and caching, and validate them with a bundled linter that catches missing permissions, pull_request_target checkout of fork code, expression injection in run steps, unpinned actions and literal secrets. Use when asked to create a CI or release workflow, review .github/workflows, or fix a workflow security finding. Not for other CI systems and not for GitHub Apps or branch protection settings."
+description: "Write or review GitHub Actions workflows with least-privilege permissions, SHA-pinned actions, timeouts, concurrency and caching, and validate them with a bundled linter that catches missing permissions, pull_request_target checkout of fork code, expression injection in run steps, unpinned actions and literal secrets. Use when asked to \"write a CI workflow\", to create a release workflow, review .github/workflows, or fix a workflow security finding. Not for other CI systems and not for GitHub Apps or branch protection settings."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for the linter (bundled YAML reader; no PyYAML needed).
 metadata:
@@ -6035,7 +6035,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: k8s-manifest-review
-description: "Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML. Use when asked to review, harden or write Kubernetes YAML or a Helm chart's rendered output. Not for cluster-level policy (RBAC, NetworkPolicy design, admission controllers) beyond noting what the workload needs."
+description: "Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML. Use when asked to \"review this Kubernetes YAML\", to harden or write manifests, or for a Helm chart's rendered output. Not for cluster-level policy (RBAC, NetworkPolicy design, admission controllers) beyond noting what the workload needs."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 (bundled YAML reader). kubectl is optional for the dry-run step.
 metadata:
@@ -6112,7 +6112,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: release-notes
-description: "Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing."
+description: "Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when asked to \"write the release notes\", when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3; git for reading history (local only, no network). Works without git from a captured log.
 metadata:
@@ -6374,7 +6374,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/de
 
 ---
 name: terraform-review
-description: "Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to review infrastructure code, a Terraform plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode)."
+description: "Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to \"review this Terraform\" or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode)."
 license: MIT
 compatibility: Any provider. Terraform or OpenTofu CLI optional for fmt, validate and plan; tflint, trivy or checkov optional for automated checks.
 metadata:
@@ -6447,7 +6447,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: adr-writer
-description: "Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes."
+description: "Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when asked to \"write an ADR\", when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes."
 license: MIT
 compatibility: Any project. Stores records under docs/adr/ (or the directory the project already uses).
 metadata:
@@ -6532,7 +6532,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: api-docs-from-code
-description: "Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc blocks into Markdown or JSON, lists undocumented public symbols, and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to document a module or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc when the project already uses them."
+description: "Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to \"document this module\" or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads .py, .js, .jsx, .ts, .tsx, .mjs.
 metadata:
@@ -6600,7 +6600,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: changelog-keeper
-description: "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here)."
+description: "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when asked to \"update the changelog\", when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Keep a Changelog 1.1 format with semantic version headings.
 metadata:
@@ -6696,7 +6696,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: onboarding-doc
-description: "Write a developer onboarding document for a repository or service that gets a new team member from a clean machine to a merged change: environment setup verified step by step, how the code is organised, how to run and test it, the configuration it needs, the deployment path, who owns what, and the first tasks. Use when a project has no onboarding guide, when the last new joiner struggled, or before a team grows. Not for user-facing documentation (use readme-author) and not for HR onboarding."
+description: "Write a developer onboarding document that gets a new team member from a clean machine to a merged change: environment setup verified step by step, how the code is organised, how to run and test it, the configuration it needs, the deployment path, who owns what, and the first tasks. Use when asked to \"write an onboarding guide\", when a project has none, when the last new joiner struggled, or before a team grows. Not for user-facing documentation (use readme-author) and not for HR onboarding."
 license: MIT
 compatibility: Any project. Uses env-diff and test-gap-finder when installed for the configuration and testing sections.
 metadata:
@@ -6768,7 +6768,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: postmortem-writer
-description: "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people."
+description: "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to \"write up what went wrong\" after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people."
 license: MIT
 compatibility: Any system. Uses log-triage when logs are available.
 metadata:
@@ -6847,7 +6847,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/do
 
 ---
 name: readme-author
-description: "Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when a repository has no README, the README is out of date, or a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy."
+description: "Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when asked to \"write a README\", when a repository has none or it is out of date, or when a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy."
 license: MIT
 compatibility: Any project. Verifies commands by running them when the environment allows.
 metadata:
@@ -10092,7 +10092,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/se
 
 ---
 name: cors-review
-description: "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP."
+description: "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says \"blocked by CORS policy\", when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP."
 license: MIT
 compatibility: Any web stack. Snippets for Express, Django, FastAPI, Spring and nginx.
 metadata:
@@ -10165,7 +10165,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/se
 
 ---
 name: dependency-audit-reader
-description: "Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates. Use when an audit fails CI, when asked what to do about a vulnerability report, or to triage dependency alerts. Not for finding new vulnerabilities (it reads the tool's output offline) or for licence compliance."
+description: "Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, overrides and accepted risks with expiry dates. Use when an audit fails CI, when asked \"what do we do about these vulnerabilities?\", or to triage dependency alerts. Not for finding new vulnerabilities (it reads the tool's output offline) or for licence compliance."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads npm audit v6 and v7+, yarn audit NDJSON, pip-audit JSON (both shapes), cargo audit JSON.
 metadata:
@@ -10427,7 +10427,7 @@ Source: https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/se
 
 ---
 name: jwt-inspector
-description: "Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when debugging authentication, reviewing a token design, or checking what a token contains. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation."
+description: "Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to \"decode this JWT\", when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. JWS and JWE compact serialisations.
 metadata:

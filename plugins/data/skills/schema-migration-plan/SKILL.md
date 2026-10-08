@@ -1,6 +1,6 @@
 ---
 name: schema-migration-plan
-description: "Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan. Use when adding, renaming, dropping or changing columns, tables, constraints or indexes on a live database, or reviewing a migration PR. Not for query tuning (use sql-query-review) and not for choosing a database."
+description: "Plan a database schema change as a sequence of backwards-compatible, reversible migration steps (expand, migrate data, contract) that work with the running application version, with lock and downtime analysis per step, a batched backfill for large tables, and a rollback plan. Use when asked \"how do I rename this column safely?\", when changing columns, tables, constraints or indexes on a live database, or reviewing a migration PR. Not for query tuning (use sql-query-review) and not for choosing a database."
 license: MIT
 compatibility: PostgreSQL and MySQL notes included; the pattern applies to any relational database with online traffic.
 metadata:

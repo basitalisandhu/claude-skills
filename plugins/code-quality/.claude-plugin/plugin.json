@@ -1,7 +1,7 @@
 {
   "name": "code-quality",
   "displayName": "Code Quality",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder.",
   "author": {
     "name": "Muhammad Basit Ali",

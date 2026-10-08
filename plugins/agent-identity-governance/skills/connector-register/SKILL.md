@@ -1,6 +1,6 @@
 ---
 name: connector-register
-description: "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked 'which MCP servers are we actually running?' or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit)."
+description: "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked \"which MCP servers are we actually running?\" or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls and starts no server. Saving tools/list output is a separate step run by a person.
 metadata:

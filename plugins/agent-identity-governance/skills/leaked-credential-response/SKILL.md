@@ -1,6 +1,6 @@
 ---
 name: leaked-credential-response
-description: "Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. Reads the identity's inventory record and saved audit exports. Use when a key or token turns up in a commit, transcript, log or ticket, or when asked 'was this leaked key used?'. Not for scanning code for secrets, for rotating keys itself, or for audit evidence outside an incident (evidence-pack-builder)."
+description: "Respond to a leaked agent credential: what it could reach, what was done with it after the leak time, which credentials to rotate in what order, and an evidence folder with SHA-256 hashes. Reads the identity's inventory record and saved audit exports. Use when a key or token turns up in a commit, transcript, log or ticket, or when asked \"was this leaked key used?\". Not for scanning code for secrets, for rotating keys itself, or for audit evidence outside an incident (evidence-pack-builder)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:

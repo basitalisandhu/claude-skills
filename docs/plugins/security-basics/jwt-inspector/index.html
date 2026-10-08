@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>jwt-inspector: Decode a JSON Web Token without verifying it | Claude Code skills</title>
-<meta name="description" content="Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when debugging authentication, reviewing a token design, or checking what a token contains. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.">
+<meta name="description" content="Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to &quot;decode this JWT&quot;, when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="jwt-inspector: Decode a JSON Web Token without verifying it | Claude Code skills">
-<meta property="og:description" content="Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when debugging authentication, reviewing a token design, or checking what a token contains. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.">
+<meta property="og:description" content="Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to &quot;decode this JWT&quot;, when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "jwt-inspector",
- "description": "Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when debugging authentication, reviewing a token design, or checking what a token contains. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.",
+ "description": "Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to \"decode this JWT\", when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/jwt-inspector/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "security-basics",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">security-basics</a> / jwt-inspector</p>
 <h1>JWT inspector</h1>
-<p class="lede">Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when debugging authentication, reviewing a token design, or checking what a token contains. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.</p>
-<p class="meta">Skill <code>jwt-inspector</code> in plugin <a href="../index.html">security-basics</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/jwt-inspector/SKILL.md">plugins/security-basics/skills/jwt-inspector/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/jwt-inspector/SKILL.md">plugins/security-basics/skills/jwt-inspector/SKILL.md</a>.</p>
+<p class="lede">Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to &quot;decode this JWT&quot;, when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation.</p>
+<p class="meta">Skill <code>jwt-inspector</code> in plugin <a href="../index.html">security-basics</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/jwt-inspector/SKILL.md">plugins/security-basics/skills/jwt-inspector/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/jwt-inspector/SKILL.md">plugins/security-basics/skills/jwt-inspector/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

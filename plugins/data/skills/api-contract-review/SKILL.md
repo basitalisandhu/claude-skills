@@ -1,6 +1,6 @@
 ---
 name: api-contract-review
-description: "Lint an OpenAPI 3.x document (YAML or JSON) with a bundled script for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies; then review the contract for consistency, versioning and client friendliness. Use when designing or reviewing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API."
+description: "Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to \"review this OpenAPI spec\", when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 (bundled YAML reader). OpenAPI 3.0 and 3.1; Swagger 2.0 is reported as unsupported.
 metadata:

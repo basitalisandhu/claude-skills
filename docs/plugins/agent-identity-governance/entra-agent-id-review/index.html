@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>entra-agent-id-review: Review the Entra ID identities your AI agents use | Claude Code skills</title>
-<meta name="description" content="Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &#x27;what can our agent apps do in Entra?&#x27; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).">
+<meta name="description" content="Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &quot;what can our agent apps do in Entra?&quot; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="entra-agent-id-review: Review the Entra ID identities your AI agents use | Claude Code skills">
-<meta property="og:description" content="Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &#x27;what can our agent apps do in Entra?&#x27; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).">
+<meta property="og:description" content="Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &quot;what can our agent apps do in Entra?&quot; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "entra-agent-id-review",
- "description": "Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked 'what can our agent apps do in Entra?' or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).",
+ "description": "Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked \"what can our agent apps do in Entra?\" or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / entra-agent-id-review</p>
 <h1>Entra agent identity review</h1>
-<p class="lede">Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &#x27;what can our agent apps do in Entra?&#x27; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).</p>
-<p class="meta">Skill <code>entra-agent-id-review</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md">plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md">plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md</a>.</p>
+<p class="lede">Review the Entra ID identities your AI agents use, so each one has an owner, only the permissions it needs, current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports, including agent identity and blueprint objects when present, and highlights high-risk permissions from a fixed list. Use when asked &quot;what can our agent apps do in Entra?&quot; or before approving an agent app. Not for human admin roles (privileged-access-review) or a single consent decision (graph-permission-preflight).</p>
+<p class="meta">Skill <code>entra-agent-id-review</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md">plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md">plugins/agent-identity-governance/skills/entra-agent-id-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

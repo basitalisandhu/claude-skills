@@ -1,6 +1,6 @@
 ---
 name: credential-expiry-radar
-description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked 'which app secrets expire this month?', before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response)."
+description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked \"which app secrets expire this month?\", before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:

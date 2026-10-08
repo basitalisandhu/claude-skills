@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>agent-recertification: Run the quarterly recertification of agent and workload identities | Claude Code skills</title>
-<meta name="description" content="Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &#x27;prepare the agent access review for this quarter&#x27; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.">
+<meta name="description" content="Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &quot;prepare the agent access review for this quarter&quot; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="agent-recertification: Run the quarterly recertification of agent and workload identities | Claude Code skills">
-<meta property="og:description" content="Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &#x27;prepare the agent access review for this quarter&#x27; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.">
+<meta property="og:description" content="Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &quot;prepare the agent access review for this quarter&quot; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-recertification",
- "description": "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked 'prepare the agent access review for this quarter' or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank.",
+ "description": "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked \"prepare the agent access review for this quarter\" or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / agent-recertification</p>
 <h1>Agent and workload identity recertification</h1>
-<p class="lede">Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &#x27;prepare the agent access review for this quarter&#x27; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.</p>
-<p class="meta">Skill <code>agent-recertification</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md">plugins/agent-identity-governance/skills/agent-recertification/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md">plugins/agent-identity-governance/skills/agent-recertification/SKILL.md</a>.</p>
+<p class="lede">Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked &quot;prepare the agent access review for this quarter&quot; or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner&#x27;s behalf; decisions stay blank.</p>
+<p class="meta">Skill <code>agent-recertification</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md">plugins/agent-identity-governance/skills/agent-recertification/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md">plugins/agent-identity-governance/skills/agent-recertification/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

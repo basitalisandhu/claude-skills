@@ -1,6 +1,6 @@
 ---
 name: changelog-keeper
-description: "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here)."
+description: "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when asked to \"update the changelog\", when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Keep a Changelog 1.1 format with semantic version headings.
 metadata:

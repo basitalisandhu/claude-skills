@@ -4,21 +4,63 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-05T12:37:42Z</updated>
+  <updated>2026-10-08T10:36:56Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
+  <entry>
+    <title>security-basics 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Seven lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a security review of a diff. Agent and MCP security lives in the agent-security-skills marketplace. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>docs 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/docs/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/docs/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Six skills for writing documentation that stays accurate: README author, ADR writer, changelog keeper, onboarding doc, API docs extracted from docstrings and JSDoc, and a postmortem writer. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>devops 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/devops/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/devops/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Nine skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, a Terraform apply gate against a written policy, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>debugging 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/debugging/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/debugging/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Six skills for finding the cause of a failure: minimise a bug reproduction, cluster log lines, find flaky tests in JUnit XML, explain a stack trace, summarise a py-spy, pprof or cProfile profile, and work a memory leak checklist. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>data 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/data/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/data/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>code-quality 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/#v0.2.1-eff2c6e91474</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit eff2c6e91474.</summary>
+  </entry>
+  <entry>
+    <title>agent-identity-governance 0.1.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/#v0.1.1-0b01b8c21342</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"/>
+    <updated>2026-10-08T10:36:56Z</updated>
+    <summary>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network. Synced from https://github.com/basitalisandhu/agent-identity-governance-skills at commit 0b01b8c21342.</summary>
+  </entry>
   <entry>
     <title>repo-engineering 0.4.0</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/#v0.4.0-fc37db60793c</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"/>
     <updated>2026-10-05T12:37:42Z</updated>
     <summary>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, check release notes against the commits between two tags, sweep stale branches with delete commands printed for review, and check an implementation plan for required sections and unanswered questions. Synced from https://github.com/basitalisandhu/repo-engineering-skills at commit fc37db60793c.</summary>
-  </entry>
-  <entry>
-    <title>data 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/data/#v0.2.0-c0c49c8e272a</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/data/"/>
-    <updated>2026-10-05T12:37:42Z</updated>
-    <summary>Six skills for data and API work: SQL query review, schema migration planning, CSV profiling, JSON Schema inference from samples, regex building with test cases, and OpenAPI 3 contract review. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit c0c49c8e272a.</summary>
   </entry>
   <entry>
     <title>agent-security 0.2.0</title>
@@ -28,13 +70,6 @@
     <summary>Security skills for LLM agents: threat model a codebase, audit agent configuration, review MCP servers, trace prompt injection to tool calls, look up incident precedents, run security evals, scan with Semgrep, and review agent session logs for injection, misuse, egress and loops. Includes guard hooks for Bash and an optional incident-database MCP server. Synced from https://github.com/basitalisandhu/agent-security-skills at commit 8a92c279dbb8.</summary>
   </entry>
   <entry>
-    <title>security-basics 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/#v0.2.0-e9e52e4f7fa1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"/>
-    <updated>2026-10-05T12:29:59Z</updated>
-    <summary>Seven lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a security review of a diff. Agent and MCP security lives in the agent-security-skills marketplace. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit e9e52e4f7fa1.</summary>
-  </entry>
-  <entry>
     <title>github-manager 0.2.0</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/github-manager/#v0.2.0-6c79521a2f5a</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/github-manager/"/>
@@ -42,39 +77,11 @@
     <summary>Engineering manager skills that compute from exported GitHub data: a stuck-PR and review-queue digest with next actions, an iteration report with shipped, carried-over and newly opened work plus cycle time and review turnaround, a blameless incident postmortem timeline, and an issue triage digest (unlabelled, unanswered, possible duplicates, stale, popular, suggested labels). Every number and row cites the PR, issue, comment or event it came from; team level only, no per-person scoring. Synced from https://github.com/basitalisandhu/github-manager-skills at commit 6c79521a2f5a.</summary>
   </entry>
   <entry>
-    <title>docs 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/docs/#v0.2.0-e9e52e4f7fa1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/docs/"/>
-    <updated>2026-10-05T12:29:59Z</updated>
-    <summary>Six skills for writing documentation that stays accurate: README author, ADR writer, changelog keeper, onboarding doc, API docs extracted from docstrings and JSDoc, and a postmortem writer. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit e9e52e4f7fa1.</summary>
-  </entry>
-  <entry>
-    <title>devops 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/devops/#v0.2.0-e9e52e4f7fa1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/devops/"/>
-    <updated>2026-10-05T12:29:59Z</updated>
-    <summary>Nine skills for shipping and operating software: Dockerfile hardening, GitHub Actions workflow authoring and validation, Kubernetes manifest review, Terraform review, a Terraform apply gate against a written policy, crontab diagnosis, .env key diffs, release notes from git history and a semver advisor. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit e9e52e4f7fa1.</summary>
-  </entry>
-  <entry>
-    <title>debugging 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/debugging/#v0.2.0-e9e52e4f7fa1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/debugging/"/>
-    <updated>2026-10-05T12:29:59Z</updated>
-    <summary>Six skills for finding the cause of a failure: minimise a bug reproduction, cluster log lines, find flaky tests in JUnit XML, explain a stack trace, summarise a py-spy, pprof or cProfile profile, and work a memory leak checklist. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit e9e52e4f7fa1.</summary>
-  </entry>
-  <entry>
     <title>compliance-evidence 0.2.0</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/#v0.2.0-694728a89fb8</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/"/>
     <updated>2026-10-05T12:29:59Z</updated>
     <summary>Compliance evidence skills for Claude Code: build integrity-checked evidence packs from GitHub, AWS and Microsoft 365 exports, map them to ISO 27001 and SOC 2 control identifiers, draft auditor narratives and security questionnaire answers that cite evidence or say not assessable, and map a pack to the Essential Eight maturity levels. Standard-library Python scripts read exports already on disk and make no network calls. Synced from https://github.com/basitalisandhu/compliance-evidence-skills at commit 694728a89fb8.</summary>
-  </entry>
-  <entry>
-    <title>code-quality 0.2.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/#v0.2.0-e9e52e4f7fa1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"/>
-    <updated>2026-10-05T12:29:59Z</updated>
-    <summary>Eight skills for keeping a codebase healthy: a review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage for Python and TypeScript, and a test gap finder. Synced from https://github.com/basitalisandhu/claude-dev-skills at commit e9e52e4f7fa1.</summary>
   </entry>
   <entry>
     <title>aws-security 0.3.0</title>
@@ -96,13 +103,6 @@
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/"/>
     <updated>2026-10-05T12:05:55Z</updated>
     <summary>Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network. Synced from https://github.com/basitalisandhu/claude-code-tooling-skills at commit 77944fe5134f.</summary>
-  </entry>
-  <entry>
-    <title>agent-identity-governance 0.1.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/#v0.1.0-6e1ccd045ee1</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"/>
-    <updated>2026-10-05T11:59:40Z</updated>
-    <summary>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network. Synced from https://github.com/basitalisandhu/agent-identity-governance-skills at commit 6e1ccd045ee1.</summary>
   </entry>
   <entry>
     <title>ways-of-working 0.2.1</title>

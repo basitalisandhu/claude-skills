@@ -1,6 +1,6 @@
 ---
 name: k8s-manifest-review
-description: "Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML. Use when asked to review, harden or write Kubernetes YAML or a Helm chart's rendered output. Not for cluster-level policy (RBAC, NetworkPolicy design, admission controllers) beyond noting what the workload needs."
+description: "Review Kubernetes manifests (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs, Pods, Services, Secrets) with a bundled script for missing resource limits and probes, privileged or root containers, mutable image tags, host namespaces and hostPath mounts, inline secrets and missing seccomp, then produce the corrected YAML. Use when asked to \"review this Kubernetes YAML\", to harden or write manifests, or for a Helm chart's rendered output. Not for cluster-level policy (RBAC, NetworkPolicy design, admission controllers) beyond noting what the workload needs."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 (bundled YAML reader). kubectl is optional for the dry-run step.
 metadata:

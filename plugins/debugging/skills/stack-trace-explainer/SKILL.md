@@ -1,6 +1,6 @@
 ---
 name: stack-trace-explainer
-description: "Read a stack trace or crash report from any mainstream runtime (Python, JavaScript and Node, Java and JVM, Go, Rust, .NET, Ruby, PHP), identify the frame where the fault lives versus where it surfaced, explain the error type, and propose the next diagnostic step. Use when someone pastes a trace and asks what it means or where to look. Not for performance traces or profiles (use perf-profile-reader) and not for logs without a trace (use log-triage)."
+description: "Read a stack trace or crash report from any mainstream runtime (Python, JavaScript and Node, Java and JVM, Go, Rust, .NET, Ruby, PHP), identify the frame where the fault lives versus where it surfaced, explain the error type, and propose the next diagnostic step. Use when someone pastes a trace and asks \"what does this error mean?\" or where to look. Not for performance traces or profiles (use perf-profile-reader) and not for logs without a trace (use log-triage)."
 license: MIT
 compatibility: Any language. Works from a pasted trace; reading the referenced source files improves the answer.
 metadata:

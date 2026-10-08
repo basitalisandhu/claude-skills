@@ -1,6 +1,6 @@
 ---
 name: dockerfile-hardening
-description: "Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking."
+description: "Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to \"review my Dockerfile\", to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for the linter. Docker is only needed to build and verify the result.
 metadata:

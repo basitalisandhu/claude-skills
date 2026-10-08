@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>type-coverage: Measure how much of a Python or TypeScript codebase is type-annotated | Claude Code skills</title>
-<meta name="description" content="Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).">
+<meta name="description" content="Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked &quot;how well typed is this code?&quot;, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/type-coverage/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="type-coverage: Measure how much of a Python or TypeScript codebase is type-annotated | Claude Code skills">
-<meta property="og:description" content="Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).">
+<meta property="og:description" content="Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked &quot;how well typed is this code?&quot;, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/type-coverage/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "type-coverage",
- "description": "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).",
+ "description": "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked \"how well typed is this code?\", where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/type-coverage/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / type-coverage</p>
 <h1>Type coverage</h1>
-<p class="lede">Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).</p>
-<p class="meta">Skill <code>type-coverage</code> in plugin <a href="../index.html">code-quality</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/type-coverage/SKILL.md">plugins/code-quality/skills/type-coverage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/type-coverage/SKILL.md">plugins/code-quality/skills/type-coverage/SKILL.md</a>.</p>
+<p class="lede">Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked &quot;how well typed is this code?&quot;, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that).</p>
+<p class="meta">Skill <code>type-coverage</code> in plugin <a href="../index.html">code-quality</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/type-coverage/SKILL.md">plugins/code-quality/skills/type-coverage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/type-coverage/SKILL.md">plugins/code-quality/skills/type-coverage/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

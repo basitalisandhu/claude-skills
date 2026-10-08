@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>postmortem-writer: Write a blameless incident postmortem from the timeline | Claude Code skills</title>
-<meta name="description" content="Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.">
+<meta name="description" content="Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to &quot;write up what went wrong&quot; after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/docs/postmortem-writer/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="postmortem-writer: Write a blameless incident postmortem from the timeline | Claude Code skills">
-<meta property="og:description" content="Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.">
+<meta property="og:description" content="Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to &quot;write up what went wrong&quot; after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/docs/postmortem-writer/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "postmortem-writer",
- "description": "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.",
+ "description": "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to \"write up what went wrong\" after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/postmortem-writer/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / postmortem-writer</p>
 <h1>Postmortem writer</h1>
-<p class="lede">Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.</p>
-<p class="meta">Skill <code>postmortem-writer</code> in plugin <a href="../index.html">docs</a> 0.2.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/postmortem-writer/SKILL.md">plugins/docs/skills/postmortem-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/postmortem-writer/SKILL.md">plugins/docs/skills/postmortem-writer/SKILL.md</a>.</p>
+<p class="lede">Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to &quot;write up what went wrong&quot; after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people.</p>
+<p class="meta">Skill <code>postmortem-writer</code> in plugin <a href="../index.html">docs</a> 0.2.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/postmortem-writer/SKILL.md">plugins/docs/skills/postmortem-writer/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/postmortem-writer/SKILL.md">plugins/docs/skills/postmortem-writer/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

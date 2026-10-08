@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>memory-leak-checklist: Diagnose a process whose memory grows over time with a fixed checklist | Claude Code skills</title>
-<meta name="description" content="Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).">
+<meta name="description" content="Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when asked &quot;why does memory keep growing?&quot;, or when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/debugging/memory-leak-checklist/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="memory-leak-checklist: Diagnose a process whose memory grows over time with a fixed checklist | Claude Code skills">
-<meta property="og:description" content="Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).">
+<meta property="og:description" content="Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when asked &quot;why does memory keep growing?&quot;, or when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/debugging/memory-leak-checklist/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "memory-leak-checklist",
- "description": "Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime's heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).",
+ "description": "Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime's heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when asked \"why does memory keep growing?\", or when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/debugging/memory-leak-checklist/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "debugging",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/debugging/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">debugging</a> / memory-leak-checklist</p>
 <h1>Memory leak checklist</h1>
-<p class="lede">Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).</p>
-<p class="meta">Skill <code>memory-leak-checklist</code> in plugin <a href="../index.html">debugging</a> 0.2.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/memory-leak-checklist/SKILL.md">plugins/debugging/skills/memory-leak-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/memory-leak-checklist/SKILL.md">plugins/debugging/skills/memory-leak-checklist/SKILL.md</a>.</p>
+<p class="lede">Diagnose a process whose memory grows over time with a fixed checklist: confirm it is a leak and not a cache or fragmentation, measure with the runtime&#x27;s heap tools (tracemalloc, objgraph, Node heap snapshots, Go pprof heap, JVM histograms), find the retaining path, and fix the usual suspects (unbounded caches, listeners, closures, global registries, connection pools, large buffers). Use when asked &quot;why does memory keep growing?&quot;, or when memory climbs until a restart or an out-of-memory kill. Not for CPU performance (use perf-profile-reader).</p>
+<p class="meta">Skill <code>memory-leak-checklist</code> in plugin <a href="../index.html">debugging</a> 0.2.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/debugging/skills/memory-leak-checklist/SKILL.md">plugins/debugging/skills/memory-leak-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/debugging/skills/memory-leak-checklist/SKILL.md">plugins/debugging/skills/memory-leak-checklist/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

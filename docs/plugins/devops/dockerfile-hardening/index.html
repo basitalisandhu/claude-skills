@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dockerfile-hardening: Lint a Dockerfile | Claude Code skills</title>
-<meta name="description" content="Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.">
+<title>dockerfile-hardening: Harden a container image before it ships | Claude Code skills</title>
+<meta name="description" content="Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to &quot;review my Dockerfile&quot;, to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/devops/dockerfile-hardening/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="dockerfile-hardening: Lint a Dockerfile | Claude Code skills">
-<meta property="og:description" content="Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.">
+<meta property="og:title" content="dockerfile-hardening: Harden a container image before it ships | Claude Code skills">
+<meta property="og:description" content="Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to &quot;review my Dockerfile&quot;, to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/devops/dockerfile-hardening/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "dockerfile-hardening",
- "description": "Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.",
+ "description": "Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to \"review my Dockerfile\", to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/dockerfile-hardening/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / dockerfile-hardening</p>
 <h1>Dockerfile hardening</h1>
-<p class="lede">Lint a Dockerfile with a bundled script for images that run as root, unpinned or latest base images, secrets in ENV or ARG, remote scripts piped to a shell, unclean apt layers, world-writable permissions and missing HEALTHCHECK, then rewrite it as a smaller, pinned, non-root multi-stage build. Use when asked to review, harden, slim down or write a Dockerfile, or before publishing an image. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.</p>
-<p class="meta">Skill <code>dockerfile-hardening</code> in plugin <a href="../index.html">devops</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/dockerfile-hardening/SKILL.md">plugins/devops/skills/dockerfile-hardening/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/dockerfile-hardening/SKILL.md">plugins/devops/skills/dockerfile-hardening/SKILL.md</a>.</p>
+<p class="lede">Harden a container image before it ships: a bundled script flags a Dockerfile that runs as root, uses unpinned or latest base images, puts secrets in ENV or ARG, pipes remote scripts to a shell, leaves apt layers unclean, makes files world-writable or has no HEALTHCHECK, and the file is rewritten as a smaller, pinned, non-root multi-stage build. Use when asked to &quot;review my Dockerfile&quot;, to check an image is safe to publish, or to harden, slim down or write a Dockerfile for a Python or Node app. Not for Kubernetes manifests (use k8s-manifest-review) or docker-compose networking.</p>
+<p class="meta">Skill <code>dockerfile-hardening</code> in plugin <a href="../index.html">devops</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/dockerfile-hardening/SKILL.md">plugins/devops/skills/dockerfile-hardening/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/dockerfile-hardening/SKILL.md">plugins/devops/skills/dockerfile-hardening/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

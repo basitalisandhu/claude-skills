@@ -1,6 +1,6 @@
 ---
 name: csv-profiler
-description: "Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules. Use when handed a data file to load, analyse or validate, or when an import fails. Not for spreadsheets with formulas (export to CSV first) and not for files too large to read (use --sample)."
+description: "Profile a CSV or TSV file with a bundled script (column types, nulls, distinct counts, ranges and statistics, candidate keys, ragged and duplicate rows, mixed types, whitespace) and turn the profile into import decisions: column types for a table or schema, cleaning steps and validation rules. Use when asked to \"summarise this CSV file\", when handed a data file to load, analyse or validate, or when an import fails. Not for spreadsheets with formulas (export to CSV first) and not for files too large to read (use --sample)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Files up to a few hundred MB; use --sample for larger ones.
 metadata:

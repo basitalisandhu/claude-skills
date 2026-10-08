@@ -1,6 +1,6 @@
 ---
 name: postmortem-writer
-description: "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people."
+description: "Write a blameless incident postmortem from the timeline, logs, chat transcript and metrics: impact with numbers, a minute-by-minute timeline, contributing causes found with a structured analysis rather than a single root cause, what went well and what did not, and action items with owners, deadlines and a check that they would have prevented or shortened the incident. Use when asked to \"write up what went wrong\" after an outage, a data incident, a security event or a serious near-miss. Not for bug reports (use bug-repro-minimiser) and not for performance reviews of people."
 license: MIT
 compatibility: Any system. Uses log-triage when logs are available.
 metadata:

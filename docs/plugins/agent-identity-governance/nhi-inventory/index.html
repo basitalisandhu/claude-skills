@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nhi-inventory: List every non-human identity your agents and automations run as | Claude Code skills</title>
-<meta name="description" content="List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &#x27;which agent identities have no owner?&#x27;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).">
+<meta name="description" content="List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &quot;which agent identities have no owner?&quot;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="nhi-inventory: List every non-human identity your agents and automations run as | Claude Code skills">
-<meta property="og:description" content="List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &#x27;which agent identities have no owner?&#x27;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).">
+<meta property="og:description" content="List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &quot;which agent identities have no owner?&quot;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "nhi-inventory",
- "description": "List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked 'which agent identities have no owner?', before an access review, or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).",
+ "description": "List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked \"which agent identities have no owner?\", before an access review, or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / nhi-inventory</p>
 <h1>Non-human identity inventory</h1>
-<p class="lede">List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &#x27;which agent identities have no owner?&#x27;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).</p>
-<p class="meta">Skill <code>nhi-inventory</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md">plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md">plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md</a>.</p>
+<p class="lede">List every non-human identity your agents and automations run as, in one table with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra app and service principal, AWS IAM and GitHub exports plus a hand-kept register of agents and connectors. Use when asked &quot;which agent identities have no owner?&quot;, before an access review, or when starting agent identity governance. Not for one app&#x27;s Graph permissions (graph-permission-preflight) or IAM policy content (iam-least-privilege-review).</p>
+<p class="meta">Skill <code>nhi-inventory</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md">plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md">plugins/agent-identity-governance/skills/nhi-inventory/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
