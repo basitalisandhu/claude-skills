@@ -1,7 +1,7 @@
 {
   "name": "repo-engineering",
   "displayName": "Repo Engineering",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README's first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, check release notes against the commits between two tags, sweep stale branches with delete commands printed for review, and check an implementation plan for required sections and unanswered questions.",
   "author": {
     "name": "Muhammad Basit Ali",

@@ -1,7 +1,7 @@
 {
   "name": "aws-security",
   "displayName": "AWS Security",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "AWS security skills for Claude Code: read-only account audit, SCP guardrail builder and linter, landing zone blast-radius design, IAM least-privilege review, Security Hub and GuardDuty triage, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, a sandbox OU guardrail pack and an audit of what an agent role session did, from CloudTrail. Scripts are standard-library Python and work offline on specs and saved aws CLI output.",
   "author": {
     "name": "Muhammad Basit Ali",
