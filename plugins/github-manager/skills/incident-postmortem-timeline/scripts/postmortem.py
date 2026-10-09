@@ -25,7 +25,9 @@ Builds:
   questions  contributing factors written as questions for the review, never as conclusions
   skeleton   a postmortem document in Markdown that cites each timeline row
 
-Exit codes: 0 written, 2 bad input.
+Optional --check draft.md compares table-row HH:MM (UTC, any timeline date) and ISO
+times with timeline rows, accepting a one-minute difference. Prose and code blocks
+are ignored. Exit codes: 0 written/checked, 1 unmatched draft times, 2 bad input.
 """
 from __future__ import annotations
 
@@ -380,11 +382,39 @@ def render_markdown(rep: dict) -> str:
     return "\n".join(out)
 
 
+def check_draft(text: str, rows: list[dict]) -> list[dict]:
+    times = [time for row in rows if (time := parse_time(row["time"])) is not None]
+    pattern = re.compile(
+        r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?"
+        r"|\b(?:[01]\d|2[0-3]):[0-5]\d\b")
+    problems = []
+    fenced = False
+    for number, line in enumerate(text.splitlines(), 1):
+        if line.strip().startswith(("```", "~~~")):
+            fenced = not fenced
+            continue
+        if fenced or not line.lstrip().startswith("|"):
+            continue
+        for match in pattern.finditer(line):
+            value = match.group()
+            if "T" in value:
+                moment = parse_time(value)
+                found = moment is not None and any(abs((time - moment).total_seconds()) <= 60 for time in times)
+            else:
+                hour, minute = map(int, value.split(":"))
+                seconds = hour * 3600 + minute * 60
+                differences = [abs(time.hour * 3600 + time.minute * 60 + time.second - seconds) for time in times]
+                found = any(min(delta, 86400 - delta) <= 60 for delta in differences)
+            if not found:
+                problems.append({"line": number, "time": value, "message": "no timeline row within one minute"})
+    return problems
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="postmortem.py",
         description="Blameless postmortem timeline and skeleton from a saved incident issue export (offline).",
-        epilog="Exit codes: 0 written, 2 bad input.",
+        epilog="Exit codes: 0 written/checked, 1 unmatched draft times, 2 bad input.",
     )
     parser.add_argument("folder", type=Path, help="folder with issue-<N>.json, timeline-<N>.json and optional prs.json")
     parser.add_argument("--issue", type=int, required=True, help="the incident issue number")
@@ -397,15 +427,26 @@ def main(argv: list[str] | None = None) -> int:
                         help="list referenced PRs merged up to this many hours before detection (default 48)")
     parser.add_argument("--redact", action="store_true", help="show people as roles only, and replace logins in text")
     parser.add_argument("--json", action="store_true", help="JSON report")
+    parser.add_argument("--check", type=Path, metavar="DRAFT",
+                        help="check draft table times against the timeline (within one minute)")
     args = parser.parse_args(argv)
     try:
         rep = build(args.folder, args.issue, args.mitigation_pattern, args.ack_labels, args.mitigated_labels,
                     args.resolved_labels, args.lookback_hours, args.redact)
+        if args.check:
+            try:
+                draft = args.check.read_text(encoding="utf-8")
+            except OSError as exc:
+                raise InputError(f"{args.check}: cannot read: {exc}") from exc
+            rep["draft_problems"] = check_draft(draft, rep["timeline"])
     except InputError as exc:
         print(f"postmortem.py: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(rep, indent=2) if args.json else render_markdown(rep))
-    return 0
+    if args.check and not args.json:
+        for problem in rep["draft_problems"]:
+            print(f"draft line {problem['line']}: {problem['time']}: {problem['message']}", file=sys.stderr)
+    return 1 if rep.get("draft_problems") else 0
 
 
 if __name__ == "__main__":

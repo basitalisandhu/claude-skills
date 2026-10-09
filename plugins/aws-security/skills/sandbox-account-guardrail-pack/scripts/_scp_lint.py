@@ -19,6 +19,7 @@ parsed). Checks (id, level):
   SCP-REGION-BLOCKS-GLOBAL error   region deny (aws:RequestedRegion) that uses Action instead of NotAction with "*"
                                    or a service wildcard, so global services such as IAM, STS and Organizations break
   SCP-REGION-GLOBAL-GAPS  warning  region deny whose NotAction list misses core global services
+  SCP-REGION-OPERATOR     warning  region Deny uses a positive string comparison, denying matching regions
   SCP-NO-EXEMPTION        info     guardrail on security services or regions without an aws:PrincipalArn exemption,
                                    so no break-glass role can act
   SCP-DUPLICATE-SID       warning  two statements share a Sid
@@ -121,6 +122,19 @@ def lint_policy(doc, limit: int = SCP_LIMIT, strategy: str = "deny-list") -> lis
                                                                    "action not listed, in every region", sid))
         keys = condition_keys(st)
         if "aws:requestedregion" in keys:
+            for operator, values in st.get("Condition", {}).items():
+                # IAM permits set qualifiers and IfExists on string operators.
+                # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html
+                base_operator = operator
+                if base_operator.startswith(("ForAnyValue:", "ForAllValues:")):
+                    base_operator = base_operator.split(":", 1)[1]
+                base_operator = base_operator.removesuffix("IfExists")
+                if base_operator in {"StringEquals", "StringLike", "StringEqualsIgnoreCase"} and isinstance(values, dict) \
+                        and any(key.lower() == "aws:requestedregion" for key in values):
+                    out.append(issue("SCP-REGION-OPERATOR", "warning",
+                                     f"region deny uses {operator}: it denies the matching regions instead of "
+                                     "the regions outside the list; use a negated operator for a region allowlist",
+                                     sid))
             if actions:
                 broad = [a for a in actions if a == "*" or (a.endswith(":*") and a.split(":")[0] in
                          {g.split(":")[0] for g in CORE_GLOBALS})]

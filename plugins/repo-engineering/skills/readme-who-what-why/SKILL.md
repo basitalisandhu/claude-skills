@@ -32,6 +32,8 @@ The script reports where it found each answer and quotes the evidence; it does n
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/readme-who-what-why/scripts/readme_check.py" README.md --json --screen-lines 30
    ```
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/readme-who-what-why` with the path to this skill's folder, for example `.claude/skills/readme-who-what-why`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Read the element table and the to-do list.** Each element is `first screen` (2 points), `later` (1) or `missing` (0), out of 12. Hype words are listed with line numbers.
 3. **Check the evidence column by eye.** The detectors are keyword based: "without" may count as a why, a `## Usage` heading as an example. Where the evidence does not really answer the question, treat the element as missing.
 4. **Gather the facts for each gap** from the code and the user: what the project does (entry points, main module), who uses it (ask), what it replaces (ask), the install command (manifest: package name, published registry, plugin marketplace), one example that runs (try it), where to ask (issues enabled? `SECURITY.md`? ask).

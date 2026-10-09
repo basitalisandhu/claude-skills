@@ -379,8 +379,41 @@ class Index:
         return rel in self.rel_files or rel in self.rel_dirs or rel == ""
 
     def project(self) -> tuple[str, str]:
+        self.version_reason = ""
         proj = self.pyproject.get("project", {}) if isinstance(self.pyproject, dict) else {}
         poetry = self.pyproject.get("tool", {}).get("poetry", {}) if isinstance(self.pyproject, dict) else {}
+        if isinstance(proj, dict) and proj.get("name") and "version" in proj.get("dynamic", []):
+            tool = self.pyproject.get("tool", {})
+            dynamic = tool.get("setuptools", {}).get("dynamic", {}).get("version", {})
+            attr = dynamic.get("attr") if isinstance(dynamic, dict) else None
+            hatch = tool.get("hatch", {}).get("version", {})
+            rel = None
+            symbol = "__version__"
+            if isinstance(attr, str) and "." in attr:
+                module, symbol = attr.rsplit(".", 1)
+                rel = self.modules.get(module)
+            elif isinstance(hatch, dict) and isinstance(hatch.get("path"), str):
+                rel = hatch["path"]
+            text = self.code_texts.get(rel) if rel else None
+            if text is not None:
+                try:
+                    tree = ast.parse(text)
+                except (SyntaxError, ValueError):
+                    tree = ast.Module(body=[], type_ignores=[])
+                assignments = []
+                for node in ast.walk(tree):
+                    targets = node.targets if isinstance(node, ast.Assign) else (
+                        [node.target] if isinstance(node, ast.AnnAssign) else [])
+                    if any(isinstance(target, ast.Name) and target.id == symbol for target in targets):
+                        assignments.append(node)
+                if len(assignments) == 1 and assignments[0] in tree.body:
+                    value = assignments[0].value
+                    if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                        return str(proj["name"]), value.value
+                self.version_reason = f"dynamic version is not a single top-level string literal in {rel}"
+            else:
+                self.version_reason = "dynamic version source is unsupported or not indexed in the repository"
+            return str(proj["name"]), ""
         for src in (proj, poetry, self.package_json):
             if isinstance(src, dict) and src.get("name") and isinstance(src.get("version"), str):
                 return str(src["name"]), src["version"]
@@ -856,7 +889,7 @@ class Checker:
                 self.add("default", claim, doc, lineno, "stale", f"code default is {default!r} in {rel}")
 
     def check_versions(self, line: str, doc: str, lineno: int) -> None:
-        if not self.version or not self.name:
+        if not self.name:
             return
         name = re.escape(self.name)
         found: list[str] = []
@@ -865,7 +898,9 @@ class Checker:
             found += re.findall(r"\bversion\s*[:=]?\s*" + SEMVER, line, re.IGNORECASE)
         for v in dict.fromkeys(found):
             claim = f"{self.name} {v}"
-            if v == self.version:
+            if not self.version:
+                self.add("version", claim, doc, lineno, "unverified", self.index.version_reason)
+            elif v == self.version:
                 self.add("version", claim, doc, lineno, "verified")
             else:
                 self.add("version", claim, doc, lineno, "stale", f"manifest version is {self.version}")

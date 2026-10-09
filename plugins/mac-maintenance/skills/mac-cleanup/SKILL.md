@@ -1,6 +1,6 @@
 ---
 name: mac-cleanup
-description: "Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when \"System Data\" is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes."
+description: "Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when \"my Mac feels slow\", to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes."
 license: MIT
 compatibility: macOS with Python 3.11 or newer on PATH as python3. Standard library only, no network access. Optional tools (docker, brew, uv, pip3, xcrun, mdls, osascript) are used when present and reported as unverified when not.
 metadata:

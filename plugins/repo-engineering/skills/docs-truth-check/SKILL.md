@@ -35,6 +35,8 @@ Report only what the script or a file you opened verified. Every claim carries o
 
    By default it reads `README*`, `CONTRIBUTING*`, `AGENTS.md` and `CLAUDE.md` at the root plus `docs/**/*.md`. Narrow or widen with `--docs 'docs/*.md'` (repeatable) and leave generated or vendored trees out with `--exclude`.
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/docs-truth-check` with the path to this skill's folder, for example `.claude/skills/docs-truth-check`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Read the failures first.** The table sorts `stale`, then `missing`, then `unverified`, then `verified`. Use `--only-failures` for a short list.
 
 3. **Confirm each failure by opening the cited file.** For a `stale` default, quote the `add_argument(...)` line. For a `missing` path, list the directory and look for the renamed file (the detail column names close siblings when it finds them). For a `missing` symbol, grep for it; a symbol defined only in a language the script does not parse stays a doc problem to check by hand, not a confirmed drift.
@@ -70,7 +72,7 @@ Exit codes: 0 no drift, 1 drift at the `--fail-on` level, 2 bad input.
 | `default` | "`--flag` defaults to `X`", "`ENV_NAME` defaults to `X`", "(default: X)" | the code's literal CLI or environment lookup default equals X, including `os.environ.get`, `os.getenv`, or their direct imports from `os`; non-literal environment defaults are unverified |
 | `env` | `UPPER_CASE_NAME` in backticks | the name appears in a code or config file |
 | `symbol` | `name()`, `Class.method`, `snake_case`, `camelCase` in backticks | defined in Python (`ast`), exported or declared in JS/TS (regex), or a key in TOML, JSON, YAML, INI or `.env` files |
-| `version` | `<project>==X.Y.Z`, `<project>@X.Y.Z`, "version X.Y.Z" on a line naming the project | equals the version in `pyproject.toml` or `package.json` |
+| `version` | `<project>==X.Y.Z`, `<project>@X.Y.Z`, "version X.Y.Z" on a line naming the project | equals the version in `pyproject.toml` or `package.json`; dynamic versions are read from `[tool.setuptools.dynamic]` attr or `[tool.hatch.version]` path without executing code and reported `unverified` when not a plain string literal |
 | `target` | `npm run X`, `make X`, also after `cd dir &&` | the package.json script or Makefile target exists in that directory |
 
 Names that clearly belong to other projects (`os.environ`, `owner/repo`, `pip install requests`, Python builtins) are not treated as claims about this repository.

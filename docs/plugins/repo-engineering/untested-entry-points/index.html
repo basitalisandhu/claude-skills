@@ -70,6 +70,7 @@ python3 install.py --user --skill repo-engineering/untested-entry-points</code><
 <ol><li><strong>Rank the gaps</strong>:</li></ol>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/untested-entry-points/scripts/test_gaps.py&quot; .
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/untested-entry-points/scripts/test_gaps.py&quot; . --json --top 30</code></pre>
+<p>If this skill was copied into <code>.claude/skills/</code> without the plugin system, <code>${CLAUDE_PLUGIN_ROOT}</code> is empty. Replace <code>${CLAUDE_PLUGIN_ROOT}/skills/untested-entry-points</code> with the path to this skill&#x27;s folder, for example <code>.claude/skills/untested-entry-points</code>, and run the command from the repository root. The same applies to any other script command in this skill.</p>
 <ol start="2"><li><strong>Check the top of the list.</strong> For each unit, open it and grep the tests for indirect use (a CLI test that runs <code>main</code> through a subprocess will not mention it by name). Mark indirectly tested units as such; they stay on the list because indirect tests break silently.</li><li><strong>Generate stubs</strong> for the units the user wants pinned:</li></ol>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/untested-entry-points/scripts/test_gaps.py&quot; . --top 5 --stubs
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/untested-entry-points/scripts/test_gaps.py&quot; . --top 5 --stubs-dir tests/characterisation</code></pre>

@@ -74,8 +74,10 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/changelog-keeper/scripts/changelog.py
 <p>Write the line for the user: what changed for them, with the issue or pull request number. Internal refactors, CI and test-only changes do not get entries unless the audience is contributors. Breaking changes go in <code>Changed</code> or <code>Removed</code> with &quot;Breaking:&quot; at the start of the line and the migration step.</p>
 <ol start="3"><li><strong>Cut a release</strong> once <code>semver-advisor</code> has decided the version:</li></ol>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/changelog-keeper/scripts/changelog.py&quot; release 1.4.0 --repo-url https://github.com/owner/repo
-python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/changelog-keeper/scripts/changelog.py&quot; show 1.4.0   # the text for the GitHub release body</code></pre>
+python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/changelog-keeper/scripts/changelog.py&quot; show 1.4.0   # the text for the GitHub release body
+python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/changelog-keeper/scripts/changelog.py&quot; show 1.4.0 --format github</code></pre>
 <p>The script moves the <code>Unreleased</code> entries under <code>[1.4.0] - &lt;date&gt;</code>, opens a fresh empty <code>[Unreleased]</code>, and rewrites the compare links. It refuses to release an empty <code>Unreleased</code> or a version that already exists. Use <code>--dry-run</code> to preview.</p>
+<p><code>show --format github</code> uses bold category labels and bullets, then appends the version&#x27;s compare link when present. The default <code>keepachangelog</code> format and <code>--json</code> output stay unchanged.</p>
 <ol start="4"><li><strong>Keep it consistent with the other artefacts</strong>: the GitHub release body (<code>show &lt;version&gt;</code>), the package version in the manifest, and the git tag <code>v&lt;version&gt;</code> should all agree; add a CI check that the manifest version has a changelog section (<code>show $VERSION</code> exits 2 when missing).</li></ol>
 <ol start="5"><li><strong>Gate pull requests</strong> with the check: <code>changelog.py check</code> in CI, plus a job that fails when <code>src/</code> changed and <code>CHANGELOG.md</code> did not (with a <code>skip-changelog</code> label as the escape hatch).</li></ol>
 <h3 id="output-format">Output format</h3>

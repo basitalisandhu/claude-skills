@@ -33,6 +33,8 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/adr-miner/scripts/adr_mine.py" . --range v1.0.0..HEAD --json
    ```
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/adr-miner` with the path to this skill's folder, for example `.claude/skills/adr-miner`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Triage with the user.** Show the list (source, title, SHA, date, reasons). Most repositories produce more candidates than decisions; drop routine bumps and typo-level "replace" commits. Keep a candidate when it changed how the system is built, run or depended on.
 
 3. **Read each kept candidate's evidence**: `git show <sha>` for the full diff, the pull request if one is linked, the comment and its surrounding code. Note anything the stub can cite (an issue number, a benchmark in the PR).
