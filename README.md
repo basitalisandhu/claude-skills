@@ -100,7 +100,7 @@ Version 0.1.1. Source: [agent-identity-governance-skills](https://github.com/bas
 
 ### agent-security
 
-Version 0.2.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
+Version 0.3.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -116,7 +116,7 @@ Version 0.2.0. Source: [agent-security-skills](https://github.com/basitalisandhu
 
 ### aws-security
 
-Version 0.3.0. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
+Version 0.4.0. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -148,7 +148,7 @@ Version 0.1.1. Source: [claude-code-tooling-skills](https://github.com/basitalis
 
 ### code-quality
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install code-quality@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install code-quality@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -163,7 +163,7 @@ Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### compliance-evidence
 
-Version 0.2.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
+Version 0.3.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -177,7 +177,7 @@ Version 0.2.0. Source: [compliance-evidence-skills](https://github.com/basitalis
 
 ### data
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install data@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install data@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -190,7 +190,7 @@ Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### debugging
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install debugging@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install debugging@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -203,7 +203,7 @@ Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### devops
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install devops@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install devops@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -219,7 +219,7 @@ Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### docs
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install docs@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install docs@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -232,7 +232,7 @@ Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### github-manager
 
-Version 0.2.0. Source: [github-manager-skills](https://github.com/basitalisandhu/github-manager-skills). Install: `/plugin install github-manager@claude-skills`.
+Version 0.3.0. Source: [github-manager-skills](https://github.com/basitalisandhu/github-manager-skills). Install: `/plugin install github-manager@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -243,7 +243,7 @@ Version 0.2.0. Source: [github-manager-skills](https://github.com/basitalisandhu
 
 ### m365-governance
 
-Version 0.3.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
+Version 0.4.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -270,7 +270,7 @@ Version 0.1.3. Source: [mac-maintenance-skills](https://github.com/basitalisandh
 
 ### repo-engineering
 
-Version 0.4.0. Source: [repo-engineering-skills](https://github.com/basitalisandhu/repo-engineering-skills). Install: `/plugin install repo-engineering@claude-skills`.
+Version 0.4.1. Source: [repo-engineering-skills](https://github.com/basitalisandhu/repo-engineering-skills). Install: `/plugin install repo-engineering@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -289,7 +289,7 @@ Version 0.4.0. Source: [repo-engineering-skills](https://github.com/basitalisand
 
 ### security-basics
 
-Version 0.2.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install security-basics@claude-skills`.
+Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/claude-dev-skills). Install: `/plugin install security-basics@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |

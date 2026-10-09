@@ -30,7 +30,7 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 SEVERITIES = ["critical", "high", "medium", "low", "info"]
 MAX_FILE_BYTES = 2 * 1024 * 1024
 
