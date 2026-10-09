@@ -1,6 +1,6 @@
 ---
 name: type-coverage
-description: "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked how well typed the code is, where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that)."
+description: "Measure how much of a Python or TypeScript codebase is type-annotated with a bundled script (parameters and return values per function, explicit any counts), find the least-typed files, and plan a gradual typing rollout with a CI threshold. Use when asked \"how well typed is this code?\", where to add types first, or to enforce typing on new code. Not for finding type errors; it measures annotations only (run mypy, pyright or tsc for that)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Optional mypy, pyright or tsc for the follow-up checks.
 metadata:

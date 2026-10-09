@@ -15,7 +15,7 @@
       "name": "agent-identity-governance",
       "source": "./plugins/agent-identity-governance",
       "description": "Eight agent identity governance skills, each with a tested standard-library script over saved Entra, AWS, GitHub and register exports: nhi-inventory, entra-agent-id-review, agent-recertification, credential-expiry-radar, connector-register, agent-action-timeline, agent-kill-switch-runbook and leaked-credential-response. No network calls; key ids shown by their last four characters.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -146,7 +146,7 @@
       "name": "code-quality",
       "source": "./plugins/code-quality",
       "description": "Review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage and test gap finder.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -206,7 +206,7 @@
       "name": "data",
       "source": "./plugins/data",
       "description": "SQL query review, schema migration planning, CSV profiler, JSON Schema inference, regex builder and OpenAPI 3 contract review.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -234,7 +234,7 @@
       "name": "debugging",
       "source": "./plugins/debugging",
       "description": "Bug reproduction minimiser, log triage, flaky test hunter, stack trace explainer, profile reader and a memory leak checklist.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -260,7 +260,7 @@
       "name": "devops",
       "source": "./plugins/devops",
       "description": "Dockerfile hardening, GitHub Actions authoring, Kubernetes manifest and Terraform review, a Terraform apply gate, cron doctor, env file diff, release notes and a semver advisor.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -290,7 +290,7 @@
       "name": "docs",
       "source": "./plugins/docs",
       "description": "README author, ADR writer, changelog keeper, onboarding doc, API docs from code and a postmortem writer.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -444,7 +444,7 @@
       "name": "security-basics",
       "source": "./plugins/security-basics",
       "description": "Secrets hygiene scan, dependency audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a diff security review. For agent-specific security see agent-security-skills.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"

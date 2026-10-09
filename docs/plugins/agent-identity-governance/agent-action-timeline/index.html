@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>agent-action-timeline: Reconstruct what one agent identity did | Claude Code skills</title>
-<meta name="description" content="Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &#x27;what did this agent do last week?&#x27;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.">
+<meta name="description" content="Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &quot;what did this agent do last week?&quot;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="agent-action-timeline: Reconstruct what one agent identity did | Claude Code skills">
-<meta property="og:description" content="Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &#x27;what did this agent do last week?&#x27;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.">
+<meta property="og:description" content="Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &quot;what did this agent do last week?&quot;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "agent-action-timeline",
- "description": "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked 'what did this agent do last week?', during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity.",
+ "description": "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked \"what did this agent do last week?\", during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / agent-action-timeline</p>
 <h1>Agent action timeline</h1>
-<p class="lede">Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &#x27;what did this agent do last week?&#x27;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.</p>
-<p class="meta">Skill <code>agent-action-timeline</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md">plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md">plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md</a>.</p>
+<p class="lede">Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked &quot;what did this agent do last week?&quot;, during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user&#x27;s activity.</p>
+<p class="meta">Skill <code>agent-action-timeline</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md">plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md">plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>connector-register: Keep an approved register of the MCP servers | Claude Code skills</title>
-<meta name="description" content="Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &#x27;which MCP servers are we actually running?&#x27; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).">
+<meta name="description" content="Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &quot;which MCP servers are we actually running?&quot; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="connector-register: Keep an approved register of the MCP servers | Claude Code skills">
-<meta property="og:description" content="Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &#x27;which MCP servers are we actually running?&#x27; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).">
+<meta property="og:description" content="Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &quot;which MCP servers are we actually running?&quot; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "connector-register",
- "description": "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked 'which MCP servers are we actually running?' or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit).",
+ "description": "Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked \"which MCP servers are we actually running?\" or before a quarterly connector review. Not for auditing an MCP server's code (mcp-server-review) or agent config files (agent-config-audit).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / connector-register</p>
 <h1>Connector and MCP server register</h1>
-<p class="lede">Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &#x27;which MCP servers are we actually running?&#x27; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).</p>
-<p class="meta">Skill <code>connector-register</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md">plugins/agent-identity-governance/skills/connector-register/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md">plugins/agent-identity-governance/skills/connector-register/SKILL.md</a>.</p>
+<p class="lede">Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. Compares the register with saved tools/list outputs and permission manifests to catch unregistered servers and tools and entries that are gone. Use when asked &quot;which MCP servers are we actually running?&quot; or before a quarterly connector review. Not for auditing an MCP server&#x27;s code (mcp-server-review) or agent config files (agent-config-audit).</p>
+<p class="meta">Skill <code>connector-register</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md">plugins/agent-identity-governance/skills/connector-register/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md">plugins/agent-identity-governance/skills/connector-register/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

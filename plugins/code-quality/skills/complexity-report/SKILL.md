@@ -1,6 +1,6 @@
 ---
 name: complexity-report
-description: "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code."
+description: "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked \"which code is most complex?\", where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No network access needed.
 metadata:

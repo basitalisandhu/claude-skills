@@ -1,6 +1,6 @@
 ---
 name: test-gap-finder
-description: "Map source modules to their test files by naming convention and imports with a bundled script, list the modules that have no test, and prioritise which to cover first by risk. Use when asked what is untested, where to add tests, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that)."
+description: "Find the source modules that have no tests and prioritise which to cover first by risk: a bundled script maps modules to their tests by naming convention and imports and shows what is missing. Use when asked \"what is untested?\", where to add tests first, or to check that a change comes with tests. Not for line coverage; it works at module level without running anything (use coverage.py, c8 or go test -cover for that)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Supports Python, JavaScript, TypeScript, Go, Ruby and Rust layouts.
 metadata:

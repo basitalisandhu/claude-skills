@@ -1,6 +1,6 @@
 ---
 name: perf-profile-reader
-description: "Summarise a captured CPU profile (py-spy collapsed stacks or dump, Go pprof text, Python cProfile output) into the few functions that hold the time, separate busy from waiting, and name the optimisation to try first, using a bundled script. Use when someone has a profile and asks where the time goes, or before optimising anything. Not for taking the profile (instructions are included) and not for memory profiles (use memory-leak-checklist)."
+description: "Summarise a captured CPU profile (py-spy collapsed stacks or dump, Go pprof text, Python cProfile output) into the few functions that hold the time, separate busy from waiting, and name the optimisation to try first, using a bundled script. Use when someone has a profile and asks \"where does the time go?\", or before optimising anything. Not for taking the profile (instructions are included) and not for memory profiles (use memory-leak-checklist)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads text produced by py-spy, go tool pprof, cProfile or pstats; no profiler is required to read an existing capture.
 metadata:

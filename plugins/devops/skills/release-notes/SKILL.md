@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: "Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing."
+description: "Generate release notes from a git commit range with a bundled script that groups commits by Conventional Commits type (breaking, features, fixes, performance, docs, build), links commits and issues, and lists contributors; then edit them into notes a user can read. Use when asked to \"write the release notes\", when cutting a release, writing a GitHub release body, or updating CHANGELOG.md from history. Not for deciding the version number (use semver-advisor) and not for commit message writing."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3; git for reading history (local only, no network). Works without git from a captured log.
 metadata:

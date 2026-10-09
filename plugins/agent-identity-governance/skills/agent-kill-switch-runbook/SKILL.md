@@ -1,6 +1,6 @@
 ---
 name: agent-kill-switch-runbook
-description: "Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. Checks every credential and assignment in the inventory has a step. Use when asked 'how do we turn this agent off?', before an agent goes live, or in an incident. Not for running the steps (it changes nothing) or for offboarding a human account."
+description: "Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. Checks every credential and assignment in the inventory has a step. Use when asked \"how do we turn this agent off?\", before an agent goes live, or in an incident. Not for running the steps (it changes nothing) or for offboarding a human account."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls and runs no command it prints. The Azure CLI, AWS CLI and GitHub CLI are needed by the person running the runbook.
 metadata:

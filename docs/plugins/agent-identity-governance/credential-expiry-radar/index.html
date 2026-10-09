@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>credential-expiry-radar: Find the secrets | Claude Code skills</title>
-<meta name="description" content="Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &#x27;which app secrets expire this month?&#x27;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).">
+<meta name="description" content="Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &quot;which app secrets expire this month?&quot;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="credential-expiry-radar: Find the secrets | Claude Code skills">
-<meta property="og:description" content="Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &#x27;which app secrets expire this month?&#x27;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).">
+<meta property="og:description" content="Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &quot;which app secrets expire this month?&quot;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "credential-expiry-radar",
- "description": "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked 'which app secrets expire this month?', before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).",
+ "description": "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked \"which app secrets expire this month?\", before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/credential-expiry-radar/",
  "codeRepository": "https://github.com/basitalisandhu/agent-identity-governance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-identity-governance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"
  },
- "version": "0.1.0"
+ "version": "0.1.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-identity-governance</a> / credential-expiry-radar</p>
 <h1>Credential expiry radar</h1>
-<p class="lede">Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &#x27;which app secrets expire this month?&#x27;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).</p>
-<p class="meta">Skill <code>credential-expiry-radar</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md">plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md">plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md</a>.</p>
+<p class="lede">Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked &quot;which app secrets expire this month?&quot;, before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response).</p>
+<p class="meta">Skill <code>credential-expiry-radar</code> in plugin <a href="../index.html">agent-identity-governance</a> 0.1.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md">plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-identity-governance-skills">agent-identity-governance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md">plugins/agent-identity-governance/skills/credential-expiry-radar/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

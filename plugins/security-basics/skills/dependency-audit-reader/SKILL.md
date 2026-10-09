@@ -1,6 +1,6 @@
 ---
 name: dependency-audit-reader
-description: "Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, the overrides and the accepted risks with expiry dates. Use when an audit fails CI, when asked what to do about a vulnerability report, or to triage dependency alerts. Not for finding new vulnerabilities (it reads the tool's output offline) or for licence compliance."
+description: "Read the JSON output of npm audit, yarn audit, pip-audit or cargo audit with a bundled script that ranks vulnerable packages by severity, separates fixable from unfixable and direct from transitive, and names the packages to upgrade first; then plan the upgrades, overrides and accepted risks with expiry dates. Use when an audit fails CI, when asked \"what do we do about these vulnerabilities?\", or to triage dependency alerts. Not for finding new vulnerabilities (it reads the tool's output offline) or for licence compliance."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads npm audit v6 and v7+, yarn audit NDJSON, pip-audit JSON (both shapes), cargo audit JSON.
 metadata:

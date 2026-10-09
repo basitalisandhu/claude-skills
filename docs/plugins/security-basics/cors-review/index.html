@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>cors-review: Review a web application&#x27;s Cross-Origin Resource Sharing configuration | Claude Code skills</title>
-<meta name="description" content="Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.">
+<meta name="description" content="Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says &quot;blocked by CORS policy&quot;, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/cors-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="cors-review: Review a web application&#x27;s Cross-Origin Resource Sharing configuration | Claude Code skills">
-<meta property="og:description" content="Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.">
+<meta property="og:description" content="Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says &quot;blocked by CORS policy&quot;, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/security-basics/cors-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "cors-review",
- "description": "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.",
+ "description": "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says \"blocked by CORS policy\", when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/cors-review/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "security-basics",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/security-basics/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">security-basics</a> / cors-review</p>
 <h1>CORS review</h1>
-<p class="lede">Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.</p>
-<p class="meta">Skill <code>cors-review</code> in plugin <a href="../index.html">security-basics</a> 0.2.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/cors-review/SKILL.md">plugins/security-basics/skills/cors-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/cors-review/SKILL.md">plugins/security-basics/skills/cors-review/SKILL.md</a>.</p>
+<p class="lede">Review a web application&#x27;s Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says &quot;blocked by CORS policy&quot;, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP.</p>
+<p class="meta">Skill <code>cors-review</code> in plugin <a href="../index.html">security-basics</a> 0.2.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/security-basics/skills/cors-review/SKILL.md">plugins/security-basics/skills/cors-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/security-basics/skills/cors-review/SKILL.md">plugins/security-basics/skills/cors-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

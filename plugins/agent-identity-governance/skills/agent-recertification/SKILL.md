@@ -1,6 +1,6 @@
 ---
 name: agent-recertification
-description: "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked 'prepare the agent access review for this quarter' or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank."
+description: "Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. Flags identities never attested, attestations older than 90 days and owners who have left. Use when asked \"prepare the agent access review for this quarter\" or before an audit of non-human access. Not for human user access reviews (access-review-pack) or for deciding on an owner's behalf; decisions stay blank."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc) for the users export only.
 metadata:

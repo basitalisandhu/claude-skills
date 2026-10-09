@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>changelog-keeper: Maintain CHANGELOG.md in the Keep a Changelog format | Claude Code skills</title>
-<meta name="description" content="Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).">
+<meta name="description" content="Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when asked to &quot;update the changelog&quot;, when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/docs/changelog-keeper/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="changelog-keeper: Maintain CHANGELOG.md in the Keep a Changelog format | Claude Code skills">
-<meta property="og:description" content="Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).">
+<meta property="og:description" content="Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when asked to &quot;update the changelog&quot;, when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/docs/changelog-keeper/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "changelog-keeper",
- "description": "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).",
+ "description": "Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version's section. Use when asked to \"update the changelog\", when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/changelog-keeper/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "docs",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/docs/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">docs</a> / changelog-keeper</p>
 <h1>Changelog keeper</h1>
-<p class="lede">Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).</p>
-<p class="meta">Skill <code>changelog-keeper</code> in plugin <a href="../index.html">docs</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a>.</p>
+<p class="lede">Maintain CHANGELOG.md in the Keep a Changelog format with a bundled script that validates the structure, adds entries under Unreleased in the right category, cuts a release (version, date, compare links) and prints a version&#x27;s section. Use when asked to &quot;update the changelog&quot;, when a change needs a changelog line, when preparing a release, or when the changelog has drifted from the format. Not for generating entries from git history (use release-notes for that, then add the entries here).</p>
+<p class="meta">Skill <code>changelog-keeper</code> in plugin <a href="../index.html">docs</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/docs/skills/changelog-keeper/SKILL.md">plugins/docs/skills/changelog-keeper/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

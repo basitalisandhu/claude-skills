@@ -1,6 +1,6 @@
 ---
 name: cors-review
-description: "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that create cross-site data leaks or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser reports a CORS error, when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP."
+description: "Review a web application's Cross-Origin Resource Sharing configuration (allowed origins, credentials, methods, headers, preflight caching, exposed headers) against a checklist of the mistakes that leak data cross-site or break legitimate clients, and produce the correct configuration for the framework or gateway in use. Use when a browser says \"blocked by CORS policy\", when an API must be called from another origin, or when a scanner flags a permissive policy. Not for CSRF defence in general (CORS is not a CSRF mechanism; the checklist says what is) and not for CSP."
 license: MIT
 compatibility: Any web stack. Snippets for Express, Django, FastAPI, Spring and nginx.
 metadata:

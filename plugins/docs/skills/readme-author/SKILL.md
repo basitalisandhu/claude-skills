@@ -1,6 +1,6 @@
 ---
 name: readme-author
-description: "Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when a repository has no README, the README is out of date, or a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy."
+description: "Write or rewrite a README that answers what the project is, who it is for, how to install and use it in under five minutes, and where everything else lives, using a fixed section order and a quality checklist (first screen, copy-pasteable commands verified to work, no stale claims). Use when asked to \"write a README\", when a repository has none or it is out of date, or when a project is about to be published. Not for API reference generation (use api-docs-from-code) and not for marketing copy."
 license: MIT
 compatibility: Any project. Verifies commands by running them when the environment allows.
 metadata:

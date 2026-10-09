@@ -1,6 +1,6 @@
 ---
 name: agent-action-timeline
-description: "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked 'what did this agent do last week?', during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity."
+description: "Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. Use when asked \"what did this agent do last week?\", during an incident, or before giving an agent more access. Not for live monitoring or alerting, and not for investigating a human user's activity."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:

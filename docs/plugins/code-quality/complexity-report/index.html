@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>complexity-report: Rank the functions in a Python or JavaScript/TypeScript tree | Claude Code skills</title>
-<meta name="description" content="Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.">
+<meta name="description" content="Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked &quot;which code is most complex?&quot;, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="complexity-report: Rank the functions in a Python or JavaScript/TypeScript tree | Claude Code skills">
-<meta property="og:description" content="Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.">
+<meta property="og:description" content="Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked &quot;which code is most complex?&quot;, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "complexity-report",
- "description": "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.",
+ "description": "Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked \"which code is most complex?\", where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.2.0"
+ "version": "0.2.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / complexity-report</p>
 <h1>Complexity report</h1>
-<p class="lede">Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked which code is most complex, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.</p>
-<p class="meta">Skill <code>complexity-report</code> in plugin <a href="../index.html">code-quality</a> 0.2.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/complexity-report/SKILL.md">plugins/code-quality/skills/complexity-report/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/complexity-report/SKILL.md">plugins/code-quality/skills/complexity-report/SKILL.md</a>.</p>
+<p class="lede">Rank the functions in a Python or JavaScript/TypeScript tree by cyclomatic complexity, length and nesting depth with a bundled script, then explain which ones to simplify and how. Use when asked &quot;which code is most complex?&quot;, where to start a cleanup, to set or enforce a complexity threshold in CI, or to measure a refactor before and after. Not for runtime performance (use perf-profile-reader) and not a substitute for reading the code.</p>
+<p class="meta">Skill <code>complexity-report</code> in plugin <a href="../index.html">code-quality</a> 0.2.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/complexity-report/SKILL.md">plugins/code-quality/skills/complexity-report/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/complexity-report/SKILL.md">plugins/code-quality/skills/complexity-report/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

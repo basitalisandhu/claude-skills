@@ -1,6 +1,6 @@
 ---
 name: adr-writer
-description: "Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes."
+description: "Write an Architecture Decision Record for a technical choice, with context, the options considered and their trade-offs, the decision and its consequences, in a fixed format with a status lifecycle (proposed, accepted, superseded), numbered and stored in the repository. Use when asked to \"write an ADR\", when a team is choosing between technologies, patterns or designs, when someone asks why something was done this way, or to record a decision already made. Not for product requirements or meeting minutes."
 license: MIT
 compatibility: Any project. Stores records under docs/adr/ (or the directory the project already uses).
 metadata:

@@ -1,6 +1,6 @@
 ---
 name: terraform-review
-description: "Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to review infrastructure code, a Terraform plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode)."
+description: "Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to \"review this Terraform\" or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode)."
 license: MIT
 compatibility: Any provider. Terraform or OpenTofu CLI optional for fmt, validate and plan; tflint, trivy or checkov optional for automated checks.
 metadata:
