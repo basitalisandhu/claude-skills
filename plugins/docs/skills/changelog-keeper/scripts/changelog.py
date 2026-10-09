@@ -192,6 +192,19 @@ def section_markdown(v: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+def section_github(v: dict, links: dict) -> str:
+    out = []
+    for c in v["categories"]:
+        if out:
+            out.append("")
+        out += [f"**{c['name']}**", ""] + [f"- {entry}" for entry in c["entries"]]
+    if v["name"] in links:
+        if out:
+            out.append("")
+        out.append(f"Full changelog: {links[v['name']]}")
+    return "\n".join(out) + ("\n" if out else "")
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -214,6 +227,7 @@ def main(argv: list[str] | None = None) -> int:
     command("check")
     sp = command("show")
     sp.add_argument("version", nargs="?", default="Unreleased")
+    sp.add_argument("--format", choices=["keepachangelog", "github"], default="keepachangelog")
     sa = command("add")
     sa.add_argument("category", help="Added, Changed, Deprecated, Removed, Fixed or Security")
     sa.add_argument("text")
@@ -245,7 +259,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.json:
             print(json.dumps({"name": v["name"], "date": v["date"], "categories": [{"name": c["name"], "entries": c["entries"]} for c in v["categories"]]}, indent=2))
         else:
-            print(section_markdown(v), end="")
+            print(section_github(v, doc["links"]) if args.format == "github" else section_markdown(v), end="")
         return 0
     if args.cmd == "latest":
         released = [v for v in doc["versions"] if v["name"] != "Unreleased"]

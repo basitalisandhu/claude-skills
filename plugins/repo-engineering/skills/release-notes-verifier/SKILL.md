@@ -35,6 +35,8 @@ A note is "matched" only when the script matched it to a commit (by PR number, S
 
    The changelog is read from the `--to` revision, so commit it first. The version comes from the `--to` name (`v0.2.0` gives `0.2.0`); before the tag exists, use `--to HEAD --version 0.2.0`.
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/release-notes-verifier` with the path to this skill's folder, for example `.claude/skills/release-notes-verifier`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Optionally read pull request titles** with `--gh` when the repository squash-merges and commit subjects are terse. Ask the user first: it calls `gh pr view` (read-only) and so contacts GitHub.
 
 3. **Work through the findings**:

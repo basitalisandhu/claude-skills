@@ -88,7 +88,7 @@
     {
       "name": "cc-setup-tooling",
       "display_name": "Claude Code Setup Tooling",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network.",
       "license": "MIT",
       "source_repo": "https://github.com/basitalisandhu/claude-code-tooling-skills",
@@ -305,7 +305,7 @@
     {
       "name": "mac-maintenance",
       "display_name": "Mac Maintenance",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list.",
       "license": "MIT",
       "source_repo": "https://github.com/basitalisandhu/mac-maintenance-skills",
@@ -2066,7 +2066,7 @@
       "name": "mac-cleanup",
       "install_name": "mac-cleanup",
       "plugin": "mac-maintenance",
-      "description": "Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when \"System Data\" is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.",
+      "description": "Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when \"my Mac feels slow\", to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.",
       "license": "MIT",
       "source_repo": "https://github.com/basitalisandhu/mac-maintenance-skills",
       "path": "plugins/mac-maintenance/skills/mac-cleanup/SKILL.md",

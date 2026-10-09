@@ -35,6 +35,8 @@ Report the script's findings as found, with their rule ids and locations, and op
 
    In a git work tree only committed or staged files are read (`git ls-files`); otherwise the folder is walked.
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/repo-hygiene-bundle` with the path to this skill's folder, for example `.claude/skills/repo-hygiene-bundle`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Handle `high` findings first.** For `HYG-SECRET`: open the line, decide whether it is a real credential, a test value or a placeholder. If it may be real, tell the user to rotate it at the issuer and remove it from history; do not try the value. For `HYG-PERMS` write-all: propose the narrowest `permissions:` block the jobs need.
 
 3. **Confirm each `medium` finding** by opening the cited file. For `HYG-PIN`, look up the commit SHA of the tag the workflow uses (from the action's repository) and propose `uses: owner/action@<sha> # vX.Y.Z`; do not guess a SHA. For lock findings, propose the install command that regenerates the lockfile rather than editing it by hand.

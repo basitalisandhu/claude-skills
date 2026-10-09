@@ -72,6 +72,9 @@ Ask these in order, one section at a time, and wait for the answer before moving
    ```
 
    Exit 0 means no gaps, 1 means gaps for the author, 2 means the file is missing or empty or an option is wrong.
+
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/plan-grill` with the path to this skill's folder, for example `.claude/skills/plan-grill`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 5. **Close each gap** with the author, re-run, and repeat until the script exits 0 or the remaining gaps are accepted by name.
 6. **Report** in the format below.
 

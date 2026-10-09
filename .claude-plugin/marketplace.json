@@ -115,7 +115,7 @@
       "name": "cc-setup-tooling",
       "source": "./plugins/cc-setup-tooling",
       "description": "Eight skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -378,7 +378,7 @@
       "name": "mac-maintenance",
       "source": "./plugins/mac-maintenance",
       "description": "Three skills, each with a tested standard-library script: mac-cleanup (survey, safe tier, decision report), mac-duplicate-finder and mac-app-leftovers.",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"

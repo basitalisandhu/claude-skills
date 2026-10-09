@@ -133,7 +133,7 @@ Version 0.3.0. Source: [aws-security-skills](https://github.com/basitalisandhu/a
 
 ### cc-setup-tooling
 
-Version 0.1.0. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
+Version 0.1.1. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -260,12 +260,12 @@ Version 0.3.0. Source: [m365-governance-skills](https://github.com/basitalisandh
 
 ### mac-maintenance
 
-Version 0.1.2. Source: [mac-maintenance-skills](https://github.com/basitalisandhu/mac-maintenance-skills). Install: `/plugin install mac-maintenance@claude-skills`.
+Version 0.1.3. Source: [mac-maintenance-skills](https://github.com/basitalisandhu/mac-maintenance-skills). Install: `/plugin install mac-maintenance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | mac-app-leftovers | Find what uninstalled apps left behind on a Mac (Application Support and container folders, caches, preferences, saved state, logs, and login items or launch agents that point at nothing), deciding what is installed from app bundles, PATH, Homebrew and Spotlight, and move only the candidates you name into a dated Trash folder. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-app-leftovers/) · [source](https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md) |
-| mac-cleanup | Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-cleanup/) · [source](https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md) |
+| mac-cleanup | Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-cleanup/) · [source](https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md) |
 | mac-duplicate-finder | Find byte-for-byte duplicate files in a Mac's user folders, report the largest groups and folders that mirror each other, and move verified suffix copies (IMG_1 (1).MOV next to an identical IMG_1.MOV) to a dated Trash folder after a second hash check. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-duplicate-finder/) · [source](https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-duplicate-finder/SKILL.md) |
 
 ### repo-engineering

@@ -34,6 +34,8 @@ Every sentence in the guide that names something checkable must come from a fact
 
    Read the text output (or the JSON). Each fact has an id (`F12`), a kind, a sentence, the terms a guide may use for it, and a citation (`path:line`, or `dir/` for a directory whose purpose came from its name).
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/repo-onboarding-guide` with the path to this skill's folder, for example `.claude/skills/repo-onboarding-guide`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Open the cited lines you will rely on.** Confirm a test command really runs the tests (a CI step may be a lint). Read the first lines of each main package so the directory map says what the code does, and add only what you read, with its own citation.
 
 3. **Write the guide** (default `docs/onboarding.md`; ask before overwriting an existing file) with these sections, each sentence built from facts:

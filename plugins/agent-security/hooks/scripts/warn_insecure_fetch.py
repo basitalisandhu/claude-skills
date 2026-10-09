@@ -13,6 +13,7 @@ It warns on:
   * a bare host with no scheme (`curl example.com`), because curl and wget default to HTTP
   * certificate checks turned off: curl `-k`/`--insecure`/`--proxy-insecure`, wget `--no-check-certificate`
   * remote content piped into an interpreter in the same pipeline (`curl ... | sh`, `wget -O- ... | python3`)
+  * fetched content executed through process or command substitution by a shell, source, . or eval
 
 Loopback targets (localhost, 127.0.0.0/8, ::1, 0.0.0.0, *.localhost) are allowed without a prompt
 unless AGENT_SECURITY_WARN_LOOPBACK=1 is set in the environment Claude Code runs in.
@@ -144,9 +145,82 @@ def _check_target(token: str, warn_loopback: bool) -> str | None:
     return None
 
 
+def _executed_fetch(command: str, depth: int = 0) -> bool:
+    """Recognise execution context without warning on every fetch substitution."""
+    if depth >= 3:
+        return False
+    quote = None
+    context = list(command)
+    command_start = 0
+    i = 0
+    while i < len(command):
+        char = command[i]
+        if char == "\\" and quote != "'":
+            i += 2
+            continue
+        if char in {"'", '"'} and (quote is None or quote == char):
+            quote = None if quote == char else char
+            i += 1
+            continue
+        if quote is None and char in ";|&\n":
+            command_start = i + 1
+        process = quote is None and command.startswith("<(", i)
+        substitution = quote != "'" and command.startswith("$(", i)
+        backtick = quote != "'" and char == "`"
+        if not (process or substitution or backtick):
+            i += 1
+            continue
+        if backtick:
+            end = command.find("`", i + 1)
+            if end < 0:
+                i += 1
+                continue
+            inner = command[i + 1:end]
+        else:
+            nesting, end = 1, i + 2
+            inner_quote = None
+            while end < len(command) and nesting:
+                current = command[end]
+                if current == "\\" and inner_quote != "'":
+                    end += 2
+                    continue
+                if current in {"'", '"'} and (inner_quote is None or inner_quote == current):
+                    inner_quote = None if inner_quote == current else current
+                elif inner_quote is None:
+                    nesting += 1 if current == "(" else -1 if current == ")" else 0
+                end += 1
+            if nesting:
+                i += 2
+                continue
+            end -= 1
+            inner = command[i + 2:end]
+        # Earlier substitutions are arguments, not the enclosing executor.
+        prefix_text = "".join(context[command_start:i])
+        prefix = segments(prefix_text)
+        executor = prefix[-1].program if prefix else ""
+        executes = executor in INTERPRETERS | {"."}
+        if not process and not prefix_text.strip():
+            executes = True  # substitution in the command-name position
+        if executes and any(seg.program in FETCHERS for seg in segments(inner)):
+            return True
+        context[i:end + 1] = " " * (end + 1 - i)
+        i = end + 1
+    # Quoted shell programs may expand substitutions only when the inner shell runs.
+    for seg in segments(command):
+        if seg.program in {"sh", "bash", "zsh", "dash", "ksh", "ash"}:
+            for index, arg in enumerate(seg.args[:-1]):
+                if arg in {"-c", "-lc", "-ic", "-ec", "-euc", "-exc", "-xc"}:
+                    if _executed_fetch(seg.args[index + 1], depth + 1):
+                        return True
+                    break
+    return False
+
+
 def analyse(command: str) -> list[str]:
     warn_loopback = os.environ.get("AGENT_SECURITY_WARN_LOOPBACK") == "1"
     reasons: list[str] = []
+    if _executed_fetch(command):
+        reasons.append("remote content is executed through a substitution; download to a file, read it, then run it")
     segs = segments(command)
     fetch_in_pipeline = False
     for seg in segs:

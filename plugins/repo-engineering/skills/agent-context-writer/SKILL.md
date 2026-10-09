@@ -46,6 +46,8 @@ Every line you write must come from something you verified: a file you opened, a
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-context-writer/scripts/context_lint.py" CLAUDE.md . --max-lines 40 --json
    ```
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/agent-context-writer` with the path to this skill's folder, for example `.claude/skills/agent-context-writer`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 5. **Fix every finding**: delete restated manifest facts, fix or delete missing paths, replace generic advice with the specific rule behind it or delete it, and cut to the budget.
 6. **Show the user the diff** of the context file and the lint result. When both AGENTS.md and CLAUDE.md exist, keep one as the source and make the other a one-line pointer to it, if the user agrees.
 

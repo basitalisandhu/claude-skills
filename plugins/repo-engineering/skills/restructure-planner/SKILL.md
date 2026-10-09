@@ -33,6 +33,8 @@ Every number in the plan (fan-in, fan-out, cycle members, blast radius, cross-pa
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/restructure-planner/scripts/restructure_plan.py" . --goal boundaries --json --out restructure-plan.json
    ```
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/restructure-planner` with the path to this skill's folder, for example `.claude/skills/restructure-planner`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Start with cycles and god modules.** For each file cycle, open the imports on the path and say which edge is the weakest (a single name used in one place). For each god module, `names_by_package` lists which names each package uses; that is the split line to propose by hand (one new module per cluster of names), since a file split cannot be a `git mv`.
 
 3. **Check every proposed move.** Open the file and each importer the plan lists. Drop a move when the file is part of a public API, is loaded by name at run time, or belongs where it is for a reason the graph cannot see; say why in a "rejected moves" list.

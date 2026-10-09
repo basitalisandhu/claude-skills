@@ -10,6 +10,8 @@ Rules (each problem is reported with its line number):
                     inline citation [evidence: <file>#<field>]. Sentences that say "not assessable" are allowed.
   UNKNOWN-CITATION  a citation's file#field is not cited anywhere in the control map, so it cannot be traced to a
                     hashed file in the pack
+  WRONG-CONTROL-CITATION
+                    a known citation under a control heading is not mapped to that control
   STATE-MISMATCH    under a "## <identifier>" heading, a sentence claims support while the control map's state for
                     that control is contradicted or not assessable, or claims a contradiction while the state is
                     supported
@@ -74,14 +76,19 @@ def load_phrases(paths: list[str]) -> list[str]:
     return phrases
 
 
-def map_index(path: str) -> tuple[dict[str, str], set[tuple[str, str]]]:
+def map_index(path: str) -> tuple[dict[str, str], set[tuple[str, str]], dict[str, set[tuple[str, str]]]]:
     data = load_json(Path(path))
     if not isinstance(data, dict) or not isinstance(data.get("controls"), list):
         raise InputError(f"{path}: not a control map written by control_map.py")
     states = {c["id"]: c["state"] for c in data["controls"] if isinstance(c, dict) and "id" in c}
     cites = {(c["file"], c["field"]) for ctrl in data["controls"] for c in ctrl.get("citations") or []
              if isinstance(c, dict) and c.get("file") and c.get("field")}
-    return states, cites
+    control_cites = {
+        ctrl["id"]: {(cite["file"], cite["field"]) for cite in ctrl.get("citations") or []
+                     if isinstance(cite, dict) and cite.get("file") and cite.get("field")}
+        for ctrl in data["controls"] if isinstance(ctrl, dict) and "id" in ctrl
+    }
+    return states, cites, control_cites
 
 
 def blocks(text: str):
@@ -95,7 +102,8 @@ def blocks(text: str):
             yield no, line
 
 
-def lint(text: str, states: dict[str, str], cites: set[tuple[str, str]], phrases: list[str]) -> list[dict]:
+def lint(text: str, states: dict[str, str], cites: set[tuple[str, str]], phrases: list[str],
+         control_cites: dict[str, set[tuple[str, str]]] | None = None) -> list[dict]:
     problems: list[dict] = []
 
     def add(no: int, rule: str, msg: str, excerpt: str) -> None:
@@ -131,6 +139,10 @@ def lint(text: str, states: dict[str, str], cites: set[tuple[str, str]], phrases
         for ref_file, ref_field in CITATION_RE.findall(prose):
             if (ref_file, ref_field) not in cites:
                 add(no, "UNKNOWN-CITATION", f"{ref_file}#{ref_field} is not cited in the control map", prose)
+            elif control_cites is not None and current in states \
+                    and (ref_file, ref_field) not in control_cites.get(current, set()):
+                add(no, "WRONG-CONTROL-CITATION",
+                    f"{ref_file}#{ref_field} is not cited for {current} in the control map", prose)
         if prose.lower().startswith(EXEMPT_PREFIXES):
             continue
         for sentence in SENTENCE_SPLIT_RE.split(prose):
@@ -165,12 +177,12 @@ def main(argv: list[str] | None = None) -> int:
             text = Path(args.narrative).read_text(encoding="utf-8")
         except OSError as exc:
             raise InputError(f"{args.narrative}: cannot read: {exc}") from exc
-        states, cites = map_index(args.control_map)
+        states, cites, control_cites = map_index(args.control_map)
         phrases = load_phrases(args.phrases or ([str(DEFAULT_PHRASES)] if DEFAULT_PHRASES.is_file() else []))
     except InputError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    problems = lint(text, states, cites, phrases)
+    problems = lint(text, states, cites, phrases, control_cites)
     if args.redact:
         problems = redact(problems)
     if args.json:

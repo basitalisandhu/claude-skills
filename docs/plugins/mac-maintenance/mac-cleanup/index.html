@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mac-cleanup: Survey a Mac read-only | Claude Code skills</title>
-<meta name="description" content="Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when &quot;System Data&quot; is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.">
+<title>mac-cleanup: Free disk space and speed up a Mac safely | Claude Code skills</title>
+<meta name="description" content="Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when &quot;my Mac feels slow&quot;, to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-cleanup/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="mac-cleanup: Survey a Mac read-only | Claude Code skills">
-<meta property="og:description" content="Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when &quot;System Data&quot; is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.">
+<meta property="og:title" content="mac-cleanup: Free disk space and speed up a Mac safely | Claude Code skills">
+<meta property="og:description" content="Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when &quot;my Mac feels slow&quot;, to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-cleanup/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "mac-cleanup",
- "description": "Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when \"System Data\" is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.",
+ "description": "Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when \"my Mac feels slow\", to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/mac-cleanup/",
  "codeRepository": "https://github.com/basitalisandhu/mac-maintenance-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "mac-maintenance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/"
  },
- "version": "0.1.2"
+ "version": "0.1.3"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">mac-maintenance</a> / mac-cleanup</p>
 <h1>Mac cleanup</h1>
-<p class="lede">Survey a Mac read-only, remove only what programs recreate (package and build caches, Docker build cache, Xcode DerivedData, old logs), and write a decision list for everything else. Use when asked to free disk space, speed up a Mac, find duplicate apps, or when &quot;System Data&quot; is huge. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.</p>
-<p class="meta">Skill <code>mac-cleanup</code> in plugin <a href="../index.html">mac-maintenance</a> 0.1.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a>.</p>
+<p class="lede">Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when &quot;my Mac feels slow&quot;, to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.</p>
+<p class="meta">Skill <code>mac-cleanup</code> in plugin <a href="../index.html">mac-maintenance</a> 0.1.3, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

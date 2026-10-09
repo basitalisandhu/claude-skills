@@ -69,8 +69,9 @@ done
 | `--lookback-hours N` | list referenced PRs merged up to N hours before detection (default 48) |
 | `--redact` | people as roles only, logins in text replaced by roles |
 | `--json` | the full report as JSON |
+| `--check DRAFT` | check draft table times against the exported timeline within one minute; exit 1 if any draft time cannot be matched |
 
-Exit codes: 0 written, 2 bad input (missing files, wrong issue number, invalid JSON, a bad pattern).
+Exit codes: 0 written with no draft problems, 1 unmatched draft times, 2 bad input (missing files, wrong issue number, invalid JSON, a bad pattern). In Markdown mode, draft diagnostics go to stderr, keeping redirected reports clean.
 
 ## Reading the output
 

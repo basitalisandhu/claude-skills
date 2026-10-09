@@ -77,8 +77,11 @@ licensed copy can add distinctive phrases locally so that pasted text is caught.
 
 - Draft: one `## <identifier>` section per control with the paraphrased topic, one sentence per citation, a closing
   sentence that matches the control state, and "Open items for the assessor" for gaps.
-- Lint rules: `UNCITED-CLAIM`, `UNKNOWN-CITATION`, `STATE-MISMATCH`, `UNKNOWN-CONTROL`, `CERTAINTY`, `COPIED-TEXT`,
+- Lint rules: `UNCITED-CLAIM`, `UNKNOWN-CITATION`, `WRONG-CONTROL-CITATION`, `STATE-MISMATCH`, `UNKNOWN-CONTROL`, `CERTAINTY`, `COPIED-TEXT`,
   `NO-DISCLAIMER`, each with a line number. Exit 1 when any problem is found.
+  - `WRONG-CONTROL-CITATION` means a file and field exist in the control map but are not cited for the current
+    `## <identifier>` heading. Move the citation to the control it supports or use evidence mapped to the current
+    control; evidence elsewhere in the map does not support this claim.
 
 ## Limits
 

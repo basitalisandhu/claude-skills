@@ -110,8 +110,8 @@ def lint_text(text: str, folder_name: str, max_chars: int) -> tuple[list[dict], 
         add("description-not-double-quoted", desc.line, f"description is a {desc.style} scalar; use one quoted line")
     if len(text_d) > max_chars:
         add("description-too-long", desc.line, f"{len(text_d)} characters; the limit is {max_chars}")
-    first = text_d.split()[0] if text_d.split() else ""
-    if not re.fullmatch(r"[A-Z][a-z]+", first) or first.lower() in NON_VERB_STARTS:
+    first = text_d.split()[0].rstrip(".,;:!?)\"'") if text_d.split() else ""
+    if not re.fullmatch(r"[A-Z][a-z]+(?:-[a-z]+)*", first) or first.lower() in NON_VERB_STARTS:
         add("description-verb-start", desc.line, f"starts with {first!r}; start with the action, such as 'Review'")
     if not phrases:
         add("description-no-trigger-phrase", desc.line, 'no phrase in double quotes a user would type, e.g. "..."')

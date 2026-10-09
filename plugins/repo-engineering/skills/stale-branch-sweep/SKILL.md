@@ -59,6 +59,9 @@ prs.json       [{"number": 12, "headRefName": "feature/login", "headRefOid": "d4
    ```
 
    Exit 0 means nothing to clean up, 1 means merged or stale branches for a person to review, 2 means bad input.
+
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/stale-branch-sweep` with the path to this skill's folder, for example `.claude/skills/stale-branch-sweep`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 3. **Agree the threshold** (`--days`, default 90) with the user; release or long-lived branches may need to be excluded by name before anything is deleted.
 4. **Present the report**: merged branches with the delete commands, stale branches grouped by last committer with a short question to each ("can `spike/cache` go?"), and branches with no ref (re-export after `git fetch --prune`).
 5. **Hand over the commands.** The user runs them. If they ask you to run them, run only the merged list they approved, one command per branch, and stop at the first error. Remind them that a deleted branch can be restored from its SHA in the report while the commits are still reachable.

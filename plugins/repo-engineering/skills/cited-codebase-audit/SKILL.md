@@ -33,6 +33,8 @@ Report only what you verified by opening the cited line. A finding without a res
 
    It lists languages by file and line count, entry points (console scripts, package.json bin and scripts, `__main__` guards, Dockerfile `ENTRYPOINT` and `CMD`, Makefile targets), test files, CI workflows, dependency manifests with their lockfiles and pin counts, the licence file and its family, the largest source files, and source files no test mentions by name.
 
+   If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/cited-codebase-audit` with the path to this skill's folder, for example `.claude/skills/cited-codebase-audit`, and run the command from the repository root. The same applies to any other script command in this skill.
+
 2. **Walk the checklist in order.** For each item, open the files the inventory points at; record findings only from lines you have read.
 
    | Category id | What to look at |
