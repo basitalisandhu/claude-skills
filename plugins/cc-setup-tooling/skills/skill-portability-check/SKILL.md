@@ -57,6 +57,7 @@ Exit codes: 0 no findings, 1 at least one finding, 2 a path does not exist.
 | `plugin-root-no-fallback` | `${CLAUDE_PLUGIN_ROOT}` script paths and no copy-install path | name the script relative to the skill folder |
 | `env-no-default` | `os.environ["CLAUDE_..."]` with no default | `os.environ.get(..., fallback)` |
 | `non-portable-shell` | `sed -i`, `readlink -f`, `date -d`, `stat -c`, `stat -f`, `grep -P`, `xargs -r`, `echo -e`, `base64 -w`, `find -printf` | use a portable form or Python |
+| `python-command` | bare `python` at the start of a command in bash or sh code blocks | use `python3` and state the interpreter in compatibility |
 | `bashism-in-sh` | `[[`, `function`, `source`, `==`, arrays under `#!/bin/sh` | use POSIX sh or bash |
 | `shebang-hardcoded` | `#!/bin/bash`, `#!/usr/bin/python3` | `#!/usr/bin/env bash`, `#!/usr/bin/env python3` |
 | `open-no-encoding` | `open()`, `read_text()`, `write_text()` in text mode without `encoding=` | add `encoding="utf-8"` |

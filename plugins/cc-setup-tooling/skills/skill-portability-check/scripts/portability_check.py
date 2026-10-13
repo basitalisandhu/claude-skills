@@ -15,6 +15,8 @@ Rules (each finding cites the file and line):
   * env-no-default: Python indexing os.environ with a CLAUDE_ variable name (such as the plugin root) and no default;
   * non-portable-shell: GNU-only or BSD-only command options in .sh files and in bash or sh code blocks of Markdown
     (sed -i, readlink -f, date -d, stat -c, stat -f, grep -P, xargs -r, echo -e, base64 -w, find -printf);
+  * python-command: a bare python command at the start of a command in a bash code block; use python3 and
+    state the interpreter in compatibility;
   * bashism-in-sh: a #!/bin/sh script using [[, function, source, == or arrays;
   * shebang-hardcoded: #!/bin/bash or #!/usr/bin/python3 instead of #!/usr/bin/env ...;
   * open-no-encoding: Python open(), Path.open(), read_text() or write_text() in text mode without encoding=;
@@ -72,6 +74,7 @@ SHELL_RULES = [
     (re.compile(r"\bfind\b.*\s-printf\b"), "find -printf is GNU only"),
 ]
 BASHISMS = re.compile(r"\[\[|^\s*function\s+\w+|^\s*source\s+|\s==\s|^\s*\w+=\(")
+PYTHON_COMMAND_RE = re.compile(r"^[ \t]*python[ \t]+", re.MULTILINE)
 OS_CALLS = {
     "getuid",
     "geteuid",
@@ -199,6 +202,14 @@ def shell_findings(text: str, offset: int = 0) -> list[tuple[int, str, str]]:
     for rx, hint in SHELL_RULES:
         for m in rx.finditer(text):
             out.append((line_of(text, m.start()) + offset, "non-portable-shell", hint))
+    for m in PYTHON_COMMAND_RE.finditer(text):
+        out.append(
+            (
+                line_of(text, m.start()) + offset,
+                "python-command",
+                "bare python may not exist on every host; use python3 and state the interpreter in compatibility",
+            )
+        )
     return out
 
 
