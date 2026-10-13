@@ -4,8 +4,29 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-09T17:51:04Z</updated>
+  <updated>2026-10-13T10:38:02Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
+  <entry>
+    <title>ways-of-working 0.2.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.1-72a002dd9707</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"/>
+    <updated>2026-10-13T10:38:02Z</updated>
+    <summary>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people. Synced from https://github.com/basitalisandhu/ways-of-working-skills at commit 72a002dd9707.</summary>
+  </entry>
+  <entry>
+    <title>m365-governance 0.4.0</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.4.0-65a5cf77b702</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
+    <updated>2026-10-13T10:38:02Z</updated>
+    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit 65a5cf77b702.</summary>
+  </entry>
+  <entry>
+    <title>cc-setup-tooling 0.1.1</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/#v0.1.1-10d4f34c48d4</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/"/>
+    <updated>2026-10-13T10:38:02Z</updated>
+    <summary>Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network. Synced from https://github.com/basitalisandhu/claude-code-tooling-skills at commit 10d4f34c48d4.</summary>
+  </entry>
   <entry>
     <title>security-basics 0.3.0</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/security-basics/#v0.3.0-a74e248192d8</id>
@@ -19,13 +40,6 @@
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/repo-engineering/"/>
     <updated>2026-10-09T17:51:04Z</updated>
     <summary>Repository engineering skills: verify documentation claims against the working tree, run an audit whose every finding cites a resolvable path:line, write AGENTS.md and CLAUDE.md that hold only what code cannot say, check a README&#x27;s first screen, rank untested functions and entry points, write onboarding guides only from cited facts, plan restructures from the import graph, mine ADRs from git history, run offline hygiene checks with SARIF, check release notes against the commits between two tags, sweep stale branches with delete commands printed for review, and check an implementation plan for required sections and unanswered questions. Synced from https://github.com/basitalisandhu/repo-engineering-skills at commit 7b2ac5ef3cb3.</summary>
-  </entry>
-  <entry>
-    <title>m365-governance 0.4.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.4.0-092a1653099a</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
-    <updated>2026-10-09T17:51:04Z</updated>
-    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit 092a1653099a.</summary>
   </entry>
   <entry>
     <title>github-manager 0.3.0</title>
@@ -98,24 +112,10 @@
     <summary>Mac cleanup skills: survey what takes space and memory without changing anything, remove only the caches and leftovers that programs recreate, find byte-identical duplicate files and park the obvious copies in the Trash, and find data, login items and launch agents left by uninstalled apps. Every deletion of user data is a decision the user makes from a written list. Synced from https://github.com/basitalisandhu/mac-maintenance-skills at commit c6e6df26fdb2.</summary>
   </entry>
   <entry>
-    <title>cc-setup-tooling 0.1.1</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/#v0.1.1-d5971fb609ce</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/"/>
-    <updated>2026-10-09T09:28:06Z</updated>
-    <summary>Eight skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network. Synced from https://github.com/basitalisandhu/claude-code-tooling-skills at commit d5971fb609ce.</summary>
-  </entry>
-  <entry>
     <title>agent-identity-governance 0.1.1</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/#v0.1.1-0b01b8c21342</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/"/>
     <updated>2026-10-08T10:36:56Z</updated>
     <summary>Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent&#x27;s actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network. Synced from https://github.com/basitalisandhu/agent-identity-governance-skills at commit 0b01b8c21342.</summary>
-  </entry>
-  <entry>
-    <title>ways-of-working 0.2.1</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.1-3f4a45d535d8</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"/>
-    <updated>2026-10-05T11:51:45Z</updated>
-    <summary>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people. Synced from https://github.com/basitalisandhu/ways-of-working-skills at commit 3f4a45d535d8.</summary>
   </entry>
 </feed>
