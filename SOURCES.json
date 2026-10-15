@@ -104,10 +104,10 @@
       "repo": "m365-governance-skills",
       "url": "https://github.com/basitalisandhu/m365-governance-skills",
       "path": "plugins/m365-governance",
-      "commit": "65a5cf77b702025ee7ed464ee645f17166af30d4",
-      "synced_at": "2026-10-13T10:38:02Z",
-      "upstream_version": "0.4.0",
-      "content_sha256": "405e3df396cb6a702fd16f3536afcace8a917aaa31c6ff850377a3ef2b959879"
+      "commit": "31344cf75b38ee78ca01be91abdf2794c5a02730",
+      "synced_at": "2026-10-15T08:19:45Z",
+      "upstream_version": "0.5.0",
+      "content_sha256": "8612bfbe8cc1b6527b7b1f2cfc82a1f4f8abd1bac4ca880b8805b79b472eae46"
     },
     "mac-maintenance": {
       "repo": "mac-maintenance-skills",
