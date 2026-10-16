@@ -390,6 +390,14 @@ Docs hub: <https://basitalisandhu.github.io/>
 
 Skills are edited in their source repositories. See [CONTRIBUTING.md](CONTRIBUTING.md) for how this repository syncs, validates and builds.
 
+The plan is in [ROADMAP.md](ROADMAP.md); questions and ideas go in [Discussions](https://github.com/basitalisandhu/claude-skills/discussions).
+
+## Contributors
+
+Thank you to everyone who has had a pull request merged here:
+
+- [@nawaaaaaAaar](https://github.com/nawaaaaaAaar) added JSON output for plugin and skill listing ([#10](https://github.com/basitalisandhu/claude-skills/pull/10)).
+
 ## License
 
 MIT. See [LICENSE](LICENSE). The vendored plugins are MIT, by the same author.
