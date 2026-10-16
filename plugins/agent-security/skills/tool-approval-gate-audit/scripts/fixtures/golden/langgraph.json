@@ -1,0 +1,179 @@
+{
+ "tool": "approval_gates",
+ "files_scanned": 1,
+ "truncated": false,
+ "skipped": [],
+ "summary": {
+  "tools": 6,
+  "consequential": 5,
+  "findings": {
+   "high": 2,
+   "medium": 1,
+   "low": 0,
+   "info": 0
+  }
+ },
+ "tools": [
+  {
+   "name": "search_docs",
+   "symbol": "search_docs",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 13,
+   "side_effects": [],
+   "gates": [],
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "write_report",
+   "symbol": "write_report",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 19,
+   "side_effects": [
+    {
+     "kind": "file-write",
+     "evidence": "Path(path).write_text(text, encoding='utf-8')",
+     "file": "graph.py",
+     "line": 21
+    }
+   ],
+   "gates": [
+    {
+     "kind": "interrupt_before",
+     "evidence": "interrupt_before=['actions']",
+     "file": "graph.py",
+     "line": 63,
+     "conditional": false,
+     "result_ignored": false
+    }
+   ],
+   "name_verbs": [
+    "write"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "remove_workspace",
+   "symbol": "remove_workspace",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 26,
+   "side_effects": [
+    {
+     "kind": "file-delete",
+     "evidence": "shutil.rmtree(path)",
+     "file": "graph.py",
+     "line": 31
+    }
+   ],
+   "gates": [
+    {
+     "kind": "interrupt",
+     "evidence": "interrupt({'action': 'remove_workspace', 'path': path})",
+     "file": "graph.py",
+     "line": 28,
+     "conditional": false,
+     "result_ignored": false
+    }
+   ],
+   "name_verbs": [
+    "remove"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "deploy_service",
+   "symbol": "deploy",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 36,
+   "side_effects": [],
+   "gates": [],
+   "name_verbs": [
+    "deploy"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "move_files",
+   "symbol": "move_files",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 50,
+   "side_effects": [
+    {
+     "kind": "file-move",
+     "evidence": "shutil.move(src, dst) via _really_move()",
+     "file": "graph.py",
+     "line": 42
+    }
+   ],
+   "gates": [],
+   "name_verbs": [
+    "move"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "post_update",
+   "symbol": "post_update",
+   "framework": "langchain",
+   "file": "graph.py",
+   "line": 58,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.post('https://status.example.org/updates', json={'text': text})",
+     "file": "graph.py",
+     "line": 55
+    }
+   ],
+   "gates": [
+    {
+     "kind": "approval-call",
+     "evidence": "confirm_with_human(text)",
+     "file": "graph.py",
+     "line": 54,
+     "conditional": false,
+     "result_ignored": true
+    }
+   ],
+   "name_verbs": [
+    "post",
+    "update"
+   ],
+   "consequential": true
+  }
+ ],
+ "findings": [
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "deploy_service",
+   "file": "graph.py",
+   "line": 36,
+   "message": "consequential (name verb 'deploy') and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "move_files",
+   "file": "graph.py",
+   "line": 50,
+   "message": "consequential (shutil.move(src, dst) via _really_move()) and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "GATE-RESULT-IGNORED",
+   "severity": "medium",
+   "tool": "post_update",
+   "file": "graph.py",
+   "line": 58,
+   "message": "confirm_with_human(text) at line 54 discards its result: confirm it raises when the human refuses",
+   "fix": "Use the answer: stop the tool (return or raise) unless the approval call says yes."
+  }
+ ]
+}

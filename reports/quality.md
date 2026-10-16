@@ -18,7 +18,7 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 135
+## Skills that point at a skill in another plugin: 138
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
@@ -71,10 +71,11 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `aws-security/aws-account-audit -> compliance-evidence/aws-identity-and-logging-evidence`
 - `aws-security/aws-agent-session-audit -> agent-security/agent-session-log-review`
 
-### cc-setup-tooling (8)
+### cc-setup-tooling (9)
 
 - `cc-setup-tooling/context-budget-audit -> repo-engineering/agent-context-writer`
 - `cc-setup-tooling/permissions-builder -> agent-security/agent-config-audit`
+- `cc-setup-tooling/sandbox-config-review -> agent-security/agent-config-audit`
 - `cc-setup-tooling/skill-collision-check -> devops/release-notes`
 - `cc-setup-tooling/skill-collision-check -> docs/changelog-keeper`
 - `cc-setup-tooling/skill-description-linter -> ways-of-working/decision-log`
@@ -93,12 +94,14 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `code-quality/test-gap-finder -> debugging/flaky-test-hunter`
 - `code-quality/test-gap-finder -> repo-engineering/untested-entry-points`
 
-### compliance-evidence (4)
+### compliance-evidence (6)
 
 - `compliance-evidence/aws-identity-and-logging-evidence -> aws-security/aws-account-audit`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/conditional-access-gap-analysis`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/intune-baseline-check`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/privileged-access-review`
+- `compliance-evidence/maester-control-map -> m365-governance/conditional-access-gap-analysis`
+- `compliance-evidence/maester-control-map -> m365-governance/entra-posture-review`
 
 ### data (7)
 

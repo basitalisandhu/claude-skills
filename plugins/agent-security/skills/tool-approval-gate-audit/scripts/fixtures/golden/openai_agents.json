@@ -1,0 +1,252 @@
+{
+ "tool": "approval_gates",
+ "files_scanned": 1,
+ "truncated": false,
+ "skipped": [],
+ "summary": {
+  "tools": 8,
+  "consequential": 6,
+  "findings": {
+   "high": 4,
+   "medium": 0,
+   "low": 0,
+   "info": 2
+  }
+ },
+ "tools": [
+  {
+   "name": "get_weather",
+   "symbol": "get_weather",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 15,
+   "side_effects": [],
+   "gates": [],
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "send_invoice",
+   "symbol": "send_invoice",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 20,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.post('https://billing.example.com/invoices', json={'customer': custo...",
+     "file": "agent.py",
+     "line": 21
+    }
+   ],
+   "gates": [
+    {
+     "evidence": "needs_approval=True",
+     "file": "agent.py",
+     "line": 19,
+     "result_ignored": false,
+     "kind": "needs_approval",
+     "conditional": false
+    }
+   ],
+   "name_verbs": [
+    "send"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "run_tests",
+   "symbol": "run_tests",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 25,
+   "side_effects": [
+    {
+     "kind": "process",
+     "evidence": "subprocess.run(['pytest', path], capture_output=True, text=True)",
+     "file": "agent.py",
+     "line": 26
+    }
+   ],
+   "gates": [],
+   "name_verbs": [
+    "run"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "delete_branch",
+   "symbol": "delete_branch",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 30,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.delete(f'https://git.example.com/branches/{name}')",
+     "file": "agent.py",
+     "line": 31
+    }
+   ],
+   "gates": [
+    {
+     "evidence": "needs_approval='yes'",
+     "file": "agent.py",
+     "line": 29,
+     "result_ignored": false,
+     "kind": "not-bool",
+     "conditional": false
+    }
+   ],
+   "name_verbs": [
+    "delete"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "transfer_credits",
+   "symbol": "transfer_credits",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 35,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.post('https://ledger.example.com/transfer', json={'to': account, 'am...",
+     "file": "agent.py",
+     "line": 36
+    }
+   ],
+   "gates": [
+    {
+     "evidence": "needs_approval=is_large",
+     "file": "agent.py",
+     "line": 34,
+     "result_ignored": false,
+     "kind": "needs_approval",
+     "conditional": true
+    }
+   ],
+   "name_verbs": [
+    "transfer"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "publish_notes",
+   "symbol": "publish_notes",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 40,
+   "side_effects": [],
+   "gates": [
+    {
+     "evidence": "needs_approval=False",
+     "file": "agent.py",
+     "line": 39,
+     "result_ignored": false,
+     "kind": "explicit-false",
+     "conditional": false
+    }
+   ],
+   "name_verbs": [
+    "publish"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "list_invoices",
+   "symbol": "list_invoices",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 45,
+   "side_effects": [],
+   "gates": [
+    {
+     "evidence": "needs_approval=ASK",
+     "file": "agent.py",
+     "line": 44,
+     "result_ignored": false,
+     "kind": "needs_approval",
+     "conditional": false
+    }
+   ],
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "archive_record",
+   "symbol": "archive_tool",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 55,
+   "side_effects": [
+    {
+     "kind": "file-write",
+     "evidence": "open('archive.log', 'a', encoding='utf-8')",
+     "file": "agent.py",
+     "line": 50
+    }
+   ],
+   "gates": [],
+   "name_verbs": [],
+   "consequential": true
+  }
+ ],
+ "findings": [
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "run_tests",
+   "file": "agent.py",
+   "line": 25,
+   "message": "consequential (subprocess.run(['pytest', path], capture_output=True, text=True)) and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "GATE-NOT-BOOL",
+   "severity": "high",
+   "tool": "delete_branch",
+   "file": "agent.py",
+   "line": 30,
+   "message": "needs_approval='yes' is not a bool, so whether the tool asks for approval depends on how the installed SDK treats that value",
+   "fix": "Pass True, False or a function that returns a bool; never a string, number or None."
+  },
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "publish_notes",
+   "file": "agent.py",
+   "line": 40,
+   "message": "consequential (name verb 'publish') and no approval gate (needs_approval=False)",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "archive_record",
+   "file": "agent.py",
+   "line": 55,
+   "message": "consequential (open('archive.log', 'a', encoding='utf-8')) and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "GATE-CONDITIONAL",
+   "severity": "info",
+   "tool": "transfer_credits",
+   "file": "agent.py",
+   "line": 35,
+   "message": "needs_approval=is_large is decided at run time; read it",
+   "fix": "Read the condition: it must be deterministic code, fail closed on errors, and cover every consequential argument."
+  },
+  {
+   "id": "GATE-ON-READ-ONLY",
+   "severity": "info",
+   "tool": "list_invoices",
+   "file": "agent.py",
+   "line": 45,
+   "message": "read-only tool behind an unconditional approval",
+   "fix": "Drop the approval on read-only tools so reviewers keep paying attention to the ones that act."
+  }
+ ]
+}
