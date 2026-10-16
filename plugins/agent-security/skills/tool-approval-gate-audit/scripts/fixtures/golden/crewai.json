@@ -1,0 +1,140 @@
+{
+ "tool": "approval_gates",
+ "files_scanned": 1,
+ "truncated": false,
+ "skipped": [],
+ "summary": {
+  "tools": 4,
+  "consequential": 3,
+  "findings": {
+   "high": 1,
+   "medium": 0,
+   "low": 0,
+   "info": 1
+  }
+ },
+ "tools": [
+  {
+   "name": "send_newsletter",
+   "symbol": "SendNewsletterTool",
+   "framework": "crewai",
+   "file": "crew.py",
+   "line": 9,
+   "side_effects": [
+    {
+     "kind": "mail",
+     "evidence": "smtplib.SMTP('mail.example.com')",
+     "file": "crew.py",
+     "line": 14
+    },
+    {
+     "kind": "mail",
+     "evidence": "smtp.send_message(build_message(subject, body))",
+     "file": "crew.py",
+     "line": 15
+    }
+   ],
+   "gates": [
+    {
+     "kind": "task-human-input",
+     "evidence": "Task(human_input=True)",
+     "file": "crew.py",
+     "line": 45,
+     "conditional": true,
+     "result_ignored": false
+    }
+   ],
+   "name_verbs": [
+    "send"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "cleanup_cache",
+   "symbol": "CleanupTool",
+   "framework": "crewai",
+   "file": "crew.py",
+   "line": 19,
+   "side_effects": [
+    {
+     "kind": "file-delete",
+     "evidence": "os.remove(path)",
+     "file": "crew.py",
+     "line": 25
+    }
+   ],
+   "gates": [
+    {
+     "kind": "input",
+     "evidence": "input(f'Delete {path}? ')",
+     "file": "crew.py",
+     "line": 24,
+     "conditional": false,
+     "result_ignored": true
+    }
+   ],
+   "name_verbs": [],
+   "consequential": true
+  },
+  {
+   "name": "lookup_customer",
+   "symbol": "lookup_customer",
+   "framework": "crewai",
+   "file": "crew.py",
+   "line": 30,
+   "side_effects": [],
+   "gates": [],
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "update_crm",
+   "symbol": "update_crm",
+   "framework": "crewai",
+   "file": "crew.py",
+   "line": 36,
+   "side_effects": [
+    {
+     "kind": "sql-write",
+     "evidence": "db.execute('UPDATE customers SET status = ? WHERE id = ?', (status, record_id))",
+     "file": "crew.py",
+     "line": 40
+    }
+   ],
+   "gates": [
+    {
+     "kind": "approval-call",
+     "evidence": "request_approval(f'update {record_id} to {status}')",
+     "file": "crew.py",
+     "line": 38,
+     "conditional": false,
+     "result_ignored": false
+    }
+   ],
+   "name_verbs": [
+    "update"
+   ],
+   "consequential": true
+  }
+ ],
+ "findings": [
+  {
+   "id": "GATE-RESULT-IGNORED",
+   "severity": "high",
+   "tool": "cleanup_cache",
+   "file": "crew.py",
+   "line": 19,
+   "message": "input(f'Delete {path}? ') at line 24 discards the answer, so a refusal does not stop the tool",
+   "fix": "Use the answer: stop the tool (return or raise) unless the approval call says yes."
+  },
+  {
+   "id": "GATE-CONDITIONAL",
+   "severity": "info",
+   "tool": "send_newsletter",
+   "file": "crew.py",
+   "line": 9,
+   "message": "Task(human_input=True) is a task-level review: check it happens before the tool acts, not after the task's output; read it",
+   "fix": "Read the condition: it must be deterministic code, fail closed on errors, and cover every consequential argument."
+  }
+ ]
+}

@@ -1,0 +1,152 @@
+{
+ "tool": "approval_gates",
+ "files_scanned": 1,
+ "truncated": false,
+ "skipped": [],
+ "summary": {
+  "tools": 4,
+  "consequential": 3,
+  "findings": {
+   "high": 2,
+   "medium": 2,
+   "low": 1,
+   "info": 0
+  }
+ },
+ "tools": [
+  {
+   "name": "list_notes",
+   "symbol": "list_notes",
+   "framework": "mcp",
+   "file": "server.py",
+   "line": 12,
+   "side_effects": [],
+   "gates": [],
+   "annotations": {
+    "readOnlyHint": true
+   },
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "save_note",
+   "symbol": "save_note",
+   "framework": "mcp",
+   "file": "server.py",
+   "line": 17,
+   "side_effects": [
+    {
+     "kind": "file-write",
+     "evidence": "open(f'notes/{name}.txt', 'w', encoding='utf-8')",
+     "file": "server.py",
+     "line": 18
+    }
+   ],
+   "gates": [],
+   "annotations": {
+    "readOnlyHint": true
+   },
+   "name_verbs": [],
+   "consequential": true
+  },
+  {
+   "name": "delete_note",
+   "symbol": "delete_note",
+   "framework": "mcp",
+   "file": "server.py",
+   "line": 24,
+   "side_effects": [
+    {
+     "kind": "file-delete",
+     "evidence": "os.remove(f'notes/{name}.txt')",
+     "file": "server.py",
+     "line": 25
+    }
+   ],
+   "gates": [],
+   "annotations": {},
+   "name_verbs": [
+    "delete"
+   ],
+   "consequential": true
+  },
+  {
+   "name": "purge_notes",
+   "symbol": "purge",
+   "framework": "mcp",
+   "file": "server.py",
+   "line": 30,
+   "side_effects": [
+    {
+     "kind": "sql-write",
+     "evidence": "conn.execute('DELETE FROM notes')",
+     "file": "server.py",
+     "line": 34
+    }
+   ],
+   "gates": [
+    {
+     "kind": "approval-call",
+     "evidence": "approve_purge(reason)",
+     "file": "server.py",
+     "line": 31,
+     "conditional": false,
+     "result_ignored": false
+    }
+   ],
+   "annotations": {
+    "readOnlyHint": false,
+    "destructiveHint": false
+   },
+   "name_verbs": [],
+   "consequential": true
+  }
+ ],
+ "findings": [
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "save_note",
+   "file": "server.py",
+   "line": 17,
+   "message": "consequential (open(f'notes/{name}.txt', 'w', encoding='utf-8')) and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "NO-GATE",
+   "severity": "high",
+   "tool": "delete_note",
+   "file": "server.py",
+   "line": 24,
+   "message": "consequential (os.remove(f'notes/{name}.txt')) and no approval gate",
+   "fix": "Put a deterministic approval in front of the tool (needs_approval=True, interrupt() before the side effect, or an approval call whose refusal stops the tool), or record a reviewed 'never' in the policy."
+  },
+  {
+   "id": "READONLY-HINT-BUT-WRITES",
+   "severity": "medium",
+   "tool": "save_note",
+   "file": "server.py",
+   "line": 17,
+   "message": "readOnlyHint=True but the body calls open(f'notes/{name}.txt', 'w', encoding='utf-8')",
+   "fix": "Set readOnlyHint=False, or move the write into a separate tool."
+  },
+  {
+   "id": "DESTRUCTIVE-NO-HINT",
+   "severity": "medium",
+   "tool": "purge_notes",
+   "file": "server.py",
+   "line": 30,
+   "message": "deletes data but says destructiveHint=False",
+   "fix": "Set destructiveHint=True in the tool annotations, and still gate it: hints are advisory."
+  },
+  {
+   "id": "DESTRUCTIVE-NO-HINT",
+   "severity": "low",
+   "tool": "delete_note",
+   "file": "server.py",
+   "line": 24,
+   "message": "deletes data but does not set destructiveHint=True",
+   "fix": "Set destructiveHint=True in the tool annotations, and still gate it: hints are advisory."
+  }
+ ]
+}

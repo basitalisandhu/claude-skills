@@ -51,8 +51,8 @@
     {
       "name": "agent-security",
       "source": "./plugins/agent-security",
-      "description": "Nine security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
-      "version": "0.3.0",
+      "description": "Ten security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -114,8 +114,8 @@
     {
       "name": "cc-setup-tooling",
       "source": "./plugins/cc-setup-tooling",
-      "description": "Eight skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
-      "version": "0.1.1",
+      "description": "Nine skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, sandbox-config-review, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -131,6 +131,7 @@
         "trigger-evaluation",
         "context-budget",
         "permissions",
+        "sandbox",
         "hooks",
         "skill-collisions",
         "portability"
@@ -172,8 +173,8 @@
     {
       "name": "compliance-evidence",
       "source": "./plugins/compliance-evidence",
-      "description": "Seven compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map. Exports on disk, offline evaluation, three result states.",
-      "version": "0.3.0",
+      "description": "Nine compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map, vendor attestation digest, Maester control map. Exports on disk, offline evaluation, three result states.",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -192,7 +193,9 @@
         "aws",
         "microsoft-365",
         "essential-eight",
-        "security-questionnaire"
+        "security-questionnaire",
+        "vendor-risk",
+        "maester"
       ],
       "category": "security",
       "tags": [
@@ -471,8 +474,8 @@
     {
       "name": "ways-of-working",
       "source": "./plugins/ways-of-working",
-      "description": "Twelve ways-of-working skills, each with a tested standard-library script over local files: change-request-writer, meeting-actions-ledger, risk-exception-register, risk-register-refresh, rfc-lifecycle, decision-log, weekly-status-rollup, one-on-one-ledger, focus-plan, vendor-scorecard, working-agreement-check and shift-handover. No network, no rating of people.",
-      "version": "0.2.1",
+      "description": "Thirteen ways-of-working skills, each with a tested standard-library script over local files: change-request-writer, meeting-actions-ledger, risk-exception-register, risk-register-refresh, rfc-lifecycle, decision-log, weekly-status-rollup, one-on-one-ledger, focus-plan, vendor-scorecard, working-agreement-check, shift-handover and next-actions-sweep. No network, no rating of people.",
+      "version": "0.3.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -497,7 +500,8 @@
         "risk-register",
         "vendor-scorecard",
         "working-agreement",
-        "on-call-handover"
+        "on-call-handover",
+        "inbox-triage"
       ],
       "category": "productivity",
       "tags": [

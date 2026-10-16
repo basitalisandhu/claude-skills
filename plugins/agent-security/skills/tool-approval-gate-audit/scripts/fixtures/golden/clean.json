@@ -1,0 +1,84 @@
+{
+ "tool": "approval_gates",
+ "files_scanned": 1,
+ "truncated": false,
+ "skipped": [],
+ "summary": {
+  "tools": 3,
+  "consequential": 2,
+  "findings": {
+   "high": 0,
+   "medium": 0,
+   "low": 0,
+   "info": 0
+  }
+ },
+ "tools": [
+  {
+   "name": "get_order",
+   "symbol": "get_order",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 9,
+   "side_effects": [],
+   "gates": [],
+   "name_verbs": [],
+   "consequential": false
+  },
+  {
+   "name": "refund_order",
+   "symbol": "refund_order",
+   "framework": "openai-agents",
+   "file": "agent.py",
+   "line": 14,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.post('https://shop.example.com/refunds', json={'order': order_id, 'a...",
+     "file": "agent.py",
+     "line": 15
+    }
+   ],
+   "gates": [
+    {
+     "evidence": "needs_approval=True",
+     "file": "agent.py",
+     "line": 13,
+     "result_ignored": false,
+     "kind": "needs_approval",
+     "conditional": false
+    }
+   ],
+   "name_verbs": [],
+   "consequential": true
+  },
+  {
+   "name": "cancel_subscription",
+   "symbol": "cancel_subscription",
+   "framework": "langchain",
+   "file": "agent.py",
+   "line": 19,
+   "side_effects": [
+    {
+     "kind": "network-write",
+     "evidence": "requests.delete(f'https://shop.example.com/subscriptions/{subscription_id}')",
+     "file": "agent.py",
+     "line": 24
+    }
+   ],
+   "gates": [
+    {
+     "kind": "interrupt",
+     "evidence": "interrupt({'action': 'cancel_subscription', 'subscription_id': subscription_id})",
+     "file": "agent.py",
+     "line": 21,
+     "conditional": false,
+     "result_ignored": false
+    }
+   ],
+   "name_verbs": [],
+   "consequential": true
+  }
+ ],
+ "findings": []
+}

@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![125 skills in 16 plugins](https://img.shields.io/badge/skills-125%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![130 skills in 16 plugins](https://img.shields.io/badge/skills-130%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**125 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**130 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,7 +81,7 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**125 skills in 16 plugins.** 170 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**130 skills in 16 plugins.** 190 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
 
 ### agent-identity-governance
 
@@ -100,7 +100,7 @@ Version 0.1.1. Source: [agent-identity-governance-skills](https://github.com/bas
 
 ### agent-security
 
-Version 0.3.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
+Version 0.4.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -113,6 +113,7 @@ Version 0.3.0. Source: [agent-security-skills](https://github.com/basitalisandhu
 | prompt-injection-review | Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/prompt-injection-review/SKILL.md) |
 | secure-agent-checklist | Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md) |
 | semgrep-agentic | Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. | no | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md) |
+| tool-approval-gate-audit | Find every tool a Python agent's model can call, decide which have consequential side effects, and check each one sits behind a deterministic human approval gate that cannot fail open, with gaps reported per tool at file and line. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-security/tool-approval-gate-audit/) · [source](https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/tool-approval-gate-audit/SKILL.md) |
 
 ### aws-security
 
@@ -133,13 +134,14 @@ Version 0.4.0. Source: [aws-security-skills](https://github.com/basitalisandhu/a
 
 ### cc-setup-tooling
 
-Version 0.1.1. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
+Version 0.2.0. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | context-budget-audit | Audit what a Claude Code project puts in context on every turn (CLAUDE.md and its imports, AGENTS.md, rules files, skill descriptions, MCP tool schemas from saved tools/list output, hooks), estimate the tokens, rank the biggest items and flag duplicates and stale sections. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/context-budget-audit/SKILL.md) |
 | hook-author | Write and test a Claude Code hook with cc-hooks: pick the event and the decision (block, warn, allow or modify) from a table, scaffold the hook, its fixtures, a pytest file and the settings block from a short spec, then prove it with cc-hooks test. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/hook-author/SKILL.md) |
 | permissions-builder | Build a least-privilege .claude/settings.json permission set from what a project actually needs: generate MCP rules with claude-mcp-allow, merge them with your own allow, ask and deny lists, put deny first, diff against the current file, then test the result with claude-perm-sim against the commands the team runs. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/permissions-builder/SKILL.md) |
+| sandbox-config-review | Review a Claude Code project's sandbox settings across user, project, local and managed scopes, show what the operating system actually enforces around Bash commands, and flag what leaves it open: sandbox off, fail-open, the unsandboxed retry, broad excludedCommands, wildcard domains, readable credentials and loosening values a cloned repository ships. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/sandbox-config-review/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/sandbox-config-review/SKILL.md) |
 | skill-collision-check | Find installed skills that share a name, shadow each other or overlap so much in description that the wrong one gets picked, across personal, project, managed, plugin and copied folders, and say which one wins. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-collision-check/SKILL.md) |
 | skill-description-linter | Lint the front matter of your SKILL.md files so each skill is listed and picked correctly: double-quoted description under 600 characters, a verb first, a quoted trigger phrase, Use when and Not for sentences, name equal to the folder, strict-YAML safety and a Limits section, with --fix for the quoting. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-description-linter/SKILL.md) |
 | skill-portability-check | Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md) |
@@ -163,7 +165,7 @@ Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### compliance-evidence
 
-Version 0.3.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
+Version 0.4.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -173,7 +175,9 @@ Version 0.3.0. Source: [compliance-evidence-skills](https://github.com/basitalis
 | essential-eight-evidence-map | Map an evidence pack to the ASD Essential Eight Maturity Model (November 2023) and show, for each of the eight strategies, which ML1 to ML3 requirements have evidence, which do not, and the maturity level the strategy can claim today, from the pack's manifest and a mapping you own. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/essential-eight-evidence-map/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/essential-eight-evidence-map/SKILL.md) |
 | evidence-pack-builder | Turn a folder of exports already on disk into an integrity-checked ISO 27001 or SOC 2 evidence pack, recording who collected each file, when, from which system and with which command, with a SHA-256 per file, a manifest and later re-verification that flags changed, missing or stale files. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/evidence-pack-builder/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/evidence-pack-builder/SKILL.md) |
 | github-change-control-evidence | Turn saved gh exports of one GitHub repository into ISO 27001 and SOC 2 evidence rows for change and vulnerability management, checking branch protection or rulesets, required reviews, an approval by someone other than the author on every merged pull request, CODEOWNERS, signed commits, Dependabot and secret scanning, and separating switched off from not assessable. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/github-change-control-evidence/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/github-change-control-evidence/SKILL.md) |
+| maester-control-map | Map a Maester results file (Microsoft 365 and Entra ID security tests) to ISO 27001 and SOC 2 control identifiers through a mapping you own, report each control as supported, contradicted or not assessable with the tests behind it, and add control columns to the test list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/maester-control-map/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/maester-control-map/SKILL.md) |
 | security-questionnaire-drafter | Draft answers to a customer or vendor security questionnaire only from your own evidence pack and policy folder, citing the policy section or evidence file behind every answer and marking questions with nothing behind them as not assessable instead of inventing an answer. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/security-questionnaire-drafter/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/security-questionnaire-drafter/SKILL.md) |
+| vendor-attestation-digest | Digest a register of vendor SOC 2 reports, ISO 27001 certificates and bridge letters against your vendor list: expired or expiring documents, gaps after a SOC 2 period with no bridge letter, qualified opinions, noted exceptions, services outside scope and unreviewed user entity controls, with an action list per owner. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/vendor-attestation-digest/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/vendor-attestation-digest/SKILL.md) |
 
 ### data
 
@@ -303,7 +307,7 @@ Version 0.3.0. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### ways-of-working
 
-Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandhu/ways-of-working-skills). Install: `/plugin install ways-of-working@claude-skills`.
+Version 0.3.0. Source: [ways-of-working-skills](https://github.com/basitalisandhu/ways-of-working-skills). Install: `/plugin install ways-of-working@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -311,6 +315,7 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 | decision-log | Record operational decisions as one Markdown file each (context, decision, who decided, date, review date, status, supersede links) and lint the folder for overdue reviews, broken or one-way supersede links, cycles and missing fields, rendering an INDEX.md table. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/decision-log/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/decision-log/SKILL.md) |
 | focus-plan | Find focus time in a meeting-heavy week from a saved .ics calendar export (Outlook, Google or Apple): meetings and hours per day, back-to-back runs, the longest free blocks inside working hours, recurring series with counts, and a plain focus plan; recurring rules it cannot expand are listed, never guessed. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/focus-plan/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/focus-plan/SKILL.md) |
 | meeting-actions-ledger | Track the action items agreed across a folder of Markdown or text meeting notes in one ledger: each action with owner and due date, the same action carried between meetings merged into one, overdue, unowned and thrice-carried items flagged, every item cited to file and line, written to ledger.md and ledger.json. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/meeting-actions-ledger/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/meeting-actions-ledger/SKILL.md) |
+| next-actions-sweep | Turn saved exports of several mailboxes and chats (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list labelled reply, decide, do or FYI, with the reason, any stated deadline, the source link, duplicates across accounts merged, and a waiting-on-others list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/next-actions-sweep/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/next-actions-sweep/SKILL.md) |
 | one-on-one-ledger | Prepare for 1:1s from your own local notes: days since the last 1:1 against a cadence, open commitments on each side (yours first, overdue marked) and topics raised more than once, as a ledger per person or a prep sheet for one. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/one-on-one-ledger/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/one-on-one-ledger/SKILL.md) |
 | rfc-lifecycle | Draft a design proposal (RFC) with a fixed section list and a security review checklist, then lint a folder of RFCs for the status header, review questions with no answer, open questions left in review or accepted RFCs, a missing decision date or section, and RFCs in review over 14 days. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/rfc-lifecycle/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/rfc-lifecycle/SKILL.md) |
 | risk-exception-register | Review a register of time-bound security exceptions and risk acceptances (CSV or Markdown table): flags expired exceptions and those expiring within 30 days, missing approvers or compensating controls, approvers who are also the requester, and repeated renewals, then prints a review agenda with a blank decision line per item. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/risk-exception-register/) · [source](https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/risk-exception-register/SKILL.md) |
@@ -336,11 +341,11 @@ Version 0.2.1. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->105 of the 125 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->110 of the 130 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->125 of the 125 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->130 of the 130 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 

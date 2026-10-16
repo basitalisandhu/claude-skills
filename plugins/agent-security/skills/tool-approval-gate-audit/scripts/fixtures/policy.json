@@ -1,0 +1,6 @@
+{
+  "send_invoice": "always",
+  "transfer_credits": "always",
+  "publish_notes": "never",
+  "refund_order": "always"
+}
