@@ -6,6 +6,18 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-16
+
+### Added
+
+- New skills synced from their source repositories: `tool-approval-gate-audit` (agent-security 0.4.0), `sandbox-config-review` (cc-setup-tooling 0.2.0), `vendor-attestation-digest` and `maester-control-map` (compliance-evidence 0.4.0) and `next-actions-sweep` (ways-of-working 0.3.0). Each has a standard-library script, synthetic fixtures and tests in its source repository.
+- `ROADMAP.md`, a Contributors section and links to GitHub Discussions (#27, #30).
+
+### Changed
+
+- Daily sync pull requests (#25, #31) updated the plugins; versions and source commits are in `SOURCES.json`.
+- The marketplace metadata version is 0.3.0.
+
 ## [0.2.0] - 2026-10-13
 
 ### Added
