@@ -4,21 +4,21 @@
   <id>https://basitalisandhu.github.io/claude-skills/</id>
   <link href="https://basitalisandhu.github.io/claude-skills/"/>
   <link rel="self" href="https://basitalisandhu.github.io/claude-skills/feed.xml"/>
-  <updated>2026-10-13T10:38:02Z</updated>
+  <updated>2026-10-15T08:19:45Z</updated>
   <author><name>Muhammad Basit Ali</name><uri>https://github.com/basitalisandhu</uri></author>
+  <entry>
+    <title>m365-governance 0.5.0</title>
+    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.5.0-31344cf75b38</id>
+    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
+    <updated>2026-10-15T08:19:45Z</updated>
+    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit 31344cf75b38.</summary>
+  </entry>
   <entry>
     <title>ways-of-working 0.2.1</title>
     <id>https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/#v0.2.1-72a002dd9707</id>
     <link href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"/>
     <updated>2026-10-13T10:38:02Z</updated>
     <summary>Twelve ways-of-working skills that compute from files you already have: a CAB-style change record from a Terraform plan or PR export, one action ledger across meeting notes, a security exception register lint, a quarterly risk register refresh against findings exports, an RFC writer with a lifecycle lint, a one-file-per-decision log, a weekly status note from git and gh exports, a private 1:1 ledger, meeting load and focus blocks from a calendar export, a weighted vendor scorecard with a sensitivity check, a check of a team&#x27;s working agreement against GitHub settings exports, and a shift handover note from incident and alert exports. Standard-library scripts, no network, no rating of people. Synced from https://github.com/basitalisandhu/ways-of-working-skills at commit 72a002dd9707.</summary>
-  </entry>
-  <entry>
-    <title>m365-governance 0.4.0</title>
-    <id>https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/#v0.4.0-65a5cf77b702</id>
-    <link href="https://basitalisandhu.github.io/claude-skills/plugins/m365-governance/"/>
-    <updated>2026-10-13T10:38:02Z</updated>
-    <summary>Microsoft 365 governance skills for Claude Code: Graph permission preflight for apps and connectors, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and group sprawl report, a quarterly access review pack, and a Copilot oversharing readiness score with fixes by site owner. Scripts are standard-library Python and evaluate exported Microsoft Graph JSON offline. Synced from https://github.com/basitalisandhu/m365-governance-skills at commit 65a5cf77b702.</summary>
   </entry>
   <entry>
     <title>cc-setup-tooling 0.1.1</title>

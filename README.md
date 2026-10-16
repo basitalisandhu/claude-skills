@@ -243,7 +243,7 @@ Version 0.3.0. Source: [github-manager-skills](https://github.com/basitalisandhu
 
 ### m365-governance
 
-Version 0.4.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
+Version 0.5.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
