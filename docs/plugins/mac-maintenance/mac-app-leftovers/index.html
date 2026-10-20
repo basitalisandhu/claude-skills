@@ -37,7 +37,7 @@
   "name": "mac-maintenance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/"
  },
- "version": "0.1.3"
+ "version": "0.1.4"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">mac-maintenance</a> / mac-app-leftovers</p>
 <h1>Mac app leftovers</h1>
 <p class="lede">Find what uninstalled apps left behind on a Mac (Application Support and container folders, caches, preferences, saved state, logs, and login items or launch agents that point at nothing), deciding what is installed from app bundles, PATH, Homebrew and Spotlight, and move only the candidates you name into a dated Trash folder. Use when asked &quot;why is there still a Slack folder?&quot;, to remove leftovers, or as the leftovers step of a cleanup. Not for uninstalling apps, Apple&#x27;s own folders, or judging whether a command-line tool&#x27;s data is wanted.</p>
-<p class="meta">Skill <code>mac-app-leftovers</code> in plugin <a href="../index.html">mac-maintenance</a> 0.1.3, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md">plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md">plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md</a>.</p>
+<p class="meta">Skill <code>mac-app-leftovers</code> in plugin <a href="../index.html">mac-maintenance</a> 0.1.4, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md">plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md">plugins/mac-maintenance/skills/mac-app-leftovers/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -78,7 +78,7 @@ python3 install.py --user --skill mac-maintenance/mac-app-leftovers</code></pre>
 <ol start="5"><li><strong>Report</strong> which items moved, which need Finder, which startup items were removed, and the sudo commands left for the user. Remind them that space returns when the Trash is emptied.</li></ol>
 <h3 id="reading-the-output">Reading the output</h3>
 <table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr><td><code>candidates[].id</code></td><td><code>&lt;area&gt;:&lt;entry name&gt;</code>; the handle for <code>--trash</code></td></tr><tr><td><code>candidates[].kind</code></td><td><code>app data</code> or <code>cache or log (regenerable)</code></td></tr><tr><td><code>candidates[].bytes</code>, <code>last_changed</code></td><td>measured size; modification date of the entry itself</td></tr><tr><td><code>startup.login_items</code></td><td>login items whose <code>path</code> does not exist, with an osascript <code>fix</code></td></tr><tr><td><code>startup.launch_agents</code>, <code>startup.launch_daemons</code></td><td>plists whose program is missing, with a <code>launchctl bootout</code> fix; daemon fixes need sudo</td></tr><tr><td><code>moved</code>, <code>failed</code></td><td>present only with <code>--trash</code></td></tr></tbody></table>
-<p>Exit codes: 0 no candidates and no startup leftovers, 1 something found (or moved), 2 bad input.</p>
+<p>Exit codes: 0 no candidates and no startup leftovers, 1 something found (or moved), 2 bad input or usage. A <code>--trash</code> id that is malformed, or that is not a candidate in this run, is bad input and nothing is moved: copy the ids from a run without <code>--trash</code>. Bad input or usage: a home or root that is not a folder, a negative or non-numeric number option, an output or log path that cannot be written (checked before the scan starts).</p>
 <h3 id="output-format">Output format</h3>
 <pre><code class="language-markdown">## Leftovers of uninstalled apps
 

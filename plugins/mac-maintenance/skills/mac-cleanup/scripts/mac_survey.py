@@ -474,19 +474,44 @@ def render(report: dict, top: int) -> str:
     return "\n".join(lines)
 
 
+EXIT_CODES = "Exit codes: 0 nothing regenerable found, 1 the survey lists cleanup candidates, 2 bad input or usage."
+
+
+def positive_int(text: str) -> int:
+    """argparse type: a whole number of at least 1."""
+    try:
+        value = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+    if value < 1:
+        raise argparse.ArgumentTypeError(f"must be 1 or more, got {value}")
+    return value
+
+
+def non_negative_float(text: str) -> float:
+    """argparse type: a number of 0 or more."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a number, got {text!r}") from None
+    if not value >= 0 or value == float("inf"):
+        raise argparse.ArgumentTypeError(f"must be 0 or more, got {text}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+                                 formatter_class=argparse.RawDescriptionHelpFormatter, epilog=EXIT_CODES)
     ap.add_argument("--home", default=str(Path.home()), help="home folder to survey (default: your home)")
     ap.add_argument("--apps-dir", action="append", default=None,
                     help="application folder to scan (repeatable; default /Applications and ~/Applications)")
-    ap.add_argument("--top", type=int, default=15, help="rows per table (default 15)")
-    ap.add_argument("--large-mb", type=int, default=1024, help="large file threshold in MB (default 1024)")
-    ap.add_argument("--node-mb", type=int, default=200, help="node_modules threshold in MB (default 200)")
+    ap.add_argument("--top", type=positive_int, default=15, help="rows per table (default 15)")
+    ap.add_argument("--large-mb", type=positive_int, default=1024, help="large file threshold in MB (default 1024)")
+    ap.add_argument("--node-mb", type=positive_int, default=200, help="node_modules threshold in MB (default 200)")
     ap.add_argument("--fast", action="store_true", help="skip the home-folder walk (large files, node_modules)")
     ap.add_argument("--no-commands", action="store_true",
                     help="do not run external commands (docker, brew, mdls, osascript, ps); file sizes only")
-    ap.add_argument("--timeout", type=int, default=180, help="seconds per external command (default 180)")
+    ap.add_argument("--timeout", type=positive_int, default=180, help="seconds per external command (default 180)")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     ap.add_argument("--out", help="also write the JSON report to this file")
     ap.add_argument("--quiet", action="store_true", help="no progress lines on stderr")
@@ -495,6 +520,9 @@ def main(argv: list[str] | None = None) -> int:
     home = Path(args.home).expanduser()
     if not home.is_dir():
         print(f"error: not a directory: {home}", file=sys.stderr)
+        return 2
+    if args.out and (Path(args.out).is_dir() or not Path(args.out).expanduser().parent.is_dir()):
+        print(f"error: --out {args.out}: needs a file path in an existing folder", file=sys.stderr)
         return 2
     app_dirs = [Path(p) for p in args.apps_dir] if args.apps_dir else [Path("/Applications"), home / "Applications"]
     survey = Survey(home, not args.no_commands, args.timeout, args.large_mb, args.node_mb, args.fast,
@@ -512,7 +540,11 @@ def main(argv: list[str] | None = None) -> int:
         survey.large_and_node(args.top)
     survey.report["seconds"] = round(time.time() - started, 1)
     if args.out:
-        Path(args.out).write_text(json.dumps(survey.report, indent=2), encoding="utf-8")
+        try:
+            Path(args.out).expanduser().write_text(json.dumps(survey.report, indent=2), encoding="utf-8")
+        except OSError as exc:
+            print(f"error: cannot write --out {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     if args.json:
         print(json.dumps(survey.report, indent=2))
     else:

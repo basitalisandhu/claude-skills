@@ -103,6 +103,23 @@ class ListTests(unittest.TestCase):
         rc, out, _ = run(["--offline", "--format", "markdown", "list", "--limit", "2"])
         self.assertTrue(out.startswith("| id |")); self.assertIn("](https://", out)
 
+    def test_format_after_the_subcommand(self):
+        # SKILL.md writes the option after the subcommand; both positions must work and the later one wins.
+        rc, out, _ = run(["--offline", "list", "--limit", "2", "--format", "markdown"])
+        self.assertEqual(rc, 0); self.assertTrue(out.startswith("| id |"))
+        rc, out, _ = run(["--offline", "--format", "markdown", "list", "--limit", "1", "--format", "json"])
+        self.assertEqual(len(json.loads(out)), 1)
+        rc, out, _ = run(["--offline", "--format", "json", "list", "--limit", "1"])
+        self.assertEqual(len(json.loads(out)), 1)
+        rc, out, _ = run(["--offline", "stats", "--by", "vector", "--format", "json"])
+        self.assertEqual(json.loads(out)["by"], "vector")
+
+    def test_framework_alias_mcp(self):
+        rc, full, _ = run(["--offline", "--format", "json", "list", "--framework", "Model Context Protocol"])
+        rc, short, _ = run(["--offline", "--format", "json", "list", "--framework", "MCP"])
+        self.assertTrue(json.loads(full))
+        self.assertEqual([e["id"] for e in json.loads(short)], [e["id"] for e in json.loads(full)])
+
 
 class ShowStatsFieldsTests(unittest.TestCase):
     def test_show(self):

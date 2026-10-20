@@ -1,0 +1,5 @@
+{"Events": [
+  {"CloudTrailEvent": "{\"eventTime\": \"2026-10-01T22:10:00Z\", \"eventSource\": \"s3.amazonaws.com\", \"eventName\": \"ListBuckets\", \"sourceIPAddress\": \"198.51.100.10\", \"userIdentity\": {\"type\": \"IAMUser\", \"userName\": \"ci-deployer\", \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"}}"},
+  {"CloudTrailEvent": "{\"eventTime\": \"2026-10-02T03:05:00Z\", \"eventSource\": \"iam.amazonaws.com\", \"eventName\": \"CreateAccessKey\", \"sourceIPAddress\": \"203.0.113.77\", \"userIdentity\": {\"type\": \"IAMUser\", \"userName\": \"ci-deployer\", \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"}}"},
+  {"CloudTrailEvent": "{\"eventTime\": \"2026-10-02T03:06:00Z\", \"eventSource\": \"s3.amazonaws.com\", \"eventName\": \"GetObject\", \"sourceIPAddress\": \"203.0.113.77\", \"userIdentity\": {\"type\": \"IAMUser\", \"userName\": \"ci-deployer\", \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"}}"}
+]}

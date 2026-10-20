@@ -26,7 +26,7 @@ Output (--out):
                                          organization, protect CloudTrail, GuardDuty, Security Hub and Config, deny
                                          the root user, require IMDSv2, deny public S3 ACLs) plus deny IAM user and
                                          access key creation, require the owner tag on new instances, and the spend
-                                         denies from spend_guardrails.py; packed under 5120 characters and linted
+                                         denies from spend_guardrails.py; packed under 10240 characters (the SCP quota) and linted
                                          with scp_lint.py
   baseline-checklist.md                  per-account baseline with read-only verification commands
   auto-expiry/design.md                  tag-based TTL design with the exact EventBridge Scheduler command
@@ -151,7 +151,7 @@ def build_scps(spec: dict, cfg: dict) -> tuple[list[dict], dict]:
                                       "guardrails": sorted({g for g, _ in items}), "statements": [s["Sid"] for _, s in items]})
         manifest["lint"] += [{"file": name, **issue} for issue in lint_policy(doc)]
     if len(docs) > scp_builder.MAX_ATTACHED - 1:
-        manifest["warnings"].append(f"{len(docs)} documents: an OU takes at most {scp_builder.MAX_ATTACHED} SCPs including "
+        manifest["warnings"].append(f"{len(docs)} documents: an OU takes at most {scp_builder.MAX_ATTACHED} directly attached SCPs including "
                                     "FullAWSAccess; attach some to a parent OU")
     return docs, manifest
 
@@ -532,7 +532,14 @@ def main(argv: list[str] | None = None) -> int:
         for name, content in result["files"].items():
             path = out / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content if isinstance(content, str) else json.dumps(content, indent=2) + "\n", encoding="utf-8")
+            if isinstance(content, str):
+                text = content
+            elif name.startswith("scps/scp-"):
+                # Organizations keeps whitespace when a policy is uploaded with the CLI, so write what was measured.
+                text = scp_builder.compact(content) + "\n"
+            else:
+                text = json.dumps(content, indent=2) + "\n"
+            path.write_text(text, encoding="utf-8")
     if args.json:
         print(json.dumps(result, indent=2))
     else:

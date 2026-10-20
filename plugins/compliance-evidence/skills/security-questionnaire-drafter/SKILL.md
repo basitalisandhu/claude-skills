@@ -42,7 +42,7 @@ Each question gets one state:
 
 | Input | How to produce it (read-only) |
 |---|---|
-| Questionnaire | Save the customer's file as CSV (spreadsheet: File > Save as > CSV UTF-8) with a column whose header contains "Question"; or paste it into Markdown as a table or a numbered list |
+| Questionnaire | Save the customer's file as CSV (spreadsheet: File > Save as > CSV UTF-8) with a column whose header contains "Question"; or paste it into Markdown as a table or a numbered list. Semicolon or tab separated files, Excel "Unicode Text" (UTF-16) and Windows-1252 CSV are read too |
 | `--evidence` | An evidence pack from `evidence-pack-builder` (`evidence_pack.py build <exports> --out <pack>`); hashes are checked and a file that fails is never cited |
 | `--policies` | A folder with the approved policies as `.md` (split at headings) or `.txt`; export Word policies as plain text or Markdown first |
 | `--control-map` | Optional: `control_map.py <pack> --framework iso27001 --map <map.yaml> --out control-map.json` from `control-map-from-exports` |
@@ -64,6 +64,8 @@ ID,Question,Answer
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/security-questionnaire-drafter/scripts/questionnaire.py" questionnaire.csv --evidence ./pack-2026-q3 --policies ./policies --csv answers-draft.csv
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/security-questionnaire-drafter/scripts/questionnaire.py" questionnaire.csv --evidence ./pack-2026-q3 --policies ./policies --control-map control-map.json --json --redact --out draft.json
    ```
+
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/security-questionnaire-drafter/scripts/questionnaire.py tests/fixtures/questionnaire/questionnaire.csv --policies tests/fixtures/questionnaire/policies --evidence /tmp/pack` (exits 1: the cyber insurance question has no source and is left not assessable). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/questionnaire.py` from the skill folder.
 
    Options: `--min-score <n>` (default 3), `--max-cites <n>` (default 3), `--fail-on not-assessable|contradicted|none`, `--json`, `--redact`, `--out`, `--csv`.
 

@@ -27,7 +27,10 @@ Remove these permissions: with --granted (an IAM policy document, `aws iam get-p
 `aws iam get-role-policy` output), every explicitly granted action the session never called is listed for removal,
 and every wildcard grant is listed with the actions the session used under it. Without --granted the report lists
 the actions the session used successfully, as a starting point for an allow list. Read and write are classified by
-the record's readOnly field, or by verb prefix (Get, List, Describe and similar count as read).
+the record's readOnly field, or by verb prefix (Get, List, Describe and similar count as read). Actions are named as
+IAM names them: Lambda event names lose their API version suffix (UpdateFunctionCode20150331v2), S3 ListBuckets is
+s3:ListAllMyBuckets, ListObjects, ListObjectsV2 and HeadBucket are s3:ListBucket, HeadObject is s3:GetObject, and
+CloudWatch (event source monitoring) is cloudwatch.
 
 Output: Markdown (default) or --json, to stdout or --out. Access key ids, request parameters and response elements
 are never printed; secret-shaped strings are masked. --redact also replaces account ids, source IP addresses and
@@ -68,6 +71,7 @@ LOGGING_TAMPER = {
     "config:DeleteConfigurationRecorder",
     "config:DeleteDeliveryChannel",
     "securityhub:DisableSecurityHub",
+    "securityhub:DisableSecurityHubV2",
     "securityhub:BatchDisableStandards",
     "securityhub:DisableImportFindingsForProduct",
     "logs:DeleteLogGroup",
@@ -121,6 +125,8 @@ def read_text(path: Path) -> str:
 
 def records_in(path: Path) -> list[dict]:
     text = read_text(path)
+    if not text.strip():
+        raise InputError(f"{path.name}: empty file, no CloudTrail records")
     try:
         docs = [json.loads(text)]
     except json.JSONDecodeError:
@@ -139,7 +145,9 @@ def records_in(path: Path) -> list[dict]:
         elif isinstance(doc, dict) and isinstance(doc.get("Records"), list):
             out += [r for r in doc["Records"] if isinstance(r, dict)]
         elif isinstance(doc, list):
-            out += [r for r in doc if isinstance(r, dict)]
+            if not all(isinstance(r, dict) for r in doc):
+                raise InputError(f"{path.name}: a list of CloudTrail records must hold only JSON objects")
+            out += doc
         elif isinstance(doc, dict) and "eventName" in doc:
             out.append(doc)
         else:
@@ -203,8 +211,26 @@ def session_of(r: dict) -> tuple[str, str]:
     return "", str(r.get("_username") or "")
 
 
+# CloudTrail names a call by event source and event name; IAM names the permission. Where they differ (checked
+# against the AWS documentation), report the IAM action so allow lists and --granted policies compare correctly.
+EVENT_SOURCE_PREFIX = {"monitoring": "cloudwatch"}  # CloudWatch records eventSource monitoring.amazonaws.com
+EVENT_TO_ACTION = {
+    ("s3", "ListBuckets"): "ListAllMyBuckets",
+    ("s3", "ListObjects"): "ListBucket",
+    ("s3", "ListObjectsV2"): "ListBucket",
+    ("s3", "HeadBucket"): "ListBucket",
+    ("s3", "HeadObject"): "GetObject",
+}
+LAMBDA_VERSION_SUFFIX = re.compile(r"20\d{6}(v\d+)?$")  # UpdateFunctionCode20150331v2 is lambda:UpdateFunctionCode
+
+
 def action(r: dict) -> str:
-    return f"{r['eventSource'].split('.', 1)[0]}:{r['eventName']}"
+    source = r["eventSource"].split(".", 1)[0]
+    name = r["eventName"]
+    if source == "lambda":
+        name = LAMBDA_VERSION_SUFFIX.sub("", name)
+    name = EVENT_TO_ACTION.get((source, name), name)
+    return f"{EVENT_SOURCE_PREFIX.get(source, source)}:{name}"
 
 
 def is_read(r: dict) -> bool:
@@ -236,10 +262,24 @@ def load_list(path: str) -> list[str]:
     try:
         doc = json.loads(text)
     except json.JSONDecodeError:
-        return [ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().startswith("#")]
+        return check_actions([ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().startswith("#")], path)
     if isinstance(doc, list) and all(isinstance(x, str) for x in doc):
-        return doc
-    return granted_actions(doc, path)
+        return check_actions(doc, path)
+    return check_actions(granted_actions(doc, path), path)
+
+
+ACTION_RE = re.compile(r"^(\*|[a-z0-9-]+:[A-Za-z0-9*?]+)$")
+
+
+def check_actions(actions: list[str], where: str) -> list[str]:
+    """An allow list must name actions as service:Action; an empty or malformed one would flag every call."""
+    actions = [a.strip() for a in actions if a.strip()]
+    if not actions:
+        raise InputError(f"{where}: the allow list is empty")
+    bad = [a for a in actions if not ACTION_RE.match(a)]
+    if bad:
+        raise InputError(f"{where}: not IAM actions (expected service:Action): {', '.join(bad[:3])}")
+    return actions
 
 
 def policy_document(doc, where: str) -> dict:
@@ -297,8 +337,11 @@ def audit(records: list[dict], args) -> dict:
         if args.role_name and role != args.role_name:
             continue
         kept.append(r)
+    if not records:
+        raise InputError("the input holds no CloudTrail records")
     if not kept:
-        raise InputError("no records match the session filter")
+        wanted = ", ".join(f"{k} {v}" for k, v in (("--session-name", args.session_name), ("--role-name", args.role_name)) if v)
+        raise InputError(f"none of the {len(records)} records match {wanted}")
     kept.sort(key=lambda r: str(r.get("eventTime") or ""))
     by_service: dict[str, Counter] = defaultdict(Counter)
     acts: Counter = Counter()

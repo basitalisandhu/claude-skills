@@ -1,0 +1,7 @@
+{"value": [
+  {"id": "20000000-0000-0000-0000-000000000001", "appId": "00000000-0000-0000-0000-0000000000a1", "displayName": "invoice-agent", "servicePrincipalType": "Application", "accountEnabled": true, "owners": [{"userPrincipalName": "sam@example.com"}]},
+  {"id": "20000000-0000-0000-0000-000000000002", "appId": "00000000-0000-0000-0000-0000000000b2", "displayName": "old-sync-bot", "servicePrincipalType": "Application", "accountEnabled": true},
+  {"id": "20000000-0000-0000-0000-000000000003", "appId": "00000000-0000-0000-0000-0000000000c3", "displayName": "vm-runner", "servicePrincipalType": "ManagedIdentity", "tags": ["owner:platform@example.com"]},
+  {"@odata.type": "#microsoft.graph.agentIdentityBlueprintPrincipal", "id": "20000000-0000-0000-0000-000000000004", "appId": "00000000-0000-0000-0000-0000000000d4", "displayName": "ledger-agent-blueprint", "servicePrincipalType": "Application", "accountEnabled": true},
+  {"id": "20000000-0000-0000-0000-0000000000ff", "appId": "00000003-0000-0000-c000-000000000000", "displayName": "Microsoft Graph", "appOwnerOrganizationId": "f8cdef31-a31e-4b4a-93e4-5f571e91255a"}
+]}

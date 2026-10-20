@@ -9,6 +9,9 @@ with the same shape. Fields per entry: name (required), kind (mcp-server, connec
 data_classification, permissions (a list, or text separated by semicolons), review_date (the next review is due
 on this date, YYYY-MM-DD), and optionally tools (the tool names allowed) and version.
 
+File names match register names without regard to case, and a "/" in a name (an npm scope such as
+@acme/tickets-mcp) is written "__" in the file name (@acme__tickets-mcp.json).
+
 --tools DIR holds one saved MCP tools/list result per server, named <register name>.json: {"tools": [...]},
 {"result": {"tools": [...]}} or a list of such pages. --manifests DIR holds one permission manifest per entry,
 named <register name>.json, with a "permissions", "scopes" or "oauth_scopes" list.
@@ -22,7 +25,7 @@ Rules:
   invalid-classification  data_classification is not one of --classifications
   invalid-review-date     review_date is not YYYY-MM-DD
   review-overdue          review_date is before --as-of
-  duplicate-name          two entries share a name
+  duplicate-name          two entries share a name (compared without regard to case or surrounding spaces)
   unregistered-server     a tool listing exists for a name the register does not hold (only with --tools)
   not-present             a registered mcp-server has no tool listing, so it may be gone (only with --tools)
   unregistered-tool       the listing has a tool the entry's tools list does not allow
@@ -259,8 +262,26 @@ def manifest_permissions(data) -> list[str]:
 # ---- checks ------------------------------------------------------------------------------------------------------
 
 
+def file_key(name: str) -> str:
+    """How a register name and a listing or manifest file stem are matched."""
+    return name.strip().lower().replace("/", "__")
+
+
+def keyed(folder: dict | None) -> dict | None:
+    if folder is None:
+        return None
+    out: dict = {}
+    for stem, value in folder.items():
+        k = file_key(stem)
+        if k in out:
+            raise InputError(f"two files map to the same register name {stem!r}; keep one")
+        out[k] = (stem, value)
+    return out
+
+
 def check(entries: list[dict], listings, manifests, as_of: date, classes: set[str]) -> list[dict]:
     findings: list[dict] = []
+    by_key, man_by_key = keyed(listings), keyed(manifests)
 
     def add(rule: str, name: str, detail: str, line=None) -> None:
         findings.append({"rule": rule, "name": name, "detail": detail, "line": line})
@@ -268,8 +289,9 @@ def check(entries: list[dict], listings, manifests, as_of: date, classes: set[st
     seen: dict[str, int] = {}
     for e in entries:
         name, line = e["name"], e["line"]
-        seen[name] = seen.get(name, 0) + 1
-        if seen[name] == 2:
+        norm = name.strip().lower()
+        seen[norm] = seen.get(norm, 0) + 1
+        if seen[norm] == 2:
             add("duplicate-name", name, "more than one entry has this name", line)
         for field, rule in REQUIRED.items():
             if not e[field]:
@@ -278,15 +300,17 @@ def check(entries: list[dict], listings, manifests, as_of: date, classes: set[st
             add("invalid-classification", name, f"{e['data_classification']!r} is not one of {sorted(classes)}", line)
         if e["review_date"]:
             try:
-                due = date.fromisoformat(e["review_date"])
+                raw = e["review_date"]
+                # a spreadsheet often saves 2026-12-01T00:00:00 or "2026-12-01 00:00:00"; the date part counts
+                due = date.fromisoformat(raw[:10] if re.match(r"^\d{4}-\d{2}-\d{2}[T ]\d", raw) else raw)
             except ValueError:
                 add("invalid-review-date", name, f"{e['review_date']!r} is not YYYY-MM-DD", line)
             else:
                 if due < as_of:
                     add("review-overdue", name, f"review was due {due} ({(as_of - due).days} days ago)", line)
-        if listings is not None:
-            if name in listings:
-                offered = set(listings[name])
+        if by_key is not None:
+            if file_key(name) in by_key:
+                offered = set(by_key[file_key(name)][1])
                 if e["tools"] is not None:
                     for t in sorted(offered - set(e["tools"])):
                         add("unregistered-tool", name, f"tool {t!r} is offered but not in the register", line)
@@ -294,15 +318,16 @@ def check(entries: list[dict], listings, manifests, as_of: date, classes: set[st
                         add("tool-gone", name, f"tool {t!r} is in the register but no longer offered", line)
             elif e["kind"] in ("mcp-server", "mcp", ""):
                 add("not-present", name, "registered, but there is no saved tool listing for it", line)
-        if manifests is not None and name in manifests:
-            held, declared = set(manifests[name]), set(e["permissions"])
+        if man_by_key is not None and file_key(name) in man_by_key:
+            held, declared = set(man_by_key[file_key(name)][1]), set(e["permissions"])
             for p in sorted(held - declared):
                 add("undeclared-permission", name, f"manifest holds {p!r}, the register does not record it", line)
             for p in sorted(declared - held):
                 add("permission-not-in-manifest", name, f"register records {p!r}, the manifest does not hold it", line)
-    names = {e["name"] for e in entries}
-    for server in sorted(set(listings or {}) - names):
-        add("unregistered-server", server, f"a tool listing exists with {len(listings[server])} tool(s), but no entry")
+    names = {file_key(e["name"]) for e in entries}
+    for k in sorted(set(by_key or {}) - names):
+        stem, tools = by_key[k]
+        add("unregistered-server", stem, f"a tool listing exists with {len(tools)} tool(s), but no entry")
     return findings
 
 
@@ -363,6 +388,8 @@ def main(argv: list[str] | None = None) -> int:
         listings = load_folder(args.tools, tool_names)
         manifests = load_folder(args.manifests, manifest_permissions)
         classes = {c.strip().lower() for c in args.classifications.split(",") if c.strip()}
+        if not classes:
+            raise InputError("--classifications needs at least one value")
         findings = check(entries, listings, manifests, as_of, classes)
     except InputError as exc:
         print(f"connector_register.py: {exc}", file=sys.stderr)
@@ -376,7 +403,11 @@ def main(argv: list[str] | None = None) -> int:
     }
     text = json.dumps(doc, indent=2) + "\n" if args.json else render(doc)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"connector_register.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(text)
     return 1 if findings else 0

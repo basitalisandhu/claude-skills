@@ -21,7 +21,7 @@
 <p class="crumbs"><a href="../../index.html">Home</a> / security-basics</p>
 <h1>Security Basics</h1>
 <p class="lede">Seven lightweight security skills for everyday development: secrets hygiene scan, npm audit and pip-audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a security review of a diff. Agent and MCP security lives in the agent-security-skills marketplace.</p>
-<p class="meta">Plugin <code>security-basics</code>, version 0.3.0, 7 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-16T05:53:03Z">2026-10-16</time>.</p>
+<p class="meta">Plugin <code>security-basics</code>, version 0.3.1, 7 skills, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Synced <time datetime="2026-10-20T09:15:59Z">2026-10-20</time>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -43,6 +43,17 @@ python3 install.py --user --only security-basics</code></pre>
 <h3 id="skills">Skills</h3>
 <table><thead><tr><th>Skill</th><th>Triggers on</th><th>Produces</th></tr></thead><tbody><tr><td><code>secrets-hygiene</code></td><td>check for secrets, pre-commit, after a leak</td><td><code>secrets_scan.py</code> redacted findings, baseline, rotation steps</td></tr><tr><td><code>dependency-audit-reader</code></td><td>npm audit or pip-audit fails CI</td><td><code>audit_reader.py</code> ranked packages, upgrade and override plan</td></tr><tr><td><code>http-security-headers</code></td><td>are our headers secure, scanner finding</td><td><code>headers_check.py</code> grade and the server configuration</td></tr><tr><td><code>jwt-inspector</code></td><td>what is in this token, is our JWT setup safe</td><td><code>jwt_inspect.py</code> decoded claims (unverified) and findings</td></tr><tr><td><code>cors-review</code></td><td>CORS error, allow the frontend, permissive policy</td><td>checklist findings and the allowlist configuration</td></tr><tr><td><code>auth-flow-review</code></td><td>design login, review auth, account takeover</td><td>per-flow findings with severity and corrected flows</td></tr><tr><td><code>diff-security-review</code></td><td>is this PR safe security-wise, pre-merge security pass</td><td><code>diff_security_scan.py</code> findings on added lines, read with the code around them</td></tr></tbody></table>
 <p>Tests for every script live in the repository&#x27;s <code>tests/</code> directory; run <code>python3 -m pytest -q</code> at the repository root.</p>
+<h3 id="sample-output">Sample output</h3>
+<p><code>dependency-audit-reader</code> on an <code>npm audit --json</code> report (npm 7 or later) with a direct, a transitive and an unfixable advisory:</p>
+<pre><code class="language-text">$ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/dependency-audit-reader/scripts/audit_reader.py&quot; audit.json
+dependency-audit-reader 0.1.0: npm: 3 vulnerable packages critical=2, high=1; 2 fixable, 1 without a fix
+severity  package                      installed        direct fix                      advisories
+critical  minimist                     &lt;0.2.4           no     no                       1097, GHSA-xvch-5gv4-984h  Prototype Pollution in minimist
+critical  mkdirp                       0.4.1 - 0.5.1    yes    yes                      via minimist
+high      lodash                       &lt;4.17.21         yes    lodash@4.17.21           1096, GHSA-35jh-r3h4-6jhm  Command Injection in lodash
+upgrade first: minimist, mkdirp, lodash
+exit 1</code></pre>
+<p><code>--ignore GHSA-35jh-r3h4-6jhm</code> (or the npm source number <code>1096</code>) drops the lodash advisory; a package leaves the list only when every advisory on it is ignored.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>
 </body>

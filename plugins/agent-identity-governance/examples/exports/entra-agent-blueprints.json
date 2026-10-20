@@ -1,0 +1,7 @@
+{"value": [
+  {"@odata.type": "#microsoft.graph.agentIdentityBlueprint", "id": "30000000-0000-0000-0000-000000000001", "appId": "00000000-0000-0000-0000-0000000000d4",
+   "displayName": "ledger-agent-blueprint", "createdDateTime": "2026-03-01T00:00:00Z",
+   "sponsors": [{"userPrincipalName": "kim@example.com"}],
+   "passwordCredentials": [{"keyId": "33333333-0000-0000-0000-00000000cafe", "startDateTime": "2026-03-01T00:00:00Z", "endDateTime": "2027-03-01T00:00:00Z"}],
+   "keyCredentials": []}
+]}

@@ -199,10 +199,18 @@ def main(argv: list[str] | None = None) -> int:
     findings: list[dict] = []
     parse_errors: list[str] = []
     for f in files:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        if "\x00" in text:
+            parse_errors.append(f"{f}: binary file, not a workflow")
+            continue
         try:
-            doc = load(f.read_text(encoding="utf-8", errors="replace"))
+            doc = load(text)
         except YAMLError as exc:
             parse_errors.append(f"{f}: {exc}")
+            continue
+        if not isinstance(doc, dict):
+            shape = {list: "a list", str: "plain text", type(None): "empty"}.get(type(doc), type(doc).__name__)
+            parse_errors.append(f"{f}: not a workflow: the top level is {shape}, expected a mapping with name, on and jobs")
             continue
         findings += lint(f, doc)
     order = {s: i for i, s in enumerate(SEVERITIES)}

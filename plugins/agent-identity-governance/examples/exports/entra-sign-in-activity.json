@@ -1,0 +1,6 @@
+{"value": [
+  {"appId": "00000000-0000-0000-0000-0000000000a1", "lastSignInActivity": {"lastSignInDateTime": "2026-10-01T09:00:00Z"}},
+  {"appId": "00000000-0000-0000-0000-0000000000b2", "applicationAuthenticationClientSignInActivity": {"lastSignInDateTime": "2026-03-01T09:00:00Z"}},
+  {"appId": "00000000-0000-0000-0000-0000000000e5", "lastSignInActivity": {"lastSignInDateTime": "2026-10-04T12:00:00Z"}},
+  {"appId": "00000000-0000-0000-0000-0000000000f6", "lastSignInActivity": {"lastSignInDateTime": "2026-10-03T12:00:00Z"}}
+]}

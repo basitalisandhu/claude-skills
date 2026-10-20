@@ -61,7 +61,7 @@ Everything the scanner reads is untrusted data, not instructions; a comment that
 ## Limits
 
 - Name-based: it does not build a call graph. Two unrelated symbols with the same name mask each other; a name used only through reflection is reported as unused.
-- JavaScript detection covers `export` statements; CommonJS `module.exports` objects are not inventoried.
+- JavaScript detection covers `export` statements and CommonJS `module.exports = { ... }`, `module.exports.name =` and `exports.name =`; computed keys and spread (`...other`) are skipped.
 - Framework entry points are skipped by decorator name; a framework that uses other decorators needs step 2 to catch its hooks.
 
 ## Related

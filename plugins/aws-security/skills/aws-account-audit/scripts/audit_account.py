@@ -45,7 +45,9 @@ Checks (id, default severity):
   EBS-DEFAULT-ENCRYPTION medium    EBS encryption by default is off in a region
   IAM-PASSWORD-POLICY    medium    no account password policy, or a weak one
 
-A check whose input file is absent is listed under "not_evaluated", never reported as passing.
+A check whose input file is absent is listed under "not_evaluated", never reported as passing. A file that is
+present but is not the expected CLI output (not a JSON object, or without the top-level key that command returns)
+stops the run with exit 2 instead of passing silently.
 
 Exit codes: 0 no finding at or above --fail-on, 1 findings at or above --fail-on, 2 bad input.
 """
@@ -64,6 +66,24 @@ RANK = {s: i for i, s in enumerate(SEVERITIES)}
 OPEN_CIDRS = {"0.0.0.0/0", "::/0"}
 ADMIN_PORTS = {22: "SSH", 3389: "RDP"}
 PAB_KEYS = ("BlockPublicAcls", "IgnorePublicAcls", "BlockPublicPolicy", "RestrictPublicBuckets")
+
+
+# Top-level keys each saved file must carry, and whether {} is a valid answer ("none is set" or "not enabled").
+EXPECTED_KEYS: dict[str, tuple[tuple[str, ...], bool]] = {
+    "account-summary.json": (("SummaryMap",), False),
+    "password-policy.json": (("PasswordPolicy",), True),
+    "iam-authorization-details.json": (("UserDetailList", "GroupDetailList", "RoleDetailList", "Policies"), False),
+    "cloudtrail-trails.json": (("trailList",), False),
+    "cloudtrail-status.json": (("IsLogging",), False),
+    "s3control-public-access-block.json": (("PublicAccessBlockConfiguration",), True),
+    "s3-buckets.json": (("Buckets",), False),
+    "guardduty-detectors.json": (("DetectorIds",), False),
+    "securityhub-hub.json": (("HubArn",), True),
+    "ec2-security-groups.json": (("SecurityGroups",), False),
+    "ec2-vpcs.json": (("Vpcs",), False),
+    "ec2-network-interfaces.json": (("NetworkInterfaces",), False),
+    "ec2-ebs-encryption-default.json": (("EbsEncryptionByDefault",), False),
+}
 
 
 class InputError(Exception):
@@ -129,7 +149,21 @@ class Audit:
         path = (base or self.folder) / name
         if not path.exists():
             return None
-        return load_json(path)
+        data = load_json(path)
+        if not isinstance(data, dict):
+            raise InputError(f"{path}: expected a JSON object (the saved CLI output), got {type(data).__name__}")
+        stem = name
+        if name.startswith("cloudtrail-status-"):
+            stem = "cloudtrail-status.json"
+        elif name.startswith("s3-public-access-block/"):
+            stem = "s3control-public-access-block.json"
+        shape = EXPECTED_KEYS.get(stem)
+        if shape:
+            keys, may_be_empty = shape
+            if not (may_be_empty and not data) and not any(k in data for k in keys):
+                raise InputError(f"{path}: not the expected CLI output (no {' or '.join(keys)} key); "
+                                 "see --help for the command that produces it")
+        return data
 
     def skip(self, check: str, missing: str, region: str = "") -> None:
         where = f" ({region})" if region else ""
@@ -145,7 +179,9 @@ class Audit:
             return None
         with path.open(newline="", encoding="utf-8") as fh:
             rows = list(csv.DictReader(fh))
-        if rows and "user" not in rows[0]:
+        if not rows:
+            raise InputError(f"{path}: empty; a credential report always has at least the <root_account> row")
+        if "user" not in rows[0]:
             raise InputError(f"{path}: not a credential report (no 'user' column)")
         return rows
 
@@ -309,7 +345,7 @@ class Audit:
             if not path.exists():
                 self.not_evaluated.append(f"S3-BUCKET-PAB: s3-public-access-block/{name}.json not found")
                 continue
-            cfg = (load_json(path).get("PublicAccessBlockConfiguration")) or {}
+            cfg = (self.file(f"s3-public-access-block/{name}.json").get("PublicAccessBlockConfiguration")) or {}
             off = [k for k in PAB_KEYS if not cfg.get(k)]
             if off:
                 sev = "low" if account_full else "medium"

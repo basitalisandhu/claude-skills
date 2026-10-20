@@ -1,6 +1,6 @@
 ---
 name: agent-threat-model
-description: "Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", for its attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist)."
+description: "Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", \"what could go wrong with this agent?\", to map its trust boundaries and attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist)."
 license: MIT
 compatibility: Python 3.11 or newer. The atm CLI (pipx or uvx; from PyPI as agent-threat-model, or from git+https://github.com/basitalisandhu/agent-threat-model while PyPI publication is pending) for validation and analysis; the draft works without it.
 metadata:
@@ -29,6 +29,8 @@ The scanner reads source and configuration, and you open files to correct the dr
    ```bash
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-threat-model/scripts/scan_agent_stack.py" . --out system.yaml
    ```
+
+   From a copy of the skill folder without the plugin system, the script is `scripts/scan_agent_stack.py` inside it. Exit codes: 0 draft written, 2 the root is not a directory or `--out` cannot be written. A malformed `.mcp.json` (or one server entry in it) is reported on stderr and skipped, and a walk that stops at the file limit says so; add what is missing by hand.
 
    The scanner detects frameworks and model providers, tools by capability (shell, messaging, database, repository writes, cloud APIs, payments, file deletion, URL fetch, each MCP server), input channels (chat, e-mail, web, documents, tickets, repository issues, calendar, rules files, retrieval), data stores, credentials, and signals of approvals, sandboxing, limits, audit, kill switches and a credential broker. Every entry's `description` names the files it came from. Ids are unique and the references resolve, so the draft already passes `atm validate`.
 

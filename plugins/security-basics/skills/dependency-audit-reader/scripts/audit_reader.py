@@ -18,11 +18,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 VERSION = "0.1.0"
 SEVERITIES = ["critical", "high", "moderate", "low", "info"]
+GHSA_RE = re.compile(r"GHSA(?:-[0-9a-z]{4}){3}", re.IGNORECASE)
 SEV_ALIAS = {"medium": "moderate", "important": "high", "unknown": "info", "none": "info", "informational": "info", "warning": "moderate", "error": "high"}
 
 
@@ -68,10 +70,16 @@ def detect(doc) -> str | None:
 def parse_npm7(doc: dict) -> list[dict]:
     out = []
     for name, v in (doc.get("vulnerabilities") or {}).items():
-        ids, titles, urls = [], [], []
+        ids, titles, urls, groups = [], [], [], []
         for via in v.get("via") or []:
             if isinstance(via, dict):
-                ids.append(str(via.get("source") or via.get("url") or via.get("name")))
+                group = [str(via.get("source") or via.get("url") or via.get("name"))]
+                ghsa = GHSA_RE.search(str(via.get("url") or ""))
+                if ghsa:  # npm v7 keys advisories by a numeric source; the GHSA id people put in ignore lists is in the url
+                    group.append(ghsa.group(0))
+                group = [i for i in group if i and i != "None"]
+                ids.extend(i for i in group if i not in ids)
+                groups.append(group)
                 titles.append(via.get("title", ""))
                 if via.get("url"):
                     urls.append(via["url"])
@@ -81,8 +89,9 @@ def parse_npm7(doc: dict) -> list[dict]:
         else:
             fix_text = "yes" if fix else "no"
         out.append({"package": name, "version": v.get("range", ""), "severity": norm_sev(v.get("severity")), "direct": bool(v.get("isDirect")),
-                    "fix": fix_text, "fixable": bool(fix), "ids": [i for i in ids if i and i != "None"], "titles": [t for t in titles if t], "urls": urls,
-                    "dependents": [str(e) for e in (v.get("effects") or [])]})
+                    "fix": fix_text, "fixable": bool(fix), "ids": ids, "titles": [t for t in titles if t], "urls": urls,
+                    "dependents": [str(e) for e in (v.get("effects") or [])], "_groups": [g for g in groups if g],
+                    "via": [str(x) for x in (v.get("via") or []) if isinstance(x, str)]})
     return out
 
 
@@ -93,9 +102,10 @@ def parse_npm6(doc: dict) -> list[dict]:
         versions = sorted({f.get("version", "") for f in findings})
         direct = any(len(p.split(">")) == 1 for f in findings for p in f.get("paths") or [])
         patched = adv.get("patched_versions") or "<0.0.0"
+        ids6 = [str(aid)] + ([adv["github_advisory_id"]] if adv.get("github_advisory_id") else []) + ([adv["cves"][0]] if adv.get("cves") else [])
         out.append({"package": adv.get("module_name", "?"), "version": ", ".join(v for v in versions if v), "severity": norm_sev(adv.get("severity")), "direct": direct,
-                    "fix": patched if patched != "<0.0.0" else "no", "fixable": patched != "<0.0.0", "ids": [str(aid)] + ([adv["cves"][0]] if adv.get("cves") else []),
-                    "titles": [adv.get("title", "")], "urls": [adv["url"]] if adv.get("url") else [], "dependents": []})
+                    "fix": patched if patched != "<0.0.0" else "no", "fixable": patched != "<0.0.0", "ids": ids6,
+                    "titles": [adv.get("title", "")], "urls": [adv["url"]] if adv.get("url") else [], "dependents": [], "_groups": [ids6]})
     return out
 
 
@@ -125,7 +135,8 @@ def parse_pip_audit(doc) -> list[dict]:
         out.append({"package": d.get("name", "?"), "version": d.get("version", ""), "severity": norm_sev(max((v.get("severity") or "info" for v in vulns), key=lambda s: -SEVERITIES.index(norm_sev(s)))) if any(v.get("severity") for v in vulns) else "info",
                     "direct": None, "fix": ", ".join(fixes) if fixes else "no", "fixable": bool(fixes),
                     "ids": [v.get("id", "") for v in vulns] + [a for v in vulns for a in (v.get("aliases") or [])],
-                    "titles": [(v.get("description") or "")[:120] for v in vulns], "urls": [], "dependents": []})
+                    "titles": [(v.get("description") or "")[:120] for v in vulns], "urls": [], "dependents": [],
+                    "_groups": [[v.get("id", "")] + list(v.get("aliases") or []) for v in vulns]})
     return out
 
 
@@ -161,33 +172,63 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--fail-on", choices=SEVERITIES, default="high")
     ap.add_argument("--ignore", action="append", default=[], metavar="ID", help="advisory id to ignore (repeatable)")
     args = ap.parse_args(argv)
+    name = "standard input" if args.file == "-" else args.file
+    if args.file != "-" and not Path(args.file).is_file():
+        print(f"error: audit file not found: {args.file}", file=sys.stderr)
+        return 2
     try:
         text = sys.stdin.read() if args.file == "-" else Path(args.file).read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        print(f"error: {name} is not UTF-8 text; pass the JSON output of the audit tool", file=sys.stderr)
+        return 2
+    except OSError as exc:
+        print(f"error: cannot read {name}: {exc}", file=sys.stderr)
+        return 2
+    if not text.strip():
+        print(f"error: {name} is empty; capture the report with --json (npm, yarn, cargo) or -f json (pip-audit)", file=sys.stderr)
+        return 2
+    try:
         doc = load(text)
-    except (OSError, json.JSONDecodeError) as exc:
-        print(f"error: cannot read audit JSON: {exc}", file=sys.stderr)
+    except json.JSONDecodeError as exc:
+        print(f"error: {name} is not audit JSON: {exc}", file=sys.stderr)
         return 2
     fmt = args.format or detect(doc)
     if fmt is None:
         print("error: unrecognised audit format; pass --format", file=sys.stderr)
         return 2
-    items = PARSERS[fmt](doc)
-    ignored = set(args.ignore)
-    items = [i for i in items if not (set(i["ids"]) & ignored) or len(set(i["ids"]) - ignored) > 0 and not set(i["ids"]) <= ignored]
+    try:
+        items = PARSERS[fmt](doc)
+    except (AttributeError, TypeError) as exc:  # --format forced onto a document of another shape
+        print(f"error: {name} does not have the shape of a {fmt} report ({exc}); drop --format to auto-detect", file=sys.stderr)
+        return 2
+    ignored = {i.lower() for i in args.ignore}
+    total = len(items)
+    # An advisory is one group of ids (a source number and its GHSA, or an id and its aliases); naming any id in the group
+    # ignores that advisory, and a package drops out only when every advisory on it is ignored.
+    def kept(item: dict) -> bool:
+        groups = item.get("_groups") or [[x] for x in item["ids"]]
+        return not groups or any(not ({x.lower() for x in g} & ignored) for g in groups)
+
+    items = [i for i in items if kept(i)]
+    for i in items:
+        i.pop("_groups", None)
     order = {s: i for i, s in enumerate(SEVERITIES)}
     items.sort(key=lambda i: (order[i["severity"]], -len(i["ids"]), i["package"]))
     counts = {s: sum(1 for i in items if i["severity"] == s) for s in SEVERITIES}
     fixable = [i for i in items if i["fixable"]]
     report = {"version": VERSION, "format": fmt, "vulnerable_packages": len(items), "counts": counts, "fixable": len(fixable), "unfixable": len(items) - len(fixable),
-              "direct": sum(1 for i in items if i["direct"]), "upgrade_first": [i["package"] for i in items[:5]], "items": items, "fail_on": args.fail_on}
+              "direct": sum(1 for i in items if i["direct"]), "upgrade_first": [i["package"] for i in items[:5]], "items": items, "fail_on": args.fail_on,
+              "ignored_packages": total - len(items)}
     if args.json:
         print(json.dumps(report, indent=2))
     else:
-        print(f"dependency-audit-reader {VERSION}: {fmt}: {len(items)} vulnerable packages " + ", ".join(f"{s}={counts[s]}" for s in SEVERITIES if counts[s]) + f"; {len(fixable)} fixable, {len(items) - len(fixable)} without a fix")
+        by_sev = ", ".join(f"{s}={counts[s]}" for s in SEVERITIES if counts[s])
+        print(f"dependency-audit-reader {VERSION}: {fmt}: {len(items)} vulnerable packages" + (f" {by_sev}" if by_sev else "") + f"; {len(fixable)} fixable, {len(items) - len(fixable)} without a fix"
+              + (f"; {total - len(items)} ignored" if total - len(items) else ""))
         print(f"{'severity':<9} {'package':<28} {'installed':<16} {'direct':<6} {'fix':<24} advisories")
         for i in items:
             direct = {True: "yes", False: "no", None: "?"}[i["direct"]]
-            print(f"{i['severity']:<9} {i['package'][:28]:<28} {str(i['version'])[:16]:<16} {direct:<6} {i['fix'][:24]:<24} {', '.join(i['ids'][:3])}  {(i['titles'][0] if i['titles'] else '')[:60]}")
+            print(f"{i['severity']:<9} {i['package'][:28]:<28} {str(i['version'])[:16]:<16} {direct:<6} {i['fix'][:24]:<24} {', '.join(i['ids'][:3]) or ('via ' + ', '.join(i.get('via') or ['?']))}  {(i['titles'][0] if i['titles'] else '')[:60]}".rstrip())
         if items:
             print("upgrade first: " + ", ".join(report["upgrade_first"]))
     worst = min((order[i["severity"]] for i in items), default=99)

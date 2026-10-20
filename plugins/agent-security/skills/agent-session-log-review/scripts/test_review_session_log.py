@@ -159,6 +159,33 @@ class MisuseTests(unittest.TestCase):
         self.assertEqual(retry["event"], 4)
         self.assertIn("/etc/app/config.yml", retry["evidence"])
 
+    def test_denied_relative_path_retried_as_absolute(self):
+        recs = [
+            user("Fix the failing test", 0),
+            call("Bash", {"command": "cat .env"}, "c1", 1),
+            result("c1", "Permission denied by hook", 2, error=True),
+            call("Read", {"file_path": "/work/app/.env"}, "c2", 3),
+            result("c2", "DEBUG=1", 4),
+        ]
+        rc, out, _ = run(recs, "--root", "/work/app", "--format", "json")
+        flags = [f for f in json.loads(out)["flags"] if f["id"] == "TOOL-DENIED-RETRY"]
+        self.assertEqual(len(flags), 1, out)
+        self.assertIn("/work/app/.env", flags[0]["evidence"])
+        rc, out, _ = run(recs, "--format", "json")  # no root: matched by file name
+        flags = [f for f in json.loads(out)["flags"] if f["id"] == "TOOL-DENIED-RETRY"]
+        self.assertEqual(len(flags), 1, out)
+        rc, out, _ = run(recs[:3] + [call("Read", {"file_path": "/work/app/README.md"}, "c2", 3)], "--root", "/work/app", "--format", "json")
+        self.assertFalse([f for f in json.loads(out)["flags"] if f["id"] == "TOOL-DENIED-RETRY"])
+
+    def test_bundled_example_session(self):
+        example = HERE.parent / "references" / "example-session.jsonl"
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            rc = rsl.main([str(example), "--root", "/work/widgets", "--allow-host", "github.com", "--format", "json"])
+        self.assertEqual(rc, 1)
+        ids = sorted(f["id"] for f in json.loads(out.getvalue())["flags"])
+        self.assertEqual(ids, ["EGRESS-NETWORK", "EGRESS-SECRET", "INJ-PROVENANCE", "TOOL-DENIED-RETRY"])
+
     def test_destructive_shapes_and_writes_outside_root(self):
         log = [
             user("Tidy up", 1),

@@ -268,6 +268,10 @@ def review(folder: Path, args, as_of: datetime) -> dict:
     blueprint_by_id = {str(b.get("appId") or b.get("id")): b for b in blueprints}
     for b in blueprints:
         blueprint_by_id[str(b.get("id"))] = b
+        # the blueprint's own service principal holds the permissions its agent identities inherit
+        principal = next((sp for sp in sps if str(sp.get("appId") or "") == str(b.get("appId") or "")), None)
+        if principal is not None and principal.get("id"):
+            b["_principal_id"] = str(principal["id"])
     last_seen: dict[str, datetime] = {}
     for row in activity_rows or []:
         seen = [
@@ -278,6 +282,12 @@ def review(folder: Path, args, as_of: datetime) -> dict:
         seen = [s for s in seen if s]
         if seen:
             last_seen[str(row.get("appId"))] = max(seen)
+    for b in blueprints:
+        b["_agents"] = [
+            str(a.get("appId") or "")
+            for a in [*agent_objs, *(sp for sp in sps if is_agent_type(sp))]
+            if str(a.get("agentIdentityBlueprintId") or "") == str(b.get("appId") or "")
+        ]
     by_object = {str(sp.get("id")): sp for sp in sps}
     for a in agent_objs:
         by_object.setdefault(str(a.get("id")), a)
@@ -288,9 +298,13 @@ def review(folder: Path, args, as_of: datetime) -> dict:
         if str(sp.get("appOwnerOrganizationId") or "") in MICROSOFT_TENANTS:
             continue
         app_id = str(sp.get("appId") or "")
-        app = apps.get(app_id, {})
+        app = apps.get(app_id) or blueprint_by_id.get(app_id) or {}
         reasons = []
-        if obj_id in agent_ids or is_agent_type(sp):
+        if "blueprint" in str(sp.get("@odata.type", "")).lower() or (
+            app_id in blueprint_by_id and obj_id not in agent_ids
+        ):
+            reasons.append("agent blueprint principal")
+        elif obj_id in agent_ids or is_agent_type(sp):
             reasons.append("agent identity object")
         name = str(sp.get("displayName") or app.get("displayName") or app_id)
         if name_re.search(name):
@@ -358,9 +372,20 @@ def review_one(
     blueprint_ref = str(sp.get("agentIdentityBlueprintId") or "")
     blueprint = blueprint_by_id.get(blueprint_ref) if blueprint_ref else None
     owners = sorted({who(o) for o in (sp.get("owners") or []) + (app.get("owners") or [])} - {""})
-    sponsors = sorted({who(o) for o in (sp.get("sponsors") or [])} - {""})
+    sponsors = sorted({who(o) for o in (sp.get("sponsors") or []) + (app.get("sponsors") or [])} - {""})
     if not owners and not sponsors:
-        add("no-owner", "MEDIUM", "no owner or sponsor recorded")
+        bp = blueprint or {}
+        parent = sorted({who(o) for o in (bp.get("sponsors") or []) + (bp.get("owners") or [])} - {""})
+        if parent:
+            add(
+                "no-owner",
+                "MEDIUM",
+                "no owner or sponsor on this agent identity; its blueprint's are "
+                + ", ".join(parent)
+                + " (record who answers for this agent itself)",
+            )
+        else:
+            add("no-owner", "MEDIUM", "no owner or sponsor recorded")
     app_perms, delegated = [], []
     for a in assignments or []:
         if str(a.get("principalId")) != obj_id:
@@ -371,6 +396,20 @@ def review_one(
         app_perms.append({"resource": resource, "permission": value, "high_risk": risky})
         if risky:
             add("high-risk-application-permission", "HIGH", f"{resource}: {value} (application)")
+    inherited_from = (blueprint or {}).get("_principal_id")
+    for a in (assignments or []) if inherited_from else []:
+        if str(a.get("principalId")) != inherited_from:
+            continue
+        value = role_names.get((str(a.get("resourceId")), str(a.get("appRoleId")))) or str(a.get("appRoleId"))
+        resource = a.get("resourceDisplayName") or res_names.get(str(a.get("resourceId"))) or a.get("resourceId")
+        risky = value in HIGH_RISK
+        app_perms.append({"resource": resource, "permission": value, "high_risk": risky, "inherited": True})
+        if risky:
+            add(
+                "high-risk-application-permission",
+                "HIGH",
+                f"{resource}: {value} (application, inherited from blueprint {blueprint.get('displayName')})",
+            )
     for g in grants or []:
         if str(g.get("clientId")) != obj_id:
             continue
@@ -399,7 +438,8 @@ def review_one(
             c["status"] = "expiring"
             add("credential-expiring", "MEDIUM", f"{c['kind']} {c['key_id']} on the {c['on']} ends {end.date()}")
         if c["kind"] == "client-secret" and start and end and (end - start).days > args.max_secret_days:
-            add("long-lived-secret", "MEDIUM", f"secret {c['key_id']} is valid for {(end - start).days} days")
+            shared = " (on the blueprint, shared by its agent identities)" if c["on"] == "blueprint" else ""
+            add("long-lived-secret", "MEDIUM", f"secret {c['key_id']} is valid for {(end - start).days} days{shared}")
         c.pop("start")
     uris = redirect_uris(app)
     for u in uris:
@@ -415,13 +455,21 @@ def review_one(
     elif ca == "report-only":
         add("ca-report-only", "LOW", "only report-only policies: " + ", ".join(ca_policies))
     last = last_seen.get(app_id)
+    if "agent blueprint principal" in reasons and app.get("_agents"):
+        # the blueprint does not sign in itself; its agent identities do, with its credentials
+        uses = [last_seen[a] for a in app["_agents"] if a in last_seen] + ([last] if last else [])
+        last = max(uses) if uses else None
     if activity_known and (not last or (as_of - last).days > args.dormant_days):
         add("dormant", "MEDIUM", f"last sign-in {last.date() if last else 'not recorded'}")
     return {
         "display_name": str(sp.get("displayName") or app.get("displayName") or app_id),
         "app_id": app_id,
         "service_principal_id": obj_id,
-        "type": "agent identity" if "agent identity object" in reasons else str(sp.get("servicePrincipalType") or ""),
+        "type": "agent identity"
+        if "agent identity object" in reasons
+        else (
+            "agent blueprint" if "agent blueprint principal" in reasons else str(sp.get("servicePrincipalType") or "")
+        ),
         "selected_because": reasons,
         "enabled": sp.get("accountEnabled", True) is not False,
         "blueprint": str(blueprint.get("displayName")) if blueprint else (blueprint_ref or None),
@@ -459,7 +507,8 @@ def render(doc: dict) -> str:
     for r in doc["reviewed"]:
         lines += ["", f"## {r['display_name']} (`{r['app_id']}`)", ""]
         perms = [
-            f"{p['resource']}: {'**' + p['permission'] + '**' if p['high_risk'] else p['permission']} (application)"
+            f"{p['resource']}: {'**' + p['permission'] + '**' if p['high_risk'] else p['permission']} "
+            f"({'application, inherited from the blueprint' if p.get('inherited') else 'application'})"
             for p in r["application_permissions"]
         ] + [
             f"{p['resource']}: {'**' + p['permission'] + '**' if p['high_risk'] else p['permission']} "
@@ -517,7 +566,11 @@ def main(argv: list[str] | None = None) -> int:
         doc = redact(doc)
     text = json.dumps(doc, indent=2) + "\n" if args.json else render(doc)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"entra_agent_review.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(text)
     floor = SEVERITIES.index(args.fail_on)

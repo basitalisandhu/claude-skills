@@ -15,8 +15,15 @@ Rules:
   * a rule in deny is removed from ask and allow, and a rule in ask is removed from allow, because Claude Code
     evaluates deny, then ask, then allow; each removal is a finding (conflict-allow-deny, conflict-ask-deny,
     conflict-allow-ask) so a person sees what was asked for twice;
-  * broad-allow: an allow rule that covers a whole tool or server (Bash, Bash(*), Read(**), Edit(/**), WebFetch,
-    WebFetch(domain:*), mcp__*, mcp__server, mcp__server__*);
+  * broad-allow: an allow rule that covers a whole tool or server (Bash, Bash(*), PowerShell, PowerShell(*), Read(**),
+    Edit(/**), WebFetch, WebFetch(domain:*), mcp__server, mcp__server__*);
+  * allow-glob-ignored: an allow rule with * in the tool name and no literal mcp__<server>__ prefix ("*", "B*",
+    "mcp__*"); Claude Code skips it with a warning and it approves nothing, so it is dropped. Deny and ask rules
+    may glob the tool name ("*" denies every tool, "mcp__*" every MCP tool);
+  * wildcard-before-subcommand: a Bash or PowerShell allow rule whose * stands for the program or the subcommand
+    (Bash(* --version), Bash(git * main)), which Claude Code warns about at startup;
+  * colon-star-literal: :* anywhere but the end of a Bash or PowerShell pattern (Bash(git:* push)), where the colon
+    is literal and the rule does not match what it seems to;
   * malformed-rule: text that is not Tool or Tool(specifier); it is dropped;
   * deny-removed: with --replace, a deny rule in the current file that the merged list no longer has.
 The merged block lists deny, then ask, then allow, each sorted, so diffs stay stable.
@@ -37,9 +44,13 @@ import sys
 from pathlib import Path
 
 LISTS = ("deny", "ask", "allow")
-RULE_RE = re.compile(r"^(?:mcp__[\w-]+(?:__[\w*-]+)?|[A-Z][A-Za-z]*(?:\(.+\))?)$", re.DOTALL)
+RULE_RE = re.compile(r"^(?:mcp__[\w-]+(?:__[\w*-]+)?|[A-Z][A-Za-z]*(?:\(.+\))?|[\w*-]*\*[\w*-]*)$", re.DOTALL)
+# An allow rule may glob the tool name only after a literal mcp__<server>__ prefix; anything else is skipped.
+ANCHORED_ALLOW_GLOB_RE = re.compile(r"^mcp__[A-Za-z0-9-]+(?:_[A-Za-z0-9-]+)*__[\w*-]+$")
+SHELL_TOOLS = ("Bash", "PowerShell")
 BROAD_RE = re.compile(
-    r"^(?:Bash|Bash\(\*\)|Bash\(:\*\)|Read|Edit|Write|WebFetch|WebSearch|"
+    r"^(?:Bash|Bash\(\*\)|Bash\(:\*\)|PowerShell|PowerShell\(\*\)|PowerShell\(:\*\)|Read|Edit|Write|WebFetch|"
+    r"WebSearch|"
     r"(?:Read|Edit|Write)\((?:/|//|~/|\./)?\*\*(?:/\*)?\)|WebFetch\(domain:\*\))$"
 )
 
@@ -48,7 +59,7 @@ def broad(rule: str) -> bool:
     """True for a rule that covers a whole tool, or a whole MCP server (mcp__*, mcp__server, mcp__server__*)."""
     if rule.startswith("mcp__"):
         rest = rule[len("mcp__") :]
-        return rest == "*" or "__" not in rest or rest.endswith("__*")
+        return "*" not in rest.split("__", 1)[0] and ("__" not in rest or rest.endswith("__*"))
     return bool(BROAD_RE.match(rule))
 
 
@@ -69,7 +80,10 @@ def load_json(path: Path) -> dict:
 def read_source(path: Path) -> dict[str, list[str]]:
     if not path.is_file():
         raise InputError(f"{path}: not found")
-    text = path.read_text(encoding="utf-8")
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as exc:
+        raise InputError(f"{path}: not UTF-8 text") from exc
     out: dict[str, list[str]] = {k: [] for k in LISTS}
     if text.lstrip().startswith("{"):
         data = load_json(path)
@@ -93,6 +107,35 @@ def read_source(path: Path) -> dict[str, list[str]]:
     return out
 
 
+def tool_name(rule: str) -> str:
+    return rule.split("(", 1)[0]
+
+
+def allow_glob_ignored(rule: str) -> bool:
+    """An allow rule with * in the tool name and no literal mcp__<server>__ prefix approves nothing."""
+    name = tool_name(rule)
+    return "*" in name and not ANCHORED_ALLOW_GLOB_RE.match(name)
+
+
+def shell_pattern_problem(rule: str) -> tuple[str, str] | None:
+    """Problems with a Bash or PowerShell command pattern, from the permissions page's matching rules."""
+    name = tool_name(rule)
+    if name not in SHELL_TOOLS or not rule.endswith(")") or "(" not in rule:
+        return None
+    spec = rule[len(name) + 1 : -1].strip()
+    if ":*" in spec[:-2]:
+        return "colon-star-literal", "`:*` is a wildcard only at the end of a pattern; here the colon is literal"
+    words = spec.split()
+    if len(words) >= 2 and words[0] == "*":
+        return "wildcard-before-subcommand", "the leading * stands in for the program, so any program matches"
+    if len(words) >= 3 and words[1] == "*":
+        return (
+            "wildcard-before-subcommand",
+            f"the * stands in for the subcommand, so every {words[0]} subcommand and option matches",
+        )
+    return None
+
+
 def merge(sources: list[tuple[str, dict[str, list[str]]]]) -> tuple[dict[str, list[str]], list[dict]]:
     findings: list[dict] = []
     merged: dict[str, set[str]] = {k: set() for k in LISTS}
@@ -103,6 +146,17 @@ def merge(sources: list[tuple[str, dict[str, list[str]]]]) -> tuple[dict[str, li
                 rule = raw.strip()
                 if not RULE_RE.match(rule):
                     findings.append({"rule": "malformed-rule", "list": key, "item": raw, "detail": f"from {label}"})
+                    continue
+                if key == "allow" and allow_glob_ignored(rule):
+                    findings.append(
+                        {
+                            "rule": "allow-glob-ignored",
+                            "list": key,
+                            "item": raw,
+                            "detail": f"from {label}; Claude Code skips an allow glob without a literal "
+                            "mcp__<server>__ prefix and approves nothing; dropped",
+                        }
+                    )
                     continue
                 merged[key].add(rule)
                 origin.setdefault((key, rule), label)
@@ -136,6 +190,11 @@ def merge(sources: list[tuple[str, dict[str, list[str]]]]) -> tuple[dict[str, li
             }
         )
     merged["allow"] -= merged["ask"]
+    for key in ("allow", "ask"):
+        for rule in sorted(merged[key]):
+            problem = shell_pattern_problem(rule)
+            if problem and (key == "allow" or problem[0] == "colon-star-literal"):
+                findings.append({"rule": problem[0], "list": key, "item": rule, "detail": problem[1]})
     for rule in sorted(merged["allow"]):
         if broad(rule):
             findings.append(

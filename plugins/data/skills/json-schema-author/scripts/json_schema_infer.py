@@ -142,7 +142,7 @@ def load_samples(path: Path) -> list:
             try:
                 samples.append(json.loads(line))
             except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{no}: not JSON and not NDJSON: {exc.msg}")
+                raise ValueError(f"{path}:{no}: not JSON and not NDJSON: {exc.msg}") from None
     return samples
 
 
@@ -158,6 +158,19 @@ def infer(samples: list, title: str | None, opts: dict) -> dict:
     return schema
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -168,8 +181,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", action="store_true", help="accepted for uniformity; output is always JSON")
     ap.add_argument("--no-examples", action="store_true")
     ap.add_argument("--no-bounds", action="store_true", help="omit minimum/maximum and minLength/maxLength")
-    ap.add_argument("--enum-max", type=int, default=10)
-    ap.add_argument("--enum-min-samples", type=int, default=5)
+    ap.add_argument("--enum-max", type=count_arg(0), default=10)
+    ap.add_argument("--enum-min-samples", type=count_arg(1), default=5)
     args = ap.parse_args(argv)
     samples: list = []
     for f in args.files:
@@ -179,7 +192,10 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         try:
             samples += load_samples(p)
-        except (ValueError, UnicodeDecodeError) as exc:
+        except UnicodeDecodeError:
+            print(f"error: {f}: not UTF-8 text; samples must be JSON or NDJSON", file=sys.stderr)
+            return 2
+        except ValueError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
     if not samples:

@@ -27,7 +27,7 @@ One or more skill folders, plugin folders or SKILL.md files. Every file below a 
 
 1. Run the script over the folder.
 2. Fix in this order: `yaml-unsafe` (the skill may not load at all), `crlf` and `symlink` (break installs), `open-no-encoding` and `os-specific-call` (crash on Windows), `plugin-root-no-fallback` (copy installs cannot find the script), then shell and path findings.
-3. For `plugin-root-no-fallback`, add a line to the SKILL.md that names the script relative to the skill folder, for example "From a copy install, run `scripts/tool.py` from the skill folder instead."
+3. For `plugin-root-no-fallback`, add a line to the SKILL.md that names the script relative to the skill folder, for example "From a copy install, run `scripts/tool.py` from the skill folder instead.", or write the path as `${CLAUDE_SKILL_DIR}/scripts/tool.py`: Claude Code resolves `${CLAUDE_SKILL_DIR}` to the skill's own folder whether it is installed as a personal, project or plugin skill (skills docs, read 2026-10-18). Other agents that read SKILL.md may not expand it, so keep the plain line when the skill is shared beyond Claude Code.
 4. A skill that is meant for one platform (a macOS cleanup skill) can pass `--skip-rule platform-path`; say so in its Limits.
 5. Re-run until it exits 0, and add it to CI.
 

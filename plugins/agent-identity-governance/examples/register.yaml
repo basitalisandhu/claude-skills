@@ -1,0 +1,17 @@
+# Approved MCP servers and connectors (synthetic example)
+connectors:
+  - name: tickets-mcp
+    kind: mcp-server
+    owner: sam@example.com
+    purpose: read and update support tickets
+    data_classification: confidential
+    permissions: [tickets:read, tickets:write]
+    review_date: 2026-12-01
+    tools: [list_tickets, update_ticket]
+  - name: wiki-search
+    kind: connector
+    owner: kim@example.com
+    purpose: search the internal wiki
+    data_classification: internal
+    permissions: [wiki.read]
+    review_date: 2026-09-01

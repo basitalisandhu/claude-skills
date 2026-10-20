@@ -23,12 +23,17 @@ Then apply the `agent-config-audit` skill's manual pass (instruction files that 
 If `semgrep` is installed, run the agentic-semgrep-rules pack (pinned clone or release bundle), fall back to the bundled rules only when it cannot be fetched, scan the agent configuration files explicitly, and triage with the `semgrep-agentic` skill:
 
 ```bash
-git clone --depth 1 --branch v1.0.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules 2>/dev/null \
+git clone --depth 1 --branch v0.2.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules 2>/dev/null \
   && semgrep --metrics=off --config /tmp/agentic-semgrep-rules/rules --json -o semgrep-agentic.json "${ARGUMENTS:-.}" \
   || semgrep --metrics=off --config "${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules" --json -o semgrep-agentic.json "${ARGUMENTS:-.}"
-semgrep --metrics=off --config "${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules/agentic-config.yaml" --json -o semgrep-config.json \
-  "${ARGUMENTS:-.}"/.claude/settings.json "${ARGUMENTS:-.}"/.mcp.json "${ARGUMENTS:-.}"/.cursor/mcp.json 2>/dev/null || true
+set --
+for f in .claude/settings.json .claude/settings.local.json .mcp.json .cursor/mcp.json .vscode/mcp.json; do
+  [ -f "${ARGUMENTS:-.}/$f" ] && set -- "$@" "${ARGUMENTS:-.}/$f"
+done
+[ "$#" -gt 0 ] && semgrep --metrics=off --config "${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules/agentic-config.yaml" --json -o semgrep-config.json "$@"
 ```
+
+Only existing config files are passed: one missing path makes Semgrep report nothing for the others.
 
 Say in the report which pack ran. If `semgrep` is not installed, say so and list the install command (`pip install semgrep` or `brew install semgrep`); do not treat the step as passed.
 

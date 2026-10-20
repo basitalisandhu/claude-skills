@@ -43,6 +43,10 @@ from _miniyaml import load as yaml_load  # noqa: E402
 ENVIRONMENTS = ["prod", "staging", "test", "dev", "sandbox"]
 CLASSIFICATIONS = ["public", "internal", "confidential", "restricted"]
 NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+DOMAIN_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$")
+TOP_KEYS = {"organization", "email_domain", "workloads"}
+WORKLOAD_KEYS = {"name", "environment", "data_classification", "internet_facing", "depends_on"}
+TRUE_WORDS, FALSE_WORDS = {"yes", "true", "y"}, {"no", "false", "n"}
 IMPACT = ["low", "medium", "high", "critical"]
 
 SCP_BY_OU = {
@@ -75,10 +79,15 @@ def load_input(path: Path) -> dict:
 
 
 def normalise(data: dict) -> tuple[str, str, list[dict]]:
+    unknown = sorted(set(data) - TOP_KEYS)
+    if unknown:
+        raise InputError(f"unknown keys: {', '.join(unknown)} (expected {', '.join(sorted(TOP_KEYS))})")
     org = str(data.get("organization", "")).strip().lower()
     if not NAME_RE.match(org):
         raise InputError("organization must be lowercase letters, digits and hyphens")
     domain = str(data.get("email_domain", "example.com")).strip().lower()
+    if not DOMAIN_RE.match(domain):
+        raise InputError(f"email_domain {domain!r} is not a domain name such as example.com")
     workloads = data.get("workloads")
     if not isinstance(workloads, list) or not workloads:
         raise InputError("workloads must be a non-empty list")
@@ -87,6 +96,9 @@ def normalise(data: dict) -> tuple[str, str, list[dict]]:
     for i, w in enumerate(workloads):
         if not isinstance(w, dict):
             raise InputError(f"workloads[{i}] must be a mapping")
+        unknown = sorted(set(w) - WORKLOAD_KEYS)
+        if unknown:
+            raise InputError(f"workloads[{i}]: unknown keys {', '.join(unknown)} (expected {', '.join(sorted(WORKLOAD_KEYS))})")
         name = str(w.get("name", "")).strip().lower()
         env = str(w.get("environment", "")).strip().lower()
         cls = str(w.get("data_classification", "internal")).strip().lower()
@@ -97,12 +109,21 @@ def normalise(data: dict) -> tuple[str, str, list[dict]]:
             raise InputError(f"workloads[{i}].environment {env!r}: one of {', '.join(ENVIRONMENTS)}")
         if cls not in CLASSIFICATIONS:
             raise InputError(f"workloads[{i}].data_classification {cls!r}: one of {', '.join(CLASSIFICATIONS)}")
-        if isinstance(facing, str):
-            facing = facing.strip().lower() in {"yes", "true", "y"}
+        if isinstance(facing, str) and facing.strip().lower() in TRUE_WORDS | FALSE_WORDS:
+            facing = facing.strip().lower() in TRUE_WORDS
+        if not isinstance(facing, bool):
+            raise InputError(f"workloads[{i}].internet_facing {facing!r}: use true or false")
         if (name, env) in seen:
             raise InputError(f"duplicate workload {name} in {env}")
         seen.add((name, env))
-        deps = [str(d).strip().lower() for d in (w.get("depends_on") or [])]
+        raw_deps = w.get("depends_on") or []
+        if isinstance(raw_deps, str):
+            raw_deps = [raw_deps]
+        if not isinstance(raw_deps, list):
+            raise InputError(f"workloads[{i}].depends_on must be a list of workload names")
+        deps = [str(d).strip().lower() for d in raw_deps]
+        if name in deps:
+            raise InputError(f"workloads[{i}] {name} lists itself in depends_on")
         out.append({"name": name, "environment": env, "data_classification": cls, "internet_facing": bool(facing),
                     "depends_on": deps})
     names_by_env = {(w["name"], w["environment"]) for w in out}
@@ -183,8 +204,8 @@ def design(data: dict) -> dict:
             rows.append(row(name, "critical" if deployable else "high", deployable or ["shared DNS and artifacts"],
                             "Pipelines that deploy into workload accounts carry their deployment roles; a poisoned "
                             "artifact reaches every consumer",
-                            "One deployment role per target account, scoped by aws:SourceAccount and the pipeline's "
-                            "role; separate prod and non-prod pipelines; signed artifacts"))
+                            "One deployment role per target account whose trust policy names only the pipeline's role "
+                            "(aws:PrincipalArn); separate prod and non-prod pipelines; signed artifacts"))
         elif name.endswith("-network") and a["kind"] == "foundation":
             rows.append(row(name, "high", networked, "Network paths to every attached VPC; can reroute or inspect traffic",
                             "Transit Gateway route tables per environment; no prod to non-prod routes; flow logs to "

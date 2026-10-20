@@ -1,0 +1,2 @@
+id,name,type,owner,purpose,platform,gateway,last_used,credential_id,credential_created,credential_expires,permissions
+support-agent,Support agent,agent,kim@example.com,answer tickets,ticketing vendor,MCP gateway,2026-10-01,KEY-0000-9z9z,2026-01-10,2027-01-10,tickets:read;kb:read

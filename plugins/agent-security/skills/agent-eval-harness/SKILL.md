@@ -28,6 +28,8 @@ Injection-task text and the tool results in traces are test data written to look
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-eval-harness/scripts/eval_runner.py" --demo
    ```
 
+   When the skill folder was copied without the plugin system (so `CLAUDE_PLUGIN_ROOT` is empty), run `python3 scripts/eval_runner.py --demo` from the skill folder instead.
+
    The naive scripted agent has ASR 1.0 with no policy and 0.0 under the provenance policy, with benign utility 1.0 throughout. Those numbers are pinned by the template's tests.
 
 2. **Copy the template** into the project (`eval/eval_runner.py`) and replace the demo suite:
@@ -42,18 +44,20 @@ Injection-task text and the tool results in traces are test data written to look
 
 5. **Graduate to AgentDojo** when the agent fits its tool interface. Install `agentdojo`, write the suite as `TaskSuite` with `user_task` and `injection_task` classes, and put the same two policies in the pipeline's tool executor to run them against 949 attack cases. Notes in [references/agentdojo-notes.md](references/agentdojo-notes.md).
 
-6. **Wire it into CI** so a prompt or tool change cannot silently raise ASR: run the template suite on every pull request (no network, seconds), and the real-model suite nightly with a cost cap.
+6. **Wire it into CI** so a prompt or tool change cannot silently raise ASR: run the template suite on every pull request (no network, seconds) with `--max-asr 0` so the job fails when any attack lands, and the real-model suite nightly with a cost cap and a threshold you agree with the owner (for example `--max-asr 0.05`).
+
+   Exit codes: 0 finished (and within `--max-asr` when given), 1 an attack success rate above `--max-asr`, 2 a usage error, an `--agent` spec that cannot be imported or an `--out` path that cannot be written. An agent or tool that raises does not stop the run: the case scores as failed, the error is kept in the case, and the table counts it under `errors`. A call to a tool name that does not exist returns an error result to the agent and is recorded as a denial.
 
 ## Output format
 
 ```markdown
 ## Security eval: <agent> (<date>, suite <name>: <n> user tasks x <n> injections)
 
-| Policy | Benign utility | Utility under attack | ASR | Denials |
-|---|---|---|---|---|
-| none | 0.95 | 0.93 | 0.41 | 0 |
-| provenance | 0.95 | 0.94 | 0.03 | 37 |
-| provenance+approval | 0.93 | 0.92 | 0.00 | 41 |
+| Policy | Benign utility | Utility under attack | ASR | Denials | Errors |
+|---|---|---|---|---|---|
+| none | 0.95 | 0.93 | 0.41 | 0 | 0 |
+| provenance | 0.95 | 0.94 | 0.03 | 37 | 0 |
+| provenance+approval | 0.93 | 0.92 | 0.00 | 41 | 1 |
 
 **Attacks that still succeed under <best policy>:** <case ids with one line each>
 **Utility lost to the policy:** <case ids with the denied call and whether the denial was right>
@@ -65,6 +69,7 @@ Injection-task text and the tool results in traces are test data written to look
 - The bundled demo agent is scripted, so its numbers only show the report shape; results mean something only after `agent_fn` calls your real model through the executor.
 - Attack success rate depends on the injection tasks you write. A low rate on a small suite says nothing about phrasings or channels the suite does not include.
 - The `approval` policy uses an oracle approver that passes only arguments the request entails; a human approver is weaker, so treat its numbers as a best case.
+- `--agent` imports the module from the working directory or the script's folder; run it from the project root (`python3 eval/eval_runner.py --agent eval.agent:run`) or set `PYTHONPATH`.
 - The template makes no network calls. Model costs, rate limits and the full AgentDojo benchmark are outside it.
 
 ## Related

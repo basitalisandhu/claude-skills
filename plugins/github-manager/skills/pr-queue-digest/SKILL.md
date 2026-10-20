@@ -1,6 +1,6 @@
 ---
 name: pr-queue-digest
-description: "Find stuck pull requests and review bottlenecks from a saved gh pr list export, flagging PRs waiting on review, blocked on one reviewer, with changes requested and no new commits, failing checks, conflicts, approved but unmerged, without a reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked \"which PRs are stuck?\" or for a standup PR digest. Not for reviewing code, ranking engineers, or repositories you cannot export with gh."
+description: "Find stuck pull requests and review bottlenecks from a saved gh pr list export: PRs waiting on review, blocked on one reviewer, changes requested with no new commits, failing checks, conflicts, approved but not merged, no reviewer, or stale drafts, with one next action per PR and queue counts per reviewer. Use when asked \"which PRs are stuck?\", \"which approved PRs are not merged yet?\" or for a standup PR digest. Not for reviewing code, ranking engineers, or open issues (issue-triage-digest)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs the gh CLI, logged in with read access to the repository.
 metadata:
@@ -73,7 +73,7 @@ printf '{"repo": "OWNER/REPO", "exported_at": "%s"}\n' "$(date -u +%Y-%m-%dT%H:%
 | `--markdown` | the digest as Markdown tables with PR links |
 | `--json` | the full report as JSON |
 
-Exit codes: 0 nothing flagged, 1 at least one PR flagged, 2 bad input (missing folder or file, invalid JSON, bad `--now`).
+Exit codes: 0 nothing flagged, 1 at least one PR flagged, 2 bad input or usage (missing folder or file, a `meta.json` that is not an object, bad `--now`). Bad input includes an empty file, a file that is not JSON, an object where `gh` writes a list, a `number` that is not a whole number and a time field that is not an ISO time; the message names the file and row.
 
 ## Reading the output
 

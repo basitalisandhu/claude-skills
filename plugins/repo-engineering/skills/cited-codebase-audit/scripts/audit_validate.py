@@ -89,6 +89,8 @@ class Resolver:
         rel = Path(os.path.normpath(path)).as_posix()
         if rel == ".." or rel.startswith("../"):
             return "CIT-PATH", f"{path}: points outside the repository"
+        if "\x00" in rel:
+            return "CIT-PATH", f"{path!r}: contains a NUL byte"
         resolved = (self.root / rel).resolve()
         if self.root not in resolved.parents and resolved != self.root:
             return "CIT-PATH", f"{path}: resolves outside the repository"
@@ -180,13 +182,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--min-accept", type=float, metavar="PCT",
                     help="exit 0 when at least PCT percent are accepted (default: every finding must be accepted)")
     args = ap.parse_args(argv)
+    if args.min_accept is not None and not 0 <= args.min_accept <= 100:
+        print("error: --min-accept is a percentage from 0 to 100", file=sys.stderr)
+        return 2
     root = Path(args.repo).resolve()
     if not root.is_dir():
         print(f"error: not a directory: {args.repo}", file=sys.stderr)
         return 2
     try:
         report = json.loads(Path(args.report).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         print(f"error: cannot read report: {exc}", file=sys.stderr)
         return 2
     if not isinstance(report, dict) or not isinstance(report.get("findings"), list):
@@ -198,7 +203,11 @@ def main(argv: list[str] | None = None) -> int:
         cleaned["findings"] = result["accepted"]
         cleaned["rejected_findings"] = result["rejected"]
         cleaned["validation"] = {"stats": result["stats"], "warnings": result["warnings"]}
-        Path(args.out).write_text(json.dumps(cleaned, indent=2) + "\n", encoding="utf-8")
+        try:
+            Path(args.out).write_text(json.dumps(cleaned, indent=2) + "\n", encoding="utf-8")
+        except OSError as exc:
+            print(f"error: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     print(json.dumps(result, indent=2) if args.json else render(result))
     s = result["stats"]
     if args.min_accept is not None:

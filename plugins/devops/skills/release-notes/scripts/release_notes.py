@@ -13,7 +13,8 @@ Usage:
     release_notes.py [--repo DIR] [--range REV..REV] [--input FILE] [--version X.Y.Z] [--date YYYY-MM-DD]
                      [--repo-url https://github.com/owner/repo] [--authors] [--json]
 
-Exit codes: 0 notes produced (possibly empty), 2 git failed or input unreadable.
+Exit codes: 0 notes produced (possibly empty: an empty range or empty input), 2 git failed, or the input is unreadable
+or has text but no records in the format above (a plain `git log`, JSON).
 Standard library only. Runs git locally when --input is not given. No network.
 """
 from __future__ import annotations
@@ -164,7 +165,13 @@ def main(argv: list[str] | None = None) -> int:
     except (RuntimeError, OSError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    notes = build(parse_log(raw), args.version, args.date, args.repo_url.rstrip("/") if args.repo_url else None, args.authors)
+    commits = parse_log(raw)
+    if raw.strip() and not commits:
+        source = "standard input" if args.input == "-" else (args.input or "git log")
+        print(f"error: {source} has text but no commit records in the expected format; capture it with "
+              f"git log --no-merges --date=short --format='{FORMAT}' REV..REV", file=sys.stderr)
+        return 2
+    notes = build(commits, args.version, args.date, args.repo_url.rstrip("/") if args.repo_url else None, args.authors)
     print(json.dumps(notes, indent=2) if args.json else render_markdown(notes, args.authors), end="" if not args.json else "\n")
     return 0
 

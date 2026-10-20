@@ -37,7 +37,7 @@
   "name": "cc-setup-tooling",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/"
  },
- "version": "0.2.0"
+ "version": "0.3.0"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">cc-setup-tooling</a> / skill-portability-check</p>
 <h1>Skill portability check</h1>
 <p class="lede">Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file. Use when asked &quot;will this skill work on Windows?&quot;, before publishing a skill, or in CI. Not for security review (use skill-supply-chain-review) or description wording.</p>
-<p class="meta">Skill <code>skill-portability-check</code> in plugin <a href="../index.html">cc-setup-tooling</a> 0.2.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md">plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-code-tooling-skills">claude-code-tooling-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md">plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md</a>.</p>
+<p class="meta">Skill <code>skill-portability-check</code> in plugin <a href="../index.html">cc-setup-tooling</a> 0.3.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md">plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-code-tooling-skills">claude-code-tooling-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md">plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -67,7 +67,7 @@ python3 install.py --user --skill cc-setup-tooling/skill-portability-check</code
 <h3 id="inputs">Inputs</h3>
 <p>One or more skill folders, plugin folders or SKILL.md files. Every file below a folder is read except <code>.git</code>, <code>node_modules</code>, caches and virtual environments; binary files are skipped.</p>
 <h3 id="steps">Steps</h3>
-<ol><li>Run the script over the folder.</li><li>Fix in this order: <code>yaml-unsafe</code> (the skill may not load at all), <code>crlf</code> and <code>symlink</code> (break installs), <code>open-no-encoding</code> and <code>os-specific-call</code> (crash on Windows), <code>plugin-root-no-fallback</code> (copy installs cannot find the script), then shell and path findings.</li><li>For <code>plugin-root-no-fallback</code>, add a line to the SKILL.md that names the script relative to the skill folder, for example &quot;From a copy install, run <code>scripts/tool.py</code> from the skill folder instead.&quot;</li><li>A skill that is meant for one platform (a macOS cleanup skill) can pass <code>--skip-rule platform-path</code>; say so in its Limits.</li><li>Re-run until it exits 0, and add it to CI.</li></ol>
+<ol><li>Run the script over the folder.</li><li>Fix in this order: <code>yaml-unsafe</code> (the skill may not load at all), <code>crlf</code> and <code>symlink</code> (break installs), <code>open-no-encoding</code> and <code>os-specific-call</code> (crash on Windows), <code>plugin-root-no-fallback</code> (copy installs cannot find the script), then shell and path findings.</li><li>For <code>plugin-root-no-fallback</code>, add a line to the SKILL.md that names the script relative to the skill folder, for example &quot;From a copy install, run <code>scripts/tool.py</code> from the skill folder instead.&quot;, or write the path as <code>${CLAUDE_SKILL_DIR}/scripts/tool.py</code>: Claude Code resolves <code>${CLAUDE_SKILL_DIR}</code> to the skill&#x27;s own folder whether it is installed as a personal, project or plugin skill (skills docs, read 2026-10-18). Other agents that read SKILL.md may not expand it, so keep the plain line when the skill is shared beyond Claude Code.</li><li>A skill that is meant for one platform (a macOS cleanup skill) can pass <code>--skip-rule platform-path</code>; say so in its Limits.</li><li>Re-run until it exits 0, and add it to CI.</li></ol>
 <h3 id="script">Script</h3>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/skill-portability-check/scripts/portability_check.py&quot; plugins/my-plugin
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/skill-portability-check/scripts/portability_check.py&quot; skills/mac-cleanup --skip-rule platform-path --json</code></pre>

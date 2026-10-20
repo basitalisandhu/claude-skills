@@ -61,6 +61,8 @@ fails its hash check as `not assessable`, never `supported`. `verify` reports `o
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/evidence-pack-builder/scripts/evidence_pack.py" sidecar ./evidence-2026-q3
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/evidence-pack-builder/scripts/evidence_pack.py build tests/fixtures/exports --out /tmp/pack` and `python3 plugins/compliance-evidence/skills/evidence-pack-builder/scripts/evidence_pack.py verify tests/fixtures/evidence-pack/tampered-pack` (exits 1: one file was changed after packing). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/evidence_pack.py` from the skill folder.
+
    Fill `collector`, `collected_at` (ISO 8601), `scope`, `period` and, per file, the exact `command` that produced it
    ([references/example-evidence-sources.json](references/example-evidence-sources.json) shows the format).
    Ask the user for any value you do not know; never invent a command or a time. A file without a command is still

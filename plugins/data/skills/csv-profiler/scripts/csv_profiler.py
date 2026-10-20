@@ -142,6 +142,8 @@ def profile(path: Path, delimiter: str | None, has_header: bool, sample: int | N
     text = raw.decode(encoding, errors="replace")
     if not text.strip():
         raise ValueError("file is empty")
+    if "\x00" in text[:65536]:
+        raise ValueError(f"binary file (NUL bytes after decoding as {encoding}); if it is UTF-16 text, pass --encoding utf-16")
     quotechar = '"'
     try:
         dialect = csv.Sniffer().sniff(text[:65536], delimiters=",;\t|")
@@ -240,6 +242,19 @@ def render_text(p: dict) -> str:
     return "\n".join(lines)
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -249,9 +264,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--delimiter", help="field delimiter (sniffed when omitted; use 'tab' for TSV)")
     ap.add_argument("--no-header", action="store_true")
-    ap.add_argument("--sample", type=int, help="profile only the first N data rows")
+    ap.add_argument("--sample", type=count_arg(1), help="profile only the first N data rows")
     ap.add_argument("--encoding", default="utf-8")
-    ap.add_argument("--top", type=int, default=5, help="most common values to keep per column")
+    ap.add_argument("--top", type=count_arg(0), default=5, help="most common values to keep per column")
     ap.add_argument("--strict", action="store_true", help="exit 1 when any warning is produced")
     args = ap.parse_args(argv)
     p = Path(args.file)

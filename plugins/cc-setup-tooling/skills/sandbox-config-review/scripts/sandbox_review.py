@@ -3,8 +3,9 @@
 actually enforced, and flag the settings that leave the boundary open.
 
 The sandbox is the boundary the operating system enforces around Bash, PowerShell and Monitor commands and the
-processes they start. Its rules come from https://code.claude.com/docs/en/sandboxing (read 2026-10-16); this script
-applies only the key names, defaults and merge rules stated there.
+processes they start. Its rules come from https://code.claude.com/docs/en/sandboxing (read 2026-10-16) and the
+settings reference (rechecked 2026-10-18); this script applies only the key names, defaults and merge rules stated
+there.
 
 Scopes read (offline, local files only):
   * --project DIR: DIR/.claude/settings.json (project, committed with the repository) and
@@ -21,9 +22,13 @@ Merge rules (from the page):
   * Only user and managed settings are honoured for filesystem.disabled, network.strictAllowlist, allowAppleEvents,
     credentials mask entries and network.tlsTerminate. When managed settings configure sandbox.filesystem or list a
     credentials.files deny entry, only managed settings can set filesystem.disabled. allowManagedDomainsOnly is read
-    from managed settings only.
+    from managed settings only, as are filesystem.allowManagedReadPathsOnly (only managed
+    allowRead entries count), bwrapPath and socatPath.
+  * A managed read block (denyRead, a Read(...) deny rule or a credentials.files entry), or an admin-required
+    sandbox, makes the repository's allowRead entries at or under a path that managed or user settings deny ignored.
   * Admin-required sandbox (managed allowUnsandboxedCommands false, or managed allowManagedDomainsOnly true): the
-    repository's excludedCommands, network.allowedDomains, network.allowUnixSockets, filesystem.allowWrite,
+    repository's excludedCommands, network.allowedDomains, network.allowUnixSockets, network.allowMachLookup,
+    filesystem.allowWrite,
     WebFetch(domain:...) allow rules, proxy ports, and true values of the weaker-isolation keys are ignored, as is a
     repository false for enabled or failIfUnavailable when user settings set true.
   * network.strictAllowlist true in user or managed settings: the repository's allowedDomains, WebFetch(domain:...)
@@ -50,6 +55,9 @@ Rules (severity):
   proxy-port-set (medium)             httpProxyPort or socksProxyPort applies, so the built-in domain checks stop
   repo-loosens (high if honoured, low if ignored) a loosening value in the committed .claude/settings.json
   strict-allowlist-ignored-scope (medium) strictAllowlist set in project or local settings, where it has no effect
+  mach-lookup-all (medium)            network.allowMachLookup holds "*", every macOS XPC and Mach service
+  managed-only-key-ignored (low)      allowManagedDomainsOnly, filesystem.allowManagedReadPathsOnly, bwrapPath or
+                                      socatPath set outside managed settings, where Claude Code does not read it
 The active-sandbox checks (fail-open, escape-hatch-open, credentials-readable) are skipped while the sandbox is off
 or the platform is native Windows; the configuration checks still run.
 
@@ -89,6 +97,7 @@ BOOL_KEYS = (
     "enableWeakerNestedSandbox",
     "enableWeakerNetworkIsolation",
     "allowAppleEvents",
+    "filesystem.allowManagedReadPathsOnly",
 )
 # Defaults the page states. Keys without a stated default show "not set".
 DEFAULTS = {
@@ -107,13 +116,16 @@ LIST_KEYS = (
     "network.allowedDomains",
     "network.deniedDomains",
     "network.allowUnixSockets",
+    "network.allowMachLookup",
 )
 INT_KEYS = ("network.httpProxyPort", "network.socksProxyPort")
 WEAKER = ("network.allowAllUnixSockets", "network.allowLocalBinding", "enableWeakerNestedSandbox")
 WEAKER += ("enableWeakerNetworkIsolation",)
 ONLY_TRUSTED_BOOLS = ("filesystem.disabled", "network.strictAllowlist", "allowAppleEvents")
 REPO_IGNORED_WHEN_ADMIN = ("excludedCommands", "network.allowedDomains", "network.allowUnixSockets")
-REPO_IGNORED_WHEN_ADMIN += ("filesystem.allowWrite", "webfetch-allow")
+REPO_IGNORED_WHEN_ADMIN += ("filesystem.allowWrite", "webfetch-allow", "network.allowMachLookup")
+# Keys Claude Code reads from managed settings only; set anywhere else they do nothing.
+MANAGED_ONLY = ("network.allowManagedDomainsOnly", "filesystem.allowManagedReadPathsOnly", "bwrapPath", "socatPath")
 ESCAPE_ASK_RULE = "Bash(dangerouslyDisableSandbox:true)"
 
 # excludedCommands: first words that hand Claude a general-purpose tool outside the sandbox.
@@ -232,6 +244,16 @@ def check_types(data: dict, label: str) -> None:
                 raise InputError(f"{label}: sandbox.{key}[{i}] needs a string {field!r}")
             if entry.get("mode") not in ("deny", "mask"):
                 raise InputError(f'{label}: sandbox.{key}[{i}].mode must be "deny" or "mask"')
+    for key in ("bwrapPath", "socatPath"):
+        value = sandbox.get(key)
+        if value is not None and not isinstance(value, str):
+            raise InputError(f"{label}: sandbox.{key} must be a string")
+    value = sandbox.get("ignoreViolations")
+    if value is not None and (
+        not isinstance(value, dict)
+        or not all(isinstance(v, list) and all(isinstance(x, str) for x in v) for v in value.values())
+    ):
+        raise InputError(f"{label}: sandbox.ignoreViolations must map command substrings to arrays of strings")
     perms = data.get("permissions", {})
     if not isinstance(perms, dict):
         raise InputError(f"{label}: permissions must be an object")
@@ -367,6 +389,14 @@ class Review:
         self.admin_required = bool(self.admin_reasons)
         self.managed_domains_only = get(managed_sb, "network.allowManagedDomainsOnly") is True
         self.strict_lock = any(get(self.sb(s), "network.strictAllowlist") is True for s in TRUSTED)
+        self.managed_read_only = get(managed_sb, "filesystem.allowManagedReadPathsOnly") is True
+        # A managed read block (denyRead, a Read(...) deny rule or a credentials.files entry) makes Claude Code ignore
+        # repository allowRead entries at or under a path that managed or user settings deny reading.
+        self.managed_read_lock = (
+            bool(get(managed_sb, "filesystem.denyRead"))
+            or bool(get(managed_sb, "credentials.files"))
+            or any(read_rule_path(r) for r in self.perms("managed", "deny"))
+        )
         self.managed_fs_lock = isinstance(managed_sb.get("filesystem"), dict) or any(
             e.get("mode") == "deny" for e in (get(managed_sb, "credentials.files") or [])
         )
@@ -383,7 +413,7 @@ class Review:
     # ------------------------------------------------------------------------------------------- honoured values
 
     def bool_honoured(self, scope: str, key: str, value: bool) -> tuple[bool, str]:
-        if key == "network.allowManagedDomainsOnly" and scope != "managed":
+        if key in MANAGED_ONLY and scope != "managed":
             return False, "read from managed settings only"
         if key in ONLY_TRUSTED_BOOLS and scope in REPO:
             return False, "not honoured from project or local settings"
@@ -417,6 +447,8 @@ class Review:
         return {"value": DEFAULTS.get(key), "source": "default" if key in DEFAULTS else None, "ignored": ignored}
 
     def list_honoured(self, scope: str, key: str) -> tuple[bool, str]:
+        if key == "filesystem.allowRead" and scope != "managed" and self.managed_read_only:
+            return False, "managed allowManagedReadPathsOnly honours managed allowRead entries only"
         if scope in REPO and self.admin_required and key in REPO_IGNORED_WHEN_ADMIN:
             return False, "admin-required sandbox (" + "; ".join(self.admin_reasons) + ") ignores repository entries"
         if key in ("network.allowedDomains", "webfetch-allow"):
@@ -601,6 +633,26 @@ class Review:
                         "your own proxy now filters this traffic; allowedDomains, deniedDomains, strictAllowlist "
                         "and approval prompts stop applying to it",
                     )
+        for e in lists["network.allowMachLookup"]:
+            if e["honoured"] and e["value"].strip() == "*":
+                self.add(
+                    "mach-lookup-all",
+                    "medium",
+                    e["scope"],
+                    "sandbox.network.allowMachLookup: *",
+                    "sandboxed commands may look up every macOS XPC and Mach service; list the services a tool "
+                    "needs, for example com.apple.coresimulator.*",
+                )
+        for key in MANAGED_ONLY:
+            for scope in ("user", "project", "local"):
+                if get(self.sb(scope), key) is not None:
+                    self.add(
+                        "managed-only-key-ignored",
+                        "low",
+                        scope,
+                        f"sandbox.{key}",
+                        "Claude Code reads this key from managed settings only, so it has no effect here",
+                    )
         for scope in REPO:
             if get(self.sb(scope), "network.strictAllowlist") is not None:
                 self.add(
@@ -654,14 +706,22 @@ class Review:
             ),
             None,
         )
-        allow_read = [e["value"] for e in lists["filesystem.allowRead"]]
+        allow_read = [e for e in lists["filesystem.allowRead"] if e["honoured"]]
+        repo_locked = self.admin_required or self.managed_read_lock
+
+        def reopens(entry: dict, path: str, where: str, target: str) -> bool:
+            if not (path_covers(entry["value"], target) and len(norm_path(entry["value"])) > len(norm_path(path))):
+                return False
+            # a repository allowRead cannot re-open a path that managed or user settings deny, once a lock applies
+            return not (entry["scope"] in REPO and repo_locked and where.split(" ", 1)[0] in TRUSTED)
+
         for target, what in CREDENTIAL_TARGETS:
             pool = mac_mask if fs_off else covers
             hit = None
             for path, where in pool:
                 if not path_covers(path, target):
                     continue
-                reopened = any(path_covers(a, target) and len(norm_path(a)) > len(norm_path(path)) for a in allow_read)
+                reopened = any(reopens(a, path, where, target) for a in allow_read)
                 if not reopened:
                     hit = where
                     break
@@ -678,9 +738,9 @@ class Review:
     def check_repo(self, lists: dict, ports: dict, allowed: list[dict]) -> None:
         """Loosening values in the committed project .claude/settings.json, which a cloned repository can ship."""
         items: list[tuple[str, bool, str]] = []
-        for key in ("excludedCommands", "filesystem.allowWrite", "network.allowUnixSockets"):
+        for key in ("excludedCommands", "filesystem.allowWrite", "network.allowUnixSockets", "network.allowMachLookup"):
             for e in lists[key]:
-                if e["scope"] == "project":
+                if e["scope"] == "project" and (key != "network.allowMachLookup" or e["value"].strip() == "*"):
                     items.append((f"{key}: {e['value']}", e["honoured"], e["reason"]))
         for d in allowed:
             if d["scope"] == "project" and host_of(d["host"]).startswith("*"):
@@ -903,6 +963,14 @@ def main(argv: list[str] | None = None) -> int:
         for scope, value in (("user", args.user), ("managed", args.managed)):
             if value:
                 f = Path(value)
+                if scope == "user" and not f.exists():
+                    # a fresh install has no ~/.claude/settings.json; that is an empty user scope, not bad input
+                    paths[scope] = f.name
+                    print(
+                        f"sandbox_review.py: note: --user {f} does not exist, so user settings are empty",
+                        file=sys.stderr,
+                    )
+                    continue
                 if not f.is_file():
                     raise InputError(f"--{scope} {f}: not found")
                 paths[scope] = f.name

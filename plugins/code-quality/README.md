@@ -27,3 +27,15 @@ Skills then appear as `/code-quality:<skill>`. Scripts need Python 3.11 or newer
 | `test-gap-finder` | what is untested, did the PR add tests | `test_gap_finder.py` list of modules without tests, prioritised |
 
 Tests for every script live in the repository's `tests/` directory; run `python3 -m pytest -q` at the repository root.
+
+## Sample output
+
+`test-gap-finder` on a small package with `shop/cart.py`, `shop/payments.py`, `shop/_mailer.py`, an entry point `shop/main.py`, and `tests/test_cart.py` plus `tests/test_mailer.py`:
+
+```text
+$ python3 "${CLAUDE_PLUGIN_ROOT}/skills/test-gap-finder/scripts/test_gap_finder.py" shop
+test-gap-finder 0.1.0: 2/3 modules have a test by name or import (66.7%), 2 test files, 1 entry-point or config file(s) not counted
+  no test: shop/payments.py
+Name and import based. A module listed as covered may still have weak tests; one listed as uncovered may be exercised indirectly.
+exit 0
+```

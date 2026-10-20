@@ -49,6 +49,14 @@ Copy the log out of the host's folder before reviewing it, so the review does no
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-session-log-review/scripts/review_session_log.py" ./session.jsonl --format json --out session-review.json --redact
    ```
 
+   To see the output before using a real log, run it on the bundled example, a session in which a fetched issue page steers the agent into reading a local credentials file and posting it to another host:
+
+   ```bash
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-session-log-review/scripts/review_session_log.py" "${CLAUDE_PLUGIN_ROOT}/skills/agent-session-log-review/references/example-session.jsonl" --root /work/widgets --allow-host github.com --flagged-only
+   ```
+
+   It exits 1 with four flags: the denied shell read retried through `Read`, the secret in the result, the collector host that came only from the fetched page (`INJ-PROVENANCE`) and the upload to it. When the skill folder was copied without the plugin system, run `python3 scripts/review_session_log.py references/example-session.jsonl ...` from the skill folder.
+
    Options: `--root`, `--allow-host` (repeatable), `--untrusted-tool <regex>` for tools whose results count as untrusted beyond fetch, browse, search, mail and MCP tools, `--repeat <n>` (default 5), `--flagged-only`, `--min-severity`, `--fail-on` (default high), `--format markdown|json`, `--redact`, `--out <file>`.
 
 3. **Read every flagged event in the log itself.** A flag is a lead. For `INJ-PROVENANCE`, open the untrusted result it names and the call that used the value, and decide whether the user's request explains the call.
@@ -74,6 +82,7 @@ Exit code 1 means a flag at or above `--fail-on`, so the script can gate a pipel
 ## Limits
 
 - The rules are structural and fixed: they look at where values came from, which tool ran and the shape of arguments. Injected text that changes what the agent writes, without a new host, address or path reaching a tool, is not detected, and a host the user also typed is never flagged as injected.
+- A denied call and its retry are linked by a shared host or file. Relative file names are joined to `--root`, so give the root when the agent mixes relative names (`config.yml`) with absolute paths; without it, files match by base name, which can link two different files with the same name.
 - Tool names are matched by pattern (shell, fetch, search, mail, send, write and `mcp__` tools); a custom tool with an unusual name needs `--untrusted-tool` or a manual read.
 - Secret detection is by shape (cloud key ids, private key headers, tokens with known prefixes, key and password assignments); other secrets pass unflagged. Masking applies to the report, never to the log file.
 - One log file per run, up to 50 MB. Sub-agent transcripts stored in separate files need their own run.

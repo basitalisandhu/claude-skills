@@ -96,6 +96,8 @@ holds exactly 30, 100 or 1000 entries. Add these files to the evidence pack side
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/github-change-control-evidence/scripts/github_evidence.py" ./evidence-2026-q3/github --json --out github-rows.json --redact
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/github-change-control-evidence/scripts/github_evidence.py tests/fixtures/github/free-plan` (a repository on a plan without branch protection: every protection row is not assessable, not failed). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/github_evidence.py` from the skill folder.
+
    Options: `--as-of YYYY-MM-DD` (date for alert ages), `--cite-prefix github/` (cite paths as they appear inside a
    pack), `--json`, `--out`, `--redact`, `--fail-on contradicted|not-assessable|none`.
 

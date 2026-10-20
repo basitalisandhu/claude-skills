@@ -152,7 +152,8 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
     paths = stem_files(folder, "issues")
     if not paths:
         raise InputError(f"{folder}: no issues.json (export it with gh issue list --json, see SKILL.md)")
-    issues = [i for i in merge_rows(paths) if str(i.get("state", "OPEN")).upper() == "OPEN"]
+    rows = merge_rows(paths, "issue", required=("createdAt",), optional=("updatedAt",))
+    issues = [i for i in rows if str(i.get("state", "OPEN")).upper() == "OPEN"]
     meta_path = find_file(folder, "meta")
     meta = load_json(meta_path) if meta_path else {}
     if not isinstance(meta, dict):
@@ -162,7 +163,7 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
         if now is None:
             raise InputError(f"--now is not an ISO time: {args.now}")
     elif parse_time(meta.get("exported_at")):
-        now, source = parse_time(meta.get("exported_at")), "meta.json exported_at"
+        now, source = parse_time(meta.get("exported_at")), f"{meta_path.name} exported_at"
     else:
         now, source = datetime.now(UTC).replace(microsecond=0), "current time (no meta.json)"
     keyword_map: dict[str, list[str]] = {}

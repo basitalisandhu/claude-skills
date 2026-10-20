@@ -1,0 +1,4 @@
+identity_id,owner,decision,attested_on,attested_by
+entra:00000000-0000-0000-0000-0000000000a1,sam@example.com,keep,2026-08-01,sam@example.com
+entra:00000000-0000-0000-0000-0000000000b2,lee@example.com,remove,2026-07-01,lee@example.com
+register:support-agent,kim@example.com,keep,2026-03-15,kim@example.com

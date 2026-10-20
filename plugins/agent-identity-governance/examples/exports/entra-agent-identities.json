@@ -1,0 +1,8 @@
+{"value": [
+  {"@odata.type": "#microsoft.graph.agentIdentity", "id": "40000000-0000-0000-0000-000000000001", "appId": "00000000-0000-0000-0000-0000000000e5",
+   "displayName": "ledger-agent-emea", "agentIdentityBlueprintId": "00000000-0000-0000-0000-0000000000d4", "servicePrincipalType": "ServiceIdentity",
+   "accountEnabled": true, "createdDateTime": "2026-03-02T00:00:00Z", "sponsors": [{"userPrincipalName": "kim@example.com"}]},
+  {"@odata.type": "#microsoft.graph.agentIdentity", "id": "40000000-0000-0000-0000-000000000002", "appId": "00000000-0000-0000-0000-0000000000f6",
+   "displayName": "ledger-agent-apac", "agentIdentityBlueprintId": "00000000-0000-0000-0000-0000000000d4", "servicePrincipalType": "ServiceIdentity",
+   "accountEnabled": true, "createdDateTime": "2026-03-02T00:00:00Z"}
+]}

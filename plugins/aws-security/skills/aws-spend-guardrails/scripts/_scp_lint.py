@@ -8,12 +8,16 @@ parsed). Checks (id, level):
 
   SCP-STRUCTURE           error    not an object, no Statement, a statement without Effect, Action/NotAction or Resource
   SCP-VERSION             warning  Version is not "2012-10-17"
-  SCP-SIZE                error    compact JSON (no whitespace) is over the limit (default 5120 characters)
+  SCP-SIZE                error    compact JSON (no whitespace) is over the limit (default 10240 characters, the
+                                   AWS Organizations quota for an SCP)
+  SCP-SIZE-AS-WRITTEN     warning  the file as written is over the limit but its compact form is not: the AWS CLI
+                                   and SDKs keep whitespace, so upload the compact form
   SCP-PRINCIPAL           error    Principal or NotPrincipal element (SCPs apply to every principal in the account;
                                    scope with aws:PrincipalArn conditions instead)
   SCP-ALLOW-IN-DENY-LIST  warning  Allow statement other than the full allow in a deny-list strategy; it grants nothing
                                    on its own and usually signals a misunderstanding of how SCPs combine
-  SCP-ALLOW-NOTACTION     error    Allow with NotAction: allows every action not listed
+  SCP-ALLOW-NOTACTION     warning  Allow with NotAction: valid SCP syntax, but it allows every action not listed
+  SCP-ALLOW-RESOURCE      error    Allow statement with a Resource other than "*" (SCPs accept only "*" there)
   SCP-DENY-ALL            error    Deny "*" on "*" with no Condition: blocks everything in the attached accounts
   SCP-DENY-NOTACTION-BARE warning  Deny with NotAction and no Condition: denies every action not listed, everywhere
   SCP-REGION-BLOCKS-GLOBAL error   region deny (aws:RequestedRegion) that uses Action instead of NotAction with "*"
@@ -33,7 +37,7 @@ import json
 import sys
 from pathlib import Path
 
-SCP_LIMIT = 5120
+SCP_LIMIT = 10240  # AWS Organizations quota for an SCP document, checked 2026-10-18
 LEVELS = ["error", "warning", "info"]
 CORE_GLOBALS = ["iam:*", "sts:*", "organizations:*", "support:*", "route53:*", "cloudfront:*", "budgets:*", "health:*"]
 SECURITY_PREFIXES = ("cloudtrail:", "guardduty:", "securityhub:", "config:")
@@ -104,9 +108,12 @@ def lint_policy(doc, limit: int = SCP_LIMIT, strategy: str = "deny-list") -> lis
         not_actions = [a.lower() for a in as_list(st.get("NotAction"))]
         if effect == "Allow":
             if not_actions:
-                out.append(issue("SCP-ALLOW-NOTACTION", "error", "Allow with NotAction allows every action not listed; "
-                                                                 "list the allowed actions instead", sid))
-            elif strategy == "deny-list" and not is_full_allow(st):
+                out.append(issue("SCP-ALLOW-NOTACTION", "warning", "Allow with NotAction allows every action not "
+                                                                   "listed; list the allowed actions instead", sid))
+            if any(r != "*" for r in as_list(st.get("Resource"))):
+                out.append(issue("SCP-ALLOW-RESOURCE", "error", "an Allow statement in an SCP can only have \"*\" as "
+                                                                "Resource; scope it in a Deny statement instead", sid))
+            if not not_actions and strategy == "deny-list" and not is_full_allow(st):
                 out.append(issue("SCP-ALLOW-IN-DENY-LIST", "warning",
                                  "Allow statement in a deny-list SCP: it does not grant anything by itself (IAM policies "
                                  "grant) and does not restrict anything (only Deny does); remove it or switch to an "
@@ -168,13 +175,23 @@ def load_policy(path: Path):
             return json.loads(content) if isinstance(content, str) else content
         except json.JSONDecodeError as exc:
             raise ValueError(f"{path}: Policy.Content is not JSON: {exc}") from exc
+    if isinstance(data, dict) and "Statement" not in data and isinstance(data.get("documents"), list) and "limit" in data:
+        raise ValueError(f"{path}: this is the builder's manifest, not an SCP; lint the scp-*.json files next to it")
     return data
+
+
+def is_describe_output(path: Path) -> bool:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return isinstance(data, dict) and isinstance(data.get("Policy"), dict)
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="+", help="SCP JSON files (or describe-policy output)")
-    ap.add_argument("--limit", type=int, default=SCP_LIMIT, help="size limit in characters (default 5120)")
+    ap.add_argument("--limit", type=int, default=SCP_LIMIT, help="size limit in characters (default 10240)")
     ap.add_argument("--strategy", choices=["deny-list", "allow-list"], default="deny-list",
                     help="SCP strategy in use (default deny-list)")
     ap.add_argument("--fail-on", choices=LEVELS, default="error", help="exit 1 at or above this level (default error)")
@@ -187,7 +204,13 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, ValueError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
-        results.append({"file": f, "chars_compact": len(compact(doc)), "issues": lint_policy(doc, args.limit, args.strategy)})
+        issues = lint_policy(doc, args.limit, args.strategy)
+        as_written = len(Path(f).read_text(encoding="utf-8").strip())
+        if len(compact(doc)) <= args.limit < as_written and not is_describe_output(Path(f)):
+            issues.append(issue("SCP-SIZE-AS-WRITTEN", "warning",
+                                f"the file is {as_written} characters as written; the AWS CLI and SDKs keep whitespace, "
+                                f"so upload the compact form ({len(compact(doc))} characters)"))
+        results.append({"file": f, "chars_compact": len(compact(doc)), "issues": issues})
     if args.json:
         print(json.dumps(results, indent=2))
     else:

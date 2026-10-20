@@ -10,7 +10,7 @@ Plain JavaScript files are listed but not measured.
 Usage:
     type_coverage.py PATH [--json] [--min PERCENT] [--exclude DIR ...] [--top N]
 
-Exit codes: 0 overall coverage at or above --min (default 0, so informational), 1 below --min, 2 bad input.
+Exit codes: 0 overall coverage at or above --min (default 0, so informational), 1 below --min, 2 bad input (missing path, unsupported file, or no source files).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
@@ -200,6 +200,30 @@ def analyse(root: Path, excludes: set[str]) -> dict:
                         "any_annotations": sum(f.get("any", 0) for f in files)}}
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
+def percent_arg(text: str) -> float:
+    """argparse type for a percentage between 0 and 100."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a percentage, got {text!r}") from None
+    if not 0 <= value <= 100:
+        raise argparse.ArgumentTypeError(f"must be a percentage between 0 and 100, got {value:g}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -207,13 +231,20 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--min", type=float, default=0.0, help="fail (exit 1) when overall coverage is below this percent")
-    ap.add_argument("--top", type=int, default=15, help="least-covered files to list in text mode")
+    ap.add_argument("--min", type=percent_arg, default=0.0, help="fail (exit 1) when overall coverage is below this percent")
+    ap.add_argument("--top", type=count_arg(1), default=15, help="least-covered files to list in text mode")
     ap.add_argument("--exclude", action="append", default=[], metavar="DIR")
     args = ap.parse_args(argv)
     root = Path(args.path)
     if not root.exists():
         print(f"error: path not found: {root}", file=sys.stderr)
+        return 2
+    supported = {".py", ".ts", ".tsx"}
+    if root.is_file() and root.suffix not in supported:
+        print(f"error: {root} is not a supported source file (suffix {root.suffix or 'none'}); supported: {', '.join(sorted(supported))}", file=sys.stderr)
+        return 2
+    if not any(True for _ in iter_files(root, DEFAULT_EXCLUDES | set(args.exclude))):
+        print(f"error: no source files found under {root} (suffixes {', '.join(sorted(supported))}, excluded folders skipped)", file=sys.stderr)
         return 2
     report = analyse(root, DEFAULT_EXCLUDES | set(args.exclude))
     report["min"] = args.min

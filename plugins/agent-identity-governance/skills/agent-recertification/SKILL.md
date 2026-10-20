@@ -43,6 +43,8 @@ aws-role:old-runner,kim@example.com,remove,2026-09-01,kim@example.com
 
 ## Script
 
+To see the output first, build the inventory from the bundled synthetic exports (`nhi_inventory.py "${CLAUDE_PLUGIN_ROOT}/examples/exports" --as-of 2026-10-05 --json --out inventory.json`), then run `python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-recertification/scripts/agent_recertification.py" inventory.json --attestations "${CLAUDE_PLUGIN_ROOT}/examples/attestations.csv" --users "${CLAUDE_PLUGIN_ROOT}/examples/users.json" --as-of 2026-10-05`. It exits 1: a removal decided in July that was not done, an owner who left and identities never attested. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/agent_recertification.py` from the skill folder; the examples live in the plugin's `examples/` folder, so take them from a clone of the repository.
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-recertification/scripts/agent_recertification.py" inventory.json --attestations tracking-2026-Q3.csv --users users.json --previous-inventory inventory-2026-Q3.json --as-of 2026-10-05 --out recert-2026-Q4
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-recertification/scripts/agent_recertification.py" inventory.json --as-of 2026-10-05 --json
@@ -63,7 +65,7 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-recertification/scripts/agent_recert
 | Flag | Raised when |
 |---|---|
 | `never-attested` | no attestation row for the identity |
-| `attestation-stale` | the latest attestation is older than `--max-age` days, or has no date |
+| `attestation-stale` | the latest attestation is older than `--max-age` days, has no date, or is dated after `--as-of` |
 | `owner-left` | an owner is missing from the users export or disabled (only with `--users`) |
 | `no-owner` | the inventory names no owner |
 | `removal-not-done` | the latest decision was remove, retire or revoke, and the identity is still in the inventory |

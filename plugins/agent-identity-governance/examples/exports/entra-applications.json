@@ -1,0 +1,11 @@
+{"value": [
+  {"id": "10000000-0000-0000-0000-000000000001", "appId": "00000000-0000-0000-0000-0000000000a1", "displayName": "invoice-agent",
+   "createdDateTime": "2025-01-10T00:00:00Z", "signInAudience": "AzureADMyOrg",
+   "owners": [{"userPrincipalName": "sam@example.com"}],
+   "web": {"redirectUris": ["http://invoices.example.com/callback"]},
+   "passwordCredentials": [{"keyId": "11111111-0000-0000-0000-00000000aaaa", "displayName": "prod", "startDateTime": "2025-01-10T00:00:00Z", "endDateTime": "2026-10-12T00:00:00Z"}],
+   "keyCredentials": []},
+  {"id": "10000000-0000-0000-0000-000000000002", "appId": "00000000-0000-0000-0000-0000000000b2", "displayName": "old-sync-bot",
+   "createdDateTime": "2024-01-01T00:00:00Z", "owners": [],
+   "passwordCredentials": [{"keyId": "11111111-0000-0000-0000-00000000bbbb", "startDateTime": "2024-01-01T00:00:00Z", "endDateTime": "2026-09-01T00:00:00Z"}]}
+]}

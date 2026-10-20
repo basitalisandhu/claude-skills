@@ -194,7 +194,8 @@ def render(result: dict, top: int) -> str:
     if result["folder_pairs"]:
         lines.append("Folders that duplicate each other:")
         for e in result["folder_pairs"][:top]:
-            lines.append(f"  {human(e['wasted']):>10}  {e['groups']:>5} groups  {' <-> '.join(e['folders'])}")
+            where = " <-> ".join(e["folders"]) if len(e["folders"]) > 1 else f"{e['folders'][0]} (copies inside it)"
+            lines.append(f"  {human(e['wasted']):>10}  {e['groups']:>5} groups  {where}")
         lines.append("")
     lines.append(f"Suffix copies next to an identical original: {len(result['suffix_copies'])} files, "
                  f"{human(result['suffix_copies_bytes'])}")
@@ -207,16 +208,56 @@ def render(result: dict, top: int) -> str:
     return "\n".join(lines)
 
 
+def write_lists(out: Path, groups: list[dict], copies: list[dict], pairs: list[dict]) -> None:
+    """Write duplicates.txt, suffix-copies.txt and folder-pairs.txt into out (created if missing)."""
+    out.mkdir(parents=True, exist_ok=True)
+    with open(out / "duplicates.txt", "w", encoding="utf-8") as fh:
+        for g in groups:
+            fh.write(f"[{len(g['paths'])} copies x {human(g['bytes'])}, {human(g['wasted'])} wasted]\n")
+            fh.write("".join(f"  {p}\n" for p in g["paths"]) + "\n")
+    (out / "suffix-copies.txt").write_text("".join(f"{c['copy']}\n" for c in copies), encoding="utf-8")
+    with open(out / "folder-pairs.txt", "w", encoding="utf-8") as fh:
+        for e in pairs:
+            fh.write(f"{human(e['wasted']):>10}  {e['groups']:>5} groups  {' <-> '.join(e['folders'])}\n")
+
+
+EXIT_CODES = "Exit codes: 0 no duplicate groups, 1 duplicates found (or copies moved), 2 bad input or usage."
+
+
+def positive_int(text: str) -> int:
+    """argparse type: a whole number of at least 1."""
+    try:
+        value = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+    if value < 1:
+        raise argparse.ArgumentTypeError(f"must be 1 or more, got {value}")
+    return value
+
+
+def non_negative_float(text: str) -> float:
+    """argparse type: a number of 0 or more."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a number, got {text!r}") from None
+    if not value >= 0 or value == float("inf"):
+        raise argparse.ArgumentTypeError(f"must be 0 or more, got {text}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+                                 formatter_class=argparse.RawDescriptionHelpFormatter, epilog=EXIT_CODES)
     ap.add_argument("roots", nargs="*", help="folders to scan (default: the user folders under --home)")
     ap.add_argument("--home", default=str(Path.home()), help="home folder (default: your home)")
-    ap.add_argument("--min-mb", type=float, default=2.0, help="smallest file to consider in MB (default 2)")
+    ap.add_argument("--min-mb", type=non_negative_float, default=2.0,
+                    help="smallest file to consider in MB (default 2)")
     ap.add_argument("--exclude-dir", action="append", default=None,
                     help=f"directory name to skip (repeatable; default {', '.join(DEFAULT_EXCLUDES)})")
-    ap.add_argument("--pair-depth", type=int, default=3, help="folder levels for the folder-pair table (default 3)")
-    ap.add_argument("--top", type=int, default=15, help="rows per table in the text output (default 15)")
+    ap.add_argument("--pair-depth", type=positive_int, default=3,
+                    help="folder levels for the folder-pair table (default 3)")
+    ap.add_argument("--top", type=positive_int, default=15, help="rows per table in the text output (default 15)")
     ap.add_argument("--out-dir", help="write duplicates.txt, suffix-copies.txt and folder-pairs.txt here")
     ap.add_argument("--trash-suffix-copies", action="store_true",
                     help="move verified suffix copies into --trash-dir (originals stay)")
@@ -234,6 +275,9 @@ def main(argv: list[str] | None = None) -> int:
     if not roots:
         print("error: no existing root folders to scan", file=sys.stderr)
         return 2
+    if args.out_dir and Path(args.out_dir).expanduser().exists() and not Path(args.out_dir).expanduser().is_dir():
+        print(f"error: --out-dir {args.out_dir}: exists and is not a folder", file=sys.stderr)
+        return 2
     excludes = set(args.exclude_dir) if args.exclude_dir else set(DEFAULT_EXCLUDES)
     progress = None if args.quiet else (lambda m: print(f"[dupes] {m}", file=sys.stderr, flush=True))
 
@@ -248,16 +292,11 @@ def main(argv: list[str] | None = None) -> int:
               "moved": None, "failed": [], "moved_bytes": 0, "trash_dir": None}
 
     if args.out_dir:
-        out = Path(args.out_dir)
-        out.mkdir(parents=True, exist_ok=True)
-        with open(out / "duplicates.txt", "w", encoding="utf-8") as fh:
-            for g in groups:
-                fh.write(f"[{len(g['paths'])} copies x {human(g['bytes'])}, {human(g['wasted'])} wasted]\n")
-                fh.write("".join(f"  {p}\n" for p in g["paths"]) + "\n")
-        (out / "suffix-copies.txt").write_text("".join(f"{c['copy']}\n" for c in copies), encoding="utf-8")
-        with open(out / "folder-pairs.txt", "w", encoding="utf-8") as fh:
-            for e in result["folder_pairs"]:
-                fh.write(f"{human(e['wasted']):>10}  {e['groups']:>5} groups  {' <-> '.join(e['folders'])}\n")
+        try:
+            write_lists(Path(args.out_dir).expanduser(), groups, copies, result["folder_pairs"])
+        except OSError as exc:
+            print(f"error: cannot write --out-dir {args.out_dir}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
 
     if args.trash_suffix_copies:
         trash_dir = (Path(args.trash_dir).expanduser() if args.trash_dir

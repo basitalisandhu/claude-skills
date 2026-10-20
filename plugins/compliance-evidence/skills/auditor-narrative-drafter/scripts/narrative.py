@@ -15,7 +15,10 @@ starts with the disclaimer that it is preparation for a human assessor and not a
 
 Run narrative_lint.py on the draft, and again after any human edit, before it goes to the assessor.
 
-Exit codes: 0 draft written, 2 bad input (unreadable map, unknown control). Nothing here calls any API.
+Control identifiers are matched without regard to case, and a control named twice is drafted once.
+
+Exit codes: 0 draft written, 2 bad input (unreadable map, a map entry without id, state or topic, an empty map,
+unknown control, or an --out path that cannot be written). Nothing here calls any API.
 """
 from __future__ import annotations
 
@@ -46,6 +49,18 @@ def load_map(path: str) -> dict:
     data = load_json(Path(path))
     if not isinstance(data, dict) or not isinstance(data.get("controls"), list) or data.get("framework") not in LABELS:
         raise InputError(f"{path}: not a control map written by control_map.py (--out or --json)")
+    if not data["controls"]:
+        raise InputError(f"{path}: the control map has no controls; check the --map used with control_map.py")
+    for n, c in enumerate(data["controls"]):
+        missing = [k for k in ("id", "state", "topic") if not isinstance(c, dict) or not c.get(k)]
+        if missing:
+            raise InputError(f"{path}: controls[{n}] has no {', '.join(missing)}; regenerate it with control_map.py")
+        for chk in c.get("checks") or []:
+            for cit in (chk.get("citations") if isinstance(chk, dict) else None) or []:
+                if not isinstance(cit, dict) or not cit.get("file") or not cit.get("field"):
+                    raise InputError(f"{path}: control {c['id']}: a citation without file or field")
+            if isinstance(chk, dict):
+                chk.setdefault("state", c["state"])
     return data
 
 
@@ -94,11 +109,13 @@ def control_section(ctrl: dict) -> list[str]:
 
 def draft(cmap: dict, control_ids: list[str] | None, drafted: datetime) -> str:
     by_id = {c["id"]: c for c in cmap["controls"]}
+    folded = {k.strip().upper(): k for k in by_id}
     if control_ids:
-        unknown = [c for c in control_ids if c not in by_id]
+        wanted = list(dict.fromkeys(c.strip().upper() for c in control_ids))
+        unknown = [c for c in wanted if c not in folded]
         if unknown:
             raise InputError(f"control(s) not in the control map: {', '.join(unknown)}; available: {', '.join(by_id)}")
-        chosen = [by_id[c] for c in control_ids]
+        chosen = [by_id[folded[c]] for c in wanted]
     else:
         chosen = list(by_id.values())
     lines = [f"# Draft control narratives: {LABELS[cmap['framework']]} identifiers", "", f"> {DISCLAIMER}", "",
@@ -129,7 +146,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"error: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     if args.json:
         print(dumps({"framework": cmap["framework"], "controls": args.control or [c["id"] for c in cmap["controls"]],
                      "markdown": text, "disclaimer": DISCLAIMER}))

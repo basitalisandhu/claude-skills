@@ -58,7 +58,7 @@ Say "identical" only for files the script hashed in full. Wasted space is the si
 | `suffix_copies` | copies named `<stem> (n)<ext>`, `<stem> copy<ext>` or `<stem> copy n<ext>` next to an identical `<stem><ext>` |
 | `moved`, `failed` | present only with `--trash-suffix-copies`; each failed row carries the reason |
 
-Exit codes: 0 no duplicate groups, 1 duplicates found (or copies moved), 2 bad input.
+Exit codes: 0 no duplicate groups, 1 duplicates found (or copies moved), 2 bad input or usage. Bad input or usage: a home or root that is not a folder, a negative or non-numeric number option, an output or log path that cannot be written (checked before the scan starts).
 
 ## Output format
 

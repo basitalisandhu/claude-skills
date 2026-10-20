@@ -471,7 +471,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     text = json.dumps(doc, indent=2) + "\n" if args.json else render(doc)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"agent_action_timeline.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(text)
     s = doc["summary"]

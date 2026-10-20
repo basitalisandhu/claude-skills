@@ -66,8 +66,11 @@ Exit codes: 0 no findings, 1 at least one finding (conflict, broad allow, malfor
 | Finding | Meaning |
 |---|---|
 | `conflict-allow-deny`, `conflict-ask-deny`, `conflict-allow-ask` | the same rule in two lists; the stricter list keeps it, as the host evaluates deny, then ask, then allow |
-| `broad-allow` | an allow rule covering a whole tool or server: `Bash`, `Bash(*)`, `Read(**)`, `Edit(/**)`, `WebFetch`, `WebFetch(domain:*)`, `mcp__*`, `mcp__server`, `mcp__server__*` |
-| `malformed-rule` | not `Tool` or `Tool(specifier)`; dropped |
+| `broad-allow` | an allow rule covering a whole tool or server: `Bash`, `Bash(*)`, `PowerShell`, `PowerShell(*)`, `Read(**)`, `Edit(/**)`, `WebFetch`, `WebFetch(domain:*)`, `mcp__server`, `mcp__server__*` |
+| `allow-glob-ignored` | an allow rule with `*` in the tool name and no literal `mcp__<server>__` prefix (`*`, `B*`, `mcp__*`): Claude Code skips it with a warning and it approves nothing, so it is dropped. Deny and ask rules may glob the tool name |
+| `wildcard-before-subcommand` | a Bash or PowerShell allow rule whose `*` stands for the program or the subcommand, such as `Bash(* --version)` or `Bash(git * main)`; Claude Code warns about these at startup |
+| `colon-star-literal` | `:*` anywhere but the end of a Bash or PowerShell pattern, such as `Bash(git:* push)`: the colon is literal there and the rule does not match what it seems to |
+| `malformed-rule` | not `Tool`, `Tool(specifier)` or a tool-name glob; dropped |
 | `deny-removed` | with `--replace`, a deny rule the current file has and the result does not |
 
 ## Output

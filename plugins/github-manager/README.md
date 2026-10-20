@@ -9,6 +9,8 @@ Four engineering manager skills that compute from exported GitHub data, each wit
 | `incident-postmortem-timeline` | `skills/incident-postmortem-timeline/scripts/postmortem.py` | build a blameless timeline of an incident issue with detected, acknowledged, mitigated and resolved phases, people as roles, questions for the review and a cited postmortem skeleton |
 | `issue-triage-digest` | `skills/issue-triage-digest/scripts/issue_triage.py` | flag unlabelled, unanswered, possibly duplicate, stale and popular open issues, suggest a label per issue from a YAML keyword map, and count issues per check and label, as Markdown and JSON |
 
+Exit codes are the same in every script: 0 clean, 1 something flagged (`pr_queue.py`, `issue_triage.py`, `postmortem.py --check`), 2 bad input or usage, with a message that names the file and row. `iteration_report.py` has no findings and never exits 1.
+
 Requirements: Python 3.11 or newer on `PATH` as `python3`, and the gh CLI for the export step. The scripts read saved JSON only: no network access, no third-party packages. Team level only: no per-person scoring.
 
 Use it when you want to find stale PRs and stale drafts before standup (`pr-queue-digest`), or a cycle time to merge that stands in for the DORA metrics' lead time for changes up to the merge (`iteration-report`; deployment frequency, change failure rate and time to restore are not computed). For issue triage (unlabelled, unanswered, duplicate and stale issues, label suggestions) use `issue-triage-digest`; for open pull requests use `pr-queue-digest`.

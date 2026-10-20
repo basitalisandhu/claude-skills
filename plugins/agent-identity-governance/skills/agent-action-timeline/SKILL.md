@@ -45,6 +45,8 @@ Optional files: `--allow-list` with one `fnmatch` pattern per line (`s3:Get*`, `
 
 ## Script
 
+To see the output first, run it on the bundled CloudTrail sample: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-action-timeline/scripts/agent_action_timeline.py" --identity ci-deployer --cloudtrail "${CLAUDE_PLUGIN_ROOT}/examples/logs/cloudtrail.json" --allow-list "${CLAUDE_PLUGIN_ROOT}/examples/logs/allow.txt"`. It exits 1: `iam:CreateAccessKey` is outside the allow list. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/agent_action_timeline.py` from the skill folder; the examples live in the plugin's `examples/` folder, so take them from a clone of the repository.
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-action-timeline/scripts/agent_action_timeline.py" --identity <appId> --identity agent-runtime --entra-signins signins.json --cloudtrail cloudtrail.json --allow-list allow.txt
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-action-timeline/scripts/agent_action_timeline.py" --identity deploy-bot[bot] --github-audit gh-audit.json --since 2026-09-28 --until 2026-10-04 --json

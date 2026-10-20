@@ -69,7 +69,7 @@ Older gh versions do not offer the `closingIssuesReferences` field; drop it from
 | `--redact` | replace logins that appear in titles with `user-xxxxxx` tokens |
 | `--json` | the full report as JSON |
 
-Exit codes: 0 report written, 2 bad input (missing files, invalid JSON, a window that ends before it starts, an unknown milestone).
+Exit codes: 0 report written, 2 bad input or usage (missing files, a window that ends before it starts, an unknown milestone). Bad input includes an empty file, a file that is not JSON, an object where `gh` writes a list, a `number` that is not a whole number and a time field that is not an ISO time; the message names the file and row.
 
 ## Reading the output
 

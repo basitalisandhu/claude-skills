@@ -1,0 +1,2 @@
+s3:ListBuckets
+s3:GetObject

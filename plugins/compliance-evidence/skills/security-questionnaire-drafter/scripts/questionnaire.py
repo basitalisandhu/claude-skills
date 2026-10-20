@@ -3,7 +3,8 @@
 file behind every answer and marking questions with no evidence as not assessable instead of inventing an answer.
 
 Inputs:
-  questionnaire   CSV (the column whose header contains "question" holds the questions; an "id", "#", "no", "ref"
+  questionnaire   CSV or TSV, comma, semicolon or tab separated, UTF-8, UTF-16 or Windows-1252 as spreadsheet
+                  programs save them (the column whose header contains "question" holds the questions; an "id", "#", "no", "ref"
                   or "number" column is used as the question id) or Markdown (a table with a "Question" column,
                   numbered or bulleted list items, or lines ending in "?"). Export XLSX questionnaires to CSV first.
   --evidence      an evidence pack folder with manifest.json (from evidence-pack-builder), or any folder of files.
@@ -120,8 +121,31 @@ def concepts(text: str) -> set[str]:
 # --- questionnaire ---------------------------------------------------------------------------------------------
 
 
+def read_questionnaire(path: Path) -> str:
+    """Questionnaire text. Spreadsheet exports are often not UTF-8: Excel's "Unicode Text" is UTF-16 with a byte
+    order mark, and "CSV" on Windows is code page 1252. Both are read; other files must be UTF-8."""
+    try:
+        if path.stat().st_size > MAX_BYTES:
+            raise InputError(f"{path.name}: larger than 5 MB")
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise InputError(f"{path}: cannot read: {exc}") from exc
+    if raw[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        return raw.decode("utf-16")
+    try:
+        return raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        try:
+            return raw.decode("cp1252")
+        except UnicodeDecodeError as exc:
+            raise InputError(f"{path.name}: not UTF-8, UTF-16 or Windows-1252 text") from exc
+
+
 def parse_csv(text: str) -> list[dict]:
-    rows = list(csv.reader(io.StringIO(text)))
+    first = text.splitlines()[0] if text.strip() else ""
+    # Excel in many European locales writes ";" between fields, and "Unicode Text" uses tabs
+    delimiter = max((";", "\t", ","), key=first.count) if first and max(first.count(d) for d in (";", "\t", ",")) else ","
+    rows = list(csv.reader(io.StringIO(text), delimiter=delimiter))
     if not rows or not any(c.strip() for c in rows[0]):
         raise InputError("questionnaire CSV has no header row")
     header = [h.strip().lower() for h in rows[0]]
@@ -164,15 +188,16 @@ def parse_markdown(text: str) -> list[dict]:
 
 
 def load_questions(path: Path) -> list[dict]:
-    text = read(path)
-    qs = parse_csv(text) if path.suffix.lower() == ".csv" else parse_markdown(text)
+    text = read_questionnaire(path)
+    qs = parse_csv(text) if path.suffix.lower() in (".csv", ".tsv") else parse_markdown(text)
     if not qs:
         raise InputError(f"{path.name}: no questions found")
-    seen: dict[str, int] = {}
+    taken: set[str] = set()
     for q in qs:
-        seen[q["id"]] = seen.get(q["id"], 0) + 1
-        if seen[q["id"]] > 1:
-            q["id"] = f"{q['id']}-{seen[q['id']]}"
+        base, n = q["id"], 2
+        while q["id"] in taken:  # a repeated id gets -2, -3 ..., skipping ids the file already uses
+            q["id"], n = f"{base}-{n}", n + 1
+        taken.add(q["id"])
     return qs
 
 
@@ -232,6 +257,10 @@ def load_evidence(folder: Path | None) -> tuple[list[dict], list[str]]:
         for f in doc["files"]:
             if not isinstance(f, dict) or not f.get("path"):
                 raise InputError("manifest.json: every file entry needs a path")
+            rel = str(f["path"]).replace("\\", "/")
+            if rel.startswith("/") or re.match(r"^[A-Za-z]:", rel) or ".." in rel.split("/"):
+                notes.append(f"{f['path']}: path points outside the pack; not cited")
+                continue
             p = root / f["path"]
             if not p.is_file():
                 notes.append(f"{f['path']}: listed in the manifest but not found; not cited")
@@ -251,6 +280,8 @@ def load_evidence(folder: Path | None) -> tuple[list[dict], list[str]]:
         notes.append("no manifest.json: files are cited by path without a hash check")
         for p in sorted(x for x in folder.rglob("*") if x.is_file()):
             rel = p.relative_to(folder).as_posix()
+            if any(part.startswith(".") for part in rel.split("/")):
+                continue  # .DS_Store, .git and other hidden files are not evidence
             files.append({"path": rel, "collected_at": "", "sha256": "", "text": rel})
     for f in files:
         f["concepts"] = concepts(f["text"])

@@ -1,6 +1,6 @@
 ---
 name: adr-miner
-description: "Recover architecture decisions that were made but never written down by mining git history, manifest and config changes and rationale comments, then draft MADR stubs (status proposed) that cite a commit SHA on every line; a second script lints an existing docs/adr folder for numbering, status and superseded-link problems. Use when asked \"why did we switch to X?\" or to backfill ADRs. Not for recording a decision being made now (adr-writer, or decision-log for operational decisions) or generating a changelog."
+description: "Recover design decisions that were made but never written down by mining git history, manifest and config changes and rationale comments, then draft MADR stubs (status proposed) that cite a commit SHA on every line; a second script lints an existing docs/adr folder for numbering, status and superseded-link problems. Use when asked \"why did we switch to X?\", to dig old decisions out of git history, or to backfill ADRs. Not for writing a new architecture decision record or a decision being made now (adr-writer, or decision-log for operational decisions) or generating a changelog."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3, and git. Standard library only, no network access.
 metadata:
@@ -32,6 +32,8 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/adr-miner/scripts/adr_mine.py" .
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/adr-miner/scripts/adr_mine.py" . --range v1.0.0..HEAD --json
    ```
+
+   Test fixtures and vendored code produce config and comment candidates that are not decisions; leave them out with `--exclude tests/fixtures` (repeatable).
 
    If this skill was copied into `.claude/skills/` without the plugin system, `${CLAUDE_PLUGIN_ROOT}` is empty. Replace `${CLAUDE_PLUGIN_ROOT}/skills/adr-miner` with the path to this skill's folder, for example `.claude/skills/adr-miner`, and run the command from the repository root. The same applies to any other script command in this skill.
 
@@ -66,6 +68,7 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
 | `adr_mine.py` | `--no-comments` | skip TODO and NOTE comment mining |
 | `adr_mine.py` | `--out-dir DIR` | write one stub per candidate, numbered after the highest existing ADR; never overwrites |
 | `adr_mine.py` | `--stubs` | also print each stub (JSON: `stub_markdown`) |
+| `adr_mine.py` | `--exclude GLOB` | leave matching paths out of config and comment mining, for example `tests/fixtures` (repeatable) |
 | `adr_lint.py` | `ADR_DIR` | the folder to check (default `docs/adr`) |
 | `adr_lint.py` | `--strict` | warnings also make the exit code 1 |
 | both | `--json` | JSON output |
@@ -82,7 +85,7 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
 
 | Lint rule | Level | Meaning |
 |---|---|---|
-| `ADR-GAP` | error | a number missing between the lowest and highest ADR |
+| `ADR-GAP` | error | a number, or a run of numbers, missing between the lowest and highest ADR |
 | `ADR-DUP` | error | two files share a number |
 | `ADR-STATUS` | error | no status, or one outside proposed, accepted, rejected, deprecated, superseded, draft |
 | `ADR-SUPERSEDED` | error | superseded with no link to, or number of, the replacing ADR |
@@ -90,6 +93,8 @@ Every sentence in a stub must trace to a cited commit, diff line or comment. Do 
 | `ADR-TITLE` | error | no level-one heading |
 | `ADR-BACKLINK` | warning | B replaces A, but B does not mention A |
 | `ADR-NAME` | warning | a Markdown file not named `NNNN-title.md` (README, index and template files are skipped) |
+| `ADR-READ` | error | an ADR file that cannot be read |
+| `ADR-EMPTY` | warning | no `NNNN-title.md` file in the folder, so it is probably the wrong folder |
 
 ## Output format
 

@@ -42,6 +42,10 @@ FRAMEWORK_DECORATORS = {"route", "get", "post", "put", "patch", "delete", "task"
 JS_EXPORT_RE = re.compile(r"^\s*export\s+(?:default\s+)?(?:async\s+)?(?:function\*?|class|const|let|var|enum|interface|type|abstract\s+class)\s+([A-Za-z_$][\w$]*)", re.M)
 JS_EXPORT_LIST_RE = re.compile(r"^\s*export\s*\{([^}]*)\}\s*(?:;|$)", re.M)
 JS_EXPORT_DEFAULT_RE = re.compile(r"^\s*export\s+default\b", re.M)
+JS_MODULE_EXPORTS_OBJ_RE = re.compile(r"module\.exports\s*=\s*\{", re.M)
+JS_MODULE_EXPORTS_DOT_RE = re.compile(r"module\.exports\.([A-Za-z_$][\w$]*)\s*=", re.M)
+JS_EXPORTS_DOT_RE = re.compile(r"^\s*exports\.([A-Za-z_$][\w$]*)\s*=", re.M)
+JS_IDENT_RE = re.compile(r"^[A-Za-z_$][\w$]*$")
 WORD_RE = re.compile(r"[A-Za-z_$][\w$]*")
 
 
@@ -116,6 +120,113 @@ def python_candidates(path: Path, tree: ast.Module, include_private: bool) -> li
     return out
 
 
+def _js_object_body(text: str, open_at: int) -> tuple[int, int]:
+    """Span of the object literal whose opening brace is at ``open_at``.
+
+    The scan counts braces so a value like ``a: function () { return 1; }`` does
+    not end the object early (a ``[^}]*`` match would). Returns ``(start, end)``
+    with ``start`` just after the opening brace and ``end`` at the matching
+    closing brace, or ``(-1, -1)`` when the literal is unterminated.
+    """
+    depth = 0
+    in_str: str | None = None
+    in_template = False
+    i = open_at
+    while i < len(text):
+        ch = text[i]
+        if in_str:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == in_str:
+                in_str = None
+        elif in_template:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == "`":
+                in_template = False
+        elif ch in "'\"":
+            in_str = ch
+        elif ch == "`":
+            in_template = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return open_at + 1, i
+        i += 1
+    return -1, -1
+
+
+def _js_split_top_level(inner: str) -> list[int]:
+    """Offsets in ``inner`` where a depth-0 item starts.
+
+    Splitting only at depth 0 keeps an inline function body or a nested object in
+    one part, so ``a: function () { return 1; }, b`` yields two items.
+    """
+    starts = [0]
+    depth = 0
+    in_str: str | None = None
+    in_template = False
+    i = 0
+    while i < len(inner):
+        ch = inner[i]
+        if in_str:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == in_str:
+                in_str = None
+        elif in_template:
+            if ch == "\\":
+                i += 2
+                continue
+            if ch == "`":
+                in_template = False
+        elif ch in "'\"":
+            in_str = ch
+        elif ch == "`":
+            in_template = True
+        elif ch in "{([":
+            depth += 1
+        elif ch in "})]":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            starts.append(i + 1)
+        i += 1
+    return starts
+
+
+def _js_object_export_names(text: str, inner_start: int, inner_end: int) -> list[tuple[str, int]]:
+    """Keys of a ``module.exports = { ... }`` literal, with absolute offsets.
+
+    Offsets are measured against the whole source, so a multi-line literal
+    reports each key on its own line rather than all of them on the opening
+    brace. Computed keys (``[expr]:``) and spread (``...other``) are skipped
+    because their exported name is not static.
+    """
+    inner = text[inner_start:inner_end]
+    bounds = _js_split_top_level(inner) + [len(inner)]
+    names: list[tuple[str, int]] = []
+    for start, stop in zip(bounds, bounds[1:]):
+        raw = inner[start:stop]
+        part = raw.strip().rstrip(",").strip()
+        if not part or part.startswith("...") or part.startswith("["):
+            continue
+        head = part.split(":", 1)[0]
+        key = head.split("(", 1)[0].strip()
+        for prefix in ("async ", "get ", "set "):
+            if key.startswith(prefix):
+                key = key[len(prefix):].strip()
+        if JS_IDENT_RE.match(key):
+            key_at = inner.find(key, start, stop)
+            if key_at >= 0:
+                names.append((key, inner_start + key_at))
+    return names
+
+
 def js_candidates(path: Path, text: str) -> list[dict]:
     out: list[dict] = []
     if path.stem == "index" or JS_EXPORT_DEFAULT_RE.search(text) and path.suffix in {".jsx", ".tsx"}:
@@ -132,6 +243,20 @@ def js_candidates(path: Path, text: str) -> list[dict]:
             name = part.split(" as ")[-1].strip()
             if name and name != "default":
                 out.append({"file": str(path), "line": line, "name": name, "kind": "export", "qualname": name, "language": "javascript"})
+    for m in JS_MODULE_EXPORTS_OBJ_RE.finditer(text):
+        open_at = m.end() - 1
+        inner_start, inner_end = _js_object_body(text, open_at)
+        if inner_start < 0:
+            continue
+        for name, pos in _js_object_export_names(text, inner_start, inner_end):
+            line = text.count("\n", 0, pos) + 1
+            out.append({"file": str(path), "line": line, "name": name, "kind": "export", "qualname": name, "language": "javascript"})
+    for m in JS_MODULE_EXPORTS_DOT_RE.finditer(text):
+        line = text.count("\n", 0, m.start()) + 1
+        out.append({"file": str(path), "line": line, "name": m.group(1), "kind": "export", "qualname": m.group(1), "language": "javascript"})
+    for m in JS_EXPORTS_DOT_RE.finditer(text):
+        line = text.count("\n", 0, m.start()) + 1
+        out.append({"file": str(path), "line": line, "name": m.group(1), "kind": "export", "qualname": m.group(1), "language": "javascript"})
     return out
 
 

@@ -1,6 +1,6 @@
 ---
 name: credential-expiry-radar
-description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked \"which app secrets expire this month?\", before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything (it calls no API) or for finding secrets leaked in code (leaked-credential-response)."
+description: "Find the secrets, certificates, access keys and tokens that have expired or soon will, across Entra apps and Agent ID blueprints, AWS IAM, GitHub fine-grained tokens and a CSV of other keys, bucketed at 7, 30 and 90 days with an action list per owner. Use when asked \"which app secrets expire this month?\", before a rotation sprint, or after an outage caused by an expired secret. Not for rotating anything, finding leaked secrets (leaked-credential-response) or a human access review pack (access-review-pack)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:
@@ -27,6 +27,8 @@ One folder holding any of these files (at least one). The names match `nhi-inven
 |---|---|---|
 | `entra-applications.json` | `mgc applications list --expand owners --all --output json` (`GET /v1.0/applications?$expand=owners`) | Application.Read.All |
 | `entra-service-principals.json` | `mgc service-principals list --expand owners --all --output json` (SAML signing and other credentials) | Application.Read.All |
+| `entra-agent-blueprints.json` | `GET /v1.0/applications/microsoft.graph.agentIdentityBlueprint` (Entra Agent ID blueprints hold the credentials their agent identities use) | AgentIdentityBlueprint.Read.All |
+| `entra-agent-identities.json` | `GET /v1.0/servicePrincipals/microsoft.graph.agentIdentity` (optional: counts the agent identities behind each blueprint credential) | AgentIdentity.Read.All |
 | `aws-access-keys.json` | `for u in $(aws iam list-users --query 'Users[].UserName' --output text); do aws iam list-access-keys --user-name "$u" --output json; done \| jq -s .` | iam:ListUsers, iam:ListAccessKeys |
 | `aws-credential-report.csv` | `aws iam generate-credential-report` then `aws iam get-credential-report --query Content --output text \| base64 --decode` (used when the file above is absent) | iam:GenerateCredentialReport, iam:GetCredentialReport |
 | `aws-authorization-details.json` | `aws iam get-account-authorization-details --filter User --output json` (owner tags) | iam:GetAccountAuthorizationDetails |
@@ -49,6 +51,8 @@ search api,vendor portal,amy@example.com,KEY-0000-9z9z,2026-01-01,2027-01-01
 5. Offer to run it again on a schedule: the exit code is 1 while anything is expired or due within `--fail-within` days.
 
 ## Script
+
+To see the output first, run it on the bundled synthetic exports: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/credential-expiry-radar/scripts/credential_expiry_radar.py" "${CLAUDE_PLUGIN_ROOT}/examples/exports" --as-of 2026-10-05`. A blueprint secret shows as "client secret on agent blueprint, used by 2 agent identities"; a blueprint listed in both the applications and the blueprint export is counted once. Owners include sponsors. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/credential_expiry_radar.py` from the skill folder; the examples live in the plugin's `examples/` folder, so take them from a clone of the repository.
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/credential-expiry-radar/scripts/credential_expiry_radar.py" ./exports --as-of 2026-10-05

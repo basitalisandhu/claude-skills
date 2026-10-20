@@ -1,6 +1,6 @@
 ---
 name: regex-builder
-description: "Write and test regular expressions that match what they should and nothing else: a bundled script runs a pattern against labelled cases, shows each match and captured group, and warns on patterns that can backtrack catastrophically, with timing on adversarial inputs. Use when asked to write a regex (phone numbers, dates, log lines), \"why does my pattern not match\", to extract fields from text, or to check a regex used on user input. Not for parsing structured formats (JSON, HTML, URLs: use a parser) and not for full-text search."
+description: "Write and test regular expressions that match what they should and nothing else: a bundled script runs a pattern against labelled sample lines, shows each match and captured group, and warns on patterns that can backtrack catastrophically. Use when asked to \"write a regex\" (phone numbers, dates, ids), \"why does my pattern not match\", to \"extract the id and amount from lines like\" a sample, or to check a regex used on user input. Not for parsing structured formats (JSON, HTML, URLs: use a parser) and not for full-text search."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Python re dialect; notes for JavaScript and PCRE differences included.
 metadata:

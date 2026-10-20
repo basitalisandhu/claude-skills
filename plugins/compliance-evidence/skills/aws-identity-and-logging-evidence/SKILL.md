@@ -106,6 +106,8 @@ in-scope set with the user. For one region, the regional files can sit directly 
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/aws-identity-and-logging-evidence/scripts/aws_evidence.py" ./evidence-2026-q3/aws --json --out aws-rows.json --redact
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/scripts/aws_evidence.py tests/fixtures/aws/gaps --config tests/fixtures/aws/config.yaml` (an account with planted gaps). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/aws_evidence.py` from the skill folder.
+
    Options: `--as-of YYYY-MM-DD` (date for key age), `--cite-prefix aws/`, `--json`, `--out`, `--redact`,
    `--fail-on contradicted|not-assessable|none`.
 

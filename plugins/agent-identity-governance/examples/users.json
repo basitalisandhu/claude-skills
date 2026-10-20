@@ -1,0 +1,6 @@
+{"value": [
+  {"userPrincipalName": "sam@example.com", "accountEnabled": true},
+  {"userPrincipalName": "kim@example.com", "accountEnabled": true},
+  {"userPrincipalName": "ops@example.com", "accountEnabled": false},
+  {"userPrincipalName": "platform@example.com", "accountEnabled": true}
+]}

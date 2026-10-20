@@ -42,19 +42,21 @@ Skipped, NotRun, Error and Investigate never count as support. A skipped Conditi
 
 ## Inputs
 
-1. **The results file.** In PowerShell, after `Connect-Maester` with a reader account: `Invoke-Maester -OutputJsonFile ./maester-results.json`. The file has `ExecutedAt`, `TenantId`, `TenantName`, the counts and a `Tests` list; each test has `Id` (for example `MT.1001`, `CIS.M365.1.1.1`, `EIDSCA.AF01`, `MS.AAD.3.1`), `Title`, `Tag` and `Result`.
+1. **The results file.** In PowerShell, after `Connect-Maester` with a reader account: `Invoke-Maester -OutputJsonFile ./maester-results.json`. The file has `ExecutedAt`, `TenantId`, `TenantName`, the counts and a `Tests` list; each test has `Id` (for example `MT.1001`, `CIS.M365.1.1.1`, `EIDSCA.AF01`, `CISA.MS.AAD.3.1`), `Title`, `Tag` and `Result`.
 2. **The mapping** (`maester-map.csv`), one row per rule:
 
    ```csv
    match,framework,control,note
-   tag:MFA,iso27001,A.8.5,tests tagged MFA read multi-factor sign-in settings
+   MT.1006,iso27001,A.8.5,Conditional Access requires MFA for administrators
    CIS.M365.1.1.*,iso27001,A.8.2,CIS section 1.1 is about administrative accounts
    MT.1001,iso27001,A.8.1,Conditional Access requires a compliant device
    ```
 
    `match` is an exact test id, an id prefix ending in `*`, or `tag:<Tag>`. `framework` is `iso27001` or `soc2`. `control` must be in [references/iso27001-identifiers.md](references/iso27001-identifiers.md) or [references/soc2-identifiers.md](references/soc2-identifiers.md) (copies of the lists in `control-map-from-exports`, identifiers and short paraphrases only); pass `--identifiers <file>` with more rows in the same table format for identifiers those lists do not carry, with topics in your own words.
 
-   [references/example-map.csv](references/example-map.csv) is an example to review, not an authoritative mapping: five rows with the reason each is plausible. Check the tag names against your own results file and agree every row with the assessor.
+   Prefer test ids and id prefixes to tags. Maester 2.x writes each test's `Describe` and `It` tags into `Tag` (for example `Maester`, `CA`, `EIDSCA`, `EIDSCA.AF01`, `MS.AAD.3.1`, `CISA`); Maester 3 (in preview at the time of writing) keeps its old tags for selecting tests only and writes just the tags a test author or suite set, so a `tag:` row that matched on 2.x can match nothing on 3. Maester has never had an `MFA` tag: multi-factor tests are found by id, such as `MT.1006` and `MT.1007` (Conditional Access requires MFA for admins, for all users) and `CISA.MS.AAD.3.*`. CISA SCuBA test ids start with `CISA.` (`CISA.MS.AAD.3.1`); a `MS.AAD.3.*` row matches nothing.
+
+   [references/example-map.csv](references/example-map.csv) is an example to review, not an authoritative mapping: five id-based rows with the reason each is plausible, checked against the test ids in the Maester repository (2.3.0 and the 3.0 previews). Agree every row with the assessor, and read the "matched no test" list after each Maester upgrade.
 
 ## Procedure
 
@@ -66,6 +68,8 @@ Skipped, NotRun, Error and Investigate never count as support. A skipped Conditi
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/maester-control-map/scripts/maester_map.py" maester-results.json --map maester-map.csv --as-of 2026-10-16
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/maester-control-map/scripts/maester_map.py" maester-results.json --map maester-map.csv --annotated-csv maester-annotated.csv --json --redact --out maester-map.json
    ```
+
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/maester-control-map/scripts/maester_map.py tests/fixtures/maester/results.json --map plugins/compliance-evidence/skills/maester-control-map/references/example-map.csv --as-of 2026-10-16` (exits 1: A.8.2 is contradicted). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/maester_map.py` from the skill folder.
 
    Options: `--map`, `--identifiers` (repeatable), `--as-of` (default today), `--max-age-days` (default 30), `--annotated-csv`, `--json`, `--redact`, `--out`.
 

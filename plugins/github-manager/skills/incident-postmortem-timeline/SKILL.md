@@ -71,7 +71,7 @@ done
 | `--json` | the full report as JSON |
 | `--check DRAFT` | check draft table times against the exported timeline within one minute; exit 1 if any draft time cannot be matched |
 
-Exit codes: 0 written with no draft problems, 1 unmatched draft times, 2 bad input (missing files, wrong issue number, invalid JSON, a bad pattern). In Markdown mode, draft diagnostics go to stderr, keeping redirected reports clean.
+Exit codes: 0 written with no draft problems, 1 unmatched draft times, 2 bad input or usage (missing files, wrong issue number, a bad pattern). Bad input includes an empty file, a file that is not JSON, an object where `gh` writes a list, a `number` that is not a whole number and a time field that is not an ISO time; the message names the file and row. In Markdown mode, draft diagnostics go to stderr, keeping redirected reports clean.
 
 ## Reading the output
 

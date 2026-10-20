@@ -11,15 +11,16 @@ Spec keys (all optional; a guardrail is emitted only when its key is set):
   deny_iam_users_outside: ["111122223333"]          deny IAM user and access key creation outside these account ids
   require_imdsv2: true                              require IMDSv2 on new instances and for role credentials
   deny_public_s3_acls: true                         deny public canned ACLs and changes to the account public access block
-  max_policy_chars: 5120                            size limit per document (the AWS SCP limit is 5120)
+  max_policy_chars: 10240                           size limit per document (the AWS SCP quota is 10,240)
 
 Each guardrail is one or more statements (see references/scp-catalog.md). Statements are packed in order into as few
 documents as fit under the size limit, measured on the compact JSON form (no whitespace), which is what you should
 upload. Every document is linted with scp_lint.py before it is written; a lint error stops the build.
 
 Output: scp-01.json, scp-02.json, ... in --out, plus manifest.json listing statements, sizes and the guardrails in
-each file. AWS allows at most 5 SCPs attached to one target, including FullAWSAccess, so more than 4 documents is a
-warning.
+each file. AWS allows at most 10 SCPs attached directly to one root, OU or account, including FullAWSAccess, so more
+than 9 documents is a warning. Both quotas are from the AWS Organizations quotas page (checked 2026-10-18). The
+AWS CLI and SDKs store a policy exactly as given, whitespace included, so upload the compact files as written.
 
 Exit codes: 0 built, 1 lint errors in the generated documents, 2 bad spec.
 """
@@ -27,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -36,8 +38,8 @@ from _miniyaml import YAMLError  # noqa: E402
 from _miniyaml import load as yaml_load  # noqa: E402
 from scp_lint import compact, lint_policy  # noqa: E402
 
-SCP_LIMIT = 5120
-MAX_ATTACHED = 5
+SCP_LIMIT = 10240  # AWS Organizations quota for an SCP document (an RCP is 5120)
+MAX_ATTACHED = 10  # SCPs attached directly to one root, OU or account
 
 # Global and account-level actions exempt from the region guardrail. Based on the example in the AWS Organizations
 # documentation ("Deny access to AWS based on the requested AWS Region"); review it against the current page.
@@ -59,11 +61,17 @@ SECURITY_SERVICE_ACTIONS = {
                          "guardduty:DisassociateFromMasterAccount", "guardduty:DisassociateMembers",
                          "guardduty:StopMonitoringMembers", "guardduty:UpdateDetector"],
     "ProtectSecurityHub": ["securityhub:BatchDisableStandards", "securityhub:DeleteMembers", "securityhub:DisableSecurityHub",
-                           "securityhub:DisassociateFromAdministratorAccount", "securityhub:DisassociateFromMasterAccount",
+                           "securityhub:DisableSecurityHubV2", "securityhub:DisassociateFromAdministratorAccount",
+                           "securityhub:DisassociateFromMasterAccount",
                            "securityhub:DisassociateMembers"],
     "ProtectConfig": ["config:DeleteConfigurationRecorder", "config:DeleteDeliveryChannel",
                       "config:DeleteRetentionConfiguration", "config:StopConfigurationRecorder"],
 }
+
+BOOL_KEYS = ("deny_leave_organization", "deny_disable_security_services", "deny_root_user", "require_imdsv2",
+             "deny_public_s3_acls")
+REGION_RE = re.compile(r"^[a-z]{2}(-[a-z]+)+-\d{1,2}$")  # ap-southeast-2, us-gov-west-1, eu-central-1
+ROLE_RE = re.compile(r"^[\w+=,.@-]{1,64}\*?$")  # IAM role name characters, optionally ending in *
 
 KNOWN_KEYS = {"allowed_regions", "protected_roles", "deny_leave_organization", "deny_disable_security_services",
               "deny_root_user", "deny_iam_users_outside", "require_imdsv2", "deny_public_s3_acls", "max_policy_chars"}
@@ -99,6 +107,18 @@ def validate_spec(spec: dict) -> None:
             raise SpecError(f"protected_roles takes role names (optionally with a trailing *), not ARNs or paths: {role!r}")
     if "allowed_regions" in spec and not spec["allowed_regions"]:
         raise SpecError("allowed_regions is empty, which would deny every regional service")
+    for region in spec.get("allowed_regions", []):
+        if not REGION_RE.match(region):
+            raise SpecError(f"allowed_regions: {region!r} is not a region code such as ap-southeast-2")
+    for role in spec.get("protected_roles", []):
+        if not ROLE_RE.match(role):
+            raise SpecError(f"protected_roles: {role!r} is not a valid IAM role name")
+    for key in BOOL_KEYS:
+        if key in spec and not isinstance(spec[key], bool):
+            raise SpecError(f"{key} must be true or false, got {spec[key]!r}")
+    limit = spec.get("max_policy_chars", SCP_LIMIT)
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= SCP_LIMIT:
+        raise SpecError(f"max_policy_chars must be a whole number from 1 to {SCP_LIMIT} (the AWS SCP limit), got {limit!r}")
 
 
 def exemption(spec: dict) -> dict:

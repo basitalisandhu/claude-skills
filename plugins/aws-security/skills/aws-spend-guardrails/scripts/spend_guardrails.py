@@ -62,7 +62,7 @@ from _scp_builder import exemption, pack, with_condition  # noqa: E402
 from _scp_lint import compact, lint_policy  # noqa: E402
 
 LEVELS = ["high", "medium", "low"]
-SCP_LIMIT = 5120
+SCP_LIMIT = 10240  # AWS Organizations quota for an SCP document
 MAX_NOTIFICATIONS = 5
 MAX_EMAIL_SUBSCRIBERS = 10
 
@@ -366,7 +366,10 @@ def load_cost(paths: list[Path]) -> tuple[dict, list[str], str, int, bool]:
     estimated: set[str] = set()
     truncated = False
     for path in paths:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}: not JSON ({exc}); save aws ce get-cost-and-usage with --output json") from exc
         if not isinstance(data, dict) or not isinstance(data.get("ResultsByTime"), list):
             raise ValueError(f"{path}: expected aws ce get-cost-and-usage output with ResultsByTime")
         truncated = truncated or bool(data.get("NextPageToken"))
@@ -545,7 +548,13 @@ def main(argv: list[str] | None = None) -> int:
         out = Path(args.out)
         out.mkdir(parents=True, exist_ok=True)
         for name, content in result["files"].items():
-            text = content if isinstance(content, str) else json.dumps(content, indent=2) + "\n"
+            if isinstance(content, str):
+                text = content
+            elif name.startswith("spend-scp-") and name != "spend-scp-manifest.json":
+                # Organizations keeps whitespace when a policy is uploaded with the CLI, so write what was measured.
+                text = compact(content) + "\n"
+            else:
+                text = json.dumps(content, indent=2) + "\n"
             (out / name).write_text(text, encoding="utf-8")
     if args.json:
         print(json.dumps(result, indent=2))

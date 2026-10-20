@@ -8,7 +8,8 @@ Inputs:
   --map           your mapping of requirements to evidence, as CSV with columns requirement, evidence, state
                   (optional: supported or contradicted; default supported) and note, or as JSON: either
                   {"PA-ML1-01": ["path", ...]} or a list of {"requirement", "evidence", "state", "note"} objects.
-                  The requirement may be an id or a glob such as "RB-ML1-*".
+                  The requirement may be an id or a glob such as "RB-ML1-*", in any case. Evidence paths are the
+                  manifest paths; a leading "./" and Windows "\\" separators are accepted.
   --catalogue     the requirement list (default: references/e8-requirements-2023-11.json in this skill: 153
                   requirements across the eight strategies, ML1 to ML3, with the model's own wording under CC BY 4.0
                   and ids added by this repository, for example PA-ML1-01 is the first requirement that Patch
@@ -128,7 +129,10 @@ def load_pack(folder: Path) -> tuple[dict[str, dict], dict]:
     for f in doc["files"]:
         if not isinstance(f, dict) or not f.get("path"):
             raise InputError("manifest.json: every file entry needs a path")
-        files[f["path"]] = dict(f, _abs=root / f["path"])
+        rel = str(f["path"]).replace("\\", "/")
+        if rel.startswith("/") or re.match(r"^[A-Za-z]:", rel) or ".." in rel.split("/"):
+            raise InputError(f"manifest.json: {f['path']!r} points outside the pack; rebuild the pack")
+        files[rel] = dict(f, _abs=root / rel)
     return files, doc
 
 
@@ -144,14 +148,21 @@ def load_map(path: Path | None) -> list[dict]:
     else:
         doc = read_json(path)
         if isinstance(doc, dict):
+            for k, v in doc.items():
+                if not (isinstance(v, str) or (isinstance(v, list) and all(isinstance(e, str) for e in v))):
+                    raise InputError(f"{path.name}: {k!r} must map to a path or a list of paths")
             rows = [{"requirement": k, "evidence": e} for k, v in doc.items() for e in ([v] if isinstance(v, str) else v or [])]
         elif isinstance(doc, list) and all(isinstance(x, dict) for x in doc):
             rows = doc
         else:
             raise InputError(f"{path.name}: expected an object of requirement to evidence list, or a list of rows")
-    for r in rows:
+    for n, r in enumerate(rows, start=2 if path.suffix.lower() == ".csv" else 1):
         if not r.get("requirement") or not r.get("evidence"):
-            raise InputError(f"{path.name}: every mapping row needs requirement and evidence")
+            where = f"line {n}" if path.suffix.lower() == ".csv" else f"row {n}"
+            raise InputError(f"{path.name}: {where}: every mapping row needs requirement and evidence")
+        r["requirement"] = str(r["requirement"]).strip().upper()
+        ev = str(r["evidence"]).strip().replace("\\", "/")
+        r["evidence"] = ev[2:] if ev.startswith("./") else ev
         state = str(r.get("state") or SUPPORTED).strip().lower()
         if state not in (SUPPORTED, CONTRADICTED):
             raise InputError(f"{path.name}: state must be supported or contradicted, not {state!r}")
@@ -175,6 +186,9 @@ def validate(path: str, files: dict[str, dict], now: datetime, max_age: int | No
         when = parse_dt(f.get("collected_at"))
         if when is None or (now - when).days > max_age:
             reason = f"collected more than {max_age} days before {now.strftime('%Y-%m-%d')}" if when else "no collection date"
+        elif when > now:
+            # a collection time after --as-of means the date or the as-of day is wrong; the age cannot be judged
+            reason = f"collected {when.strftime('%Y-%m-%d')}, after --as-of {now.strftime('%Y-%m-%d')}"
     cache[path] = reason
     return reason
 

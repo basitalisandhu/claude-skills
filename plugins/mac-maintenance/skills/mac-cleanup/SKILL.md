@@ -73,7 +73,7 @@ Report only sizes the scripts measured and only removals that completed. A comma
 | `partly failed` | some entries could not be removed; the detail quotes the first error |
 | `failed` | the command returned an error; the detail quotes it |
 
-Exit codes: dry run 1 when there is something to clean and 0 when not; `--apply` 0 when every applicable action succeeded, 1 when any failed; 2 bad input.
+Exit codes: dry run 1 when there is something to clean and 0 when not; `--apply` 0 when every applicable action succeeded, 1 when any failed; 2 bad input or usage. `mac_survey.py` exits 0 when it finds no cleanup candidates, 1 when it lists some, 2 on bad input or usage. Bad input or usage: a home or root that is not a folder, a negative or non-numeric number option, an output or log path that cannot be written (checked before the scan starts).
 
 ## Output format
 

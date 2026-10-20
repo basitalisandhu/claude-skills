@@ -9,11 +9,14 @@ Conventions recognised (case-insensitive, any directory):
   Rust         foo.rs        <->  inline #[cfg(test)] module, or tests/foo.rs
 A test file also "covers" a module when it imports it (Python `import x`/`from x import`, JS `from './x'`,
 `require('./x')`), so a differently named test still counts. A module counts as covered when either rule matches.
+Entry points and config files (app.py, main.py, index.ts, settings.py and similar) and __init__.py are not counted as
+modules; the report says how many were skipped so an all-entry-point project does not read as fully covered.
 
 Usage:
     test_gap_finder.py PATH [--json] [--min PERCENT] [--exclude DIR ...] [--include-init]
 
-Exit codes: 0 coverage-by-file at or above --min (default 0), 1 below --min, 2 bad input.
+Exit codes: 0 coverage-by-file at or above --min (default 0), 1 below --min, 2 bad input (not a directory, --min
+outside 0-100, or no source modules found).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
@@ -67,8 +70,11 @@ def module_key(p: Path) -> str:
 
 
 def candidate_test_keys(stem: str) -> set[str]:
-    s = stem.lower()
-    return {f"test_{s}", f"{s}_test", f"{s}.test", f"{s}.spec", f"{s}_spec", s}
+    keys: set[str] = set()
+    # a private module (_parser.py) is usually tested as test_parser.py, so try the name without leading underscores too
+    for s in {stem.lower(), stem.lower().lstrip("_")} - {""}:
+        keys |= {f"test_{s}", f"{s}_test", f"{s}.test", f"{s}.spec", f"{s}_spec", s}
+    return keys
 
 
 def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
@@ -100,11 +106,11 @@ def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
                     names.add(f"{base}.{item}")
         test_imports[t] = names
     modules: list[dict] = []
+    skipped: list[str] = []
     for s in sources:
         stem = s.name[:-len(s.suffix)]
-        if stem == "__init__" and not include_init:
-            continue
-        if stem.lower() in NON_MODULE_NAMES or stem.startswith("."):
+        if (stem == "__init__" and not include_init) or stem.lower() in NON_MODULE_NAMES or stem.startswith("."):
+            skipped.append(s.relative_to(root).as_posix())
             continue
         covered_by: list[str] = []
         for key in candidate_test_keys(stem):
@@ -130,8 +136,19 @@ def analyse(root: Path, excludes: set[str], include_init: bool) -> dict:
     return {"version": VERSION, "root": str(root), "source_modules": len(modules), "test_files": len(tests),
             "covered": len(modules) - len(uncovered),
             "percent": round(100.0 * (len(modules) - len(uncovered)) / len(modules), 1) if modules else 100.0,
-            "modules": modules, "uncovered": [m["module"] for m in uncovered],
+            "modules": modules, "uncovered": [m["module"] for m in uncovered], "skipped_entry_points": skipped,
             "note": "Name and import based. A module listed as covered may still have weak tests; one listed as uncovered may be exercised indirectly."}
+
+
+def percent_arg(text: str) -> float:
+    """argparse type for a percentage between 0 and 100."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a percentage, got {text!r}") from None
+    if not 0 <= value <= 100:
+        raise argparse.ArgumentTypeError(f"must be a percentage between 0 and 100, got {value:g}")
+    return value
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -141,7 +158,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--min", type=float, default=0.0, help="exit 1 when the share of modules with a test is below this percent")
+    ap.add_argument("--min", type=percent_arg, default=0.0, help="exit 1 when the share of modules with a test is below this percent")
     ap.add_argument("--exclude", action="append", default=[], metavar="DIR")
     ap.add_argument("--include-init", action="store_true", help="count __init__.py files as modules")
     args = ap.parse_args(argv)
@@ -150,11 +167,17 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: not a directory: {root}", file=sys.stderr)
         return 2
     report = analyse(root, DEFAULT_EXCLUDES | set(args.exclude), args.include_init)
+    if not report["source_modules"]:
+        where = f" ({len(report['skipped_entry_points'])} entry-point or config file(s) skipped, such as {report['skipped_entry_points'][0]})" if report["skipped_entry_points"] else ""
+        print(f"error: no source modules found under {root}{where}; suffixes read: {', '.join(sorted(SOURCE_SUFFIXES))}", file=sys.stderr)
+        return 2
     report["min"] = args.min
     if args.json:
         print(json.dumps(report, indent=2))
     else:
-        print(f"test-gap-finder {VERSION}: {report['covered']}/{report['source_modules']} modules have a test by name or import ({report['percent']}%), {report['test_files']} test files")
+        skipped = len(report["skipped_entry_points"])
+        print(f"test-gap-finder {VERSION}: {report['covered']}/{report['source_modules']} modules have a test by name or import ({report['percent']}%), {report['test_files']} test files"
+              + (f", {skipped} entry-point or config file(s) not counted" if skipped else ""))
         for m in report["uncovered"]:
             print(f"  no test: {m}")
         print(report["note"])

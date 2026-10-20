@@ -61,7 +61,7 @@ A candidate is an entry nothing on this Mac claims, by the rules in the script's
 | `startup.launch_agents`, `startup.launch_daemons` | plists whose program is missing, with a `launchctl bootout` fix; daemon fixes need sudo |
 | `moved`, `failed` | present only with `--trash` |
 
-Exit codes: 0 no candidates and no startup leftovers, 1 something found (or moved), 2 bad input.
+Exit codes: 0 no candidates and no startup leftovers, 1 something found (or moved), 2 bad input or usage. A `--trash` id that is malformed, or that is not a candidate in this run, is bad input and nothing is moved: copy the ids from a run without `--trash`. Bad input or usage: a home or root that is not a folder, a negative or non-numeric number option, an output or log path that cannot be written (checked before the scan starts).
 
 ## Output format
 

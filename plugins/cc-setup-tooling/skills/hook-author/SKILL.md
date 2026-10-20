@@ -46,7 +46,7 @@ Optional keys: `field` (what the pattern is tested against: `command`, `file_pat
 | Action | PreToolUse | PostToolUse | UserPromptSubmit | Stop | SessionStart |
 |---|---|---|---|---|---|
 | block | `deny(message)`: the call does not run | `block(message)`: the tool already ran; Claude is told | `block(message)`: the prompt is dropped | `block(message)`: Claude keeps working | not offered |
-| warn | `add_context(message)` | `add_context(message)` | `add_context(message)` | `add_context(message)` | `add_context(message)` |
+| warn | `add_context(message)` | `add_context(message)` | `add_context(message)` | `add_context(message)`: Claude keeps working with the note, like a block shown as feedback; the `stop_hook_active` guard and the host's cap on consecutive continuations stop a loop | `add_context(message)` |
 | allow | `allow(message)`: skips the permission prompt | not offered | not offered | not offered | not offered |
 | modify | `update_input(..., decision="ask")`: rewrites the matched text and asks the user | not offered | not offered | not offered | not offered |
 
