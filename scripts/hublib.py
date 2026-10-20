@@ -22,7 +22,7 @@ REPO_URL = f"https://github.com/{OWNER}/{REPO_NAME}"
 SITE_URL = f"https://{OWNER}.github.io/{REPO_NAME}/"
 SITE_PATH = f"/{REPO_NAME}/"
 MARKETPLACE_NAME = "claude-skills"
-HUB_VERSION = "0.3.0"
+HUB_VERSION = "0.4.0"
 HUB_DESCRIPTION = (
     "Every Claude Code skill maintained by Muhammad Basit Ali, in one marketplace: "
     "security, AWS, Microsoft 365, compliance evidence, GitHub, repository engineering, "

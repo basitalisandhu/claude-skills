@@ -6,6 +6,18 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-20
+
+### Added
+
+- New skills synced from their source repositories in #35: `unattended-run-preflight` and `subagent-tool-scope-review` (cc-setup-tooling 0.4.0), `preventive-control-mapper` (aws-security 0.5.0), `evidence-collection-plan` (compliance-evidence 0.6.0) and `agent-audit-log-integrity` (agent-identity-governance 0.3.0). Each has a standard-library script, synthetic fixtures and tests in its source repository. The catalog now lists 135 skills in 16 plugins.
+
+### Changed
+
+- Daily sync pull requests (#33, #35) updated the plugins; versions and source commits are in `SOURCES.json`.
+- The synced example fixtures' documentation AWS key ids are baselined for the secrets scanner (#34).
+- The marketplace metadata version is 0.4.0.
+
 ## [0.3.0] - 2026-10-16
 
 ### Added
