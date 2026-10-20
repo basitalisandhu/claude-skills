@@ -1,0 +1,13 @@
+{
+  "organisation": "Example Pty Ltd",
+  "framework": "iso27001-2022",
+  "period": {"start": "2026-07-01", "end": "2027-06-30"},
+  "controls": ["A.5.1", "A.5.15", "A.5.18", "A.6.3", "A.8.2", "A.8.5", "A.8.8", "A.8.13", "A.8.15", "A.8.16", "A.8.32"],
+  "systems": [
+    {"kind": "aws", "owner": "Cloud platform lead"},
+    {"kind": "entra", "owner": "Identity administrator"},
+    {"kind": "github", "owner": "Engineering lead"},
+    {"kind": "hr-system", "owner": "People operations lead"},
+    {"kind": "ticketing", "owner": "Engineering lead"}
+  ]
+}

@@ -1,0 +1,8 @@
+{"type": "user", "message": {"role": "user", "content": "Process tonight's invoices"}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_01", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_02", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_03", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_04", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_05", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_06", "name": "mcp__erp__get_invoice", "input": {}}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "toolu_07", "name": "mcp__erp__get_invoice", "input": {}}]}}

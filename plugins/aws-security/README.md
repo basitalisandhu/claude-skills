@@ -1,6 +1,6 @@
 # AWS Security
 
-Ten AWS security skills for Claude Code: a read-only account audit, an SCP guardrail builder and linter, a landing zone blast-radius designer, an IAM least-privilege reviewer, a Security Hub and GuardDuty triage tool, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, a sandbox OU guardrail pack, and an audit of what an AI agent role session did, from CloudTrail.
+Eleven AWS security skills for Claude Code: a read-only account audit, an SCP guardrail builder and linter, a landing zone blast-radius designer, an IAM least-privilege reviewer, a Security Hub and GuardDuty triage tool, least-privilege access for AI agents with a kill switch, incident response runbooks, spend guardrails, a sandbox OU guardrail pack, an audit of what an AI agent role session did, from CloudTrail, and a mapper from failing Security Hub controls to the preventive controls that stop them coming back.
 
 Use it when you need a quick check against the CIS AWS Foundations benchmark (many of the 17 `aws-account-audit` checks, such as root MFA, CloudTrail, old access keys and open security groups, are CIS controls; the skill does not score the benchmark), when preparing for a Well-Architected security pillar review (account separation with `landing-zone-blast-radius`, detective controls, least privilege), or when an agent role needs a permission boundary (`agent-safe-aws-access`).
 
@@ -27,8 +27,9 @@ Skills then appear as `/aws-security:<skill>`. Scripts need Python 3.11 or newer
 | `aws-spend-guardrails` | budget alerts, anomaly detection, sandbox spend limits, cost spikes | `spend_guardrails.py` Budgets and anomaly JSON, spend-deny SCPs, cost review with anomaly flags |
 | `sandbox-account-guardrail-pack` | create or tighten a sandbox OU | `sandbox_pack.py` SCPs, baseline checklist, auto-expiry design, budget files and a user README |
 | `aws-agent-session-audit` | what an AI agent did in the account, unused agent permissions | `agent_session_audit.py` window, actions by service, resources, 7 checks and a remove-these-permissions proposal |
+| `preventive-control-mapper` | how to stop a Security Hub finding coming back, guardrails from findings | `preventive_map.py` per failing control: SCP, account setting, declarative policy, IaC check and Config rule options, a merged SCP draft with its size, unmapped controls |
 
-Find this when you search for: AI agent CloudTrail audit, what did Claude Code do in AWS, agent role session activity, unused permissions of an agent role, least privilege from CloudTrail.
+Find this when you search for: AI agent CloudTrail audit, what did Claude Code do in AWS, agent role session activity, unused permissions of an agent role, least privilege from CloudTrail, how to stop a Security Hub finding coming back, preventive controls from findings, SCP from Security Hub, EC2 declarative policy for IMDSv2.
 
 ## Exit codes
 
@@ -36,8 +37,8 @@ Every script uses the same three codes, and each script's `--help` states them f
 
 | Code | Meaning |
 |---|---|
-| 0 | Ran cleanly: no finding at or above `--fail-on`, or the documents were generated and pass their own lint |
-| 1 | Findings at or above `--fail-on` (review them), or a generated document failed its own lint and nothing was written |
+| 0 | Ran cleanly: no finding at or above `--fail-on`, every failing control has a preventive option, or the documents were generated and pass their own lint |
+| 1 | Findings at or above `--fail-on` (review them), a failing control the mapper table does not know, or a generated document failed its own lint and nothing was written |
 | 2 | Bad input or usage: a missing, empty or wrong-format file, a file that is not the expected CLI output, or a bad option |
 
 ## Output samples
@@ -112,4 +113,21 @@ $ python3 plugins/aws-security/skills/aws-agent-session-audit/scripts/agent_sess
 | high | AGENT-IAM-WRITE | IAM changes or role assumption from the agent session | iam:AttachRolePolicy |
 | high | AGENT-OUTSIDE-ALLOWLIST | Actions outside the declared allow list | cloudtrail:StopLogging x1, ec2:RunInstances x1 (failed), iam:AttachRolePolicy x1, s3:DeleteBucket x1 |
 | low | AGENT-OTHER-REGION | Calls in regions outside the declared list | us-east-1 |
+```
+
+`preventive-control-mapper`, selected lines of the report for the committed synthetic Security Hub export: the summary, one declarative policy option and the unmapped control (exit 1: ECR.1 is not in the table):
+
+```text
+$ python3 plugins/aws-security/skills/preventive-control-mapper/scripts/preventive_map.py --findings tests/fixtures/preventive-map/securityhub-findings.json
+# Preventive control map
+| Failing controls | With a preventive option | Detective only | Unmapped |
+| 9 | 7 | 1 | 1 |
+### EC2.8 option 1: EC2 declarative policy: require IMDSv2 for new instances [declarative-policy]
+    "instance_metadata_defaults": {
+      "http_tokens": {
+        "@@assign": "required"
+      "http_tokens_enforced": {
+        "@@assign": "enabled"
+Size: 1165 characters compact, within the limit of 10240 (the AWS Organizations quota for one SCP).
+| ECR.1 | 1 | 111122223333 | arn:aws:ecr:ap-southeast-2:111122223333:repository/example-app |
 ```

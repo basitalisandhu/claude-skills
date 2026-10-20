@@ -12,6 +12,7 @@ Agent identity governance skills that compute from exports you already can take,
 | `agent-action-timeline` | `skills/agent-action-timeline/scripts/agent_action_timeline.py` | build one ordered timeline of an agent's actions from Entra, CloudTrail, GitHub and application logs, flagging bursts, first-seen actions and actions outside an allow list |
 | `agent-kill-switch-runbook` | `skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py` | write the ordered switch-off runbook for one identity with read-only verification commands, and check every credential and assignment has a step |
 | `leaked-credential-response` | `skills/leaked-credential-response/scripts/leaked_credential_response.py` | work out a leaked credential's reach, use after the leak and rotation order, and write a hashed evidence folder |
+| `agent-audit-log-integrity` | `skills/agent-audit-log-integrity/scripts/audit_chain.py` | seal an agent audit log as a SHA-256 or HMAC hash chain, verify it later for edited, removed, inserted or reordered lines and truncation, and list actions it never recorded |
 
 Synthetic exports to try every skill on are in [`examples/`](examples) (each SKILL.md gives the command). They include an Entra Agent ID blueprint with two agent identities.
 

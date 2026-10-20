@@ -14,8 +14,8 @@
     {
       "name": "agent-identity-governance",
       "source": "./plugins/agent-identity-governance",
-      "description": "Eight agent identity governance skills, each with a tested standard-library script over saved Entra, AWS, GitHub and register exports: nhi-inventory, entra-agent-id-review, agent-recertification, credential-expiry-radar, connector-register, agent-action-timeline, agent-kill-switch-runbook and leaked-credential-response. No network calls; key ids shown by their last four characters.",
-      "version": "0.2.0",
+      "description": "Nine agent identity governance skills, each with a tested standard-library script over saved Entra, AWS, GitHub and register exports: nhi-inventory, entra-agent-id-review, agent-recertification, credential-expiry-radar, connector-register, agent-action-timeline, agent-kill-switch-runbook, leaked-credential-response and agent-audit-log-integrity. No network calls; key ids shown by their last four characters.",
+      "version": "0.3.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -38,7 +38,8 @@
         "connector-register",
         "audit-log",
         "kill-switch",
-        "incident-response"
+        "incident-response",
+        "audit-log"
       ],
       "category": "security",
       "tags": [
@@ -80,8 +81,8 @@
     {
       "name": "aws-security",
       "source": "./plugins/aws-security",
-      "description": "Ten AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails, a sandbox guardrail pack and an agent session audit from CloudTrail. Scripts run offline on specs and saved CLI output.",
-      "version": "0.4.2",
+      "description": "Eleven AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails, a sandbox guardrail pack, an agent session audit from CloudTrail and a preventive control mapper for Security Hub findings. Scripts run offline on specs and saved CLI output.",
+      "version": "0.5.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -101,7 +102,8 @@
         "incident-response",
         "ai-agents",
         "budgets",
-        "cloudtrail"
+        "cloudtrail",
+        "preventive-controls"
       ],
       "category": "security",
       "tags": [
@@ -114,8 +116,8 @@
     {
       "name": "cc-setup-tooling",
       "source": "./plugins/cc-setup-tooling",
-      "description": "Nine skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, sandbox-config-review, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
-      "version": "0.3.0",
+      "description": "Eleven skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, sandbox-config-review, unattended-run-preflight, subagent-tool-scope-review, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -134,7 +136,9 @@
         "sandbox",
         "hooks",
         "skill-collisions",
-        "portability"
+        "portability",
+        "subagents",
+        "unattended"
       ],
       "category": "development",
       "tags": [
@@ -173,8 +177,8 @@
     {
       "name": "compliance-evidence",
       "source": "./plugins/compliance-evidence",
-      "description": "Nine compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map, vendor attestation digest, Maester control map. Exports on disk, offline evaluation, three result states.",
-      "version": "0.5.0",
+      "description": "Ten compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map, vendor attestation digest, Maester control map, evidence collection plan. Exports on disk, offline evaluation, three result states.",
+      "version": "0.6.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -195,7 +199,9 @@
         "essential-eight",
         "security-questionnaire",
         "vendor-risk",
-        "maester"
+        "maester",
+        "pbc-list",
+        "evidence-collection"
       ],
       "category": "security",
       "tags": [

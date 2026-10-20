@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.4.2"
+ "version": "0.5.0"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / security-hub-triage</p>
 <h1>Security Hub triage</h1>
 <p class="lede">Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. A bundled script drops resolved and suppressed findings, groups the rest by severity, control and resource, assigns owners from rules and orders actions by severity and reach. Use when asked &quot;what do we fix first in Security Hub?&quot;, for a weekly security review, or to route findings to teams. Not for running new checks (aws-account-audit) or responding to one active incident (aws-incident-response-runbook).</p>
-<p class="meta">Skill <code>security-hub-triage</code> in plugin <a href="../index.html">aws-security</a> 0.4.2, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a>.</p>
+<p class="meta">Skill <code>security-hub-triage</code> in plugin <a href="../index.html">aws-security</a> 0.5.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md">plugins/aws-security/skills/security-hub-triage/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -85,7 +85,7 @@ python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/security-hub-triage/scripts/triage_fi
 <h3 id="interpreting-the-output">Interpreting the output</h3>
 <ul><li><code>not_open</code>: archived records, workflow RESOLVED or SUPPRESSED, compliance PASSED or NOT_AVAILABLE, archived GuardDuty findings.</li><li><code>suppressed</code>: counts per config reason. Review the config when these grow; suppression is a decision, not a fix.</li><li><code>next_actions</code>: one row per control and owner, ordered by severity then by number of resources, with up to five resources listed and the remediation URL when the finding carries one.</li><li>GuardDuty severity mapping: 9.0 and above CRITICAL, 7.0 to 8.9 HIGH, 4.0 to 6.9 MEDIUM, below 4.0 LOW.</li></ul>
 <h3 id="related">Related</h3>
-<ul><li><code>aws-account-audit</code> for accounts where Security Hub is not yet enabled.</li><li><code>iam-least-privilege-review</code> for IAM controls that keep failing.</li><li><code>aws-incident-response-runbook</code> when a GuardDuty finding is an active incident.</li></ul>
+<ul><li><code>aws-account-audit</code> for accounts where Security Hub is not yet enabled.</li><li><code>iam-least-privilege-review</code> for IAM controls that keep failing.</li><li><code>aws-incident-response-runbook</code> when a GuardDuty finding is an active incident.</li><li><code>preventive-control-mapper</code> to turn the controls that keep failing into SCPs, account settings and CI checks so they stop coming back.</li></ul>
 <p class="meta">Report a problem with this skill in <a href="https://github.com/basitalisandhu/aws-security-skills/issues">aws-security-skills issues</a>.</p>
 </main>
 <footer><p>Skills by <a href="https://github.com/basitalisandhu">Muhammad Basit Ali</a>, MIT licence. Each skill is edited in its source repository and synced into <a href="https://github.com/basitalisandhu/claude-skills">claude-skills</a> daily. Other projects: <a href="https://basitalisandhu.github.io/">basitalisandhu.github.io</a>.</p></footer>

@@ -1,0 +1,958 @@
+{
+  "schema": "evidence-collection-catalogue/1",
+  "note": "A starting set of evidence requests, not a complete audit programme. Control identifiers with short paraphrases written for this repository; the standards' text is not reproduced. Agree the list with your assessor.",
+  "control_topics": {
+    "A.5.1": "Security policies exist, are approved and reach the people they apply to",
+    "A.5.15": "Access to systems and data follows defined rules",
+    "A.5.16": "Identities are managed through their whole life",
+    "A.5.17": "Passwords, keys and other secrets are handled and rotated with care",
+    "A.5.18": "Access is granted, reviewed and removed on purpose",
+    "A.5.19": "Supplier relationships have security expectations",
+    "A.5.2": "Security roles and responsibilities are defined and assigned",
+    "A.5.20": "Supplier agreements state security terms",
+    "A.5.22": "Supplier services are monitored and reviewed",
+    "A.5.23": "Cloud services are chosen, used and left under control",
+    "A.5.24": "Incident handling is planned and prepared",
+    "A.5.26": "Incidents are responded to as planned",
+    "A.5.27": "Lessons from incidents are used to improve",
+    "A.5.29": "Security continues during a disruption",
+    "A.5.30": "Systems are ready to continue or recover",
+    "A.5.36": "Policies and standards are checked for compliance",
+    "A.5.9": "An inventory of information and related assets is kept",
+    "A.6.1": "Candidates are checked before they join",
+    "A.6.2": "Staff agree to their security duties in writing",
+    "A.6.3": "People receive security awareness training",
+    "A.6.5": "Security duties continue to apply after people leave or change role",
+    "A.8.1": "Company data on laptops and phones is protected through device management",
+    "A.8.13": "Copies of data and systems exist and restoring them is tried",
+    "A.8.15": "Systems keep a tamper-resistant record of who did what",
+    "A.8.16": "Systems are watched for unusual or hostile activity",
+    "A.8.2": "Administrative access is kept to few people and watched",
+    "A.8.24": "Encryption is used and its keys are managed",
+    "A.8.25": "Security is part of how software is built",
+    "A.8.29": "Automated tests run before changes are accepted",
+    "A.8.3": "Access to information is limited to what the job needs",
+    "A.8.32": "Changes go through a reviewed, recorded process",
+    "A.8.5": "Sign-in uses strong methods such as multi-factor authentication",
+    "A.8.7": "Systems are protected against malicious software",
+    "A.8.8": "Known software weaknesses are found and fixed in time",
+    "A.8.9": "System settings are recorded and drift is noticed",
+    "A1.2": "Backup and recovery capability supports availability commitments",
+    "A1.3": "Recovery plans are tested",
+    "CC1.1": "The organisation shows commitment to integrity and ethical values",
+    "CC1.4": "People with security duties are hired, trained and kept competent",
+    "CC2.2": "Security responsibilities are communicated inside the organisation",
+    "CC3.2": "Risks to the objectives are identified and assessed",
+    "CC4.1": "Controls are checked on an ongoing or periodic basis",
+    "CC5.3": "Policies set out what is expected and are put into practice",
+    "CC6.1": "Logical access is controlled with identities, strong sign-in and access rules",
+    "CC6.2": "Accounts are created and removed through an approved process",
+    "CC6.3": "Access follows roles and least privilege and is reviewed",
+    "CC6.6": "Connections from outside the system boundary are restricted",
+    "CC6.8": "Unauthorised or harmful software is prevented or detected",
+    "CC7.1": "Weaknesses and risky configuration changes are detected",
+    "CC7.2": "Systems are monitored for signs of attack or failure",
+    "CC7.3": "Security events are evaluated to decide if they are incidents",
+    "CC7.4": "Incidents are responded to, contained and recovered from",
+    "CC7.5": "Recovery from incidents is carried out and learned from",
+    "CC8.1": "Changes are approved, tested and recorded before they go live",
+    "CC9.2": "Vendors and partners are assessed and monitored"
+  },
+  "requests": [
+    {
+      "id": "IAM-01",
+      "title": "AWS IAM credential report",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.16",
+          "A.5.18",
+          "A.8.2",
+          "A.8.5"
+        ],
+        "soc2": [
+          "CC6.1",
+          "CC6.2",
+          "CC6.3"
+        ]
+      },
+      "system": "aws",
+      "how": "aws iam generate-credential-report, then aws iam get-credential-report --query Content --output text, decoded from base64 and saved as CSV",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/credential-report*"
+        ]
+      }
+    },
+    {
+      "id": "IAM-02",
+      "title": "AWS account password policy and account summary",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.17",
+          "A.8.5"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "aws",
+      "how": "aws iam get-account-password-policy --output json; aws iam get-account-summary --output json",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/password-policy*",
+          "aws/account-summary*"
+        ]
+      }
+    },
+    {
+      "id": "LOG-01",
+      "title": "AWS CloudTrail trails and logging status",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.15",
+          "A.8.16"
+        ],
+        "soc2": [
+          "CC7.2"
+        ]
+      },
+      "system": "aws",
+      "how": "aws cloudtrail describe-trails --output json; aws cloudtrail get-trail-status --name <trail> --output json",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/cloudtrail-*"
+        ]
+      }
+    },
+    {
+      "id": "MON-01",
+      "title": "AWS GuardDuty detectors and findings summary",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.16"
+        ],
+        "soc2": [
+          "CC7.1",
+          "CC7.2"
+        ]
+      },
+      "system": "aws",
+      "how": "aws guardduty list-detectors --region <region> --output json, then aws guardduty get-detector --detector-id <id>",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/regions/*/guardduty-*"
+        ]
+      }
+    },
+    {
+      "id": "CFG-01",
+      "title": "AWS Config recorders and recording status",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.9"
+        ],
+        "soc2": [
+          "CC7.1"
+        ]
+      },
+      "system": "aws",
+      "how": "aws configservice describe-configuration-recorders and describe-configuration-recorder-status, per region, as JSON",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/regions/*/config-recorder*"
+        ]
+      }
+    },
+    {
+      "id": "BKP-01",
+      "title": "AWS Backup plans and protected resources",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.13"
+        ],
+        "soc2": [
+          "A1.2"
+        ]
+      },
+      "system": "aws",
+      "how": "aws backup list-backup-plans --region <region> --output json",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/regions/*/backup-plans*"
+        ]
+      }
+    },
+    {
+      "id": "CRY-01",
+      "title": "AWS default encryption settings for storage",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.24"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "aws",
+      "how": "aws ec2 get-ebs-encryption-by-default --region <region>; aws s3api get-bucket-encryption --bucket <bucket>",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/encryption-*"
+        ]
+      }
+    },
+    {
+      "id": "NET-01",
+      "title": "AWS account S3 public access block settings",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.15",
+          "A.8.3"
+        ],
+        "soc2": [
+          "CC6.1",
+          "CC6.6"
+        ]
+      },
+      "system": "aws",
+      "how": "aws s3control get-public-access-block --account-id <account-id> --output json",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Cloud platform lead",
+      "consumers": [
+        "aws-identity-and-logging-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "aws/s3control-public-access-block*"
+        ]
+      }
+    },
+    {
+      "id": "IDP-01",
+      "title": "Entra Conditional Access policies export",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.15",
+          "A.8.5"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "entra",
+      "how": "Microsoft Graph GET /identity/conditionalAccess/policies (Policy.Read.All), saved unchanged as JSON",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Identity administrator",
+      "consumers": [
+        "control-map-from-exports",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "m365/conditional-access-policies*"
+        ]
+      }
+    },
+    {
+      "id": "IDP-02",
+      "title": "Entra security defaults and authentication methods policy",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.5"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "entra",
+      "how": "Microsoft Graph GET /policies/identitySecurityDefaultsEnforcementPolicy and GET /policies/authenticationMethodsPolicy, saved as JSON",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Identity administrator",
+      "consumers": [
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "m365/security-defaults*",
+          "m365/authentication-methods*"
+        ]
+      }
+    },
+    {
+      "id": "IDP-03",
+      "title": "Entra privileged role assignments",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.2",
+          "A.5.18"
+        ],
+        "soc2": [
+          "CC6.3"
+        ]
+      },
+      "system": "entra",
+      "how": "Microsoft Graph GET /roleManagement/directory/roleAssignments with $expand=principal (RoleManagement.Read.Directory), saved as JSON",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Identity administrator",
+      "consumers": [
+        "access-review-pack",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "m365/role-assignments*",
+          "m365/privileged-roles*"
+        ]
+      }
+    },
+    {
+      "id": "ACC-01",
+      "title": "Access review sign-off for in-scope systems",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.18",
+          "A.5.15"
+        ],
+        "soc2": [
+          "CC6.2",
+          "CC6.3"
+        ]
+      },
+      "system": "entra",
+      "how": "Entra access review results or the access review pack output, with the reviewer's sign-off and date",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Security lead",
+      "consumers": [
+        "access-review-pack",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "access-review/*",
+          "m365/access-review*"
+        ]
+      }
+    },
+    {
+      "id": "ACC-02",
+      "title": "Leavers list with account disablement dates",
+      "controls": {
+        "iso27001-2022": [
+          "A.6.5",
+          "A.5.18"
+        ],
+        "soc2": [
+          "CC6.2"
+        ]
+      },
+      "system": "hr-system",
+      "how": "HR system report of leavers in the period, joined to the date each account was disabled, saved as CSV",
+      "frequency": "population-sample",
+      "freshness_days": 120,
+      "owner_role": "People operations lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "hr/leavers*"
+        ]
+      }
+    },
+    {
+      "id": "HR-01",
+      "title": "Joiners list with screening and agreement records",
+      "controls": {
+        "iso27001-2022": [
+          "A.6.1",
+          "A.6.2"
+        ],
+        "soc2": [
+          "CC1.4"
+        ]
+      },
+      "system": "hr-system",
+      "how": "HR system report of joiners in the period with screening outcome and signed agreement dates, saved as CSV",
+      "frequency": "population-sample",
+      "freshness_days": 120,
+      "owner_role": "People operations lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "hr/joiners*"
+        ]
+      }
+    },
+    {
+      "id": "HR-02",
+      "title": "Security awareness training completion report",
+      "controls": {
+        "iso27001-2022": [
+          "A.6.3"
+        ],
+        "soc2": [
+          "CC1.4",
+          "CC2.2"
+        ]
+      },
+      "system": "hr-system",
+      "how": "Training platform or HR system completion report for all staff, with completion dates, saved as CSV",
+      "frequency": "once-per-period",
+      "freshness_days": 120,
+      "owner_role": "People operations lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "hr/training*"
+        ]
+      }
+    },
+    {
+      "id": "HR-03",
+      "title": "Policy acknowledgement records",
+      "controls": {
+        "iso27001-2022": [
+          "A.6.2",
+          "A.5.1"
+        ],
+        "soc2": [
+          "CC1.1",
+          "CC5.3"
+        ]
+      },
+      "system": "hr-system",
+      "how": "HR system or policy tool report of staff acknowledgements of the current policies, with dates",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "People operations lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "hr/acknowledg*"
+        ]
+      }
+    },
+    {
+      "id": "POL-01",
+      "title": "Approved information security policy set with approval dates",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.1",
+          "A.5.2"
+        ],
+        "soc2": [
+          "CC5.3"
+        ]
+      },
+      "system": "document",
+      "how": "The current policy documents with version, approver and approval date; export the version history from the document store",
+      "frequency": "once-per-period",
+      "freshness_days": 365,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/policies/*",
+          "documents/policy-*"
+        ]
+      }
+    },
+    {
+      "id": "RSK-01",
+      "title": "Risk assessment and risk treatment record",
+      "controls": {
+        "iso27001-2022": [],
+        "soc2": [
+          "CC3.2"
+        ]
+      },
+      "system": "document",
+      "how": "The risk register with owner, rating, treatment and review date for each risk, exported from where it is kept",
+      "frequency": "once-per-period",
+      "freshness_days": 365,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/risk-*"
+        ]
+      }
+    },
+    {
+      "id": "AUD-01",
+      "title": "Internal audit or control self-assessment record",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.36"
+        ],
+        "soc2": [
+          "CC4.1"
+        ]
+      },
+      "system": "document",
+      "how": "The internal audit report or self-assessment, with the date, scope and follow-up actions",
+      "frequency": "once-per-period",
+      "freshness_days": 365,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/internal-audit*"
+        ]
+      }
+    },
+    {
+      "id": "AST-01",
+      "title": "Device and asset inventory export",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.9",
+          "A.8.1"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "endpoint-mdm",
+      "how": "Device management console: export the managed device list with owner, platform and last check-in, saved as CSV",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "IT administrator",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "endpoint/devices*",
+          "m365/managed-devices*"
+        ]
+      }
+    },
+    {
+      "id": "END-01",
+      "title": "Device compliance policies and compliance status",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.1",
+          "A.8.7",
+          "A.8.9"
+        ],
+        "soc2": [
+          "CC6.8",
+          "CC7.1"
+        ]
+      },
+      "system": "endpoint-mdm",
+      "how": "Microsoft Graph GET /deviceManagement/deviceCompliancePolicies (DeviceManagementConfiguration.Read.All), saved as JSON",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "IT administrator",
+      "consumers": [
+        "control-map-from-exports",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "m365/intune-compliance-policies*",
+          "endpoint/compliance*"
+        ]
+      }
+    },
+    {
+      "id": "VUL-01",
+      "title": "Vulnerability scan results and remediation tickets",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.8"
+        ],
+        "soc2": [
+          "CC7.1"
+        ]
+      },
+      "system": "ticketing",
+      "how": "Scanner report for the period, plus the ticket export showing each high and critical finding with open and close dates",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Engineering lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "tickets/vulnerab*",
+          "documents/vulnerability-*"
+        ]
+      }
+    },
+    {
+      "id": "VUL-02",
+      "title": "GitHub Dependabot alerts and security settings",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.8",
+          "A.8.25"
+        ],
+        "soc2": [
+          "CC7.1"
+        ]
+      },
+      "system": "github",
+      "how": "gh api repos/<owner>/<repo>/dependabot/alerts --paginate; gh api repos/<owner>/<repo>/vulnerability-alerts",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Engineering lead",
+      "consumers": [
+        "github-change-control-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "github/dependabot-alerts*",
+          "github/vulnerability-alerts*"
+        ]
+      }
+    },
+    {
+      "id": "CHG-01",
+      "title": "GitHub branch protection or rulesets on the release branch",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.25",
+          "A.8.29",
+          "A.8.32"
+        ],
+        "soc2": [
+          "CC8.1"
+        ]
+      },
+      "system": "github",
+      "how": "gh api repos/<owner>/<repo>/branches/<branch>/protection; gh api repos/<owner>/<repo>/rules/branches/<branch>",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Engineering lead",
+      "consumers": [
+        "github-change-control-evidence",
+        "control-map-from-exports"
+      ],
+      "match": {
+        "path_glob": [
+          "github/branch-protection*",
+          "github/rules*"
+        ]
+      }
+    },
+    {
+      "id": "CHG-02",
+      "title": "Merged pull requests with approvals for the period",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.32"
+        ],
+        "soc2": [
+          "CC8.1"
+        ]
+      },
+      "system": "github",
+      "how": "gh pr list --repo <owner>/<repo> --state merged --limit 1000 --json number,mergedAt,author,reviews",
+      "frequency": "population-sample",
+      "freshness_days": 120,
+      "owner_role": "Engineering lead",
+      "consumers": [
+        "github-change-control-evidence",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "github/pulls-merged*"
+        ]
+      }
+    },
+    {
+      "id": "CHG-03",
+      "title": "Emergency and out-of-process change tickets",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.32"
+        ],
+        "soc2": [
+          "CC8.1"
+        ]
+      },
+      "system": "ticketing",
+      "how": "Ticket system export of changes marked emergency or expedited in the period, with approver and after-the-fact review",
+      "frequency": "population-sample",
+      "freshness_days": 120,
+      "owner_role": "Engineering lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "tickets/emergency-changes*",
+          "tickets/changes*"
+        ]
+      }
+    },
+    {
+      "id": "INC-01",
+      "title": "Incident register with post-incident reviews",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.24",
+          "A.5.26",
+          "A.5.27"
+        ],
+        "soc2": [
+          "CC7.3",
+          "CC7.4"
+        ]
+      },
+      "system": "ticketing",
+      "how": "Ticket system export of every security incident in the period with severity, timeline and review notes; state explicitly if there were none",
+      "frequency": "population-sample",
+      "freshness_days": 120,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "tickets/incidents*",
+          "documents/incident-register*"
+        ]
+      }
+    },
+    {
+      "id": "INC-02",
+      "title": "Incident response exercise or test record",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.24",
+          "A.5.30"
+        ],
+        "soc2": [
+          "CC7.4",
+          "CC7.5"
+        ]
+      },
+      "system": "document",
+      "how": "Notes or report from the tabletop or live exercise, with date, attendees and actions",
+      "frequency": "once-per-period",
+      "freshness_days": 365,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/incident-exercise*"
+        ]
+      }
+    },
+    {
+      "id": "ALR-01",
+      "title": "Security alert review log",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.16"
+        ],
+        "soc2": [
+          "CC7.2",
+          "CC7.3"
+        ]
+      },
+      "system": "ticketing",
+      "how": "Ticket or log export showing each alert review with date, reviewer and outcome, for the month",
+      "frequency": "monthly",
+      "freshness_days": 35,
+      "owner_role": "Security lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "tickets/alert-review*",
+          "documents/alert-review*"
+        ]
+      }
+    },
+    {
+      "id": "BCP-01",
+      "title": "Business continuity and recovery plan with review record",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.29",
+          "A.5.30"
+        ],
+        "soc2": [
+          "A1.2",
+          "A1.3"
+        ]
+      },
+      "system": "document",
+      "how": "The current plan with version, owner and last review date, plus the record of the latest recovery test",
+      "frequency": "once-per-period",
+      "freshness_days": 365,
+      "owner_role": "Operations lead",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/continuity*",
+          "documents/recovery-test*"
+        ]
+      }
+    },
+    {
+      "id": "VND-01",
+      "title": "Vendor attestation register and review",
+      "controls": {
+        "iso27001-2022": [
+          "A.5.19",
+          "A.5.20",
+          "A.5.22",
+          "A.5.23"
+        ],
+        "soc2": [
+          "CC9.2"
+        ]
+      },
+      "system": "document",
+      "how": "The vendor list with criticality, owner, latest report or certificate dates and the review outcome, as CSV",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Procurement or security lead",
+      "consumers": [
+        "vendor-attestation-digest",
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "documents/vendor*",
+          "vendors/*"
+        ]
+      }
+    },
+    {
+      "id": "GWS-01",
+      "title": "Google Workspace 2-step verification enforcement",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.5"
+        ],
+        "soc2": [
+          "CC6.1"
+        ]
+      },
+      "system": "google-workspace",
+      "how": "Admin console: Reporting, then Security, then 2-Step Verification enrolment and enforcement report, exported as CSV",
+      "frequency": "quarterly",
+      "freshness_days": 100,
+      "owner_role": "Workspace administrator",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "google-workspace/2sv*",
+          "gws/2sv*"
+        ]
+      }
+    },
+    {
+      "id": "GWS-02",
+      "title": "Google Workspace admin roles and audit log settings",
+      "controls": {
+        "iso27001-2022": [
+          "A.8.2",
+          "A.8.15"
+        ],
+        "soc2": [
+          "CC6.3",
+          "CC7.2"
+        ]
+      },
+      "system": "google-workspace",
+      "how": "Admin console: Account, then Admin roles, listing each role's members; Reporting, then Audit and investigation settings",
+      "frequency": "once-per-period",
+      "freshness_days": 180,
+      "owner_role": "Workspace administrator",
+      "consumers": [
+        "evidence-pack-builder"
+      ],
+      "match": {
+        "path_glob": [
+          "google-workspace/admin-roles*",
+          "gws/admin-roles*"
+        ]
+      }
+    }
+  ]
+}

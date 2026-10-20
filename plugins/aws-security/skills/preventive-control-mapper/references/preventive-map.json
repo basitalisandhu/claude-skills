@@ -1,0 +1,1721 @@
+{
+  "schema_version": 1,
+  "about": "Curated map from Security Hub control ids to preventive controls, strongest first. Every control id, Config identifier, IAM action, condition key and CLI flag was checked against AWS documentation and API models on 2026-10-20; the doc field on each entry is the page used. Options of kind config-rule detect, they do not prevent.",
+  "verified_on": "2026-10-20",
+  "controls": {
+    "S3.1": {
+      "title": "S3 general purpose buckets should have block public access settings enabled (account level)",
+      "prowler": [
+        "s3_account_level_public_access_blocks"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-1",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Turn on all four S3 Block Public Access settings for the account",
+          "prevents": "New and existing buckets in the account can no longer be made public through ACLs or bucket policies.",
+          "snippet_format": "cli",
+          "snippet": "aws s3control put-public-access-block --account-id <ACCOUNT_ID> --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+          "caveats": [
+            "Account-wide: a static website served straight from S3 stops working, so move it behind CloudFront with origin access control first.",
+            "AWS Organizations also has an Amazon S3 policy type that enforces the four Block Public Access settings across accounts and blocks account-level changes (docs: orgs_manage_policies_s3.html). Its policy syntax was not checked for this table, so no snippet is given."
+          ],
+          "doc": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-account.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop anyone switching the account-level block off",
+          "prevents": "Removes the usual way the setting is turned back off after a fix.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "ProtectAccountPublicAccessBlock",
+              "Effect": "Deny",
+              "Action": "s3:PutAccountPublicAccessBlock",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Declare the account block in IaC and fail CI if it is missing",
+          "prevents": "A pipeline cannot ship a stack that leaves the account block unset.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_s3_account_public_access_block\" \"this\" {\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}",
+          "caveats": [
+            "Add a policy check that fails when the four arguments are not all true (they default to false)."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_account_public_access_block"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule s3-account-level-public-access-blocks-periodic",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "s3-account-level-public-access-blocks-periodic",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_ACCOUNT_LEVEL_PUBLIC_ACCESS_BLOCKS_PERIODIC"
+            }
+          },
+          "config_rule": {
+            "name": "s3-account-level-public-access-blocks-periodic",
+            "identifier": "S3_ACCOUNT_LEVEL_PUBLIC_ACCESS_BLOCKS_PERIODIC",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/s3-account-level-public-access-blocks-periodic.html"
+        }
+      ]
+    },
+    "S3.2": {
+      "title": "S3 general purpose buckets should block public read access",
+      "prowler": [
+        "s3_bucket_public_access",
+        "s3_bucket_public_list_acl"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-2",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Turn on all four S3 Block Public Access settings for the account",
+          "prevents": "Public ACLs and public bucket policies are blocked or ignored for every bucket in the account.",
+          "snippet_format": "cli",
+          "snippet": "aws s3control put-public-access-block --account-id <ACCOUNT_ID> --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+          "caveats": [
+            "Account-wide: public static websites on S3 stop working.",
+            "AWS Organizations also has an Amazon S3 policy type that enforces the four Block Public Access settings across accounts and blocks account-level changes (docs: orgs_manage_policies_s3.html). Its policy syntax was not checked for this table, so no snippet is given."
+          ],
+          "doc": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-account.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Deny public canned ACLs and protect the account block",
+          "prevents": "Public-read style ACLs cannot be applied, and the account block cannot be switched off.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyPublicS3CannedAcls",
+              "Effect": "Deny",
+              "Action": [
+                "s3:CreateBucket",
+                "s3:PutBucketAcl",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": [
+                    "authenticated-read",
+                    "public-read",
+                    "public-read-write"
+                  ]
+                }
+              }
+            },
+            {
+              "Sid": "ProtectAccountPublicAccessBlock",
+              "Effect": "Deny",
+              "Action": "s3:PutAccountPublicAccessBlock",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "The SCP only sees the canned ACL header on the request; a bucket policy that grants public access is stopped by Block Public Access, not by this SCP.",
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Block public access on every bucket in IaC",
+          "prevents": "New buckets ship with the bucket-level block on.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_s3_bucket_public_access_block\" \"this\" {\n  bucket                  = aws_s3_bucket.this.id\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}",
+          "caveats": [
+            "The four arguments default to false, so a policy check should require all four."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule s3-bucket-public-read-prohibited",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "s3-bucket-public-read-prohibited",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_PUBLIC_READ_PROHIBITED"
+            }
+          },
+          "config_rule": {
+            "name": "s3-bucket-public-read-prohibited",
+            "identifier": "S3_BUCKET_PUBLIC_READ_PROHIBITED",
+            "trigger": "configuration changes and periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-public-read-prohibited.html"
+        }
+      ]
+    },
+    "S3.3": {
+      "title": "S3 general purpose buckets should block public write access",
+      "prowler": [
+        "s3_bucket_public_write_acl",
+        "s3_bucket_policy_public_write_access"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-3",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Turn on all four S3 Block Public Access settings for the account",
+          "prevents": "Public ACLs and public bucket policies are blocked or ignored for every bucket in the account.",
+          "snippet_format": "cli",
+          "snippet": "aws s3control put-public-access-block --account-id <ACCOUNT_ID> --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+          "caveats": [
+            "Account-wide: public static websites on S3 stop working.",
+            "AWS Organizations also has an Amazon S3 policy type that enforces the four Block Public Access settings across accounts and blocks account-level changes (docs: orgs_manage_policies_s3.html). Its policy syntax was not checked for this table, so no snippet is given."
+          ],
+          "doc": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-account.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Deny public canned ACLs and protect the account block",
+          "prevents": "Public-read style ACLs cannot be applied, and the account block cannot be switched off.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyPublicS3CannedAcls",
+              "Effect": "Deny",
+              "Action": [
+                "s3:CreateBucket",
+                "s3:PutBucketAcl",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+              ],
+              "Resource": "*",
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": [
+                    "authenticated-read",
+                    "public-read",
+                    "public-read-write"
+                  ]
+                }
+              }
+            },
+            {
+              "Sid": "ProtectAccountPublicAccessBlock",
+              "Effect": "Deny",
+              "Action": "s3:PutAccountPublicAccessBlock",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "The SCP only sees the canned ACL header on the request; a bucket policy that grants public access is stopped by Block Public Access, not by this SCP.",
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Block public access on every bucket in IaC",
+          "prevents": "New buckets ship with the bucket-level block on.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_s3_bucket_public_access_block\" \"this\" {\n  bucket                  = aws_s3_bucket.this.id\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}",
+          "caveats": [
+            "The four arguments default to false, so a policy check should require all four."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule s3-bucket-public-write-prohibited",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "s3-bucket-public-write-prohibited",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+            }
+          },
+          "config_rule": {
+            "name": "s3-bucket-public-write-prohibited",
+            "identifier": "S3_BUCKET_PUBLIC_WRITE_PROHIBITED",
+            "trigger": "configuration changes and periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-public-write-prohibited.html"
+        }
+      ]
+    },
+    "S3.5": {
+      "title": "S3 general purpose buckets should require requests to use TLS",
+      "prowler": [
+        "s3_bucket_secure_transport_policy"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-5",
+      "options": [
+        {
+          "kind": "scp",
+          "name": "Deny S3 requests that do not use TLS",
+          "prevents": "Any S3 call over plain HTTP is refused for every principal in scope, whatever the bucket policy says.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyS3InsecureTransport",
+              "Effect": "Deny",
+              "Action": "s3:*",
+              "Resource": "*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              }
+            }
+          ],
+          "exemptable": false,
+          "draft": true,
+          "caveats": [
+            "Applies to every S3 request from the accounts in scope, including old tools that still use http endpoints.",
+            "A resource control policy is the stronger fit (it also covers requests from outside the organisation); AWS publishes an HTTPS-only RCP example in aws-samples/resource-control-policy-examples.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Add the TLS-only statement to every bucket policy in IaC",
+          "prevents": "Every bucket created from the module carries the Deny statement the control checks for.",
+          "snippet_format": "json",
+          "snippet": "{\n  \"Sid\": \"AllowSSLRequestsOnly\",\n  \"Effect\": \"Deny\",\n  \"Principal\": \"*\",\n  \"Action\": \"s3:*\",\n  \"Resource\": [\n    \"arn:aws:s3:::<BUCKET>\",\n    \"arn:aws:s3:::<BUCKET>/*\"\n  ],\n  \"Condition\": {\n    \"Bool\": {\n      \"aws:SecureTransport\": \"false\"\n    }\n  }\n}",
+          "caveats": [
+            "Statement shape taken from the Security Hub S3.5 remediation example; put it in a shared bucket module so nobody writes it by hand."
+          ],
+          "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-5"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule s3-bucket-ssl-requests-only",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "s3-bucket-ssl-requests-only",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_SSL_REQUESTS_ONLY"
+            }
+          },
+          "config_rule": {
+            "name": "s3-bucket-ssl-requests-only",
+            "identifier": "S3_BUCKET_SSL_REQUESTS_ONLY",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-ssl-requests-only.html"
+        }
+      ]
+    },
+    "S3.8": {
+      "title": "S3 general purpose buckets should block public access (bucket level)",
+      "prowler": [
+        "s3_bucket_level_public_access_block"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-8",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Set the bucket-level block on every bucket in IaC",
+          "prevents": "New buckets cannot be created without the four bucket-level settings.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_s3_bucket_public_access_block\" \"this\" {\n  bucket                  = aws_s3_bucket.this.id\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}",
+          "caveats": [
+            "The control reads bucket-level settings, so the account-level setting protects the bucket but may not clear this finding on its own.",
+            "The four arguments default to false; require all four in a policy check."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block"
+        },
+        {
+          "kind": "account-setting",
+          "name": "Turn on the account-level S3 Block Public Access settings as well",
+          "prevents": "Public access is blocked for every bucket in the account even if a bucket-level block is missing.",
+          "snippet_format": "cli",
+          "snippet": "aws s3control put-public-access-block --account-id <ACCOUNT_ID> --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
+          "caveats": [
+            "Does not set the bucket-level flags the control reads; use it with the IaC option.",
+            "AWS Organizations also has an Amazon S3 policy type that enforces the four Block Public Access settings across accounts and blocks account-level changes (docs: orgs_manage_policies_s3.html). Its policy syntax was not checked for this table, so no snippet is given."
+          ],
+          "doc": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/configuring-block-public-access-account.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop the bucket-level and account-level blocks being removed",
+          "prevents": "Removes the usual ways the settings are switched off (the bucket-level delete uses the same permission as the put).",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "ProtectAccountPublicAccessBlock",
+              "Effect": "Deny",
+              "Action": "s3:PutAccountPublicAccessBlock",
+              "Resource": "*"
+            },
+            {
+              "Sid": "ProtectBucketPublicAccessBlock",
+              "Effect": "Deny",
+              "Action": "s3:PutBucketPublicAccessBlock",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule s3-bucket-level-public-access-prohibited",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "s3-bucket-level-public-access-prohibited",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_LEVEL_PUBLIC_ACCESS_PROHIBITED"
+            }
+          },
+          "config_rule": {
+            "name": "s3-bucket-level-public-access-prohibited",
+            "identifier": "S3_BUCKET_LEVEL_PUBLIC_ACCESS_PROHIBITED",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-level-public-access-prohibited.html"
+        }
+      ]
+    },
+    "EC2.1": {
+      "title": "Amazon EBS snapshots should not be configured to be publicly restorable",
+      "prowler": [
+        "ec2_ebs_public_snapshot"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-1",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: block all public sharing of EBS snapshots",
+          "prevents": "Public sharing of snapshots is blocked in every Region of every account in scope, and account admins cannot switch it off.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "snapshot_block_public_access": {
+                "state": {
+                  "@@assign": "block_all_sharing"
+                }
+              }
+            }
+          },
+          "caveats": [
+            "block_all_sharing treats snapshots that were already public as private; block_new_sharing only stops new sharing and leaves existing public snapshots public.",
+            "The sibling attribute image_block_public_access (state block_new_sharing) does the same for AMIs.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2_syntax.html"
+        },
+        {
+          "kind": "account-setting",
+          "name": "Block public sharing of EBS snapshots in one Region",
+          "prevents": "No snapshot in the Region can be shared publicly while the setting is on.",
+          "snippet_format": "cli",
+          "snippet": "aws ec2 enable-snapshot-block-public-access --state block-all-sharing --region <REGION>",
+          "caveats": [
+            "Per Region: repeat for each Region in use. block-all-sharing also makes already-public snapshots private; check nobody depends on them first."
+          ],
+          "doc": "https://docs.aws.amazon.com/cli/latest/reference/ec2/enable-snapshot-block-public-access.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop anyone switching snapshot block public access off",
+          "prevents": "The setting cannot be disabled by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyDisableSnapshotBlockPublicAccess",
+              "Effect": "Deny",
+              "Action": "ec2:DisableSnapshotBlockPublicAccess",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Declare the setting in IaC",
+          "prevents": "The Region's setting is part of the baseline stack.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_ebs_snapshot_block_public_access\" \"this\" {\n  state = \"block-all-sharing\"\n}",
+          "caveats": [
+            "One resource per Region (use a provider alias per Region)."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_snapshot_block_public_access"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule ebs-snapshot-public-restorable-check",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "ebs-snapshot-public-restorable-check",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "EBS_SNAPSHOT_PUBLIC_RESTORABLE_CHECK"
+            }
+          },
+          "config_rule": {
+            "name": "ebs-snapshot-public-restorable-check",
+            "identifier": "EBS_SNAPSHOT_PUBLIC_RESTORABLE_CHECK",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-public-restorable-check.html"
+        }
+      ]
+    },
+    "EC2.182": {
+      "title": "Block public access settings should be enabled for Amazon EBS snapshots",
+      "prowler": [
+        "ec2_ebs_snapshot_account_block_public_access"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-182",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: block all public sharing of EBS snapshots",
+          "prevents": "Public sharing of snapshots is blocked in every Region of every account in scope, and account admins cannot switch it off.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "snapshot_block_public_access": {
+                "state": {
+                  "@@assign": "block_all_sharing"
+                }
+              }
+            }
+          },
+          "caveats": [
+            "block_all_sharing treats snapshots that were already public as private; block_new_sharing only stops new sharing and leaves existing public snapshots public.",
+            "The sibling attribute image_block_public_access (state block_new_sharing) does the same for AMIs.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2_syntax.html"
+        },
+        {
+          "kind": "account-setting",
+          "name": "Block public sharing of EBS snapshots in one Region",
+          "prevents": "No snapshot in the Region can be shared publicly while the setting is on.",
+          "snippet_format": "cli",
+          "snippet": "aws ec2 enable-snapshot-block-public-access --state block-all-sharing --region <REGION>",
+          "caveats": [
+            "Per Region: repeat for each Region in use. block-all-sharing also makes already-public snapshots private; check nobody depends on them first."
+          ],
+          "doc": "https://docs.aws.amazon.com/cli/latest/reference/ec2/enable-snapshot-block-public-access.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop anyone switching snapshot block public access off",
+          "prevents": "The setting cannot be disabled by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyDisableSnapshotBlockPublicAccess",
+              "Effect": "Deny",
+              "Action": "ec2:DisableSnapshotBlockPublicAccess",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Declare the setting in IaC",
+          "prevents": "The Region's setting is part of the baseline stack.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_ebs_snapshot_block_public_access\" \"this\" {\n  state = \"block-all-sharing\"\n}",
+          "caveats": [
+            "One resource per Region (use a provider alias per Region)."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_snapshot_block_public_access"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule ebs-snapshot-block-public-access",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "ebs-snapshot-block-public-access",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "EBS_SNAPSHOT_BLOCK_PUBLIC_ACCESS"
+            }
+          },
+          "config_rule": {
+            "name": "ebs-snapshot-block-public-access",
+            "identifier": "EBS_SNAPSHOT_BLOCK_PUBLIC_ACCESS",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/ebs-snapshot-block-public-access.html"
+        }
+      ]
+    },
+    "EC2.2": {
+      "title": "VPC default security groups should not allow inbound or outbound traffic",
+      "prowler": [
+        "ec2_securitygroup_default_restrict_traffic"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-2",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Manage the default security group in IaC with no rules",
+          "prevents": "Every VPC the pipeline creates has its default security group emptied.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_default_security_group\" \"default\" {\n  vpc_id = aws_vpc.main.id\n}",
+          "caveats": [
+            "Terraform removes existing rules on first management and shows any later out-of-band rule as drift."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule vpc-default-security-group-closed",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "vpc-default-security-group-closed",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "VPC_DEFAULT_SECURITY_GROUP_CLOSED"
+            }
+          },
+          "config_rule": {
+            "name": "vpc-default-security-group-closed",
+            "identifier": "VPC_DEFAULT_SECURITY_GROUP_CLOSED",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/vpc-default-security-group-closed.html"
+        }
+      ],
+      "note": "No SCP, account setting or declarative policy was found that empties default security groups, so the pipeline check and detection are the options."
+    },
+    "EC2.7": {
+      "title": "EBS default encryption should be enabled",
+      "prowler": [
+        "ec2_ebs_default_encryption"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-7",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Turn on EBS encryption by default in each Region",
+          "prevents": "New EBS volumes and snapshot copies in the Region are encrypted; it cannot be switched off per volume.",
+          "snippet_format": "cli",
+          "snippet": "aws ec2 enable-ebs-encryption-by-default --region <REGION>",
+          "caveats": [
+            "Region-specific: repeat for every Region in use.",
+            "Existing volumes and snapshots are not changed."
+          ],
+          "doc": "https://docs.aws.amazon.com/ebs/latest/userguide/encryption-by-default.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop anyone switching encryption by default off",
+          "prevents": "The Region setting cannot be disabled by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyDisableEbsEncryptionByDefault",
+              "Effect": "Deny",
+              "Action": "ec2:DisableEbsEncryptionByDefault",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Declare the setting in IaC",
+          "prevents": "The Region's setting is part of the baseline stack.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_ebs_encryption_by_default\" \"this\" {\n  enabled = true\n}",
+          "caveats": [
+            "One resource per Region."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_encryption_by_default"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule ec2-ebs-encryption-by-default",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "ec2-ebs-encryption-by-default",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "EC2_EBS_ENCRYPTION_BY_DEFAULT"
+            }
+          },
+          "config_rule": {
+            "name": "ec2-ebs-encryption-by-default",
+            "identifier": "EC2_EBS_ENCRYPTION_BY_DEFAULT",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/ec2-ebs-encryption-by-default.html"
+        }
+      ]
+    },
+    "EC2.8": {
+      "title": "EC2 instances should use Instance Metadata Service Version 2 (IMDSv2)",
+      "prowler": [
+        "ec2_instance_imdsv2_enabled",
+        "ec2_instance_account_imdsv2_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-8",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: require IMDSv2 for new instances",
+          "prevents": "New instances in every Region of every account in scope launch with IMDSv2 required; launching or switching to IMDSv1 fails.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "instance_metadata_defaults": {
+                "http_tokens": {
+                  "@@assign": "required"
+                },
+                "http_tokens_enforced": {
+                  "@@assign": "enabled"
+                }
+              }
+            }
+          },
+          "caveats": [
+            "Enforcement makes launches fail if an AMI or launch template still asks for IMDSv1; check IMDSv1 use first (the MetadataNoToken metric).",
+            "Existing instances are not changed; fix them one by one, so EC2.8 findings on them stay open until you do.",
+            "AWS suggests a hop limit of at least 2 when containers read the metadata service.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-new-instances.html"
+        },
+        {
+          "kind": "account-setting",
+          "name": "Enforce IMDSv2 for new instances in one account and Region",
+          "prevents": "New instances in the Region must use IMDSv2.",
+          "snippet_format": "cli",
+          "snippet": "aws ec2 modify-instance-metadata-defaults --region <REGION> --http-tokens required --http-tokens-enforced enabled",
+          "caveats": [
+            "Per Region and per account; a declarative policy does the same everywhere at once and stops account admins changing it.",
+            "Does not change existing instances."
+          ],
+          "doc": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-new-instances.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Require IMDSv2 at launch and stop the defaults being weakened",
+          "prevents": "RunInstances without IMDSv2 required is refused; metadata options and defaults cannot be loosened; role credentials fetched over IMDSv1 are refused.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "RequireImdsv2OnLaunch",
+              "Effect": "Deny",
+              "Action": "ec2:RunInstances",
+              "Resource": "arn:aws:ec2:*:*:instance/*",
+              "Condition": {
+                "StringNotEquals": {
+                  "ec2:MetadataHttpTokens": "required"
+                }
+              }
+            },
+            {
+              "Sid": "DenyImdsOptionChanges",
+              "Effect": "Deny",
+              "Action": "ec2:ModifyInstanceMetadataOptions",
+              "Resource": "*"
+            },
+            {
+              "Sid": "DenyImdsDefaultsChanges",
+              "Effect": "Deny",
+              "Action": "ec2:ModifyInstanceMetadataDefaults",
+              "Resource": "*"
+            },
+            {
+              "Sid": "DenyImdsv1RoleCredentials",
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "NumericLessThan": {
+                  "ec2:RoleDelivery": "2.0"
+                }
+              }
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Launch templates, Auto Scaling groups and old AMIs or SDKs that use IMDSv1 fail to launch or lose credentials.",
+            "DenyImdsOptionChanges denies every principal not exempted, including the people who would roll an instance back; give your platform role as the break-glass role.",
+            "DenyImdsv1RoleCredentials applies to all requests signed with instance role credentials, so test it in a sandbox OU first."
+          ],
+          "doc": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ExamplePolicies_EC2.html#iam-example-instance-metadata"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Require IMDSv2 in every instance and launch template",
+          "prevents": "Resources that ask for IMDSv1 fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "metadata_options {\n  http_endpoint = \"enabled\"\n  http_tokens   = \"required\"\n}",
+          "caveats": [
+            "Applies inside aws_instance and aws_launch_template blocks."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule ec2-imdsv2-check",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "ec2-imdsv2-check",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "EC2_IMDSV2_CHECK"
+            }
+          },
+          "config_rule": {
+            "name": "ec2-imdsv2-check",
+            "identifier": "EC2_IMDSV2_CHECK",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/ec2-imdsv2-check.html"
+        }
+      ]
+    },
+    "EC2.9": {
+      "title": "Amazon EC2 instances should not have a public IPv4 address",
+      "prowler": [
+        "ec2_instance_public_ip"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-9",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: VPC Block Public Access for internet gateway ingress",
+          "prevents": "Inbound internet traffic to VPC resources is blocked org-wide, so a stray public IP is not reachable from the internet.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "vpc_block_public_access": {
+                "internet_gateway_block": {
+                  "mode": {
+                    "@@assign": "block_ingress"
+                  },
+                  "exclusions_allowed": {
+                    "@@assign": "enabled"
+                  }
+                }
+              }
+            }
+          },
+          "caveats": [
+            "block_ingress blocks internet traffic into VPCs except for excluded VPCs and subnets; it does not remove public IPs or security group rules, so this finding can stay open.",
+            "Public load balancers and bastions need an exclusion or they lose inbound internet access; test on a sandbox OU.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2_syntax.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Do not associate a public IP in IaC",
+          "prevents": "Instances and launch templates that ask for a public IPv4 address fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "associate_public_ip_address = false",
+          "caveats": [
+            "Applies to aws_instance and network interface settings of launch templates; also stop subnets assigning public IPs on launch (EC2.15)."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule ec2-instance-no-public-ip",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "ec2-instance-no-public-ip",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "EC2_INSTANCE_NO_PUBLIC_IP"
+            }
+          },
+          "config_rule": {
+            "name": "ec2-instance-no-public-ip",
+            "identifier": "EC2_INSTANCE_NO_PUBLIC_IP",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/ec2-instance-no-public-ip.html"
+        }
+      ],
+      "note": "No SCP condition key was verified for blocking a public IPv4 association, so none is offered."
+    },
+    "EC2.13": {
+      "title": "Security groups should not allow ingress from 0.0.0.0/0 or ::/0 to port 22",
+      "prowler": [
+        "ec2_securitygroup_allow_ingress_from_internet_to_tcp_port_22"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-13",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: VPC Block Public Access for internet gateway ingress",
+          "prevents": "Inbound internet traffic to VPC resources is blocked org-wide, whatever the security group says.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "vpc_block_public_access": {
+                "internet_gateway_block": {
+                  "mode": {
+                    "@@assign": "block_ingress"
+                  },
+                  "exclusions_allowed": {
+                    "@@assign": "enabled"
+                  }
+                }
+              }
+            }
+          },
+          "caveats": [
+            "block_ingress blocks internet traffic into VPCs except for excluded VPCs and subnets; it does not remove public IPs or security group rules, so this finding can stay open.",
+            "Public load balancers and bastions need an exclusion or they lose inbound internet access; test on a sandbox OU.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2_syntax.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Limit who can add security group ingress rules",
+          "prevents": "Only exempted roles can authorise new ingress rules or change rules.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenySecurityGroupIngressChanges",
+              "Effect": "Deny",
+              "Action": [
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:ModifySecurityGroupRules"
+              ],
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": false,
+          "caveats": [
+            "Blunt: it blocks every principal that is not exempted from adding ingress rules, so it is left out of the SCP draft; use it only with a network-admin role as the break-glass role, in a sandbox OU first.",
+            "SCPs cannot look at the CIDR in the rule, so it cannot allow safe rules and block 0.0.0.0/0."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Fail the pipeline on a world-open ingress rule",
+          "prevents": "No stack can ship an ingress rule open to 0.0.0.0/0 or ::/0 on 22.",
+          "snippet_format": "text",
+          "snippet": "Assertion for your IaC policy tool (tool-neutral): for every aws_security_group, aws_security_group_rule and aws_vpc_security_group_ingress_rule, fail when the source CIDR is 0.0.0.0/0 or ::/0 and the port range includes 22.",
+          "caveats": [
+            "Name the tool you use (OPA, Checkov, cfn-guard, tflint) and write the rule there; this table does not ship tool-specific rule ids."
+          ],
+          "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-13"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule restricted-ssh",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "restricted-ssh",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "INCOMING_SSH_DISABLED"
+            }
+          },
+          "config_rule": {
+            "name": "restricted-ssh",
+            "identifier": "INCOMING_SSH_DISABLED",
+            "trigger": "configuration changes and periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "The rule name and its identifier differ: use the identifier as SourceIdentifier."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/restricted-ssh.html"
+        }
+      ]
+    },
+    "EC2.19": {
+      "title": "Security groups should not allow unrestricted access to ports with high risk",
+      "prowler": [
+        "ec2_securitygroup_allow_ingress_from_internet_to_high_risk_tcp_ports"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-19",
+      "options": [
+        {
+          "kind": "declarative-policy",
+          "name": "EC2 declarative policy: VPC Block Public Access for internet gateway ingress",
+          "prevents": "Inbound internet traffic to VPC resources is blocked org-wide, whatever the security group says.",
+          "snippet_format": "json",
+          "snippet": {
+            "ec2_attributes": {
+              "vpc_block_public_access": {
+                "internet_gateway_block": {
+                  "mode": {
+                    "@@assign": "block_ingress"
+                  },
+                  "exclusions_allowed": {
+                    "@@assign": "enabled"
+                  }
+                }
+              }
+            }
+          },
+          "caveats": [
+            "block_ingress blocks internet traffic into VPCs except for excluded VPCs and subnets; it does not remove public IPs or security group rules, so this finding can stay open.",
+            "Public load balancers and bastions need an exclusion or they lose inbound internet access; test on a sandbox OU.",
+            "Create it with: aws organizations create-policy --type DECLARATIVE_POLICY_EC2 --name <name> --content file://policy.json (printed here, never run), then attach it to an OU. Check readiness with the account status report first."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ec2_syntax.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Limit who can add security group ingress rules",
+          "prevents": "Only exempted roles can authorise new ingress rules or change rules.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenySecurityGroupIngressChanges",
+              "Effect": "Deny",
+              "Action": [
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:ModifySecurityGroupRules"
+              ],
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": false,
+          "caveats": [
+            "Blunt: it blocks every principal that is not exempted from adding ingress rules, so it is left out of the SCP draft; use it only with a network-admin role as the break-glass role, in a sandbox OU first.",
+            "SCPs cannot look at the CIDR in the rule, so it cannot allow safe rules and block 0.0.0.0/0."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Fail the pipeline on a world-open ingress rule",
+          "prevents": "No stack can ship an ingress rule open to 0.0.0.0/0 or ::/0 on the high-risk ports.",
+          "snippet_format": "text",
+          "snippet": "Assertion for your IaC policy tool (tool-neutral): for every aws_security_group, aws_security_group_rule and aws_vpc_security_group_ingress_rule, fail when the source CIDR is 0.0.0.0/0 or ::/0 and the port range includes the high-risk ports.",
+          "caveats": [
+            "Name the tool you use (OPA, Checkov, cfn-guard, tflint) and write the rule there; this table does not ship tool-specific rule ids."
+          ],
+          "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-19"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule restricted-common-ports",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "restricted-common-ports",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "RESTRICTED_INCOMING_TRAFFIC"
+            }
+          },
+          "config_rule": {
+            "name": "restricted-common-ports",
+            "identifier": "RESTRICTED_INCOMING_TRAFFIC",
+            "trigger": "configuration changes and periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "The rule name and its identifier differ: use the identifier as SourceIdentifier."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/restricted-common-ports.html"
+        }
+      ]
+    },
+    "IAM.4": {
+      "title": "IAM root user access key should not exist",
+      "prowler": [
+        "iam_no_root_access_key"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-4",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Centralised root access management for member accounts",
+          "prevents": "Member accounts can have their root credentials removed centrally and cannot sign in as root or recover the root password.",
+          "snippet_format": "cli",
+          "snippet": "aws iam enable-organizations-root-credentials-management",
+          "caveats": [
+            "Run from the management account (or the delegated IAM administrator). Enabling root access management also enables trusted access for IAM in AWS Organizations.",
+            "Removing root credentials is a separate, confirmed step per account; check the account has a way to recover access first."
+          ],
+          "doc": "https://docs.aws.amazon.com/cli/latest/reference/iam/enable-organizations-root-credentials-management.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Deny every action by the root user in member accounts",
+          "prevents": "Root sign-ins, including with a leaked key, can do nothing in the accounts in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyRootUser",
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "StringLike": {
+                  "aws:PrincipalArn": "arn:aws:iam::*:root"
+                }
+              }
+            }
+          ],
+          "exemptable": false,
+          "draft": true,
+          "caveats": [
+            "A few tasks still need root (some account-level settings, closing an account); detach the SCP for those or use central root sessions.",
+            "SCPs do not apply to the management account.",
+            "Needs no exemption: root is not a role, so --break-glass-role is ignored for this statement."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule iam-root-access-key-check",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "iam-root-access-key-check",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "IAM_ROOT_ACCESS_KEY_CHECK"
+            }
+          },
+          "config_rule": {
+            "name": "iam-root-access-key-check",
+            "identifier": "IAM_ROOT_ACCESS_KEY_CHECK",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "Record global IAM resources in one supported Region only."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/iam-root-access-key-check.html"
+        }
+      ]
+    },
+    "IAM.9": {
+      "title": "MFA should be enabled for the root user",
+      "prowler": [
+        "iam_root_mfa_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-9",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Centralised root access management for member accounts",
+          "prevents": "Member accounts can have their root credentials removed centrally and cannot sign in as root or recover the root password.",
+          "snippet_format": "cli",
+          "snippet": "aws iam enable-organizations-root-credentials-management",
+          "caveats": [
+            "Run from the management account (or the delegated IAM administrator). Enabling root access management also enables trusted access for IAM in AWS Organizations.",
+            "Removing root credentials is a separate, confirmed step per account; check the account has a way to recover access first."
+          ],
+          "doc": "https://docs.aws.amazon.com/cli/latest/reference/iam/enable-organizations-root-credentials-management.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Deny every action by the root user in member accounts",
+          "prevents": "Root sign-ins, including with a leaked key, can do nothing in the accounts in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyRootUser",
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "StringLike": {
+                  "aws:PrincipalArn": "arn:aws:iam::*:root"
+                }
+              }
+            }
+          ],
+          "exemptable": false,
+          "draft": true,
+          "caveats": [
+            "A few tasks still need root (some account-level settings, closing an account); detach the SCP for those or use central root sessions.",
+            "SCPs do not apply to the management account.",
+            "Needs no exemption: root is not a role, so --break-glass-role is ignored for this statement."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule root-account-mfa-enabled",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "root-account-mfa-enabled",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "ROOT_ACCOUNT_MFA_ENABLED"
+            }
+          },
+          "config_rule": {
+            "name": "root-account-mfa-enabled",
+            "identifier": "ROOT_ACCOUNT_MFA_ENABLED",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "The rule returns NOT_APPLICABLE when the account has no root credentials."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/root-account-mfa-enabled.html"
+        }
+      ]
+    },
+    "IAM.6": {
+      "title": "Hardware MFA should be enabled for the root user",
+      "prowler": [
+        "iam_root_hardware_mfa_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-6",
+      "options": [],
+      "note": "No preventive control was found for registering a hardware MFA device. Keep the detective control and route it to the account owner (security-hub-triage). Centralised root access management can remove the root credentials instead."
+    },
+    "CloudTrail.1": {
+      "title": "CloudTrail should be enabled with at least one multi-Region trail that includes read and write management events",
+      "prowler": [
+        "cloudtrail_multi_region_enabled",
+        "cloudtrail_multi_region_enabled_logging_management_events"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-1",
+      "options": [
+        {
+          "kind": "scp",
+          "name": "Stop CloudTrail being stopped, deleted or narrowed",
+          "prevents": "Trails cannot be deleted, stopped, or have their event selectors changed by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "ProtectCloudTrail",
+              "Effect": "Deny",
+              "Action": [
+                "cloudtrail:DeleteTrail",
+                "cloudtrail:PutEventSelectors",
+                "cloudtrail:StopLogging",
+                "cloudtrail:UpdateTrail"
+              ],
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "cloudtrail:UpdateTrail is also used for legitimate changes, so the deployment role that manages trails must be the break-glass role.",
+            "SCPs do not apply to the management account."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "iac-check",
+          "name": "Declare the trail as a multi-Region trail in IaC",
+          "prevents": "The baseline stack creates the trail correctly; a policy check fails changes that turn it off.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_cloudtrail\" \"this\" {\n  name                          = \"org-trail\"\n  s3_bucket_name                = aws_s3_bucket.trail.id\n  is_multi_region_trail         = true\n  enable_log_file_validation    = true\n  include_global_service_events = true\n}",
+          "caveats": [
+            "is_multi_region_trail and enable_log_file_validation default to false. For an organisation trail also set is_organization_trail (management account only).",
+            "Also set event selectors to read and write management events."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule multi-region-cloudtrail-enabled",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "multi-region-cloudtrail-enabled",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "MULTI_REGION_CLOUD_TRAIL_ENABLED"
+            }
+          },
+          "config_rule": {
+            "name": "multi-region-cloudtrail-enabled",
+            "identifier": "MULTI_REGION_CLOUD_TRAIL_ENABLED",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "The rule name and its identifier differ: use the identifier as SourceIdentifier."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/multi-region-cloudtrail-enabled.html"
+        }
+      ]
+    },
+    "CloudTrail.2": {
+      "title": "CloudTrail should have encryption at-rest enabled",
+      "prowler": [
+        "cloudtrail_kms_encryption_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/cloudtrail-controls.html#cloudtrail-2",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Set a KMS key on every trail in IaC",
+          "prevents": "Trails without kms_key_id fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_cloudtrail\" \"this\" {\n  # ...\n  kms_key_id = aws_kms_key.trail.arn\n}",
+          "caveats": [
+            "The key policy must let CloudTrail use the key."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudtrail"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule cloud-trail-encryption-enabled",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "cloud-trail-encryption-enabled",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "CLOUD_TRAIL_ENCRYPTION_ENABLED"
+            }
+          },
+          "config_rule": {
+            "name": "cloud-trail-encryption-enabled",
+            "identifier": "CLOUD_TRAIL_ENCRYPTION_ENABLED",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/cloud-trail-encryption-enabled.html"
+        }
+      ],
+      "note": "No SCP condition key was verified for requiring a KMS key on a trail, so none is offered."
+    },
+    "Config.1": {
+      "title": "AWS Config should be enabled and use the service-linked role for resource recording",
+      "prowler": [
+        "config_recorder_all_regions_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/config-controls.html#config-1",
+      "options": [
+        {
+          "kind": "scp",
+          "name": "Stop the Config recorder and delivery channel being deleted or stopped",
+          "prevents": "Recording cannot be stopped or removed by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "ProtectConfig",
+              "Effect": "Deny",
+              "Action": [
+                "config:DeleteConfigurationRecorder",
+                "config:DeleteDeliveryChannel",
+                "config:DeleteRetentionConfiguration",
+                "config:StopConfigurationRecorder"
+              ],
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "The role that manages Config through IaC must be the break-glass role.",
+            "SCPs do not apply to the management account."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        }
+      ],
+      "note": "Config.1 has no AWS Config managed rule (it is a custom Security Hub check). The SCP keeps recording on once it is set up; enabling Config is still a separate step."
+    },
+    "GuardDuty.1": {
+      "title": "GuardDuty should be enabled",
+      "prowler": [
+        "guardduty_is_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/guardduty-controls.html#guardduty-1",
+      "options": [
+        {
+          "kind": "account-setting",
+          "name": "Auto-enable GuardDuty for every organisation member account",
+          "prevents": "Existing and new member accounts get GuardDuty enabled automatically in the Region.",
+          "snippet_format": "cli",
+          "snippet": "aws guardduty update-organization-configuration --detector-id <DETECTOR_ID> --auto-enable-organization-members ALL --region <REGION>",
+          "caveats": [
+            "Run in the delegated GuardDuty administrator account, per Region; ALL can take up to 24 hours to apply.",
+            "Find the detector id with aws guardduty list-detectors --output json."
+          ],
+          "doc": "https://docs.aws.amazon.com/cli/latest/reference/guardduty/update-organization-configuration.html"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop GuardDuty being deleted or disassociated",
+          "prevents": "Detectors cannot be deleted, disassociated, or have monitoring stopped by principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "ProtectGuardDuty",
+              "Effect": "Deny",
+              "Action": [
+                "guardduty:DeleteDetector",
+                "guardduty:DeleteMembers",
+                "guardduty:DisassociateFromAdministratorAccount",
+                "guardduty:DisassociateFromMasterAccount",
+                "guardduty:DisassociateMembers",
+                "guardduty:StopMonitoringMembers",
+                "guardduty:UpdateDetector"
+              ],
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "guardduty:UpdateDetector is also used for legitimate changes such as protection plans; give those changes to the break-glass role.",
+            "SCPs do not apply to the management account."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule guardduty-enabled-centralized",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "guardduty-enabled-centralized",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "GUARDDUTY_ENABLED_CENTRALIZED"
+            }
+          },
+          "config_rule": {
+            "name": "guardduty-enabled-centralized",
+            "identifier": "GUARDDUTY_ENABLED_CENTRALIZED",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/guardduty-enabled-centralized.html"
+        }
+      ]
+    },
+    "KMS.4": {
+      "title": "AWS KMS key rotation should be enabled",
+      "prowler": [
+        "kms_cmk_rotation_enabled"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/kms-controls.html#kms-4",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Turn rotation on for every customer managed key in IaC",
+          "prevents": "Keys that support rotation are created with rotation on.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_kms_key\" \"this\" {\n  enable_key_rotation = true\n}",
+          "caveats": [
+            "enable_key_rotation defaults to false.",
+            "Automatic rotation is not supported for asymmetric keys, HMAC keys, keys with imported key material or keys in custom key stores, so exempt those in the policy check."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key"
+        },
+        {
+          "kind": "scp",
+          "name": "Stop key rotation being switched off",
+          "prevents": "kms:DisableKeyRotation is refused for principals in scope.",
+          "snippet_format": "json",
+          "snippet": [
+            {
+              "Sid": "DenyDisableKeyRotation",
+              "Effect": "Deny",
+              "Action": "kms:DisableKeyRotation",
+              "Resource": "*"
+            }
+          ],
+          "exemptable": true,
+          "draft": true,
+          "caveats": [
+            "Add a break-glass role with --break-glass-role so one role can still change the setting.",
+            "SCPs do not apply to the management account or service-linked roles."
+          ],
+          "doc": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule cmk-backing-key-rotation-enabled",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "cmk-backing-key-rotation-enabled",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "CMK_BACKING_KEY_ROTATION_ENABLED"
+            }
+          },
+          "config_rule": {
+            "name": "cmk-backing-key-rotation-enabled",
+            "identifier": "CMK_BACKING_KEY_ROTATION_ENABLED",
+            "trigger": "periodic"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/cmk-backing-key-rotation-enabled.html"
+        }
+      ],
+      "note": "The SCP only stops rotation being turned off; it does not turn it on for keys created without it, so the IaC check carries the weight."
+    },
+    "RDS.1": {
+      "title": "RDS snapshot should be private",
+      "prowler": [
+        "rds_snapshots_public_access"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-1",
+      "options": [
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule rds-snapshots-public-prohibited",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "rds-snapshots-public-prohibited",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "RDS_SNAPSHOTS_PUBLIC_PROHIBITED"
+            }
+          },
+          "config_rule": {
+            "name": "rds-snapshots-public-prohibited",
+            "identifier": "RDS_SNAPSHOTS_PUBLIC_PROHIBITED",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region.",
+            "It can take up to 12 hours for compliance results to be captured."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/rds-snapshots-public-prohibited.html"
+        }
+      ],
+      "note": "No verified preventive control was found that blocks sharing an RDS snapshot publicly. Keep the detective control, route it to the database owner (security-hub-triage) and treat a public snapshot as an incident."
+    },
+    "RDS.2": {
+      "title": "RDS DB instances should prohibit public access",
+      "prowler": [
+        "rds_instance_no_public_access"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-2",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Set publicly_accessible to false for every RDS instance in IaC",
+          "prevents": "Instances that ask to be public fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_db_instance\" \"this\" {\n  publicly_accessible = false\n}",
+          "caveats": [
+            "The argument defaults to false; a policy check should fail any true value."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule rds-instance-public-access-check",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "rds-instance-public-access-check",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "RDS_INSTANCE_PUBLIC_ACCESS_CHECK"
+            }
+          },
+          "config_rule": {
+            "name": "rds-instance-public-access-check",
+            "identifier": "RDS_INSTANCE_PUBLIC_ACCESS_CHECK",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/rds-instance-public-access-check.html"
+        }
+      ],
+      "note": "No SCP condition key for the PubliclyAccessible setting was verified, so none is offered."
+    },
+    "RDS.3": {
+      "title": "RDS DB instances should have encryption at-rest enabled",
+      "prowler": [
+        "rds_instance_storage_encrypted"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/rds-controls.html#rds-3",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Require storage_encrypted for every RDS instance in IaC",
+          "prevents": "Unencrypted instances fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_db_instance\" \"this\" {\n  storage_encrypted = true\n}",
+          "caveats": [
+            "The argument defaults to false.",
+            "Encryption is chosen when the instance is created, so existing instances are fixed by restoring an encrypted copy of a snapshot."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule rds-storage-encrypted",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "rds-storage-encrypted",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "RDS_STORAGE_ENCRYPTED"
+            }
+          },
+          "config_rule": {
+            "name": "rds-storage-encrypted",
+            "identifier": "RDS_STORAGE_ENCRYPTED",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/rds-storage-encrypted.html"
+        }
+      ],
+      "note": "No SCP condition key for storage encryption was verified, so none is offered."
+    },
+    "Lambda.1": {
+      "title": "Lambda function policies should prohibit public access",
+      "prowler": [
+        "awslambda_function_not_publicly_accessible"
+      ],
+      "doc": "https://docs.aws.amazon.com/securityhub/latest/userguide/lambda-controls.html#lambda-1",
+      "options": [
+        {
+          "kind": "iac-check",
+          "name": "Never grant invoke permission to a wildcard principal in IaC",
+          "prevents": "Lambda permissions with a public principal, or an S3 principal without a source account, fail the pipeline.",
+          "snippet_format": "hcl",
+          "snippet": "resource \"aws_lambda_permission\" \"this\" {\n  statement_id   = \"AllowInvoke\"\n  action         = \"lambda:InvokeFunction\"\n  function_name  = aws_lambda_function.this.function_name\n  principal      = \"s3.amazonaws.com\"\n  source_arn     = aws_s3_bucket.this.arn\n  source_account = data.aws_caller_identity.current.account_id\n}",
+          "caveats": [
+            "Name the principal explicitly and set source_arn or source_account; fail on principal = \"*\"."
+          ],
+          "doc": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission"
+        },
+        {
+          "kind": "config-rule",
+          "name": "AWS Config managed rule lambda-function-public-access-prohibited",
+          "prevents": "Nothing by itself: it detects the misconfiguration continuously (and can drive auto-remediation), so a regression is seen within the evaluation window.",
+          "snippet_format": "json",
+          "snippet": {
+            "ConfigRuleName": "lambda-function-public-access-prohibited",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "LAMBDA_FUNCTION_PUBLIC_ACCESS_PROHIBITED"
+            }
+          },
+          "config_rule": {
+            "name": "lambda-function-public-access-prohibited",
+            "identifier": "LAMBDA_FUNCTION_PUBLIC_ACCESS_PROHIBITED",
+            "trigger": "configuration changes"
+          },
+          "caveats": [
+            "Needs AWS Config recording for the resource type in each Region."
+          ],
+          "doc": "https://docs.aws.amazon.com/config/latest/developerguide/lambda-function-public-access-prohibited.html"
+        }
+      ],
+      "note": "No SCP condition key for the principal of a Lambda permission was verified, so none is offered."
+    }
+  }
+}
