@@ -3,9 +3,9 @@
 [![ci](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/basitalisandhu/claude-skills/actions/workflows/ci.yml)
 [![pages](https://github.com/basitalisandhu/claude-skills/actions/workflows/pages.yml/badge.svg)](https://basitalisandhu.github.io/claude-skills/)
 [![licence](https://img.shields.io/github/license/basitalisandhu/claude-skills)](LICENSE)
-<!-- count-badge:start -->[![130 skills in 16 plugins](https://img.shields.io/badge/skills-130%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
+<!-- count-badge:start -->[![135 skills in 16 plugins](https://img.shields.io/badge/skills-135%20in%2016%20plugins-2E6BFF)](#catalog)<!-- count-badge:end -->
 
-<!-- counts:start -->**130 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
+<!-- counts:start -->**135 skills in 16 plugins, from 11 source repositories.**<!-- counts:end -->
 
 This repository collects every Claude Code skill I maintain. Clone it once and you have all of them. It is also one Claude Code plugin marketplace, so you can install any plugin from it by name. The numbers above are a snapshot; the [catalog](#catalog) below is regenerated on every sync and is the live count.
 
@@ -81,15 +81,16 @@ Go to a single source repository instead when you want only that pack, want to f
 
 <!-- catalog:start -->
 
-**130 skills in 16 plugins.** 190 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
+**135 skills in 16 plugins.** 195 bundled script files. Generated from `catalog.json` by `scripts/sync.py`.
 
 ### agent-identity-governance
 
-Version 0.2.0. Source: [agent-identity-governance-skills](https://github.com/basitalisandhu/agent-identity-governance-skills). Install: `/plugin install agent-identity-governance@claude-skills`.
+Version 0.3.0. Source: [agent-identity-governance-skills](https://github.com/basitalisandhu/agent-identity-governance-skills). Install: `/plugin install agent-identity-governance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
 | agent-action-timeline | Reconstruct what one agent identity did, in time order, from saved Entra sign-in and audit logs, CloudTrail, the GitHub audit log and application logs in JSON lines, and flag bursts, first-seen actions and actions outside a declared allow list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-action-timeline/SKILL.md) |
+| agent-audit-log-integrity | Seal an agent's audit log (JSON lines from a hook, MCP gateway or agent runtime) as a SHA-256 or HMAC hash chain, verify it later for edited, deleted, inserted or reordered lines and truncation against a stored head, and list actions the log never recorded. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-audit-log-integrity/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-audit-log-integrity/SKILL.md) |
 | agent-kill-switch-runbook | Prepare the runbook to switch off one agent identity fast: ordered steps to disable it, end sessions, remove credentials and grants, block it at the gateway and confirm in the audit log, each with a read-only verification command. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-kill-switch-runbook/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-kill-switch-runbook/SKILL.md) |
 | agent-recertification | Run the quarterly recertification of agent and workload identities: one review sheet per owner saying what each identity can do, when it last acted and what changed, plus a tracking CSV. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-recertification/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/agent-recertification/SKILL.md) |
 | connector-register | Keep an approved register of the MCP servers, connectors and plugins your agents may use, and check every entry has an owner, purpose, data classification, permissions and review date. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/connector-register/) · [source](https://github.com/basitalisandhu/agent-identity-governance-skills/blob/main/plugins/agent-identity-governance/skills/connector-register/SKILL.md) |
@@ -117,7 +118,7 @@ Version 0.5.0. Source: [agent-security-skills](https://github.com/basitalisandhu
 
 ### aws-security
 
-Version 0.4.2. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
+Version 0.5.0. Source: [aws-security-skills](https://github.com/basitalisandhu/aws-security-skills). Install: `/plugin install aws-security@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -128,13 +129,14 @@ Version 0.4.2. Source: [aws-security-skills](https://github.com/basitalisandhu/a
 | aws-spend-guardrails | Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-spend-guardrails/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/aws-spend-guardrails/SKILL.md) |
 | iam-least-privilege-review | Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/iam-least-privilege-review/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md) |
 | landing-zone-blast-radius | Design an AWS Organizations landing zone with one account per workload and environment, and show what a compromise of each account can reach. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/landing-zone-blast-radius/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/landing-zone-blast-radius/SKILL.md) |
+| preventive-control-mapper | Turn failing Security Hub controls and Prowler checks into the preventive controls that stop the same misconfiguration coming back: an SCP statement, an account or declarative-policy setting, an IaC check, plus the AWS Config rule that detects a regression. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/preventive-control-mapper/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/preventive-control-mapper/SKILL.md) |
 | sandbox-account-guardrail-pack | Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md) |
 | scp-guardrails | Write, review and lint AWS Organizations service control policies: build SCPs from a short spec (region allowlist, break-glass roles, protected logging, no root user, IMDSv2, no public S3 ACLs) under the SCP character limit, and lint any SCP for Allow statements, region denies that break global services, NotAction misuse and size. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/scp-guardrails/SKILL.md) |
 | security-hub-triage | Turn a Security Hub or GuardDuty findings backlog into an owner-assigned next-actions list, offline from exports. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/) · [source](https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/security-hub-triage/SKILL.md) |
 
 ### cc-setup-tooling
 
-Version 0.3.0. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
+Version 0.4.0. Source: [claude-code-tooling-skills](https://github.com/basitalisandhu/claude-code-tooling-skills). Install: `/plugin install cc-setup-tooling@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -147,6 +149,8 @@ Version 0.3.0. Source: [claude-code-tooling-skills](https://github.com/basitalis
 | skill-portability-check | Check a skill folder for what breaks on other hosts and operating systems: unquoted YAML colons, hard-coded home paths, CLAUDE_PLUGIN_ROOT with no fallback, GNU-only or BSD-only shell, Python open calls without encoding, POSIX-only calls, Windows path separators, CRLF and symlinks, with a fix hint per file. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-portability-check/SKILL.md) |
 | skill-supply-chain-review | Review a third-party skill or plugin before you install it: run skill-scan-gate on the folder, lock it with cc-plugin-lock, read every script for network and shell use with a bundled offline inventory, and write a one-page verdict. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-supply-chain-review/SKILL.md) |
 | skill-trigger-eval | Measure whether a skill's description triggers on the prompts it should and stays quiet on the ones it should not, using a labelled prompt set and transparent lexical scoring, and compare two description versions by precision and recall. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/skill-trigger-eval/SKILL.md) |
+| subagent-tool-scope-review | Review every Claude Code subagent file for the tools it can actually reach: agents with no tools line inherit every built-in and MCP tool, lookalike fields such as allowed-tools are ignored, and reviewers that can write or run a shell. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/subagent-tool-scope-review/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/subagent-tool-scope-review/SKILL.md) |
+| unattended-run-preflight | Replay the tool calls of a Claude Code run (a session log or a list) against the permission rules in your settings files and show which calls would stop a scheduled task, routine, CI job or claude -p run on a prompt or a deny rule, with the narrowest allow rule for each. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/unattended-run-preflight/) · [source](https://github.com/basitalisandhu/claude-code-tooling-skills/blob/main/plugins/cc-setup-tooling/skills/unattended-run-preflight/SKILL.md) |
 
 ### code-quality
 
@@ -165,7 +169,7 @@ Version 0.3.1. Source: [claude-dev-skills](https://github.com/basitalisandhu/cla
 
 ### compliance-evidence
 
-Version 0.5.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
+Version 0.6.0. Source: [compliance-evidence-skills](https://github.com/basitalisandhu/compliance-evidence-skills). Install: `/plugin install compliance-evidence@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -173,6 +177,7 @@ Version 0.5.0. Source: [compliance-evidence-skills](https://github.com/basitalis
 | aws-identity-and-logging-evidence | Turn saved aws CLI output from one AWS account into ISO 27001 and SOC 2 evidence rows for logging, access control and backup (CloudTrail, root and console MFA, access key age, password policy, GuardDuty, Config, S3 public access block, AWS Backup), telling AccessDenied (not assessable) apart from not configured (contradicted). | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/aws-identity-and-logging-evidence/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/aws-identity-and-logging-evidence/SKILL.md) |
 | control-map-from-exports | Map the exports in an evidence pack to ISO 27001:2022 Annex A or SOC 2 control identifiers and report per control supported, contradicted or not assessable, citing the exact file, field and value, plus the gaps; every file's SHA-256 is re-checked first. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/control-map-from-exports/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/control-map-from-exports/SKILL.md) |
 | essential-eight-evidence-map | Map an evidence pack to the ASD Essential Eight Maturity Model (November 2023) and show, for each of the eight strategies, which ML1 to ML3 requirements have evidence, which do not, and the maturity level the strategy can claim today, from the pack's manifest and a mapping you own. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/essential-eight-evidence-map/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/essential-eight-evidence-map/SKILL.md) |
+| evidence-collection-plan | Plan what evidence to collect for each ISO 27001:2022 or SOC 2 control before collection starts: an auditor-style PBC request list with the source system, a read-only way to obtain it, how often, who owns it and the due date, then, against an evidence pack, which requests are met, stale, missing or overdue. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/evidence-collection-plan/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/evidence-collection-plan/SKILL.md) |
 | evidence-pack-builder | Turn a folder of exports already on disk into an integrity-checked ISO 27001 or SOC 2 evidence pack, recording who collected each file, when, from which system and with which command, with a SHA-256 per file, a manifest and later re-verification that flags changed, missing or stale files. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/evidence-pack-builder/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/evidence-pack-builder/SKILL.md) |
 | github-change-control-evidence | Turn saved gh exports of one GitHub repository into ISO 27001 and SOC 2 evidence rows for change and vulnerability management, checking branch protection or rulesets, required reviews, an approval by someone other than the author on every merged pull request, CODEOWNERS, signed commits, Dependabot and secret scanning, and separating switched off from not assessable. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/github-change-control-evidence/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/github-change-control-evidence/SKILL.md) |
 | maester-control-map | Map a Maester results file (Microsoft 365 and Entra ID security tests) to ISO 27001 and SOC 2 control identifiers through a mapping you own, report each control as supported, contradicted or not assessable with the tests behind it, and add control columns to the test list. | yes | [page](https://basitalisandhu.github.io/claude-skills/plugins/compliance-evidence/maester-control-map/) · [source](https://github.com/basitalisandhu/compliance-evidence-skills/blob/main/plugins/compliance-evidence/skills/maester-control-map/SKILL.md) |
@@ -341,11 +346,11 @@ Version 0.4.0. Source: [ways-of-working-skills](https://github.com/basitalisandh
 These are true of the files in `plugins/` today:
 
 - Every skill is a `SKILL.md` with `name`, `description`, `license`, `compatibility` and `metadata` front matter, checked by `scripts/validate.py`.
-- <!-- counts-scripts:start -->110 of the 130 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
+- <!-- counts-scripts:start -->115 of the 135 skills bundle scripts.<!-- counts-scripts:end --> Every bundled Python script imports only the standard library or another bundled script.
 - The scripts work on local files and exports. One script can reach the network: `incident-lookup` can refresh its incident dataset, and falls back to the bundled copy. Some skills tell you to export data first with a vendor CLI (`gh`, `aws`, Microsoft Graph); the scripts themselves make no calls.
 - No skill sends telemetry.
 - Each source repository runs its own tests in CI before a change reaches its main branch.
-- <!-- counts-limits:start -->130 of the 130 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
+- <!-- counts-limits:start -->135 of the 135 SKILL.md files have a "Limits" section that says what the skill does not do. The site shows it as "What it does not do". The other 0 do not have that section yet.<!-- counts-limits:end -->
 
 ## FAQ
 

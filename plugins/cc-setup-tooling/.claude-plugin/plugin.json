@@ -1,8 +1,8 @@
 {
   "name": "cc-setup-tooling",
   "displayName": "Claude Code Setup Tooling",
-  "version": "0.3.0",
-  "description": "Nine skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, review the sandbox settings across scopes and flag what leaves it open, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network.",
+  "version": "0.4.0",
+  "description": "Eleven skills that keep a Claude Code setup safe and tidy: review a third-party skill or plugin before installing it (skill-scan-gate, cc-plugin-lock and an offline inventory), lint SKILL.md front matter and fix its quoting, score descriptions against labelled prompts, estimate what a project loads on every turn, merge least-privilege permission rules and test them with claude-perm-sim, review the sandbox settings across scopes and flag what leaves it open, list the tool calls that would stop an unattended run on a permission prompt, show what each subagent can reach, scaffold and test hooks with cc-hooks, find skills that collide or shadow each other, and find what breaks on other hosts and operating systems. Standard-library scripts, no network.",
   "author": {
     "name": "Muhammad Basit Ali",
     "url": "https://github.com/basitalisandhu"
@@ -27,6 +27,9 @@
     "hooks",
     "skill-collisions",
     "portability",
-    "windows"
+    "windows",
+    "subagents",
+    "scheduled-tasks",
+    "unattended"
   ]
 }

@@ -1,8 +1,8 @@
 {
   "name": "agent-identity-governance",
   "displayName": "Agent Identity Governance",
-  "version": "0.2.0",
-  "description": "Eight skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent's actions from audit exports; a kill switch runbook with a coverage check; and a leaked credential response pack with hashed evidence. Standard-library scripts over saved exports, no network.",
+  "version": "0.3.0",
+  "description": "Nine skills that treat AI agents, service principals, workload identities, API keys and MCP connectors as identities with an inventory, owners, recertification, expiry and an off switch: one inventory across Entra ID, AWS IAM, GitHub and a hand-kept register; a review of Entra agent identities; quarterly recertification sheets per owner; an expiry radar for secrets, certificates, keys and tokens; a register check for MCP servers and connectors; a timeline of one agent's actions from audit exports; a kill switch runbook with a coverage check; a leaked credential response pack with hashed evidence; and a hash chain that makes an agent audit log tamper-evident and shows actions it never recorded. Standard-library scripts over saved exports, no network.",
   "author": {
     "name": "Muhammad Basit Ali",
     "url": "https://github.com/basitalisandhu"
@@ -32,6 +32,8 @@
     "audit-log",
     "kill-switch",
     "incident-response",
-    "evidence"
+    "evidence",
+    "audit-log",
+    "tamper-evident"
   ]
 }
