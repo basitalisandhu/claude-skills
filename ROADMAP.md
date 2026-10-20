@@ -4,7 +4,7 @@ This is what we are working on and what we would like help with, in plain order.
 
 ## Now
 
-- [#24](https://github.com/basitalisandhu/claude-skills/issues/24): Sync pull requests open with no CI checks
+- Nothing is claimed at the moment. Take any item from Next and comment on its issue.
 
 ## Next
 
@@ -13,7 +13,6 @@ This is what we are working on and what we would like help with, in plain order.
 - [#4](https://github.com/basitalisandhu/claude-skills/issues/4): Write a per-plugin Atom feed
 - [#5](https://github.com/basitalisandhu/claude-skills/issues/5): Add a copy install command button to skill pages
 - [#6](https://github.com/basitalisandhu/claude-skills/issues/6): Fail site build check when a page is over 100 KB
-- [#7](https://github.com/basitalisandhu/claude-skills/issues/7): Test scripts/sync.py --source-dir with fake repos
 - [#8](https://github.com/basitalisandhu/claude-skills/issues/8): Show plugin-level parts on the site index
 
 ## Later
