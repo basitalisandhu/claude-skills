@@ -7,11 +7,13 @@ Thank you for helping. Read this first: skills are not edited here.
 - **A skill, its scripts, a plugin README, hooks, agents or the MCP server:** open an issue or pull request in the source repository. The source of every plugin is in [SOURCES.json](SOURCES.json) and in the catalog in [README.md](README.md). The next sync brings the change here.
 - **This repository's own files:** `install.py`, `scripts/`, `site/`, `tests/`, the workflows and the docs at the top level. Pull requests for those are welcome here.
 
+The daily sync opens its pull request with the workflow token, which starts no other workflow, so `sync.yml` starts `ci.yml` on the `sync/plugins` branch itself and the checks show on the pull request as usual. If a sync pull request ever has no checks, run the `ci` workflow on that branch from the Actions tab.
+
 Never edit `plugins/`, `catalog.json`, `SOURCES.json`, `.claude-plugin/marketplace.json`, the README catalog block or `docs/` by hand. They are generated, and `scripts/validate.py` fails when they drift.
 
 ## Run it locally
 
-You need Python 3.10 or newer and git. pytest is only needed for the tests.
+You need Python 3.10 or newer and git. pytest and Hypothesis are only needed for the tests (`python3 -m pip install pytest hypothesis`); without Hypothesis the property tests in `tests/test_properties.py` are skipped.
 
 ```bash
 python3 scripts/sync.py              # fetch the source repositories and regenerate everything (needs network)
@@ -20,7 +22,7 @@ python3 scripts/sync.py --offline    # regenerate catalog, README block and coun
 python3 scripts/validate.py          # structure, front matter, generated files, house rules
 python3 site/build.py                # build the site into docs/
 python3 site/build.py --check        # fail if docs/ is stale or a link is broken
-python3 -m pytest -q                 # tests for install.py and the generators, offline
+python3 -m pytest -q                 # tests for install.py, the generators and sync --source-dir, offline
 ```
 
 With the Claude Code CLI installed:

@@ -63,7 +63,7 @@ It needs Python 3.10 or newer and nothing else. It works on macOS, Linux and Win
 
 The script writes `.claude-skills-manifest.json` in the target folder. That file lists every file it wrote. Updates and `--uninstall` only remove files on that list. If a skill folder already exists and the script did not write it, the script skips it unless you pass `--force`.
 
-If two plugins ever ship a skill with the same name, the first in plugin name order installs under the plain name and the second as `<plugin>-<skill>`. The script says so when it happens. Today every skill name is unique, and `scripts/validate.py` fails the build if that changes.
+If two plugins ever ship a skill with the same name, the first in plugin name order installs under the plain name and the second as `<plugin>-<skill>` (or `<plugin>-<skill>-2` if that name is taken too, so no skill ever overwrites another). The script says so when it happens. Today every skill name is unique, and `scripts/validate.py` fails the build if that changes.
 
 The copy route installs skills only. Plugin-level hooks, commands, agents and MCP servers need the marketplace route. Some skills call their script as `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/scripts/...`; after a copy install the script is in the skill's own `scripts/` folder instead.
 

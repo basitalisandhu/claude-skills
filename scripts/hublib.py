@@ -22,7 +22,7 @@ REPO_URL = f"https://github.com/{OWNER}/{REPO_NAME}"
 SITE_URL = f"https://{OWNER}.github.io/{REPO_NAME}/"
 SITE_PATH = f"/{REPO_NAME}/"
 MARKETPLACE_NAME = "claude-skills"
-HUB_VERSION = "0.5.0"
+HUB_VERSION = "0.5.1"
 HUB_DESCRIPTION = (
     "Every Claude Code skill maintained by Muhammad Basit Ali, in one marketplace: "
     "security, AWS, Microsoft 365, compliance evidence, GitHub, repository engineering, "
@@ -104,6 +104,9 @@ def tree_hash(base: Path) -> str:
 
 # ---------------------------------------------------------------- SKILL.md parsing
 
+_FM_CLOSE = re.compile(r"^---[ \t]*$", re.M)  # a line that is only ---
+
+
 def parse_frontmatter(text: str) -> tuple[dict, str, list[str]]:
     """Parse the YAML front matter subset used by SKILL.md files.
 
@@ -114,11 +117,11 @@ def parse_frontmatter(text: str) -> tuple[dict, str, list[str]]:
     text = text.replace("\r\n", "\n")
     if not text.startswith("---\n"):
         return {}, text, ["no front matter (file must start with ---)"]
-    end = text.find("\n---", 4)
-    if end == -1:
+    close = _FM_CLOSE.search(text, 4)
+    if close is None:
         return {}, text, ["front matter is not closed with ---"]
-    block = text[4:end]
-    body = text[end + 4:].lstrip("\n")
+    block = text[4:close.start()]
+    body = text[close.end():].lstrip("\n")
     fields: dict = {}
     lines = block.split("\n")
     i = 0
@@ -223,13 +226,17 @@ def install_names(pairs: list[tuple[str, str]], prefix_all: bool = False) -> dic
     """Map (plugin, skill) to its install directory name.
 
     Pairs are taken in sorted order. The first skill with a given name keeps the plain name;
-    a later one with the same name becomes <plugin>-<skill>. prefix_all names every skill
+    a later one with the same name becomes <plugin>-<skill>, and if that
+    is also taken, <plugin>-<skill>-2, -3 and so on. prefix_all names every skill
     <plugin>-<skill>. Same rule as install.py.
     """
     out: dict[tuple[str, str], str] = {}
     taken: set[str] = set()
     for plugin, skill in sorted(pairs):
         name = f"{plugin}-{skill}" if prefix_all or skill in taken else skill
+        base, n = name, 2
+        while name in taken:  # the prefixed name is already some other skill's directory
+            name, n = f"{base}-{n}", n + 1
         taken.add(skill)
         taken.add(name)
         out[(plugin, skill)] = name

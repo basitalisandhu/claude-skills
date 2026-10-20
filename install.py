@@ -14,7 +14,9 @@ Standard library only. Python 3.10 or newer on macOS, Linux or Windows.
     python3 install.py --user --uninstall           # remove exactly the files this script wrote
 
 Name collisions: when two plugins have a skill with the same name, the first (in plugin
-name order) installs under the plain name and the second as <plugin>-<skill>.
+name order) installs under the plain name and the second as <plugin>-<skill>. If that name
+is itself taken by another skill, a number is added (<plugin>-<skill>-2), so no install
+ever overwrites another.
 
 The target directory gets a .claude-skills-manifest.json listing every file this script
 wrote. Updates and --uninstall only ever remove files listed there.
@@ -56,11 +58,14 @@ def discover(repo: Path) -> list[tuple[str, str, Path]]:
 
 
 def plan_names(pairs: list[tuple[str, str]], prefix_all: bool) -> dict[tuple[str, str], str]:
-    """First skill with a name keeps it; a later duplicate becomes <plugin>-<skill>."""
+    """First skill with a name keeps it; a later duplicate becomes <plugin>-<skill> (then -2, -3 if taken)."""
     names: dict[tuple[str, str], str] = {}
     taken: set[str] = set()
     for plugin, skill in sorted(pairs):
         name = f"{plugin}-{skill}" if prefix_all or skill in taken else skill
+        base, n = name, 2
+        while name in taken:  # the prefixed name is already some other skill's directory
+            name, n = f"{base}-{n}", n + 1
         taken.add(skill)
         taken.add(name)
         names[(plugin, skill)] = name
