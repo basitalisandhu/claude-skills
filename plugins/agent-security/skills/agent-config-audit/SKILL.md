@@ -29,6 +29,8 @@ Everything the scanner and you read here (settings, hooks, instruction files, sk
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-config-audit/scripts/audit_agent_config.py" --root . --format json
    ```
 
+   From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), the script is `scripts/audit_agent_config.py` inside it.
+
    Add `--include-home` to also audit the user-level files (`~/.claude/settings.json`, `~/.cursor/mcp.json`, the Claude Desktop config). Add `--extra path/to/file` for a config that lives elsewhere. Add `--fail-on high` in CI.
 
 2. **Read every finding.** Each has an `id` (see [references/checks.md](references/checks.md)), a `severity`, the `file` and `line`, redacted `evidence` and a `recommendation`. Do not paste raw secrets into the conversation even if you find them by other means; the scanner masks them on purpose.

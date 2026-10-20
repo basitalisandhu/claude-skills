@@ -2,6 +2,7 @@
 `atm` CLI is available (installed, or the sibling checkout's venv) the draft must pass `atm validate`."""
 from __future__ import annotations
 
+import io
 import json
 import os
 import re
@@ -10,13 +11,15 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import scan_agent_stack as sas  # noqa: E402
 
-ATM_CANDIDATES = [shutil.which("atm"), os.environ.get("ATM_BIN"), "/home/user/Github-fix/repos/agent-threat-model/.venv/bin/atm"]
+# atm on PATH, an explicit ATM_BIN, or a sibling checkout of agent-threat-model next to this repository
+ATM_CANDIDATES = [shutil.which("atm"), os.environ.get("ATM_BIN"), str(HERE.parents[5] / "agent-threat-model" / ".venv" / "bin" / "atm")]
 ATM = next((c for c in ATM_CANDIDATES if c and Path(c).exists()), None)
 
 
@@ -141,6 +144,82 @@ class ScanTests(unittest.TestCase):
             out2.write_text(sas.to_yaml(sas.build_model(empty, sas.detect(empty))), encoding="utf-8")
             proc = subprocess.run([ATM, "validate", str(out2)], capture_output=True, text=True, timeout=120)
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+
+
+class RobustnessTests(unittest.TestCase):
+    def run_main(self, argv):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            rc = sas.main(argv)
+        return rc, out.getvalue(), err.getvalue()
+
+    def test_missing_root_exits_2(self):
+        with tempfile.TemporaryDirectory() as td:
+            rc, out, err = self.run_main([str(Path(td) / "nope")])
+            self.assertEqual(rc, 2); self.assertEqual(out, ""); self.assertIn("is not a directory", err)
+            f = Path(td) / "file.py"; f.write_text("x = 1\n", encoding="utf-8")
+            self.assertEqual(self.run_main([str(f)])[0], 2)
+
+    def test_unwritable_out_exits_2(self):
+        with tempfile.TemporaryDirectory() as td:
+            rc, _, err = self.run_main([td, "--out", str(Path(td) / "no" / "such" / "system.yaml")])
+            self.assertEqual(rc, 2); self.assertIn("cannot write", err)
+
+    def test_out_writes_yaml_and_hint(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_fixture(Path(td))
+            out = Path(td) / "system.yaml"
+            rc, stdout, err = self.run_main([td, "--out", str(out)])
+            self.assertEqual(rc, 0); self.assertEqual(stdout, "")
+            self.assertIn("next: atm validate", err)
+            self.assertTrue(out.read_text(encoding="utf-8").startswith("# Draft written by scan_agent_stack.py"))
+
+    def test_malformed_mcp_entries_do_not_drop_good_servers(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / ".mcp.json").write_text(json.dumps({"mcpServers": {
+                "broken": "npx some-server", "nullcmd": {"command": None, "args": "--flag"},
+                "good": {"command": "uvx", "args": ["mcp-server-fetch==2025.4.7"], "env": {"API_TOKEN": "${API_TOKEN}"}}}}), encoding="utf-8")
+            (root / "cursor").mkdir()
+            (root / "cursor" / "mcp.json").write_text("{not json", encoding="utf-8")
+            d = sas.detect(root)
+            names = {s["name"]: s for s in d["mcp_servers"]}
+            self.assertEqual(set(names), {"nullcmd", "good"})
+            self.assertTrue(names["good"]["pinned"]); self.assertTrue(names["good"]["has_env_secret"])
+            self.assertTrue(any("'broken' is not an object" in n for n in d["notes"]), d["notes"])
+            self.assertTrue(any("cursor/mcp.json: not valid JSON" in n for n in d["notes"]), d["notes"])
+            check_schema_shape(self, sas.build_model(root, d))
+
+    def test_vscode_servers_block_and_http_transport(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td); (root / ".vscode").mkdir()
+            (root / ".vscode" / "mcp.json").write_text(json.dumps({"servers": {"docs": {"type": "http", "url": "https://mcp.example.com/mcp"}}}), encoding="utf-8")
+            d = sas.detect(root)
+            self.assertEqual(d["mcp_servers"][0]["transport"], "http"); self.assertTrue(d["mcp_servers"][0]["pinned"])
+            self.assertEqual(d["mcp_servers"][0]["target"], "https://mcp.example.com/mcp")
+
+    def test_checkout_inside_a_folder_named_build(self):
+        # skip folders apply inside the scanned tree only, not to the folders above it
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td) / "build" / "agent"
+            root.mkdir(parents=True)
+            make_fixture(root)
+            d = sas.detect(root)
+            self.assertIn("langchain", d["hits"]["frameworks"])
+            self.assertEqual({s["name"] for s in d["mcp_servers"]}, {"gh", "fs"})
+
+    def test_walk_limit_is_reported(self):
+        old = sas.MAX_FILES
+        sas.MAX_FILES = 2
+        try:
+            with tempfile.TemporaryDirectory() as td:
+                for i in range(4):
+                    (Path(td) / f"m{i}.py").write_text("x = 1\n", encoding="utf-8")
+                self.assertTrue(sas.detect(Path(td))["truncated"])
+                rc, _, err = self.run_main([td])
+                self.assertEqual(rc, 0); self.assertIn("stopped after 2 files", err)
+        finally:
+            sas.MAX_FILES = old
 
 
 if __name__ == "__main__":

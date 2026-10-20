@@ -134,7 +134,7 @@ def check_env_hygiene(root: Path) -> list[dict]:
     if not root.is_dir():
         return out
     gitignore = (root / ".gitignore").read_text(encoding="utf-8", errors="replace") if (root / ".gitignore").is_file() else ""
-    ignores_env = any(re.match(r"^\s*(\.env(\*|\.\*|\.local)?|\*\*/\.env\*?|\.env/?)\s*$", l) for l in gitignore.splitlines())
+    ignores_env = any(re.match(r"^\s*(\.env(\*|\.\*|\.local)?|\*\*/\.env\*?|\.env/?)\s*$", ln) for ln in gitignore.splitlines())
     for env in sorted(root.rglob(".env*")):
         if not env.is_file() or any(part in DEFAULT_EXCLUDES for part in env.relative_to(root).parts[:-1]):
             continue

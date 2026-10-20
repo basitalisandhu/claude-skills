@@ -1,6 +1,6 @@
 ---
 name: stale-branch-sweep
-description: "Clean up a repository's branch list safely: a bundled script joins saved gh and git exports (the remote's branches, for-each-ref dates and committers, merged refs, pull requests) and reports merged branches never deleted, branches idle for N days, branches with an open PR and protected ones, with the last committer as owner, then writes the exact git push --delete commands as a list to review and never runs them. Use when asked \"which branches can we delete?\" or before archiving a repository. Not for a whole-repository hygiene pass (repo-hygiene-bundle)."
+description: "Clean up a repository's branch list safely: a bundled script joins saved gh and git exports (remote branches, for-each-ref dates and committers, merged refs, PR list) and reports merged branches never deleted, branches idle for N days, branches with an open PR and protected ones, with the last committer as owner, then writes the exact git push --delete commands as a list to review and never runs them. Use when asked \"which branches can we delete?\" or before archiving a repository. Not for reviewing or summarising pull requests, or a whole-repository hygiene pass (repo-hygiene-bundle)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs git and the gh CLI with read access to the repository.
 metadata:

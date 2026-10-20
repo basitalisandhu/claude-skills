@@ -1,6 +1,6 @@
 ---
 name: control-map-from-exports
-description: "Map the exports in an evidence pack to ISO 27001:2022 Annex A or SOC 2 control identifiers and report per control supported, contradicted or not assessable, citing the exact file, field and value, plus the gaps; every file's SHA-256 is re-checked first. Use when asked \"which controls do our exports support?\", for a statement of applicability, a readiness assessment or an audit request list. Not for collecting data, replacing the assessor's judgement, or an opinion or attestation."
+description: "Map the exports in an evidence pack to ISO 27001:2022 Annex A or SOC 2 control identifiers and report per control supported, contradicted or not assessable, citing the exact file, field and value, plus the gaps; every file's SHA-256 is re-checked first. Use when asked \"which controls do our exports support?\", for a statement of applicability, a readiness assessment or an audit request list. Not for collecting data, an access review pack (access-review-pack), replacing the assessor's judgement, or an attestation."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads an evidence pack built by evidence-pack-builder; makes no network calls.
 metadata:
@@ -88,11 +88,15 @@ unchanged. A Graph error body saved in the file (for example `Authorization_Requ
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/control-map-from-exports/scripts/control_map.py" ./pack-2026-q3 --framework soc2 --map ./my-map.yaml --out ./control-map-soc2.json
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/control-map-from-exports/scripts/control_map.py /tmp/pack --framework iso27001 --map plugins/compliance-evidence/skills/control-map-from-exports/references/starter-map.yaml` on the pack built from `tests/fixtures/exports` (see evidence-pack-builder). From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/control_map.py` from the skill folder.
+
    Options: `--max-age-days N` (older evidence becomes not assessable), `--as-of YYYY-MM-DD`, `--json`, `--redact`,
    `--fail-on contradicted|not-assessable|none` (default none; exit 1 when a control matches).
 
 4. **Report** the table as printed: control, paraphrased topic, state, citations and gaps. For each `contradicted`
    control, name the file and field. For each `not assessable` control, say what evidence would make it assessable.
+   Read the "Map patterns that matched no pack file" list (`unmatched_patterns` in the JSON) before blaming a missing
+   export: a misspelt `evidence` pattern and an export that was never taken both make a check not assessable.
 
 ## Writing map entries
 

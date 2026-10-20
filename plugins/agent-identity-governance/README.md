@@ -13,4 +13,6 @@ Agent identity governance skills that compute from exports you already can take,
 | `agent-kill-switch-runbook` | `skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py` | write the ordered switch-off runbook for one identity with read-only verification commands, and check every credential and assignment has a step |
 | `leaked-credential-response` | `skills/leaked-credential-response/scripts/leaked_credential_response.py` | work out a leaked credential's reach, use after the leak and rotation order, and write a hashed evidence folder |
 
+Synthetic exports to try every skill on are in [`examples/`](examples) (each SKILL.md gives the command). They include an Entra Agent ID blueprint with two agent identities.
+
 Requirements: Python 3.10 or newer on `PATH` as `python3`. The scripts read local files only: no network access, no third-party packages. Key ids are shown by their last four characters and secret values are never read.

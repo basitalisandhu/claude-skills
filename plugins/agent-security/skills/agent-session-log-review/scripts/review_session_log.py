@@ -430,11 +430,36 @@ def designators(text: str) -> set[str]:
     return hosts(text) | {m.lower() for m in EMAIL_RE.findall(text)}
 
 
-def targets(e: dict) -> set[str]:
+# relative file names in shell commands and arguments: ".env", "config/prod.yaml", "../secrets.json"
+REL_PATH_RE = re.compile(r"(?<![\w/~:@.\\-])(?:\.{1,2}/)?(?:[\w-]+/)*\.?[\w-]+\.[\w.-]*\w|(?<![\w/~:@.\\-])\.[\w-]{2,}\b")
+
+
+def targets(e: dict, root: str | None = None) -> set[str]:
+    """Hosts and files a call touches. Relative names are joined to --root when it is given, so `cat .env`
+    and a read of /work/repo/.env count as the same target; without a root, files also match by base name."""
     t = arg_text(e)
-    return hosts(t) | {
-        p.rstrip("/\\,.").lower() for p in PATH_RE.findall(t) if len(p) > 3
-    }
+    out = hosts(t)
+    paths = {p.rstrip("/\\,.") for p in PATH_RE.findall(t) if len(p) > 3}
+    cleaned = PATH_RE.sub(" ", HOST_RE.sub(" ", t))
+    rel = {p for p in REL_PATH_RE.findall(cleaned) if len(p) > 3 and not p.startswith(("-", "--"))}
+    for p in paths:
+        out.add(p.lower())
+        if not root:
+            out.add("file:" + PurePosixPath(p.replace("\\", "/")).name.lower())
+    for p in rel:
+        if root:
+            joined = PurePosixPath(root.replace("\\", "/")) / p
+            parts: list[str] = []
+            for part in joined.parts:
+                if part == "..":
+                    if parts:
+                        parts.pop()
+                elif part != ".":
+                    parts.append(part)
+            out.add(str(PurePosixPath(*parts)).lower() if parts else p.lower())
+        else:
+            out.add("file:" + PurePosixPath(p).name.lower())
+    return out
 
 
 def outside_root(path: str, root: str) -> bool:
@@ -523,7 +548,7 @@ def review(events: list[dict], args) -> list[dict]:
                     None,
                 )
                 if call:
-                    last_denied.append((calls_seen, call["tool"], targets(call)))
+                    last_denied.append((calls_seen, call["tool"], targets(call, args.root)))
         if e["kind"] in ("tool_result", "message", "tool_call"):
             blob = text if e["kind"] != "tool_call" else arg_text(e)
             if has_secret(blob):
@@ -638,9 +663,9 @@ def review(events: list[dict], args) -> list[dict]:
             if (
                 calls_seen - denied_at <= 5
                 and e["tool"] != denied_tool
-                and denied_targets & targets(e)
+                and denied_targets & targets(e, args.root)
             ):
-                shared = ", ".join(sorted(denied_targets & targets(e)))
+                shared = ", ".join(sorted(x.removeprefix("file:") for x in denied_targets & targets(e, args.root)))
                 flag(
                     flags,
                     e,

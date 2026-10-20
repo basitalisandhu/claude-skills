@@ -81,7 +81,7 @@ def check(doc: dict) -> list[dict]:
     def add(line, msg):
         problems.append({"line": line, "message": msg})
 
-    if not any(l.startswith("# ") for l in doc["preamble"]):
+    if not any(ln.startswith("# ") for ln in doc["preamble"]):
         add(1, "missing top-level title (# Changelog)")
     names = [v["name"] for v in doc["versions"]]
     if "Unreleased" not in names:
@@ -102,7 +102,7 @@ def check(doc: dict) -> list[dict]:
         if v["rest"] and not re.match(r"^\[YANKED\]$", v["rest"], re.I):
             add(v["line"], f"unexpected text after the version header: {v['rest']!r}")
     keys = [semver_key(v["name"]) for v in released]
-    for a, b, va in zip(keys, keys[1:], released):
+    for a, b, va in zip(keys, keys[1:], released, strict=False):
         if a and b and a < b:
             add(va["line"], f"versions are not in descending order around {va['name']}")
     for v in doc["versions"]:
@@ -115,7 +115,7 @@ def check(doc: dict) -> list[dict]:
             seen.add(c["name"])
             if not c["entries"]:
                 add(c["line"], f"empty category {c['name']} in {v['name']}")
-        if v["name"] != "Unreleased" and not v["categories"] and not any(l.strip() for l in v["body"]):
+        if v["name"] != "Unreleased" and not v["categories"] and not any(ln.strip() for ln in v["body"]):
             add(v["line"], f"version {v['name']} has no entries")
     if doc["links"]:
         for v in doc["versions"]:
@@ -179,7 +179,7 @@ def cmd_release(doc: dict, version: str, date: str, repo_url: str | None) -> Non
     if base:
         released = [v["name"] for v in doc["versions"] if v["name"] != "Unreleased"]
         links = {"Unreleased": f"{base}/compare/v{released[0]}...HEAD"}
-        for newer, older in zip(released, released[1:]):
+        for newer, older in zip(released, released[1:], strict=False):
             links[newer] = f"{base}/compare/v{older}...v{newer}"
         links[released[-1]] = doc["links"].get(released[-1], f"{base}/releases/tag/v{released[-1]}")
         doc["links"] = links
@@ -241,7 +241,11 @@ def main(argv: list[str] | None = None) -> int:
     if not path.is_file():
         print(f"error: not a file: {path}", file=sys.stderr)
         return 2
-    doc = parse(path.read_text(encoding="utf-8"))
+    try:
+        doc = parse(path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError:
+        print(f"error: {path} is not UTF-8 text; a changelog is a Markdown file", file=sys.stderr)
+        return 2
     if args.cmd == "check":
         problems = check(doc)
         if args.json:

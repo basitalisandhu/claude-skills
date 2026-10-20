@@ -13,7 +13,12 @@ Pytest's rerunfailures plugin writes a <rerun> element; a test with a rerun coun
 Usage:
     flaky_test_hunter.py PATH [PATH ...] [--json] [--min-runs N] [--fail-on-flaky]
 
-Exit codes: 0 no flaky tests (or --fail-on-flaky not given), 1 flaky tests found with --fail-on-flaky, 2 bad input.
+XML files that are not JUnit reports (no <testsuite>, <testsuites> or <testcase>, such as a pom.xml picked up from a
+directory) and files that do not parse are listed as skipped and left out of the run count. Fewer than two usable runs
+gets a warning: flakiness needs several runs of the same suite, or rerun elements.
+
+Exit codes: 0 no flaky tests (or --fail-on-flaky not given), 1 flaky tests found with --fail-on-flaky, 2 bad input
+(missing path, no XML files, or no file that is a readable JUnit report).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
@@ -41,10 +46,16 @@ def collect_files(paths: list[str]) -> list[Path]:
     return files
 
 
+class NotJUnit(ValueError):
+    """The file is well-formed XML but not a JUnit report."""
+
+
 def parse_report(path: Path) -> list[dict]:
     """Return one record per testcase: {id, status, message, time, reruns}."""
     tree = ET.parse(path)
     root = tree.getroot()
+    if root.tag.split("}")[-1] not in ("testsuites", "testsuite", "testcase") and root.find(".//testcase") is None:
+        raise NotJUnit(f"root element <{root.tag.split('}')[-1]}> is not a JUnit report")
     cases: list[dict] = []
     for tc in root.iter("testcase"):
         classname = tc.get("classname") or ""
@@ -78,7 +89,7 @@ def analyse(files: list[Path], min_runs: int) -> dict:
     for i, f in enumerate(files):
         try:
             cases = parse_report(f)
-        except ET.ParseError as exc:
+        except (ET.ParseError, NotJUnit) as exc:
             runs.append({"file": str(f), "error": str(exc), "tests": 0})
             continue
         runs.append({"file": str(f), "tests": len(cases), "failed": sum(c["status"] == "failed" for c in cases),
@@ -86,6 +97,9 @@ def analyse(files: list[Path], min_runs: int) -> dict:
         for c in cases:
             outcomes[c["id"]].append((i, c["status"], c["message"], c["time"], c["reruns"]))
     valid_runs = [r for r in runs if "error" not in r]
+    warnings: list[str] = []
+    if len(valid_runs) == 1:
+        warnings.append("only one usable run: a test cannot both pass and fail in one run, so only rerun elements can show flakiness; pass reports from several runs")
     flaky: list[dict] = []
     always_failing: list[dict] = []
     partial: list[dict] = []
@@ -109,14 +123,15 @@ def analyse(files: list[Path], min_runs: int) -> dict:
         if 0 < len(recs) < len(valid_runs):
             partial.append({"id": test_id, "runs_seen": len(recs), "runs_total": len(valid_runs)})
     flaky.sort(key=lambda r: (-r["failed"], r["id"]))
-    return {"version": VERSION, "runs": runs, "tests": len(outcomes), "flaky": flaky, "always_failing": always_failing,
-            "partial_presence": partial, "min_runs": min_runs}
+    return {"version": VERSION, "runs": runs, "usable_runs": len(valid_runs), "tests": len(outcomes), "flaky": flaky,
+            "always_failing": always_failing, "partial_presence": partial, "min_runs": min_runs, "warnings": warnings}
 
 
 def render_text(rep: dict) -> str:
-    lines = [f"flaky-test-hunter {rep['version']}: {len(rep['runs'])} runs, {rep['tests']} distinct tests, {len(rep['flaky'])} flaky, {len(rep['always_failing'])} always failing"]
+    skipped = len(rep["runs"]) - rep["usable_runs"]
+    lines = [f"flaky-test-hunter {rep['version']}: {rep['usable_runs']} runs" + (f" ({skipped} file(s) skipped)" if skipped else "") + f", {rep['tests']} distinct tests, {len(rep['flaky'])} flaky, {len(rep['always_failing'])} always failing"]
     for r in rep["runs"]:
-        lines.append(f"  run {r['file']}: " + (f"parse error: {r['error']}" if "error" in r else f"{r['tests']} tests, {r['failed']} failed, {r['skipped']} skipped"))
+        lines.append(f"  run {r['file']}: " + (f"skipped: {r['error']}" if "error" in r else f"{r['tests']} tests, {r['failed']} failed, {r['skipped']} skipped"))
     if rep["flaky"]:
         lines.append("flaky (passed and failed across runs):")
         for t in rep["flaky"]:
@@ -127,9 +142,24 @@ def render_text(rep: dict) -> str:
         lines.append("always failing (not flaky, broken):")
         for t in rep["always_failing"]:
             lines.append(f"  {t['id']}  fail={t['failed']}  {t['top_message'][:100]}")
+    for w in rep["warnings"]:
+        lines.append(f"warning: {w}")
     if rep["partial_presence"]:
         lines.append(f"present in only some runs: {len(rep['partial_presence'])} tests (collection differences, new or removed tests)")
     return "\n".join(lines)
+
+
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -139,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("paths", nargs="+", help="JUnit XML files or directories containing them")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--min-runs", type=int, default=2, help="runs a test must appear in before it is called always-failing")
+    ap.add_argument("--min-runs", type=count_arg(1), default=2, help="runs a test must appear in before it is called always-failing")
     ap.add_argument("--fail-on-flaky", action="store_true")
     args = ap.parse_args(argv)
     try:
@@ -151,6 +181,11 @@ def main(argv: list[str] | None = None) -> int:
         print("error: no XML files found", file=sys.stderr)
         return 2
     rep = analyse(files, args.min_runs)
+    if not rep["usable_runs"]:
+        print(f"error: none of the {len(files)} XML file(s) is a readable JUnit report:", file=sys.stderr)
+        for r in rep["runs"]:
+            print(f"  {r['file']}: {r['error']}", file=sys.stderr)
+        return 2
     print(json.dumps(rep, indent=2) if args.json else render_text(rep))
     return 1 if (args.fail_on_flaky and rep["flaky"]) else 0
 

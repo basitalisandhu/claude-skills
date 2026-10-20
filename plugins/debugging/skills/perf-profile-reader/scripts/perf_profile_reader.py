@@ -24,7 +24,7 @@ import argparse
 import json
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 
 VERSION = "0.1.0"
@@ -193,6 +193,19 @@ def render_text(s: dict) -> str:
 PARSERS = {"collapsed": parse_collapsed, "pprof": parse_pprof, "cprofile": parse_cprofile, "pyspy-dump": parse_pyspy_dump}
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -200,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("file", help="profile text file ('-' for stdin)")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--top", type=int, default=15)
+    ap.add_argument("--top", type=count_arg(1), default=15)
     ap.add_argument("--format", choices=sorted(PARSERS), help="force the input format instead of auto-detecting")
     args = ap.parse_args(argv)
     if args.file == "-":

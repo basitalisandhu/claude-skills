@@ -158,10 +158,17 @@ def main(argv: list[str] | None = None) -> int:
             print(f"error: cases file not found: {p}", file=sys.stderr)
             return 2
         try:
-            cases += parse_cases(p.read_text(encoding="utf-8"))
-        except ValueError as exc:
-            print(f"error: {exc}", file=sys.stderr)
+            from_file = parse_cases(p.read_text(encoding="utf-8"))
+        except UnicodeDecodeError:
+            print(f"error: cases file {p} is not UTF-8 text", file=sys.stderr)
             return 2
+        except ValueError as exc:
+            print(f"error: {p}: {exc}", file=sys.stderr)
+            return 2
+        if not from_file:
+            print(f"error: cases file {p} has no cases; write one per line as '+ must match', '- must not match' or '= text => expected'", file=sys.stderr)
+            return 2
+        cases += from_file
     cases += [{"expect": "match", "text": t} for t in args.match]
     cases += [{"expect": "no-match", "text": t} for t in args.no_match]
     mode_name = "fullmatch" if args.fullmatch else "match" if args.match_start else "search"
@@ -186,6 +193,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {mark} [{r['expect']:<8}] {r['text']!r}: {shown}{exp}")
         for w in warnings:
             print(f"  warning: {w}")
+        if not results:
+            print("  no cases given: only the backtracking check ran; add --cases FILE or --match/--no-match to test behaviour")
     return 1 if (failed or warnings) else 0
 
 

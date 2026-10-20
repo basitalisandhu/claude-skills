@@ -344,21 +344,47 @@ def render(result: dict, top: int) -> str:
     return "\n".join(lines)
 
 
+EXIT_CODES = ("Exit codes: 0 no candidates and no startup leftovers, 1 something found (or moved), 2 bad input or "
+              "usage (including a --trash id that is not a candidate in this run; then nothing is moved).")
+
+
+def positive_int(text: str) -> int:
+    """argparse type: a whole number of at least 1."""
+    try:
+        value = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+    if value < 1:
+        raise argparse.ArgumentTypeError(f"must be 1 or more, got {value}")
+    return value
+
+
+def non_negative_float(text: str) -> float:
+    """argparse type: a number of 0 or more."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a number, got {text!r}") from None
+    if not value >= 0 or value == float("inf"):
+        raise argparse.ArgumentTypeError(f"must be 0 or more, got {text}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+                                 formatter_class=argparse.RawDescriptionHelpFormatter, epilog=EXIT_CODES)
     ap.add_argument("--home", default=str(Path.home()), help="home folder (default: your home)")
     ap.add_argument("--apps-dir", action="append", default=None,
                     help="application folder (repeatable; default /Applications, ~/Applications, /System/Applications)")
     ap.add_argument("--keep", action="append", default=[], help="entry name to never report (repeatable)")
-    ap.add_argument("--min-mb", type=float, default=1.0,
+    ap.add_argument("--min-mb", type=non_negative_float, default=1.0,
                     help="smallest cache, log, WebKit or saved-state entry to report in MB (default 1); "
                          "app data areas are always reported")
     ap.add_argument("--trash", help="comma-separated candidate ids (area:name) to move into --trash-dir")
     ap.add_argument("--trash-dir", help="destination for moved items (default ~/.Trash/app-leftovers-<date>)")
-    ap.add_argument("--top", type=int, default=25, help="rows in the text output (default 25)")
+    ap.add_argument("--top", type=positive_int, default=25, help="rows in the text output (default 25)")
     ap.add_argument("--no-commands", action="store_true", help="do not run mdfind, osascript or du")
-    ap.add_argument("--timeout", type=int, default=60, help="seconds per external command (default 60)")
+    ap.add_argument("--timeout", type=positive_int, default=60, help="seconds per external command (default 60)")
     ap.add_argument("--json", action="store_true", help="print the result as JSON")
     args = ap.parse_args(argv)
 
@@ -366,6 +392,16 @@ def main(argv: list[str] | None = None) -> int:
     if not home.is_dir():
         print(f"error: not a directory: {home}", file=sys.stderr)
         return 2
+    ids: set[str] = set()
+    if args.trash is not None:
+        ids = {s.strip() for s in args.trash.split(",") if s.strip()}
+        area_ids = {a[0] for a in AREAS}
+        malformed = sorted(i for i in ids if i.partition(":")[0] not in area_ids or not i.partition(":")[2])
+        if not ids or malformed:
+            areas = ", ".join(sorted(area_ids))
+            print(f"error: --trash takes area:name ids from a run without --trash (areas: {areas})"
+                  + (f"; not an id: {', '.join(malformed)}" if malformed else ""), file=sys.stderr)
+            return 2
     app_dirs = [Path(p).expanduser() for p in args.apps_dir] if args.apps_dir else [
         Path("/Applications"), Path("/Applications/Utilities"), home / "Applications", Path("/System/Applications"),
         Path("/System/Applications/Utilities")]
@@ -378,15 +414,28 @@ def main(argv: list[str] | None = None) -> int:
               "candidate_bytes": sum(c["bytes"] or 0 for c in candidates),
               "startup": startup_leftovers(home, commands, args.timeout), "moved": None, "failed": [],
               "moved_bytes": 0, "trash_dir": None, "seconds": round(time.time() - started, 1)}
-    if args.trash:
-        ids = {s.strip() for s in args.trash.split(",") if s.strip()}
+    unknown: list[str] = []
+    if ids:
         trash_dir = (Path(args.trash_dir).expanduser() if args.trash_dir
                      else home / ".Trash" / f"app-leftovers-{date.today()}")
-        trash_dir.mkdir(parents=True, exist_ok=True)
-        moved, failed = trash(candidates, ids, trash_dir, home)
+        known = {c["id"] for c in candidates}
+        unknown = sorted(ids - known)
+        if unknown:
+            # Fail closed: one wrong id means the list was not read from this run, so nothing is moved.
+            moved = []
+            failed = [{"id": i, "error": "not a candidate in this run" if i in unknown
+                       else "not moved: another --trash id is not a candidate, so nothing was moved"}
+                      for i in sorted(ids)]
+        else:
+            trash_dir.mkdir(parents=True, exist_ok=True)
+            moved, failed = trash(candidates, ids, trash_dir, home)
         result.update({"moved": moved, "failed": failed, "moved_bytes": sum(m["bytes"] or 0 for m in moved),
                        "trash_dir": str(trash_dir)})
     print(json.dumps(result, indent=2) if args.json else render(result, args.top))
+    if unknown:
+        print(f"error: not a candidate in this run: {', '.join(unknown)}; nothing was moved. Run without --trash "
+              "to list the current ids.", file=sys.stderr)
+        return 2
     st = result["startup"]
     return 1 if (candidates or st["login_items"] or st["launch_agents"] or st["launch_daemons"]) else 0
 

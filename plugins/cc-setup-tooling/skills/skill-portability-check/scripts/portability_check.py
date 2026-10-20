@@ -10,8 +10,9 @@ Rules (each finding cites the file and line):
   * platform-path: a path that exists on one platform only (Homebrew prefixes, the macOS Library and Applications
     folders, the Linux proc file system, the Windows APPDATA variable);
   * plugin-root-no-fallback: a SKILL.md that runs scripts through ${CLAUDE_PLUGIN_ROOT} and never says where the
-    script is when the skill is copied without the plugin system (no ${CLAUDE_PLUGIN_ROOT:-...} default and no line
-    naming the script's path relative to the skill folder);
+    script is when the skill is copied without the plugin system (no ${CLAUDE_PLUGIN_ROOT:-...} default, no line
+    naming the script's path relative to the skill folder, and no sentence saying what to use in its place when
+    the skill is copied without the plugin system); ${CLAUDE_SKILL_DIR}/scripts/... is portable as it is;
   * env-no-default: Python indexing os.environ with a CLAUDE_ variable name (such as the plugin root) and no default;
   * non-portable-shell: GNU-only or BSD-only command options in .sh files and in bash or sh code blocks of Markdown
     (sed -i, readlink -f, date -d, stat -c, stat -f, grep -P, xargs -r, echo -e, base64 -w, find -printf);
@@ -91,6 +92,10 @@ OS_CALLS = {
 OS_MODULES = {"pwd", "grp", "fcntl", "termios", "resource", "winreg", "msvcrt", "_winapi"}
 NON_TEXT_OPENERS = {"os", "tarfile", "zipfile", "webbrowser", "shelve", "dbm", "wave", "sqlite3", "Image"}
 FENCE_RE = re.compile(r"^```(bash|sh|shell|zsh)?[^\n]*\n(.*?)^```", re.MULTILINE | re.DOTALL)
+COPY_NOTE_RE = re.compile(
+    r"(?:without the plugin system|copy install|copied (?:in)?to|copied without)[^\n]*?(?:path|folder|directory)",
+    re.IGNORECASE,
+)
 CLAUDE_ENV_RE = re.compile(r"os\.environ\[\s*['\"](CLAUDE_[A-Z_]+)['\"]\s*\]")
 
 
@@ -222,13 +227,18 @@ def skill_md_findings(path: Path, text: str) -> list[tuple[int, str, str]]:
         if refs and "${CLAUDE_PLUGIN_ROOT:-" not in text:
             scripts = {m.group(1) for m in refs}
             plain = [ln for ln in text.splitlines() if "CLAUDE_PLUGIN_ROOT" not in ln and any(s in ln for s in scripts)]
-            if not plain:
+            # "If this skill was copied without the plugin system, replace ${CLAUDE_PLUGIN_ROOT}/skills/x with the
+            # path to this skill's folder" is a fallback too, although it names the variable
+            note = COPY_NOTE_RE.search(text)
+            if not plain and not note:
                 out.append(
                     (
                         line_of(text, refs[0].start()),
                         "plugin-root-no-fallback",
                         "say where the script is when the skill is copied without the plugin system, for "
-                        "example 'from a copy install run scripts/<file> from the skill folder'",
+                        "example 'from a copy install run scripts/<file> from the skill folder', or write the path "
+                        "as ${CLAUDE_SKILL_DIR}/scripts/<file>, which Claude Code resolves for personal, project and "
+                        "plugin skills alike",
                     )
                 )
     for m in FENCE_RE.finditer(text):

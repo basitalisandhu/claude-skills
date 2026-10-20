@@ -11,6 +11,7 @@ What it counts as loaded on every turn:
     only when matching files are read, so it is listed as conditional and left out of the total;
   * skills: each skill's listing entry (name, description and when_to_use, capped at 1,536 characters as the
     Claude Code skills docs state); the SKILL.md body loads only when the skill is used and is listed separately;
+    a skill with disable-model-invocation: true is listed as not loaded, since its description stays out of context;
   * MCP tools: name, description and input schema of every tool in each saved tools/list result.
 AGENTS.md is counted only when a memory file imports it; otherwise it is listed as not loaded by Claude Code.
 CLAUDE.md files in subfolders load when Claude reads files there, so they are listed as on demand. Hooks are listed
@@ -216,6 +217,12 @@ def analyse(args: argparse.Namespace) -> dict:
             fm = _skillmd.parse(t)
             entry = len(fm.text("name") or f.parent.name) + len(fm.text("description")) + len(fm.text("when_to_use"))
             name = f"{fm.text('name') or f.parent.name} ({rel(f.parent, project, home)})"
+            body = "\n".join(t.replace("\r\n", "\n").split("\n")[fm.body_start :]) if fm.closed else t
+            if fm.text("disable-model-invocation").strip().strip("'\"").lower() == "true":
+                note = "disable-model-invocation: true keeps the description out of context; runs only as /name"
+                add("skills", name, min(entry, LISTING_CAP), "not loaded", note)
+                add("skill bodies", f"{name} body", len(body), "on invoke")
+                continue
             add("skills", name, min(entry, LISTING_CAP), "every turn", "listing entry")
             if entry > LISTING_CAP:
                 findings.append(
@@ -225,7 +232,6 @@ def analyse(args: argparse.Namespace) -> dict:
                         "detail": f"listing entry is {entry} characters; the host cuts it at {LISTING_CAP}",
                     }
                 )
-            body = "\n".join(t.replace("\r\n", "\n").split("\n")[fm.body_start :]) if fm.closed else t
             add("skill bodies", f"{name} body", len(body), "on invoke")
     for spec in args.mcp_tools:
         server, tools = read_tools(spec)

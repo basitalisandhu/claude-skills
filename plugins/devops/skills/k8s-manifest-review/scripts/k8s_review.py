@@ -185,6 +185,9 @@ def main(argv: list[str] | None = None) -> int:
     objects = 0
     for f in files:
         text = f.read_text(encoding="utf-8", errors="replace")
+        if "\x00" in text:
+            parse_errors.append(f"{f}: binary file, not a manifest")
+            continue
         try:
             docs = [json.loads(text)] if f.suffix == ".json" else load_all(text)
         except (YAMLError, json.JSONDecodeError) as exc:
@@ -197,6 +200,9 @@ def main(argv: list[str] | None = None) -> int:
             if isinstance(doc, dict) and "kind" in doc:
                 objects += 1
             findings += review_doc(f, i, doc)
+    if not objects and not parse_errors:
+        print(f"error: no Kubernetes objects found in {len(files)} file(s): expected YAML or JSON documents with apiVersion and kind", file=sys.stderr)
+        return 2
     order = {s: i for i, s in enumerate(SEVERITIES)}
     findings.sort(key=lambda x: (order[x["severity"]], x["file"], x["object"], x["where"]))
     counts = {s: sum(1 for x in findings if x["severity"] == s) for s in SEVERITIES}

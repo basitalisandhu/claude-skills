@@ -121,6 +121,9 @@ def load_findings(path: Path) -> list[dict]:
         data = data.get("Findings")
     if not isinstance(data, list):
         raise InputError(f"{path}: expected {{\"Findings\": [...]}} or a list")
+    bad = sum(1 for item in data if not isinstance(item, dict))
+    if bad:
+        raise InputError(f"{path}: {bad} of {len(data)} entries are not finding objects")
     return data
 
 
@@ -280,6 +283,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="exit 1 when an open finding is at or above this severity (default HIGH)")
     ap.add_argument("--json", action="store_true", help="print JSON")
     args = ap.parse_args(argv)
+    if args.top < 1:
+        print("error: --top must be at least 1", file=sys.stderr)
+        return 2
     try:
         cfg = load_config(Path(args.config) if args.config else None)
         raw: list[dict] = []

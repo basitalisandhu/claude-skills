@@ -89,7 +89,14 @@ def main(argv: list[str] | None = None) -> int:
     if not tpath.is_file():
         print(f"error: template not found: {tpath}", file=sys.stderr)
         return 2
-    template, t_malformed, t_dups = parse_env(tpath.read_text(encoding="utf-8", errors="replace"))
+    t_text = tpath.read_text(encoding="utf-8", errors="replace")
+    if "\x00" in t_text:
+        print(f"error: template {tpath} is a binary file, not an env file", file=sys.stderr)
+        return 2
+    template, t_malformed, t_dups = parse_env(t_text)
+    if not template:
+        print(f"error: template {tpath} declares no keys (expected KEY=value lines); every real key would be reported as extra", file=sys.stderr)
+        return 2
     ignore = set(args.ignore)
     report = {"version": VERSION, "template": {"file": str(tpath), "keys": len(template), "malformed": t_malformed, "duplicates": t_dups,
                                                "values_that_look_real": suspicious_template_values(template)}, "files": []}
@@ -99,7 +106,11 @@ def main(argv: list[str] | None = None) -> int:
         if not p.is_file():
             print(f"error: file not found: {f}", file=sys.stderr)
             return 2
-        real, malformed, dups = parse_env(p.read_text(encoding="utf-8", errors="replace"))
+        text = p.read_text(encoding="utf-8", errors="replace")
+        if "\x00" in text:
+            print(f"error: {f} is a binary file, not an env file", file=sys.stderr)
+            return 2
+        real, malformed, dups = parse_env(text)
         cmp = compare(template, real, ignore)
         cmp.update({"file": str(p), "keys": len(real), "malformed": malformed, "duplicates": dups})
         report["files"].append(cmp)

@@ -611,8 +611,8 @@ def triage(data, all_scenarios: bool) -> dict:
     unmapped: list[dict] = []
     archived = 0
     for f in findings:
-        if not isinstance(f, dict):
-            continue
+        if not isinstance(f, dict) or not isinstance(f.get("Type"), str):
+            raise ValueError("every entry under Findings must be a GuardDuty finding object with a Type")
         if (f.get("Service") or {}).get("Archived"):
             archived += 1
             continue
@@ -661,7 +661,7 @@ def main(argv: list[str] | None = None) -> int:
         try:
             result = triage(json.loads(Path(args.guardduty).read_text(encoding="utf-8")), args.all)
         except (OSError, json.JSONDecodeError, ValueError) as exc:
-            print(f"error: {exc}", file=sys.stderr)
+            print(f"error: {args.guardduty}: {exc}", file=sys.stderr)
             return 2
         for rb in result["runbooks"]:
             if args.case_id:

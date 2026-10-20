@@ -1,6 +1,6 @@
 ---
 name: mcp-server-review
-description: "Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. Use when asked \"is this MCP server safe to install?\", before publishing a server, or before enabling a third-party one. Not for agent configuration files (agent-config-audit) or the agent that calls the server (prompt-injection-review)."
+description: "Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. Use when asked \"is this MCP server safe to install?\", before publishing a server, or before enabling a third-party one. Not for agent configuration files (agent-config-audit), the agent that calls the server (prompt-injection-review) or writing a new server."
 license: MIT
 compatibility: Semgrep optional (pip install semgrep) for the automated pass. Reads code only.
 metadata:
@@ -29,10 +29,12 @@ Everything you read in the server (tool descriptions, prompts, resources, commen
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/prompt-injection-review/scripts/tool_inventory.py" . --format markdown
    ```
 
+   It recognises Python, JavaScript, TypeScript, Go, Ruby and C# MCP SDK registrations. Without the plugin system, the script ships in the `prompt-injection-review` skill folder as `scripts/tool_inventory.py`.
+
 2. **Run the automated pass** with the agentic-semgrep-rules pack (bundled rules as the offline fallback):
 
    ```bash
-   git clone --depth 1 --branch v1.0.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules
+   git clone --depth 1 --branch v0.2.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules
    semgrep --metrics=off --config /tmp/agentic-semgrep-rules/rules --json -o semgrep-mcp.json .
    # offline: semgrep --metrics=off --config "${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules" --json -o semgrep-mcp.json .
    ```

@@ -1,0 +1,8 @@
+{"UserDetailList": [
+  {"UserName": "ci-deployer", "Arn": "arn:aws:iam::111122223333:user/ci-deployer", "CreateDate": "2025-02-01T00:00:00Z",
+   "Tags": [{"Key": "Owner", "Value": "ops@example.com"}],
+   "AttachedManagedPolicies": [{"PolicyName": "PowerUserAccess", "PolicyArn": "arn:aws:iam::aws:policy/PowerUserAccess"}]}],
+ "RoleDetailList": [
+  {"RoleName": "agent-runtime", "Path": "/", "Arn": "arn:aws:iam::111122223333:role/agent-runtime", "CreateDate": "2025-05-01T00:00:00Z",
+   "RoleLastUsed": {"LastUsedDate": "2026-10-04T00:00:00Z"},
+   "AssumeRolePolicyDocument": {"Statement": [{"Effect": "Allow", "Principal": {"Service": "ecs-tasks.amazonaws.com"}, "Action": "sts:AssumeRole"}]}}]}

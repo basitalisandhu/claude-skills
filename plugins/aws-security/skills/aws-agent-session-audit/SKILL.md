@@ -64,7 +64,9 @@ Confirm the account with the user first (`aws sts get-caller-identity --output j
 - `AGENT-OUTSIDE-ALLOWLIST` includes failed calls, marked "(failed)": a denied call outside the task still shows intent.
 - The remove list covers explicit grants only; a wildcard grant is shown with the actions the session used under it, and "nothing" means the whole grant can go.
 - An unused permission in one session may be needed in another task; widen the window or compare sessions before removing it.
-- Exit code 1 means a finding at or above `--fail-on`; 2 means the input could not be read or no record matched the filter.
+- Actions are reported as IAM names them, not as CloudTrail spells the event: Lambda event names lose their API version suffix (`UpdateFunctionCode20150331v2` is `lambda:UpdateFunctionCode`), S3 `ListBuckets` is `s3:ListAllMyBuckets`, `ListObjects`, `ListObjectsV2` and `HeadBucket` are `s3:ListBucket`, `HeadObject` is `s3:GetObject`, and the CloudWatch event source `monitoring` is `cloudwatch`. Write allow lists with IAM action names.
+- An allow list that is empty or holds anything other than `service:Action` patterns stops the run (exit 2) instead of flagging every call.
+- Exit code 1 means a finding at or above `--fail-on`; 2 means the input could not be read, held no CloudTrail records, or no record matched the filter (the message names the filter and the record count).
 
 ## Limits
 

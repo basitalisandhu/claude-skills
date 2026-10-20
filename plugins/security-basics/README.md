@@ -26,3 +26,20 @@ Skills then appear as `/security-basics:<skill>`. Scripts need Python 3.11 or ne
 | `diff-security-review` | is this PR safe security-wise, pre-merge security pass | `diff_security_scan.py` findings on added lines, read with the code around them |
 
 Tests for every script live in the repository's `tests/` directory; run `python3 -m pytest -q` at the repository root.
+
+## Sample output
+
+`dependency-audit-reader` on an `npm audit --json` report (npm 7 or later) with a direct, a transitive and an unfixable advisory:
+
+```text
+$ python3 "${CLAUDE_PLUGIN_ROOT}/skills/dependency-audit-reader/scripts/audit_reader.py" audit.json
+dependency-audit-reader 0.1.0: npm: 3 vulnerable packages critical=2, high=1; 2 fixable, 1 without a fix
+severity  package                      installed        direct fix                      advisories
+critical  minimist                     <0.2.4           no     no                       1097, GHSA-xvch-5gv4-984h  Prototype Pollution in minimist
+critical  mkdirp                       0.4.1 - 0.5.1    yes    yes                      via minimist
+high      lodash                       <4.17.21         yes    lodash@4.17.21           1096, GHSA-35jh-r3h4-6jhm  Command Injection in lodash
+upgrade first: minimist, mkdirp, lodash
+exit 1
+```
+
+`--ignore GHSA-35jh-r3h4-6jhm` (or the npm source number `1096`) drops the lodash advisory; a package leaves the list only when every advisory on it is ignored.

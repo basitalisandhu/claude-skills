@@ -43,11 +43,10 @@ from _ghexport import (  # noqa: E402
     InputError,
     Redactor,
     find_file,
-    flatten_pages,
     hours_between,
     human_hours,
     iso,
-    load_json,
+    load_rows,
     login_of,
     md_cell,
     median,
@@ -116,10 +115,10 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
     if not prs_paths or not issues_paths:
         raise InputError(f"{folder}: needs prs.json and issues.json (or prs-<part>.json, issues-<part>.json, "
                          "optionally with a prefix such as fixture-)")
-    prs = merge_rows(prs_paths)
-    issues = merge_rows(issues_paths)
+    prs = merge_rows(prs_paths, "PR", required=("createdAt",), optional=("mergedAt", "closedAt"))
+    issues = merge_rows(issues_paths, "issue", required=("createdAt",), optional=("closedAt",))
     ms_path = find_file(folder, "milestones")
-    milestones = flatten_pages(load_json(ms_path)) if ms_path else []
+    milestones = load_rows(ms_path) if ms_path else []
 
     logins = {login_of(p.get("author")) or "" for p in prs} | {login_of(i.get("author")) or "" for i in issues}
     for i in issues:

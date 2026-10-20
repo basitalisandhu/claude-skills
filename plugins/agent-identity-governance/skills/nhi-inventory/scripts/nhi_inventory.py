@@ -7,6 +7,10 @@ Reads every file below that is present in EXPORT_DIR (at least one must be):
 
   entra-applications.json          Graph /applications with owners expanded (app registrations and their credentials)
   entra-service-principals.json    Graph /servicePrincipals with owners expanded (enterprise apps, managed identities)
+  entra-agent-blueprints.json      Graph /applications/microsoft.graph.agentIdentityBlueprint (Entra Agent ID
+                                   blueprints: the credentials their agent identities authenticate with)
+  entra-agent-identities.json      Graph /servicePrincipals/microsoft.graph.agentIdentity (agent identities, with
+                                   agentIdentityBlueprintId and, when expanded, sponsors)
   entra-sign-in-activity.json      Graph beta /reports/servicePrincipalSignInActivities (last sign-in per appId)
   entra-app-role-assignments.json  Graph appRoleAssignedTo lists (application permissions held)
   entra-oauth2-grants.json         Graph /oauth2PermissionGrants (delegated permissions granted)
@@ -208,9 +212,82 @@ def tag_owner(tags) -> str:
 # ---- readers -----------------------------------------------------------------------------------------------------
 
 
+def is_agent_identity(obj: dict) -> bool:
+    return (
+        "agentidentity" in str(obj.get("@odata.type", "")).lower()
+        and "blueprint" not in str(obj.get("@odata.type", "")).lower()
+    )
+
+
+def read_agent_id(folder: Path, inv: dict[str, dict], sp_by_object: dict[str, str]) -> None:
+    """Entra Agent ID: blueprints carry the credentials, agent identities authenticate with them and inherit the
+    permissions granted to the blueprint's principal. Sponsors count as owners."""
+    bp_path, ai_path = folder / "entra-agent-blueprints.json", folder / "entra-agent-identities.json"
+    blueprints = items(load_json(bp_path)) if bp_path.exists() else []
+    agents = items(load_json(ai_path)) if ai_path.exists() else []
+    seen_creds: dict[str, set[tuple[str, str]]] = {}
+    for b in blueprints:
+        app_id = str(b.get("appId") or "")
+        if not app_id:
+            continue
+        key = f"entra:{app_id}"
+        ident = inv.setdefault(key, new_identity(key, "entra", "entra-agent-blueprint", b.get("displayName") or app_id))
+        ident["type"] = "entra-agent-blueprint"
+        ident["created"] = ident["created"] or iso(parse_dt(b.get("createdDateTime")))
+        ident["refs"].update({"app_id": app_id, "application_object_id": b.get("id")})
+        for o in [*(b.get("owners") or []), *(b.get("sponsors") or [])]:
+            if isinstance(o, dict):
+                add_owner(ident, owner_of(o))
+        have = seen_creds.setdefault(key, {(c["kind"], c["key_id"]) for c in ident["credentials"]})
+        for field, kind in (("passwordCredentials", "client-secret"), ("keyCredentials", "certificate")):
+            for c in b.get(field) or []:
+                if not isinstance(c, dict):
+                    continue
+                cred = credential(kind, c.get("keyId"), c.get("startDateTime"), c.get("endDateTime"))
+                if (cred["kind"], cred["key_id"]) not in have:
+                    have.add((cred["kind"], cred["key_id"]))
+                    ident["credentials"].append(cred)
+    for a in agents:
+        app_id = str(a.get("appId") or a.get("id") or "")
+        if not app_id:
+            continue
+        key = f"entra:{app_id}"
+        ident = inv.setdefault(key, new_identity(key, "entra", "entra-agent-identity", a.get("displayName") or app_id))
+        ident["type"] = "entra-agent-identity"
+        ident["created"] = ident["created"] or iso(parse_dt(a.get("createdDateTime")))
+        ident["refs"].update({"app_id": app_id, "service_principal_id": a.get("id")})
+        if a.get("accountEnabled") is False:
+            ident["enabled"] = False
+        for o in [*(a.get("owners") or []), *(a.get("sponsors") or [])]:
+            if isinstance(o, dict):
+                add_owner(ident, owner_of(o))
+        blueprint = str(a.get("agentIdentityBlueprintId") or "")
+        if blueprint:
+            ident["refs"]["blueprint_app_id"] = blueprint
+        if a.get("id"):
+            sp_by_object[str(a["id"])] = key
+    # link both ways once everything is loaded (an agent identity can be listed before its blueprint)
+    for ident in inv.values():
+        bp = ident["refs"].get("blueprint_app_id")
+        if ident["type"] == "entra-agent-identity" and bp:
+            parent = inv.get(f"entra:{bp}")
+            if parent is not None:
+                parent["type"] = "entra-agent-blueprint"
+                parent["refs"].setdefault("agent_identities", []).append(ident["id"])
+                ident["purpose"] = (
+                    ident["purpose"] or f"authenticates with the credentials of blueprint {parent['name']}"
+                )
+                if not ident["owners"]:
+                    for o in parent["owners"]:
+                        add_owner(ident, o)
+                    if ident["owners"]:
+                        ident["refs"]["owners_from"] = "blueprint"
+
+
 def read_entra(folder: Path, inv: dict[str, dict], notes: list[str]) -> None:
     apps_path, sps_path = folder / "entra-applications.json", folder / "entra-service-principals.json"
-    if not apps_path.exists() and not sps_path.exists():
+    agent_files = [folder / "entra-agent-blueprints.json", folder / "entra-agent-identities.json"]
+    if not apps_path.exists() and not sps_path.exists() and not any(p.exists() for p in agent_files):
         return
     sp_by_object: dict[str, str] = {}
     for app in items(load_json(apps_path)) if apps_path.exists() else []:
@@ -241,9 +318,11 @@ def read_entra(folder: Path, inv: dict[str, dict], notes: list[str]) -> None:
             continue
         sp_type = str(sp.get("servicePrincipalType") or "Application")
         kind = "entra-managed-identity" if sp_type == "ManagedIdentity" else "entra-app"
+        if is_agent_identity(sp):
+            kind = "entra-agent-identity"
         key = f"entra:{app_id}"
         if key not in inv:
-            kind = kind if kind == "entra-managed-identity" else "entra-enterprise-app"
+            kind = kind if kind in {"entra-managed-identity", "entra-agent-identity"} else "entra-enterprise-app"
             inv[key] = new_identity(key, "entra", kind, sp.get("displayName") or app_id)
         ident = inv[key]
         ident["refs"].update({"app_id": app_id, "service_principal_id": sp.get("id")})
@@ -261,8 +340,11 @@ def read_entra(folder: Path, inv: dict[str, dict], notes: list[str]) -> None:
                 ident["credentials"].append(
                     credential("sp-certificate", c.get("keyId"), c.get("startDateTime"), c.get("endDateTime"))
                 )
+        if is_agent_identity(sp) and sp.get("agentIdentityBlueprintId"):
+            ident["refs"]["blueprint_app_id"] = str(sp["agentIdentityBlueprintId"])
         if sp.get("id"):
             sp_by_object[str(sp["id"])] = key
+    read_agent_id(folder, inv, sp_by_object)
     activity = folder / "entra-sign-in-activity.json"
     if activity.exists():
         for ident in inv.values():
@@ -502,6 +584,14 @@ def read_register(folder: Path, inv: dict[str, dict]) -> None:
 
 
 def evaluate(inv: dict[str, dict], as_of: datetime, dormant_days: int) -> list[dict]:
+    # A blueprint does not sign in itself; it is in use while any of its agent identities is.
+    for ident in inv.values():
+        children = [inv[c] for c in ident["refs"].get("agent_identities") or [] if c in inv]
+        uses = [parse_dt(c["last_used"]) for c in children if c["last_used"]]
+        if uses and ident["type"] == "entra-agent-blueprint":
+            mine = parse_dt(ident["last_used"])
+            ident["last_used"] = iso(max([*uses, mine] if mine else uses))
+            ident["refs"]["last_used_from"] = "agent identities"
     out = []
     for key in sorted(inv):
         ident = inv[key]
@@ -560,6 +650,18 @@ def render(doc: dict) -> str:
         lines.append("  - Owner to confirm, keep or retire, and date: ____")
     if not flagged:
         lines.append("Nothing flagged. Record the date of this inventory and who reviewed it.")
+    blueprints = [i for i in doc["identities"] if i["type"] == "entra-agent-blueprint"]
+    if blueprints:
+        lines += ["", "## Entra Agent ID blueprints", ""]
+        for b in blueprints:
+            agents = b["refs"].get("agent_identities") or []
+            noun = "identity" if len(agents) == 1 else "identities"
+            listed = ": " + ", ".join(f"`{x}`" for x in agents) if agents else ""
+            lines.append(
+                f"- `{b['id']}` ({b['name']}): {b['credential_count']} credential(s) shared by {len(agents)} agent "
+                f"{noun}{listed}. "
+                "Rotating or removing a blueprint credential, or disabling the blueprint, affects every one of them."
+            )
     if doc["notes"]:
         lines += ["", "## Notes", ""] + [f"- {n}" for n in doc["notes"]]
     return "\n".join(lines) + "\n"
@@ -595,6 +697,8 @@ def build(folder: Path, as_of: datetime, dormant_days: int, include_managed: boo
 KNOWN_FILES = {
     "entra-applications.json",
     "entra-service-principals.json",
+    "entra-agent-blueprints.json",
+    "entra-agent-identities.json",
     "entra-sign-in-activity.json",
     "entra-app-role-assignments.json",
     "entra-oauth2-grants.json",
@@ -633,7 +737,11 @@ def main(argv: list[str] | None = None) -> int:
         doc = redact(doc)
     text = json.dumps(doc, indent=2, sort_keys=False) + "\n" if args.json else render(doc)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"nhi_inventory.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(text)
     return 1 if doc["summary"]["flagged"] else 0

@@ -36,7 +36,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.4.0"
+ "version": "0.5.0"
 }
 </script>
 </head>
@@ -46,7 +46,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / semgrep-agentic</p>
 <h1>Semgrep for agentic code</h1>
 <p class="lede">Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.</p>
-<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.4.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
+<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.5.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -67,24 +67,28 @@ python3 install.py --user --skill agent-security/semgrep-agentic</code></pre>
 <ol><li><strong>Check Semgrep is available</strong>: <code>semgrep --version</code> (1.179 or later). If not, tell the user the install command and stop; do not fake results.</li></ol>
 <ol start="2"><li><strong>Run the upstream pack.</strong> Prefer a pinned clone; the single-file release bundle works where cloning is inconvenient:</li></ol>
 <pre><code class="language-bash"># pinned clone (reproducible; rule ids are prefixed with the clone path, e.g. agentic-semgrep-rules.rules.python.code-execution.llm-output-to-exec-eval)
-git clone --depth 1 --branch v1.0.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules
+git clone --depth 1 --branch v0.2.0 https://github.com/basitalisandhu/agentic-semgrep-rules /tmp/agentic-semgrep-rules
 semgrep --metrics=off --config /tmp/agentic-semgrep-rules/rules --json -o semgrep-agentic.json .
 
 # single-file bundle attached to each release (rule ids appear bare, e.g. llm-output-to-exec-eval); 404 until the first release is published
 semgrep --metrics=off --config https://github.com/basitalisandhu/agentic-semgrep-rules/releases/latest/download/agentic-semgrep-rules.yaml --json -o semgrep-agentic.json .</code></pre>
-<p>The upstream README also documents <code>--config https://raw.githubusercontent.com/basitalisandhu/agentic-semgrep-rules/main/rules</code> and a pending Semgrep registry entry <code>p/agentic-semgrep-rules</code>; use whichever form your Semgrep version accepts. Replace <code>v1.0.0</code> with the latest tag.</p>
+<p>The upstream README also documents <code>--config https://raw.githubusercontent.com/basitalisandhu/agentic-semgrep-rules/main/rules</code> and a pending Semgrep registry entry <code>p/agentic-semgrep-rules</code>; use whichever form your Semgrep version accepts. Replace <code>v0.2.0</code> with the latest tag (<code>git ls-remote --tags https://github.com/basitalisandhu/agentic-semgrep-rules</code>).</p>
 <ol start="3"><li><strong>Fall back to the bundled rules only when the pack cannot be fetched</strong> (no network, private checkout). They cover the same families with fewer sources and sinks, plus agent configuration checks the upstream pack does not have yet:</li></ol>
 <pre><code class="language-bash">RULES=&quot;${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules&quot;
 semgrep --metrics=off --config &quot;$RULES&quot; --json -o semgrep-agentic.json .</code></pre>
 <p>Say in the report which pack ran.</p>
 <ol start="4"><li><strong>Scan agent configuration files explicitly.</strong> Semgrep skips dot-files and dot-directories when it walks a directory, so pass them by name. The config rules live only in the bundled set:</li></ol>
-<pre><code class="language-bash">semgrep --metrics=off --config &quot;${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules/agentic-config.yaml&quot; --json -o semgrep-config.json \
-  .claude/settings.json .claude/settings.local.json .mcp.json .cursor/mcp.json 2&gt;/dev/null || true</code></pre>
+<pre><code class="language-bash">set --
+for f in .claude/settings.json .claude/settings.local.json .mcp.json .cursor/mcp.json .vscode/mcp.json; do
+  [ -f &quot;$f&quot; ] &amp;&amp; set -- &quot;$@&quot; &quot;$f&quot;
+done
+[ &quot;$#&quot; -gt 0 ] &amp;&amp; semgrep --metrics=off --config &quot;${CLAUDE_PLUGIN_ROOT}/skills/semgrep-agentic/rules/agentic-config.yaml&quot; --json -o semgrep-config.json &quot;$@&quot;</code></pre>
+<p>Pass only files that exist: one missing path makes Semgrep stop with &quot;Invalid scanning root&quot; and report no results for the files that are there.</p>
 <ol start="5"><li><strong>Triage every finding</strong> with <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/references/triage.md">references/triage.md</a>. For each result decide true positive (severity, location, fix), false positive (why; add <code># nosemgrep: &lt;rule-id&gt;</code> with the reason only when the user agrees), or accepted risk (the mitigation and an owner).</li></ol>
 <ol start="6"><li><strong>Check coverage</strong>: the packs handle Python, JavaScript and TypeScript, plus JSON configuration from the bundled set. Other languages need a manual review with <code>prompt-injection-review</code>.</li></ol>
 <ol start="7"><li><strong>Report</strong> in the format below and, when the user wants it, add the CI step from <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/references/triage.md#ci">references/triage.md</a>.</li></ol>
 <h3 id="output-format">Output format</h3>
-<pre><code class="language-markdown">## Semgrep agentic scan: &lt;repo&gt; (pack: agentic-semgrep-rules v1.0.0 | bundled fallback; &lt;n&gt; files)
+<pre><code class="language-markdown">## Semgrep agentic scan: &lt;repo&gt; (pack: agentic-semgrep-rules v0.2.0 | bundled fallback; &lt;n&gt; files)
 
 | Rule | Severity | File:line | Triage | Note or fix |
 |---|---|---|---|---|

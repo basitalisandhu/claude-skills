@@ -1,6 +1,6 @@
 ---
 name: essential-eight-evidence-map
-description: "Map an evidence pack to the ASD Essential Eight Maturity Model (November 2023) and show, for each of the eight strategies, which ML1 to ML3 requirements have evidence, which do not, and the maturity level the strategy can claim today, from the pack's manifest and a mapping you own. Use when asked \"what Essential Eight maturity level can we claim?\", before an Essential Eight assessment or a customer asks for ML2. Not for running the assessment itself, ISO 27001 or SOC 2 mapping (control-map-from-exports), or collecting the exports."
+description: "Map an evidence pack to the ASD Essential Eight Maturity Model (November 2023) and show, for each of the eight strategies, which ML1 to ML3 requirements have evidence, which do not, and the maturity level the strategy can claim today, from the pack's manifest and a mapping you own. Use when asked \"what Essential Eight maturity level can we claim?\", before an Essential Eight assessment or a customer asks for ML2. Not for running the assessment, a tenant baseline (entra-posture-review), ISO 27001 or SOC 2 mapping (control-map-from-exports), or collecting exports."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Reads an evidence pack on disk; makes no network calls.
 metadata:
@@ -56,7 +56,7 @@ A strategy claims level L only when every requirement of every level up to L is 
    | `records/restore-test-2026-q3.md` | the signed record of the last restore test | Regular backups (ML1 restoration testing) |
 
 2. **Build the pack** with `evidence-pack-builder` (`evidence_pack.py sidecar`, then `build <folder> --out <pack>`), so every file has a hash, a collector and a collection time.
-3. **Write the mapping** (`e8-map.csv`), one row per requirement and evidence file; a glob such as `RB-ML1-*` maps one file to several requirements:
+3. **Write the mapping** (`e8-map.csv`), one row per requirement and evidence file; a glob such as `RB-ML1-*` maps one file to several requirements. Requirement ids are read in any case, and evidence paths are the manifest paths (a leading `./` and `\` separators are accepted). A manifest entry that points outside the pack (`..` or an absolute path) stops the run. With `--max-age-days`, a file collected after `--as-of` is not assessable, because its age cannot be judged. [references/example-e8-map.csv](references/example-e8-map.csv) is a three-row example to copy from:
 
    ```csv
    requirement,evidence,state,note
@@ -74,6 +74,8 @@ A strategy claims level L only when every requirement of every level up to L is 
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/essential-eight-evidence-map/scripts/e8_map.py" ./pack-2026-q3 --map e8-map.csv --target 2 --max-age-days 90
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/essential-eight-evidence-map/scripts/e8_map.py" ./pack-2026-q3 --map e8-map.csv --json --redact --out e8-map.json --csv e8-matrix.csv
    ```
+
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/essential-eight-evidence-map/scripts/e8_map.py /tmp/pack --map plugins/compliance-evidence/skills/essential-eight-evidence-map/references/example-e8-map.csv` on the pack built from `tests/fixtures/exports` (exits 1: every strategy is below ML1, with three requirements supported). `references/example-e8-map.csv` is an example to review, not an authoritative mapping. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/e8_map.py` from the skill folder.
 
    Options: `--map`, `--catalogue` (a newer list in the same shape), `--target 1|2|3` (default 1), `--max-age-days`, `--as-of`, `--json`, `--redact`, `--out`, `--csv`. Without `--map`, every requirement is `not assessable` and the report lists unmapped files as candidates per strategy.
 

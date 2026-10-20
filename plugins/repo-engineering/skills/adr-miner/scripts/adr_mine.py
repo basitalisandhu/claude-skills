@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import fnmatch
 import json
 import re
 import shutil
@@ -161,13 +162,18 @@ def diff_summary(repo: Path, sha: str, files: list[dict], root: bool = False) ->
     return summaries, reasons
 
 
-def comment_candidates(repo: Path, limit: int) -> list[dict]:
+def excluded(rel: str, patterns: list[str]) -> bool:
+    """True when rel matches a glob, or sits under a folder given with or without a trailing slash or /*."""
+    return any(fnmatch.fnmatch(rel, p) or rel.startswith(p.rstrip("/*") + "/") for p in patterns)
+
+
+def comment_candidates(repo: Path, limit: int, exclude: list[str] | None = None) -> list[dict]:
     try:
         tracked = git(repo, "ls-files", "-z").split("\0")
     except GitError:
         return []
     out = []
-    for rel in sorted(t for t in tracked if t):
+    for rel in sorted(t for t in tracked if t and not excluded(t, exclude or [])):
         if PurePosixPath(rel).suffix not in CODE_EXT and PurePosixPath(rel).name not in {"Dockerfile", "Makefile"}:
             continue
         try:
@@ -264,12 +270,13 @@ def existing_max(out_dir: Path) -> int:
     return max(nums, default=0)
 
 
-def mine(repo: Path, rev_range: str | None, max_count: int, with_comments: bool) -> dict:
+def mine(repo: Path, rev_range: str | None, max_count: int, with_comments: bool,
+         exclude: list[str] | None = None) -> dict:
     found = []
     for c in commits(repo, rev_range, max_count):
         text = c["subject"] + "\n" + c["body"]
         words = sorted({m.group(1).lower() for m in DECISION_RE.finditer(text)})
-        config_files = [f for f in c["files"] if file_kind(f["path"])]
+        config_files = [f for f in c["files"] if file_kind(f["path"]) and not excluded(f["path"], exclude or [])]
         diff, reasons = diff_summary(repo, c["sha"], config_files, c["root"]) if config_files else ([], [])
         sources = []
         if words:
@@ -283,7 +290,7 @@ def mine(repo: Path, rev_range: str | None, max_count: int, with_comments: bool)
                       "decision_words": words, "reasons": reasons, "diff": diff,
                       "files": [f["path"] for f in c["files"]]})
     if with_comments:
-        found += comment_candidates(repo, 200)
+        found += comment_candidates(repo, 200, exclude)
     return {"repo": str(repo), "range": rev_range or "HEAD", "candidates": found}
 
 
@@ -311,6 +318,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="write one MADR stub per candidate here, numbered after the highest existing ADR; existing "
                          "files are never overwritten")
     ap.add_argument("--stubs", action="store_true", help="also print each MADR stub (in JSON: a stub_markdown field)")
+    ap.add_argument("--exclude", action="append", default=[], metavar="GLOB",
+                    help="leave matching paths out of config and comment mining, for example tests/fixtures "
+                         "(repeatable)")
     ap.add_argument("--json", action="store_true", help="print JSON")
     args = ap.parse_args(argv)
     repo = Path(args.repo).resolve()
@@ -325,7 +335,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         git(repo, "rev-parse", "--is-inside-work-tree")
-        rep = mine(repo, args.rev_range, max(1, args.max_commits), not args.no_comments)
+        rep = mine(repo, args.rev_range, max(1, args.max_commits), not args.no_comments, args.exclude)
     except GitError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

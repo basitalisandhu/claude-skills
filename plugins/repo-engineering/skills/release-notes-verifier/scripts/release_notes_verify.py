@@ -34,6 +34,7 @@ DEFAULT_CHORE = (r"^(chore|ci|build|test|tests|style)(\([^)]*\))?!?:|^Merge (bra
                  r"^Release\b|^v?\d+\.\d+\.\d+$|\[(skip|no) changelog\]")
 STOP = set("""a an and are as at be by for from has have in into is it its of on or that the this to was were
 will with add added adds fix fixed fixes update updated updates change changed changes new now use uses""".split())
+CLOSES_RE = re.compile(r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?|refs?)\s*:?\s+#(\d+)\b", re.IGNORECASE)
 REV_RE = re.compile(r"^[\w./^~@{}-]+$")
 GIT_TIMEOUT = 60
 
@@ -72,7 +73,8 @@ def commits(repo: str, frm: str, to: str) -> list[dict]:
     result = []
     for rec in out.split("\x1e")[1:]:
         sha, subject, body = (rec.split("\x1f") + ["", ""])[:3]
-        prs = sorted({int(a or b) for a, b in re.findall(r"\(#(\d+)\)|(?:^|\s)#(\d+)\b", subject)})
+        prs = sorted({int(a or b) for a, b in re.findall(r"\(#(\d+)\)|(?:^|\s)#(\d+)\b", subject)} |
+                     {int(n) for n in CLOSES_RE.findall(body)})
         result.append({"sha": sha.strip(), "subject": subject.strip(), "body": body.strip(), "prs": prs,
                        "pr_title": None})
     return result
@@ -132,7 +134,8 @@ def match(note: dict, c: dict) -> bool:
         return True
     if any(len(s) >= 7 and c["sha"].startswith(s.lower()) for s in re.findall(r"\b[0-9a-f]{7,40}\b", text)):
         return True
-    ticks = {t.strip("()").lower() for t in re.findall(r"`([^`]+)`", text)}
+    # `${CLAUDE_PLUGIN_ROOT}`, `$HOME` and `parse()` should match a commit that names the bare word
+    ticks = {re.sub(r"^\$\{?|\}$|\(\)$", "", t.strip()).lower() for t in re.findall(r"`([^`]+)`", text)}
     commit_text = " ".join(filter(None, [c["subject"], c["body"], c["pr_title"]])).lower()
     if ticks and any(len(t) >= 3 and t in commit_text for t in ticks):
         return True

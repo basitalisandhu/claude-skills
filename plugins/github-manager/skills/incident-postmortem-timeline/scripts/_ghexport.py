@@ -89,13 +89,49 @@ def percentile_nearest_rank(values: list[float], pct: float) -> float | None:
 
 def load_json(path: Path) -> object:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        text = path.read_text(encoding="utf-8")
+        if not text.strip():
+            raise InputError(f"{path}: the file is empty; re-run the export command in SKILL.md")
+        return json.loads(text)
     except FileNotFoundError as exc:
         raise InputError(f"{path}: not found") from exc
     except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{path}: not valid JSON: {exc}") from exc
+
+
+def row_number(row: dict) -> int | None:
+    """The row's number as an int ('12' is accepted), or None when it is missing, a bool or not a whole number."""
+    value = row.get("number")
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value.strip())
+    return None
+
+
+def check_rows(rows: list, source: object, kind: str = "row", required: tuple[str, ...] = ("createdAt",),
+               optional: tuple[str, ...] = ()) -> None:
+    """Raise InputError unless every row is an object with a whole number, parseable `required` times and, when
+    present and not null, parseable `optional` times. Catches exports made with the wrong --json fields or edited by
+    hand, which would otherwise crash or be read as "nothing to report"."""
+    for index, row in enumerate(rows):
+        if not isinstance(row, dict):
+            raise InputError(f"{source}: item {index} is not an object; expected {kind}s from gh --json")
+        number = row_number(row)
+        if number is None:
+            raise InputError(f"{source}: item {index} has number {row.get('number')!r}; expected a whole number")
+        for field in required:
+            if parse_time(row.get(field)) is None:
+                raise InputError(f"{source}: {kind} #{number} has {field} {row.get(field)!r}; expected an ISO time "
+                                 f"such as 2026-09-30T12:00:00Z (re-run the export with the --json fields in SKILL.md)")
+        for field in optional:
+            value = row.get(field)
+            if value not in (None, "") and parse_time(value) is None:
+                raise InputError(f"{source}: {kind} #{number} has {field} {value!r}; expected an ISO time or null")
 
 
 def find_file(folder: Path, stem: str) -> Path | None:
@@ -114,16 +150,30 @@ def stem_files(folder: Path, stem: str) -> list[Path]:
     return sorted(p for p in folder.glob("*.json") if p.is_file() and pattern.search(p.name))
 
 
-def merge_rows(paths: list[Path]) -> list[dict]:
-    """Concatenate exported rows from several files; a number seen twice keeps the row from the later file."""
+def merge_rows(paths: list[Path], kind: str = "row", required: tuple[str, ...] = (),
+               optional: tuple[str, ...] = ()) -> list[dict]:
+    """Concatenate exported rows from several files; a number seen twice keeps the row from the later file.
+    Each file's rows are checked with check_rows for `required` and `optional` times."""
     rows: dict[object, dict] = {}
     for path in paths:
-        data = flatten_pages(load_json(path))
+        data = load_rows(path)
         for row in data:
             if not isinstance(row, dict) or "number" not in row:
                 raise InputError(f"{path}: expected a list of objects with a 'number' field")
-            rows[row["number"]] = row
+        check_rows(data, path, kind, required, optional)
+        for row in data:
+            rows[row_number(row)] = row
     return list(rows.values())
+
+
+def load_rows(path: Path) -> list:
+    """load_json then flatten_pages, naming the file when it does not hold a JSON array."""
+    data = load_json(path)
+    try:
+        return flatten_pages(data)
+    except InputError as exc:
+        kind = type(data).__name__.replace("dict", "object").replace("NoneType", "null")
+        raise InputError(f"{path}: {exc}, found a JSON {kind}") from exc
 
 
 def numbered_files(folder: Path, stem: str) -> dict[int, Path]:

@@ -61,6 +61,8 @@ licensed copy can add distinctive phrases locally so that pasted text is caught.
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/auditor-narrative-drafter/scripts/narrative.py" control-map.json --all --out narrative.md --redact
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/auditor-narrative-drafter/scripts/narrative.py tests/fixtures/narrative/control-map.json --control A.8.15`, then `narrative_lint.py` on a saved draft and the same map; `tests/fixtures/narrative/bad-narrative.md` shows what the linter rejects. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/narrative.py` from the skill folder.
+
 3. Lint, and lint again after every human edit:
 
    ```bash

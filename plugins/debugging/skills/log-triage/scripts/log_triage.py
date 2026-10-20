@@ -13,7 +13,8 @@ Stack traces: lines that start with whitespace or "at " or "File " are attached 
 Usage:
     log_triage.py [FILE ...] [--json] [--top N] [--level LEVEL] [--grep REGEX] [--no-collapse]
 
-Exit codes: 0 normally, 1 when --fail-on-level is given and a cluster at that level or above exists, 2 bad input.
+Exit codes: 0 normally, 1 when --fail-on-level is given and a cluster at that level or above exists, 2 bad input
+(missing file, empty or binary input, invalid --grep).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
@@ -66,7 +67,7 @@ def level_of(line: str) -> str | None:
 
 
 def cluster(lines, grep: re.Pattern[str] | None, min_level: str | None, collapse: bool) -> dict:
-    clusters: "OrderedDict[str, dict]" = OrderedDict()
+    clusters: OrderedDict[str, dict] = OrderedDict()
     last_key = None
     total = 0
     skipped = 0
@@ -123,6 +124,19 @@ def render_text(report: dict, top: int) -> str:
     return "\n".join(lines)
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -130,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="*", help="log files (stdin when none)")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--top", type=int, default=30)
+    ap.add_argument("--top", type=count_arg(1), default=30)
     ap.add_argument("--level", choices=LEVELS, help="keep only lines at this level or more severe")
     ap.add_argument("--grep", metavar="REGEX", help="keep only lines matching this regular expression")
     ap.add_argument("--no-collapse", action="store_true", help="treat indented continuation lines as their own lines")
@@ -151,6 +165,13 @@ def main(argv: list[str] | None = None) -> int:
             lines += p.read_text(encoding="utf-8", errors="replace").splitlines()
     else:
         lines = sys.stdin.read().splitlines()
+    source = ", ".join(args.files) if args.files else "standard input"
+    if any("\x00" in ln for ln in lines[:2000]):
+        print(f"error: {source} looks binary (NUL bytes); decompress it first (zcat app.log.gz | log_triage.py)", file=sys.stderr)
+        return 2
+    if not any(ln.strip() for ln in lines):
+        print(f"error: no log lines read from {source}", file=sys.stderr)
+        return 2
     report = cluster(lines, grep, args.level, not args.no_collapse)
     if args.json:
         print(json.dumps(report, indent=2))

@@ -15,6 +15,9 @@ data stores, credentials, MCP servers, and signals of approvals, sandboxing, lim
 Usage:
   scan_agent_stack.py [ROOT] [--out system.yaml] [--json]
 
+Exit codes: 0 draft written, 2 ROOT is not a directory or --out cannot be written. A malformed MCP config
+file is reported on stderr and skipped; the rest of the scan goes on.
+
 Standard library only. Read-only.
 """
 from __future__ import annotations
@@ -119,15 +122,44 @@ MCP_KIND_HINTS = [("filesystem", "write"), ("github", "write"), ("gitlab", "writ
                   ("docker", "exec"), ("kube", "exec"), ("stripe", "payment"), ("pay", "payment")]
 
 
-def iter_files(root: Path):
+def iter_files(root: Path, state: dict | None = None):
     n = 0
     for p in sorted(root.rglob("*")):
-        if not p.is_file() or p.suffix not in SRC_EXTS or any(part in SKIP_DIRS for part in p.parts):
+        if not p.is_file() or p.suffix not in SRC_EXTS or any(part in SKIP_DIRS for part in p.relative_to(root).parts):
             continue
         n += 1
         if n > MAX_FILES:
+            if state is not None:
+                state["truncated"] = True
             break
         yield p
+
+
+def mcp_servers_in(data, rel: str) -> tuple[list[dict], list[str]]:
+    """MCP server entries of one config file. Entries that are not objects, or have odd field types, are
+    skipped with a note instead of dropping every server in the file."""
+    servers, notes = [], []
+    if not isinstance(data, dict):
+        return servers, [f"{rel}: top level is not a JSON object"]
+    block = data.get("mcpServers") or data.get("servers") or {}
+    if not isinstance(block, dict):
+        return servers, [f"{rel}: mcpServers is not an object"]
+    for sname, cfg in block.items():
+        if not isinstance(cfg, dict):
+            notes.append(f"{rel}: server {sname!r} is not an object")
+            continue
+        command = cfg.get("command") if isinstance(cfg.get("command"), str) else ""
+        raw_args = cfg.get("args") or []
+        args = [str(a) for a in raw_args] if isinstance(raw_args, list) else [str(raw_args)]
+        url = cfg.get("url") if isinstance(cfg.get("url"), str) else ""
+        env = cfg.get("env") if isinstance(cfg.get("env"), dict) else {}
+        target = url or " ".join([command] + args).strip()
+        launcher = os_base(command) in {"npx", "uvx", "pipx", "bunx", "pnpx"}
+        pinned = bool(url) or any(re.search(r"@\d|==\d|@sha256:", a) for a in args) or not launcher
+        transport = cfg.get("type") if isinstance(cfg.get("type"), str) else ("http" if url else "stdio")
+        servers.append({"name": str(sname), "file": rel, "transport": transport, "target": target, "pinned": pinned,
+                        "has_env_secret": any(re.search(r"(?i)key|token|secret|password", str(k)) for k in env)})
+    return servers, notes
 
 
 def read(p: Path) -> str:
@@ -145,7 +177,9 @@ def detect(root: Path) -> dict:
     mcp_servers: list[dict] = []
     signals: dict[str, set[str]] = {"approval": set(), "sandbox": set(), "limits": set(), "kill": set(), "audit": set(), "credential-broker": set()}
     files = 0
-    for p in iter_files(root):
+    state = {"truncated": False}
+    notes: list[str] = []
+    for p in iter_files(root, state):
         rel = p.relative_to(root).as_posix()
         text = read(p)
         if not text:
@@ -167,20 +201,14 @@ def detect(root: Path) -> dict:
         for key, pat in (("approval", APPROVAL_RE), ("sandbox", SANDBOX_RE), ("limits", LIMIT_RE), ("kill", KILL_RE), ("audit", AUDIT_RE), ("credential-broker", BROKER_RE)):
             if pat.search(text):
                 signals[key].add(rel)
-        if p.name in {".mcp.json", "mcp.json", "claude_desktop_config.json"} or (p.name == "settings.json" and ".claude" in p.parts):
+        if p.name in {".mcp.json", "mcp.json", "claude_desktop_config.json"} or (p.name == "settings.json" and ".claude" in p.relative_to(root).parts):
             try:
-                data = json.loads(text)
-                servers = data.get("mcpServers") or data.get("servers") or {}
-                for sname, cfg in servers.items():
-                    if isinstance(cfg, dict):
-                        args = [str(a) for a in cfg.get("args", [])]
-                        target = cfg.get("url") or " ".join([cfg.get("command", "")] + args)
-                        pinned = bool(cfg.get("url")) or any(re.search(r"@\d|==\d|@sha256:", a) for a in args) or not any(os_base(cfg.get("command", "")) in {"npx", "uvx", "pipx", "bunx", "pnpx"} for _ in [0])
-                        mcp_servers.append({"name": sname, "file": rel, "transport": cfg.get("type") or ("http" if cfg.get("url") else "stdio"),
-                                            "target": target, "pinned": pinned, "has_env_secret": any(re.search(r"(?i)key|token|secret|password", k) for k in (cfg.get("env") or {}))})
-            except (json.JSONDecodeError, AttributeError):
-                pass
-    return {"files": files, "hits": {k: {n: sorted(v)[:5] for n, v in d.items()} for k, d in hits.items()},
+                found, why = mcp_servers_in(json.loads(text), rel)
+                mcp_servers += found
+                notes += why
+            except json.JSONDecodeError as exc:
+                notes.append(f"{rel}: not valid JSON (line {exc.lineno}); its MCP servers are missing from the draft")
+    return {"files": files, "truncated": state["truncated"], "notes": notes, "hits": {k: {n: sorted(v)[:5] for n, v in d.items()} for k, d in hits.items()},
             "credentials": {k: sorted(v)[:3] for k, v in sorted(creds.items())}, "mcp_servers": mcp_servers,
             "signals": {k: sorted(v)[:5] for k, v in signals.items()}}
 
@@ -374,11 +402,22 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", action="store_true", help="print the raw detections and the model as JSON instead of YAML")
     args = ap.parse_args(argv)
     root = Path(args.root).resolve()
+    if not root.is_dir():
+        print(f"scan_agent_stack: {args.root} is not a directory", file=sys.stderr)
+        return 2
     d = detect(root)
     model = build_model(root, d)
+    for note in d["notes"]:
+        print(f"scan_agent_stack: {note}", file=sys.stderr)
+    if d["truncated"]:
+        print(f"scan_agent_stack: stopped after {MAX_FILES} files; scan a subdirectory too, or add what is missing by hand", file=sys.stderr)
     text = json.dumps({"detections": d, "model": model}, indent=1) if args.json else to_yaml(model)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"scan_agent_stack: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
         print(f"wrote {args.out} ({d['files']} files scanned); next: atm validate {args.out}", file=sys.stderr)
     else:
         sys.stdout.write(text)

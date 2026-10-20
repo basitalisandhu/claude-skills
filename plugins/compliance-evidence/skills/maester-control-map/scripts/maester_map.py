@@ -6,11 +6,11 @@ with the tests behind each state. Also writes the test list with control columns
 Inputs:
   results         the JSON file written by Invoke-Maester -OutputJsonFile: an object with Result, ExecutedAt,
                   TenantId, TenantName, the counts and a Tests list. Each test has Index, Id (for example MT.1001,
-                  CIS.M365.1.1.1, EIDSCA.AF01, MS.AAD.3.1), Title, Name ("Id: Title"), HelpUrl, Severity, Tag,
+                  CIS.M365.1.1.1, EIDSCA.AF01, CISA.MS.AAD.3.1), Title, Name ("Id: Title"), HelpUrl, Severity, Tag,
                   Result (Passed, Failed, Skipped, NotRun, Error or Investigate), Block and ResultDetail. A test
                   without Id takes the part of Name before the first colon.
   --map           CSV with columns match, framework, control and note. match is an exact test id, an id prefix
-                  ending in "*" (CIS.M365.1.1.*), or tag:<Tag> (tag:MFA). framework is iso27001 or soc2; control
+                  ending in "*" (CIS.M365.1.1.*), or tag:<Tag> (tag:CA). framework is iso27001 or soc2; control
                   must be an identifier in references/iso27001-identifiers.md or references/soc2-identifiers.md
                   (add more with --identifiers). references/example-map.csv is an example to review, not an
                   authoritative mapping.

@@ -73,6 +73,8 @@ Findings (the action list) are separate from states: `exceptions-noted`, `expiri
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/vendor-attestation-digest/scripts/vendor_attestations.py" --register register.csv --vendors vendors.csv --docs ./vendor-docs --as-of 2026-10-16 --json --redact --out digest.json --csv actions.csv
    ```
 
+   To try it before exporting anything, clone the repository and, from its root, run `python3 plugins/compliance-evidence/skills/vendor-attestation-digest/scripts/vendor_attestations.py --register tests/fixtures/vendors/register.csv --vendors tests/fixtures/vendors/vendors.csv --docs tests/fixtures/vendors/docs --as-of 2026-10-16`. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/vendor_attestations.py` from the skill folder.
+
    Options: `--register`, `--vendors`, `--docs`, `--as-of` (required), `--max-report-age-months`, `--bridge-max-months`, `--expiring-days`, `--json`, `--redact`, `--out`, `--csv` (one row per finding, with owner and action).
 
 4. **Send each owner their actions** (the CSV has one row per finding), and check every `supported` row against the cited page before relying on it.

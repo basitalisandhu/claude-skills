@@ -22,7 +22,7 @@ Checks (id, severity):
 Usage:
     openapi_lint.py SPEC [--json] [--fail-on error|warn|info]
 
-Exit codes: 0 nothing at or above --fail-on (default: error), 1 otherwise, 2 unreadable input.
+Exit codes: 0 nothing at or above --fail-on (default: error), 1 otherwise, 2 unreadable, empty or non-mapping input.
 Standard library only (bundled minimal YAML reader). Read-only. No network.
 """
 from __future__ import annotations
@@ -224,10 +224,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: not a file: {p}", file=sys.stderr)
         return 2
     text = p.read_text(encoding="utf-8", errors="replace")
+    if "\x00" in text:
+        print(f"error: {p} is a binary file, not an OpenAPI document", file=sys.stderr)
+        return 2
+    if not text.strip():
+        print(f"error: {p} is empty", file=sys.stderr)
+        return 2
     try:
         doc = json.loads(text) if p.suffix == ".json" or text.lstrip().startswith("{") else load(text)
     except (json.JSONDecodeError, YAMLError) as exc:
         print(f"error: cannot parse {p}: {exc}", file=sys.stderr)
+        return 2
+    if not isinstance(doc, dict):
+        shape = {list: "a list", str: "plain text", type(None): "empty"}.get(type(doc), type(doc).__name__)
+        print(f"error: {p} is not an OpenAPI document: the top level is {shape}, expected a mapping with openapi, info and paths", file=sys.stderr)
         return 2
     findings = lint(doc)
     order = {lv: i for i, lv in enumerate(LEVELS)}

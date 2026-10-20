@@ -10,7 +10,9 @@ Elements (each scored 2 when found within the first screen, 1 when found later, 
   ask      where to ask: issues, discussions, SECURITY.md, CONTRIBUTING, a forum or chat link
 
 "First screen" is the first --screen-lines source lines (default 40), not counting leading badges and images.
-Hype words outside code blocks are listed with their line numbers.
+Hype words outside code blocks and inline code are listed with their line numbers. YAML front matter at the top
+is skipped, a setext heading (a line underlined with === or ---) is not taken for the opening sentence, and a code
+fence that is never closed is noted.
 
 Exit codes: 0 every element in the first screen and no hype words, 1 gaps or hype words, 2 bad input.
 """
@@ -48,6 +50,7 @@ HYPE = [
     "10x", "insanely", "incredible", "amazing", "awesome",
 ]
 HYPE_RE = re.compile(r"(?<![\w-])(" + "|".join(re.escape(h) for h in HYPE) + r")(?![\w-])", re.IGNORECASE)
+BADGE_RE = re.compile(r"^(\[!\[|!\[|<img|<p\b|</p>|<a\b|</a>|<div|</div>|<br)", re.IGNORECASE)
 ELEMENTS = ("what", "who", "why", "install", "example", "ask")
 ADVICE = {
     "what": "Open with one plain sentence: '<name> is a <kind of thing> that <does what>'.",
@@ -72,25 +75,43 @@ def blocks(lines: list[str]) -> list[dict]:
                 cur = None
         elif cur is not None:
             cur["body"].append(line)
+    if cur is not None:
+        cur["unclosed"] = True
+        out.append(cur)
     return out
+
+
+def front_matter_end(lines: list[str]) -> int:
+    """Line number of the closing '---' of YAML front matter at the very top, or 0 when there is none."""
+    if lines and lines[0].strip() == "---":
+        for i, line in enumerate(lines[1:], 2):
+            if line.strip() in {"---", "..."}:
+                return i
+    return 0
 
 
 def check(text: str, screen_lines: int, max_words: int) -> dict:
     lines = text.splitlines()
-    first_content = 1
+    skip_to = front_matter_end(lines)
+    first_content = skip_to + 1
     for i, line in enumerate(lines, 1):
         s = line.strip()
-        if not s or re.match(r"^(\[!\[|!\[|<img|<p\b|</p>|<a\b|</a>|<div|</div>|<br)", s, re.IGNORECASE):
+        if i <= skip_to or not s or BADGE_RE.match(s):
             continue
         first_content = i
         break
     screen_end = first_content + screen_lines - 1
     code = blocks(lines)
-    in_code = set()
+    in_code = set(range(1, skip_to + 1))
     for b in code:
         in_code |= set(range(b["start"], b.get("end", len(lines)) + 1))
     found: dict[str, dict] = {}
     notes: list[str] = []
+    if not text.strip():
+        notes.append("the file is empty")
+    for b in code:
+        if b.get("unclosed"):
+            notes.append(f"line {b['start']}: this code fence is never closed, so everything after it renders as code")
 
     def mark(elem: str, line: int, evidence: str) -> None:
         if elem not in found:
@@ -98,8 +119,10 @@ def check(text: str, screen_lines: int, max_words: int) -> dict:
 
     for i, line in enumerate(lines, 1):
         s = line.strip()
-        if i in in_code or not s or s.startswith(("#", "|", "<", "[![", "![", ">")) or re.match(r"^[-*_]{3,}$", s):
+        if i in in_code or not s or s.startswith(("#", "|", "<", "[![", "![", ">")) or re.match(r"^[-*_=]{3,}$", s):
             continue
+        if i < len(lines) and re.match(r"^\s*(=+|-+)\s*$", lines[i]):
+            continue  # a setext heading: the line above an === or --- underline is a title, not the opening sentence
         first_sentence = re.split(r"(?<=[.!?])\s", re.sub(r"[*_`]", "", s))[0]
         mark("what", i, first_sentence)
         n = len(first_sentence.split())
@@ -139,7 +162,7 @@ def check(text: str, screen_lines: int, max_words: int) -> dict:
     for i, line in enumerate(lines, 1):
         if i in in_code:
             continue
-        for m in HYPE_RE.finditer(line):
+        for m in HYPE_RE.finditer(re.sub(r"`[^`]*`", lambda c: " " * len(c.group(0)), line)):
             hype.append({"line": i, "word": m.group(1)})
     score = 0
     elements = {}
@@ -202,6 +225,9 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     try:
         text = Path(args.readme).read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        print(f"error: {args.readme} is not UTF-8 text", file=sys.stderr)
+        return 2
     except OSError as exc:
         print(f"error: cannot read {args.readme}: {exc}", file=sys.stderr)
         return 2

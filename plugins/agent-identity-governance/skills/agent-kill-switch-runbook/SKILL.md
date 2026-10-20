@@ -44,6 +44,13 @@ A minimal record the script accepts:
 
 ## Script
 
+To see the output first, build the inventory from the bundled synthetic exports and write the runbook for one Agent ID agent identity. From a copy of the skill folder without the plugin system (`CLAUDE_PLUGIN_ROOT` empty), run `scripts/kill_switch_runbook.py` from the skill folder; the examples live in the plugin's `examples/` folder, so take them from a clone of the repository. The commands:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/nhi-inventory/scripts/nhi_inventory.py" "${CLAUDE_PLUGIN_ROOT}/examples/exports" --as-of 2026-10-05 --json --out inventory.json
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py" inventory.json --identity entra:00000000-0000-0000-0000-0000000000e5 --as-of 2026-10-05
+```
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py" inventory.json --identity entra:<appId> --gateway "the API gateway" --out runbook.md
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py" inventory.json --identity aws-role:agent-runtime --json
@@ -63,6 +70,8 @@ What each identity type gets:
 | Type | Stop new actions | End sessions | Credentials and access | Confirm |
 |---|---|---|---|---|
 | Entra app, enterprise app, managed identity | `az ad sp update --set accountEnabled=false` | token lifetime note; delete delegated grants | `az ad app` and `az ad sp credential delete` per key, federated credential delete, app role assignment delete, Azure role assignment check | sign-in (beta) and directory audit queries |
+| Entra Agent ID agent identity | `PATCH /v1.0/servicePrincipals/<id>/microsoft.graph.agentIdentity` with `accountEnabled` false (AgentIdentity.EnableDisable.All) | delete delegated grants | none of its own: the blueprint's credentials are shared, so they are left alone unless every agent of the blueprint stops; its own app role assignments removed, inherited ones noted | sign-in (beta) and directory audit queries |
+| Entra Agent ID blueprint | first step lists every agent identity that depends on it | as for an Entra app | blueprint credentials deleted per key (this stops every agent identity of the blueprint) | sign-in (beta) and directory audit queries |
 | AWS IAM user | attach `AWSDenyAll` | covered by the deny | deactivate each key, delete the console password, detach policies, leave groups | `cloudtrail lookup-events` by user name |
 | AWS IAM role | empty the trust policy (saved first) | `AWSRevokeOlderSessions` inline policy | detach and delete policies | `cloudtrail lookup-events` by resource name |
 | GitHub App, deploy key | suspend the installation | (suspension ends tokens) | revoke private keys; delete the deploy key | organisation audit log query |

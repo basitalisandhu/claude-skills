@@ -8,6 +8,10 @@ Files read from EXPORT_DIR (at least one must be present):
 
   entra-applications.json          Graph /applications with owners expanded: passwordCredentials, keyCredentials
   entra-service-principals.json    Graph /servicePrincipals with owners expanded: SAML signing and other credentials
+  entra-agent-blueprints.json      Graph /applications/microsoft.graph.agentIdentityBlueprint: the credentials every
+                                   agent identity created from the blueprint authenticates with
+  entra-agent-identities.json      Graph /servicePrincipals/microsoft.graph.agentIdentity (to count the agent
+                                   identities that depend on each blueprint credential; optional)
   aws-access-keys.json             aws iam list-access-keys output, one object or a list of them
   aws-credential-report.csv        aws iam get-credential-report, decoded (used when aws-access-keys.json is absent)
   aws-authorization-details.json   aws iam get-account-authorization-details (owner tags on IAM users)
@@ -43,6 +47,8 @@ EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 KNOWN = (
     "entra-applications.json",
     "entra-service-principals.json",
+    "entra-agent-blueprints.json",
+    "entra-agent-identities.json",
     "aws-access-keys.json",
     "aws-credential-report.csv",
     "aws-authorization-details.json",
@@ -126,8 +132,11 @@ def redact(obj):
 
 
 def owners_of(obj: dict) -> list[str]:
+    """Owners, then sponsors (Entra Agent ID blueprints and agent identities have sponsors)."""
     out = []
-    for o in obj.get("owners") or []:
+    for o in [*(obj.get("owners") or []), *(obj.get("sponsors") or [])]:
+        if not isinstance(o, dict):
+            continue
         name = str(o.get("userPrincipalName") or o.get("mail") or o.get("displayName") or o.get("id") or "")
         if name and name not in out:
             out.append(name)
@@ -153,19 +162,56 @@ def collect(folder: Path, max_key_age: int) -> tuple[list[dict], list[str]]:
     if not present:
         raise InputError(f"{folder}: none of the expected export files is present (see --help)")
     rows: list[dict] = []
-    for name, system in (("entra-applications.json", "entra"), ("entra-service-principals.json", "entra")):
+    # Agent identities hold no credentials of their own: they authenticate with their blueprint's. Count them per
+    # blueprint appId so a blueprint secret shows how many agents stop working when it lapses.
+    dependants: dict[str, int] = {}
+    agents_path = folder / "entra-agent-identities.json"
+    if agents_path.exists():
+        for a in items(load_json(agents_path)):
+            ref = str(a.get("agentIdentityBlueprintId") or "")
+            if ref:
+                dependants[ref] = dependants.get(ref, 0) + 1
+    blueprint_ids: set[str] = set()
+    blueprints_path = folder / "entra-agent-blueprints.json"
+    blueprints = items(load_json(blueprints_path)) if blueprints_path.exists() else []
+    for b in blueprints:
+        blueprint_ids.add(str(b.get("appId") or ""))
+    seen: set[tuple[str, str]] = set()
+    sources = (
+        ("entra-agent-blueprints.json", blueprints),
+        ("entra-applications.json", None),
+        ("entra-service-principals.json", None),
+    )
+    for name, preloaded in sources:
         path = folder / name
-        if not path.exists():
+        if preloaded is None and not path.exists():
             continue
-        for obj in items(load_json(path)):
-            ident = f"{obj.get('displayName') or obj.get('appId')} ({obj.get('appId')})"
-            where = "app registration" if name.startswith("entra-app") else "service principal"
+        for obj in preloaded if preloaded is not None else items(load_json(path)):
+            app_id = str(obj.get("appId") or "")
+            ident = f"{obj.get('displayName') or app_id} ({app_id})"
+            is_blueprint = name == "entra-agent-blueprints.json" or (
+                name == "entra-applications.json"
+                and (app_id in blueprint_ids or "agentidentityblueprint" in str(obj.get("@odata.type", "")).lower())
+            )
+            if is_blueprint:
+                n = dependants.get(app_id)
+                where = "agent blueprint" + (f", used by {n} agent identit{'y' if n == 1 else 'ies'}" if n else "")
+            else:
+                where = "app registration" if name.startswith("entra-app") else "service principal"
             for field, kind in (("passwordCredentials", "client secret"), ("keyCredentials", "certificate")):
                 for c in obj.get(field) or []:
+                    if not isinstance(c, dict):
+                        continue
+                    # the same blueprint can be in the applications export and the blueprint export
+                    marker = (app_id, str(c.get("keyId") or id(c)))
+                    if name != "entra-service-principals.json":
+                        if marker in seen:
+                            continue
+                        seen.add(marker)
                     rows.append(
                         row(
                             ident,
-                            system,
+                            "entra",
                             f"{kind} on {where}",
                             c.get("keyId"),
                             owners_of(obj),
@@ -354,7 +400,11 @@ def main(argv: list[str] | None = None) -> int:
         doc = redact(doc)
     text = json.dumps(doc, indent=2) + "\n" if args.json else render(doc)
     if args.out:
-        Path(args.out).write_text(text, encoding="utf-8")
+        try:
+            Path(args.out).write_text(text, encoding="utf-8")
+        except OSError as exc:
+            print(f"credential_expiry_radar.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(text)
     return 1 if doc["needs_action"] else 0

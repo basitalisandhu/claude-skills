@@ -10,7 +10,7 @@ radon and eslint's complexity rule; the point is to rank functions, not to produ
 Usage:
     complexity_report.py PATH [--json] [--max-complexity N] [--max-length N] [--top N] [--exclude DIR ...]
 
-Exit codes: 0 nothing over the thresholds, 1 at least one function over --max-complexity or --max-length, 2 bad input.
+Exit codes: 0 nothing over the thresholds, 1 at least one function over --max-complexity or --max-length, 2 bad input (missing path, unsupported file, or no source files).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
@@ -284,6 +284,19 @@ def grade(c: int) -> str:
     return "A" if c <= 5 else "B" if c <= 10 else "C" if c <= 20 else "D" if c <= 30 else "F"
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -291,14 +304,21 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path")
     ap.add_argument("--json", action="store_true")
-    ap.add_argument("--max-complexity", type=int, default=10, help="threshold that marks a function as over (default 10)")
-    ap.add_argument("--max-length", type=int, default=60, help="line-count threshold (default 60)")
-    ap.add_argument("--top", type=int, default=20, help="rows to print in text mode")
+    ap.add_argument("--max-complexity", type=count_arg(1), default=10, help="threshold that marks a function as over (default 10)")
+    ap.add_argument("--max-length", type=count_arg(1), default=60, help="line-count threshold (default 60)")
+    ap.add_argument("--top", type=count_arg(1), default=20, help="rows to print in text mode")
     ap.add_argument("--exclude", action="append", default=[], metavar="DIR")
     args = ap.parse_args(argv)
     root = Path(args.path)
     if not root.exists():
         print(f"error: path not found: {root}", file=sys.stderr)
+        return 2
+    supported = PY_SUFFIXES | JS_SUFFIXES
+    if root.is_file() and root.suffix not in supported:
+        print(f"error: {root} is not a supported source file (suffix {root.suffix or 'none'}); supported: {', '.join(sorted(supported))}", file=sys.stderr)
+        return 2
+    if not any(True for _ in iter_files(root, DEFAULT_EXCLUDES | set(args.exclude))):
+        print(f"error: no source files found under {root} (suffixes {', '.join(sorted(supported))}, excluded folders skipped)", file=sys.stderr)
         return 2
     report = analyse(root, DEFAULT_EXCLUDES | set(args.exclude))
     fns = report["functions"]

@@ -400,20 +400,48 @@ def render(result: dict) -> str:
     return "\n".join(lines)
 
 
+EXIT_CODES = ("Exit codes: dry run 0 nothing to clean, 1 something to clean; --apply 0 every applicable action "
+              "succeeded, 1 any failed; 2 bad input or usage.")
+
+
+def positive_int(text: str) -> int:
+    """argparse type: a whole number of at least 1."""
+    try:
+        value = int(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+    if value < 1:
+        raise argparse.ArgumentTypeError(f"must be 1 or more, got {value}")
+    return value
+
+
+def non_negative_float(text: str) -> float:
+    """argparse type: a number of 0 or more."""
+    try:
+        value = float(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"expected a number, got {text!r}") from None
+    if not value >= 0 or value == float("inf"):
+        raise argparse.ArgumentTypeError(f"must be 0 or more, got {text}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
                                  formatter_class=argparse.RawDescriptionHelpFormatter,
-                                 epilog="Actions: " + ", ".join(ACTION_IDS))
+                                 epilog="Actions: " + ", ".join(ACTION_IDS) + "\n\n" + EXIT_CODES)
     ap.add_argument("--apply", action="store_true", help="perform the actions (default: dry run)")
     ap.add_argument("--only", help="comma-separated action ids to run")
     ap.add_argument("--skip", default="", help="comma-separated action ids to leave out")
     ap.add_argument("--home", default=str(Path.home()), help="home folder (default: your home)")
     ap.add_argument("--tmpdir", default=os.environ.get("TMPDIR", "/tmp"), help="temporary folder (default $TMPDIR)")
-    ap.add_argument("--npx-days", type=int, default=14, help="npx entries older than this are stale (default 14)")
-    ap.add_argument("--log-days", type=int, default=7, help="log files older than this are removed (default 7)")
+    ap.add_argument("--npx-days", type=non_negative_float, default=14,
+                    help="npx entries older than this are stale (default 14)")
+    ap.add_argument("--log-days", type=non_negative_float, default=7,
+                    help="log files older than this are removed (default 7)")
     ap.add_argument("--no-commands", action="store_true",
                     help="do not run external programs (brew, docker, uv, pip, osascript); path actions only")
-    ap.add_argument("--timeout", type=int, default=600, help="seconds per external command (default 600)")
+    ap.add_argument("--timeout", type=positive_int, default=600, help="seconds per external command (default 600)")
     ap.add_argument("--log", help="append a line per action to this file")
     ap.add_argument("--json", action="store_true", help="print the result as JSON")
     args = ap.parse_args(argv)
@@ -428,8 +456,15 @@ def main(argv: list[str] | None = None) -> int:
     if unknown:
         print(f"error: unknown action id(s): {', '.join(sorted(unknown))}", file=sys.stderr)
         return 2
+    if args.log:
+        try:
+            with open(Path(args.log).expanduser(), "a", encoding="utf-8"):
+                pass
+        except OSError as exc:
+            print(f"error: cannot write --log {args.log}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     cleaner = Cleaner(home, Path(args.tmpdir), not args.no_commands, args.apply, args.timeout, args.npx_days,
-                      args.log_days, Path(args.log) if args.log else None)
+                      args.log_days, Path(args.log).expanduser() if args.log else None)
     before = free_bytes(home)
     cleaner.log(f"safe_clean {'apply' if args.apply else 'dry-run'} home={home} free_before={human(before)}")
     cleaner.plan(only, skip)

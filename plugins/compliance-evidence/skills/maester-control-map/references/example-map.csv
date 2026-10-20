@@ -1,6 +1,6 @@
 match,framework,control,note
-tag:MFA,iso27001,A.8.5,"EXAMPLE to review: tests tagged MFA read multi-factor sign-in settings; confirm the tag exists in your own results file"
-tag:MFA,soc2,CC6.1,"EXAMPLE to review: MFA settings are one part of logical access control, never the whole of it"
+MT.1006,iso27001,A.8.5,"EXAMPLE to review: MT.1006 checks that a Conditional Access policy requires MFA for administrators; add MT.1007 (all users) if you run it"
+MT.1006,soc2,CC6.1,"EXAMPLE to review: MFA for administrators is one part of logical access control, never the whole of it"
 CIS.M365.1.1.*,iso27001,A.8.2,"EXAMPLE to review: CIS Microsoft 365 benchmark section 1.1 is about administrative accounts"
 EIDSCA.*,soc2,CC6.1,"EXAMPLE to review: EIDSCA tests read Entra ID authentication and authorisation settings; narrow it to the tests you agree with the assessor"
-MS.AAD.3.*,iso27001,A.8.5,"EXAMPLE to review: section 3 of the CISA SCuBA Entra ID baseline is about strong authentication"
+CISA.MS.AAD.3.*,iso27001,A.8.5,"EXAMPLE to review: section 3 of the CISA SCuBA Entra ID baseline (tests CISA.MS.AAD.3.1 to 3.8) is about strong authentication"

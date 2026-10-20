@@ -189,6 +189,10 @@ def load_incidents(args) -> tuple[list[dict], str]:
 # --------------------------------------------------------------------------- filtering
 
 
+# Short names people type for frameworks the dataset spells out in full.
+FRAMEWORK_ALIASES = {"mcp": "model context protocol", "a2a": "agent2agent"}
+
+
 def _list_values(e: dict, key: str) -> list[str]:
     section, sub = LIST_FIELDS[key]
     return e[section] if sub is None else e[section][sub]
@@ -215,7 +219,9 @@ def filter_incidents(incidents: list[dict], args) -> list[dict]:
         for key in ("vendor", "product", "framework"):
             want = getattr(args, key, None)
             if want:
-                w = want.lower()
+                w = want.lower().strip()
+                if key == "framework":
+                    w = FRAMEWORK_ALIASES.get(w, w)
                 if not any(w in x.lower() for x in _list_values(e, key)) and not (key == "vendor" and w in e["name"].lower()):
                     ok = False
                     break
@@ -451,6 +457,10 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--refresh", action="store_true", help="ignore the cache and fetch again")
     ap.add_argument("--cache-dir", help="cache directory (default: $XDG_CACHE_HOME or ~/.cache)")
     ap.add_argument("--format", choices=["table", "json", "markdown"], default="table")
+    # --format is also accepted after the subcommand (`incidents.py list --format markdown`); SUPPRESS keeps the
+    # global value when the subcommand does not repeat it.
+    fmt = argparse.ArgumentParser(add_help=False)
+    fmt.add_argument("--format", choices=["table", "json", "markdown"], default=argparse.SUPPRESS)
     sub = ap.add_subparsers(dest="command", required=True)
 
     def add_filters(p):
@@ -463,12 +473,12 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--cve", action="store_true", help="only incidents with a CVE")
         p.add_argument("--adversarial", choices=["yes", "no"]); p.add_argument("--query", help="substring over name, summary, sources, affected, tags, cve")
 
-    p = sub.add_parser("list", help="filter incidents"); add_filters(p); p.add_argument("--limit", type=int, default=0); p.set_defaults(fn=cmd_list)
-    p = sub.add_parser("show", help="one incident in full"); p.add_argument("id"); p.set_defaults(fn=cmd_show)
-    p = sub.add_parser("stats", help="counts per field"); add_filters(p)
+    p = sub.add_parser("list", help="filter incidents", parents=[fmt]); add_filters(p); p.add_argument("--limit", type=int, default=0); p.set_defaults(fn=cmd_list)
+    p = sub.add_parser("show", help="one incident in full", parents=[fmt]); p.add_argument("id"); p.set_defaults(fn=cmd_show)
+    p = sub.add_parser("stats", help="counts per field", parents=[fmt]); add_filters(p)
     p.add_argument("--by", default="vector", choices=FIELDS + ["year", "status"] + list(LIST_FIELDS)); p.set_defaults(fn=cmd_stats)
-    p = sub.add_parser("fields", help="field vocabularies"); p.set_defaults(fn=cmd_fields)
-    p = sub.add_parser("precedents", help="rank incidents against a design")
+    p = sub.add_parser("fields", help="field vocabularies", parents=[fmt]); p.set_defaults(fn=cmd_fields)
+    p = sub.add_parser("precedents", help="rank incidents against a design", parents=[fmt])
     p.add_argument("--channel-in", dest="channel_in", action="append"); p.add_argument("--authority", action="append")
     p.add_argument("--vector", action="append"); p.add_argument("--channel-out", dest="channel_out", action="append")
     p.add_argument("--design", help="JSON file with channel_in/authority/vector lists")

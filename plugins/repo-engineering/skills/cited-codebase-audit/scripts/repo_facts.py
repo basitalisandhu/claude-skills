@@ -3,7 +3,7 @@
 
 Sections in the report:
   languages        file count and line count per language (by extension)
-  entry_points     pyproject scripts, package.json bin/main/scripts, Python __main__ guards, Dockerfile
+  entry_points     pyproject scripts and gui-scripts, package.json bin/main/scripts, Python __main__ guards, Dockerfile
                    ENTRYPOINT/CMD, Makefile targets, conventional main files
   tests            test files by naming convention
   ci               CI configuration files (GitHub Actions, GitLab, CircleCI, Azure, Jenkins, Travis)
@@ -56,6 +56,8 @@ CI_PATTERNS = [
 ]
 TEST_RE = re.compile(
     r"(^|/)(tests?|__tests__|spec)/|(^|/)test_[^/]+\.py$|_test\.(py|go)$|\.(test|spec)\.[jt]sx?$|_spec\.rb$")
+MAIN_GUARD_RE = re.compile(r"^if\s+(?:__name__\s*==\s*['\"]__main__['\"]|['\"]__main__['\"]\s*==\s*__name__)\s*:",
+                           re.MULTILINE)
 MAIN_NAMES = {"main.py", "__main__.py", "manage.py", "app.py", "main.go", "index.js", "index.ts", "server.js",
               "server.ts", "main.rs", "cli.py"}
 LICENCE_FAMILIES = [
@@ -70,6 +72,11 @@ LICENCE_FAMILIES = [
     ("ISC", r"\bISC License\b"),
     ("Unlicense", r"This is free and unencumbered software"),
 ]
+
+
+def as_dict(value: object) -> dict:
+    """Manifests written by hand can hold any JSON or TOML type where a table is expected; treat those as empty."""
+    return value if isinstance(value, dict) else {}
 
 
 def walk(root: Path) -> list[Path]:
@@ -136,36 +143,36 @@ def collect(root: Path, top: int) -> dict:
             data = tomllib.loads(pyproject)
         except tomllib.TOMLDecodeError:
             data = {}
-        for table in (data.get("project", {}).get("scripts", {}),
-                      data.get("tool", {}).get("poetry", {}).get("scripts", {})):
-            if isinstance(table, dict):
-                for name, target in sorted(table.items()):
-                    entry_points.append({"kind": "console_script", "name": name, "target": str(target),
-                                         "source": "pyproject.toml"})
+        project = as_dict(data.get("project"))
+        for kind, table in (("console_script", project.get("scripts")), ("gui_script", project.get("gui-scripts")),
+                            ("console_script", as_dict(as_dict(data.get("tool")).get("poetry")).get("scripts"))):
+            for name, target in sorted(as_dict(table).items()):
+                entry_points.append({"kind": kind, "name": name, "target": str(target), "source": "pyproject.toml"})
     pkg = texts.get("package.json")
     if pkg:
         try:
             pj = json.loads(pkg)
         except json.JSONDecodeError:
             pj = {}
+        pj = as_dict(pj)
         bins = pj.get("bin")
         if isinstance(bins, str):
-            bins = {pj.get("name", "bin"): bins}
-        for name, target in sorted((bins or {}).items()):
-            entry_points.append({"kind": "npm_bin", "name": name, "target": target, "source": "package.json"})
+            bins = {str(pj.get("name") or "bin"): bins}
+        for name, target in sorted(as_dict(bins).items()):
+            entry_points.append({"kind": "npm_bin", "name": name, "target": str(target), "source": "package.json"})
         if isinstance(pj.get("main"), str):
             entry_points.append({"kind": "npm_main", "name": "main", "target": pj["main"], "source": "package.json"})
-        for name, cmd in sorted((pj.get("scripts") or {}).items()):
+        for name, cmd in sorted(as_dict(pj.get("scripts")).items()):
             entry_points.append({"kind": "npm_script", "name": name, "target": str(cmd), "source": "package.json"})
     for rel, text in sorted(texts.items()):
-        if rel.endswith(".py") and not TEST_RE.search(rel) and re.search(r"^if __name__ == ['\"]__main__['\"]", text,
-                                                                         re.MULTILINE):
-            line = text[: re.search(r"^if __name__", text, re.MULTILINE).start()].count("\n") + 1
+        guard = MAIN_GUARD_RE.search(text) if rel.endswith(".py") and not TEST_RE.search(rel) else None
+        if guard:
+            line = text[: guard.start()].count("\n") + 1
             entry_points.append({"kind": "python_main_guard", "name": rel, "target": f"{rel}:{line}",
                                  "source": rel})
         name = rel.split("/")[-1]
         if language(rel) == "Dockerfile":
-            for m in re.finditer(r"^(ENTRYPOINT|CMD)\s+(.+)$", text, re.MULTILINE):
+            for m in re.finditer(r"^[ \t]*(ENTRYPOINT|CMD)[ \t]+(.+)$", text, re.MULTILINE | re.IGNORECASE):
                 line = text[: m.start()].count("\n") + 1
                 entry_points.append({"kind": "docker_" + m.group(1).lower(), "name": rel,
                                      "target": m.group(2).strip(), "source": f"{rel}:{line}"})
@@ -280,7 +287,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     rep = collect(root, max(1, args.top))
     if args.out:
-        Path(args.out).write_text(json.dumps(rep, indent=2) + "\n", encoding="utf-8")
+        try:
+            Path(args.out).write_text(json.dumps(rep, indent=2) + "\n", encoding="utf-8")
+        except OSError as exc:
+            print(f"error: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     print(json.dumps(rep, indent=2) if args.json else render(rep))
     return 0
 

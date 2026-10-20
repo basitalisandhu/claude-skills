@@ -54,14 +54,14 @@ def decode(token: str) -> dict:
     try:
         header = json.loads(b64url_decode(parts[0]))
     except (ValueError, json.JSONDecodeError) as exc:
-        raise ValueError(f"header is not base64url JSON: {exc}")
+        raise ValueError(f"header is not base64url JSON: {exc}") from None
     out = {"segments": len(parts), "header": header, "payload": None, "signature_present": bool(parts[-1]), "size": len(token)}
     if len(parts) == 3:
         try:
             payload_bytes = b64url_decode(parts[1])
             out["payload"] = json.loads(payload_bytes)
         except (ValueError, json.JSONDecodeError) as exc:
-            raise ValueError(f"payload is not base64url JSON: {exc}")
+            raise ValueError(f"payload is not base64url JSON: {exc}") from None
         if not isinstance(out["payload"], dict):
             raise ValueError("payload is not a JSON object")
     return out
@@ -69,7 +69,7 @@ def decode(token: str) -> dict:
 
 def fmt_time(ts, now: dt.datetime) -> str:
     try:
-        when = dt.datetime.fromtimestamp(int(ts), tz=dt.timezone.utc)
+        when = dt.datetime.fromtimestamp(int(ts), tz=dt.UTC)
     except (TypeError, ValueError, OverflowError, OSError):
         return f"{ts!r} (not a unix timestamp)"
     delta = when - now
@@ -117,7 +117,7 @@ def analyse(tok: dict, now: dt.datetime) -> list[dict]:
     if p is None:
         return findings
     now_ts = int(now.timestamp())
-    exp, iat, nbf = p.get("exp"), p.get("iat"), p.get("nbf")
+    exp, iat = p.get("exp"), p.get("iat")
     if exp is None:
         add("JWT-002", "high", "No exp claim", "Issue tokens with an expiry; without one a leaked token lives forever.")
     else:
@@ -186,9 +186,9 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     token = sys.stdin.read() if args.token == "-" else args.token
     try:
-        now = dt.datetime.fromisoformat(args.now).astimezone(dt.timezone.utc) if args.now else dt.datetime.now(dt.timezone.utc)
+        now = dt.datetime.fromisoformat(args.now).astimezone(dt.UTC) if args.now else dt.datetime.now(dt.UTC)
         if args.now and dt.datetime.fromisoformat(args.now).tzinfo is None:
-            now = dt.datetime.fromisoformat(args.now).replace(tzinfo=dt.timezone.utc)
+            now = dt.datetime.fromisoformat(args.now).replace(tzinfo=dt.UTC)
     except ValueError:
         print("error: --now must be ISO 8601", file=sys.stderr)
         return 2

@@ -38,13 +38,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _ghexport import (  # noqa: E402
     InputError,
     Redactor,
+    check_rows,
     find_file,
-    flatten_pages,
     hours_between,
     human_hours,
     is_bot,
     iso,
     load_json,
+    load_rows,
     login_of,
     md_cell,
     numbered_files,
@@ -149,12 +150,14 @@ def analyse(folder: Path, hours: float, stale_days: float, reviewer_load: int, n
     prs_path = find_file(folder, "prs")
     if prs_path is None:
         raise InputError(f"{folder}: no prs.json (or <prefix>-prs.json); see SKILL.md for the export command")
-    prs = flatten_pages(load_json(prs_path))
+    prs = load_rows(prs_path)
     if not all(isinstance(p, dict) and "number" in p for p in prs):
         raise InputError(f"{prs_path}: expected a list of pull requests with a 'number' field")
+    check_rows(prs, prs_path, "PR", required=("createdAt",), optional=("updatedAt",))
     meta_path = find_file(folder, "meta")
     meta = load_json(meta_path) if meta_path else {}
-    meta = meta if isinstance(meta, dict) else {}
+    if not isinstance(meta, dict):
+        raise InputError(f"{meta_path}: must be a JSON object with repo and exported_at, see SKILL.md")
     if now_arg:
         now, now_source = parse_time(now_arg), "--now"
         if now is None:
@@ -163,7 +166,7 @@ def analyse(folder: Path, hours: float, stale_days: float, reviewer_load: int, n
         now, now_source = parse_time(meta.get("exported_at")), f"{meta_path.name} exported_at"
     else:
         now, now_source = datetime.now(UTC).replace(microsecond=0), "current time (no meta.json exported_at)"
-    timelines = {n: flatten_pages(load_json(p)) for n, p in numbered_files(folder, "timeline").items()}
+    timelines = {n: load_rows(p) for n, p in numbered_files(folder, "timeline").items()}
 
     open_prs = [p for p in prs if str(p.get("state") or "OPEN").upper() == "OPEN"]
     logins: set[str] = set()

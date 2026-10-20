@@ -448,6 +448,12 @@ def build(pack: Pack, mapping: dict, framework: str) -> dict:
                          "citations": [c for r in mine for c in r["citations"]],
                          "gaps": [f"{r['id']}: {g}" for r in mine for g in r["gaps"]]})
     unread = sorted(set(pack.files) - pack.read)
+    # A misspelt pattern and a missing export both read "not in the pack"; list the patterns so a typo shows.
+    unmatched = []
+    for c in checks:
+        for alt in c.get("any_of") or [c]:
+            if not pack.match(alt["evidence"]):
+                unmatched.append({"check": c["id"], "pattern": alt["evidence"]})
     return {
         "framework": framework,
         "as_of": pack.as_of.strftime("%Y-%m-%d"),
@@ -458,6 +464,7 @@ def build(pack: Pack, mapping: dict, framework: str) -> dict:
         "summary": state_counts(controls),
         "controls": controls,
         "unmapped_files": unread,
+        "unmatched_patterns": unmatched,
         "disclaimer": DISCLAIMER,
     }
 
@@ -476,6 +483,9 @@ def render(report: dict) -> str:
         lines.append(f"| {c['id']} | {cell(c['topic'])} | {c['state']} | {ev} | {gaps} |")
     lines += ["", "## Pack files no check read", ""]
     lines += [f"- {cell(f)}" for f in report["unmapped_files"]] or ["- None."]
+    lines += ["", "## Map patterns that matched no pack file", "",
+              "Either the export was not taken or the pattern is misspelt; both make the check not assessable.", ""]
+    lines += [f"- `{cell(u['pattern'])}` (check {cell(u['check'])})" for u in report["unmatched_patterns"]] or ["- None."]
     lines.append("")
     return "\n".join(lines)
 

@@ -209,7 +209,14 @@ def main(argv: list[str] | None = None) -> int:
         if not p.is_file():
             print(f"error: not a file: {f}", file=sys.stderr)
             return 2
-        all_findings += lint(p, p.read_text(encoding="utf-8", errors="replace"))
+        text = p.read_text(encoding="utf-8", errors="replace")
+        if "\x00" in text:
+            print(f"error: {f} is a binary file, not a Dockerfile", file=sys.stderr)
+            return 2
+        if not any(ins["instruction"] == "FROM" for ins in parse_dockerfile(text)):
+            print(f"error: {f} has no FROM instruction, so it is not a Dockerfile (or it is empty)", file=sys.stderr)
+            return 2
+        all_findings += lint(p, text)
     order = {s: i for i, s in enumerate(SEVERITIES)}
     counts = {s: sum(1 for x in all_findings if x["severity"] == s) for s in SEVERITIES}
     report = {"version": VERSION, "files": args.files, "findings": all_findings, "counts": counts, "fail_on": args.fail_on}

@@ -1,0 +1,4 @@
+requirement,evidence,state,note
+MFA-ML1-01,m365/conditional-access-policies.json,supported,"EXAMPLE to review: a Conditional Access policy requires MFA for all users; confirm it covers every online service in scope"
+RB-ML1-01,aws/regions/us-east-1/backup-plans.json,supported,"EXAMPLE to review: AWS Backup plans exist; check the retention matches business continuity requirements"
+RB-ML1-03,aws/regions/us-east-1/backup-plans.json,supported,"EXAMPLE to review: one region's plans only; other regions and systems need their own evidence"

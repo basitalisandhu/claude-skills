@@ -13,6 +13,9 @@ Rules:
   ADR-SUPERSEDED  status superseded without a link or reference to the ADR that replaces it
   ADR-LINK        a relative link to an ADR file that does not exist
   ADR-BACKLINK    ADR A says it is superseded by B, but B does not mention A (warning)
+  ADR-READ        an ADR file that cannot be read
+  ADR-EMPTY       the folder holds no NNNN-title.md file, so it is probably the wrong folder (warning)
+A run of missing numbers is one ADR-GAP finding ("no ADRs numbered 0003 to 0009").
 Errors make the exit code 1; warnings do not unless --strict. Exit 2 when the folder does not exist.
 """
 from __future__ import annotations
@@ -23,7 +26,7 @@ import re
 import sys
 from pathlib import Path
 
-NAME_RE = re.compile(r"^(\d{3,5})-[\w.-]+\.md$")
+NAME_RE = re.compile(r"^(\d{3,5})-[\w.-]+\.md$", re.IGNORECASE)
 SKIP_NAMES = {"readme.md", "index.md", "template.md", "adr-template.md", "0000-template.md", "_template.md"}
 STATUSES = {"proposed", "accepted", "rejected", "deprecated", "superseded", "draft"}
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)#\s]+)(?:#[^)]*)?\)")
@@ -68,18 +71,35 @@ def lint(adr_dir: Path) -> dict:
         if not m:
             add("ADR-NAME", "warning", p, 0, "file name does not follow NNNN-title.md")
             continue
+        try:
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            add("ADR-READ", "error", p, 0, f"cannot read the file: {exc.strerror or exc}")
+            continue
         adrs.setdefault(int(m.group(1)), []).append(p)
-        texts[p] = p.read_text(encoding="utf-8", errors="replace")
+        texts[p] = text
     numbers = sorted(adrs)
     for n, paths in adrs.items():
         if len(paths) > 1:
             for p in paths[1:]:
                 add("ADR-DUP", "error", p, 0, f"number {n} is also used by {paths[0].name}")
     if numbers:
-        missing = sorted(set(range(numbers[0], numbers[-1] + 1)) - set(numbers))
-        for n in missing:
+        present = set(numbers)
+        n = numbers[0]
+        while n < numbers[-1]:
+            if n in present:
+                n += 1
+                continue
+            end = n
+            while end + 1 not in present:
+                end += 1
+            what = f"no ADR numbered {n:04d}" if end == n else f"no ADRs numbered {n:04d} to {end:04d}"
             findings.append({"rule": "ADR-GAP", "level": "error", "file": "", "line": 0,
-                             "detail": f"no ADR numbered {n:04d} between {numbers[0]:04d} and {numbers[-1]:04d}"})
+                             "detail": f"{what} between {numbers[0]:04d} and {numbers[-1]:04d}"})
+            n = end + 1
+    elif not any(f["rule"] == "ADR-READ" for f in findings):
+        findings.append({"rule": "ADR-EMPTY", "level": "warning", "file": "", "line": 0,
+                         "detail": "no NNNN-title.md files here; is this the ADR folder?"})
     by_name = {p.name: p for p in texts}
     superseded_by: dict[Path, list[Path]] = {}
     statuses: dict[str, str | None] = {}
@@ -120,7 +140,8 @@ def lint(adr_dir: Path) -> dict:
             if old.name not in body and not re.search(rf"\b(?:ADR[- ]?)?0*{num}\b", body):
                 add("ADR-BACKLINK", "warning", new, 0, f"{old.name} says it is superseded by this ADR, which does "
                                                        f"not mention it")
-    order = {"ADR-GAP": 0, "ADR-DUP": 1, "ADR-STATUS": 2, "ADR-SUPERSEDED": 3, "ADR-LINK": 4, "ADR-TITLE": 5,
+    order = {"ADR-READ": -1, "ADR-EMPTY": 8,
+             "ADR-GAP": 0, "ADR-DUP": 1, "ADR-STATUS": 2, "ADR-SUPERSEDED": 3, "ADR-LINK": 4, "ADR-TITLE": 5,
              "ADR-BACKLINK": 6, "ADR-NAME": 7}
     findings.sort(key=lambda f: (order[f["rule"]], f["file"], f["line"], f["detail"]))
     return {"adr_dir": str(adr_dir), "adrs": len(texts), "numbers": [f"{n:04d}" for n in numbers],

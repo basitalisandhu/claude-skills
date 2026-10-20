@@ -216,7 +216,7 @@ def parse_crontab(text: str, system: bool | None, now: dt.datetime, next_count: 
                 job["command"] = line.split(None, 5)[5]
             job["schedule"] = " ".join(fields_raw)
         try:
-            fields = [parse_field(f, name, lo, hi, names) for f, (name, lo, hi, names) in zip(fields_raw, FIELD_SPECS)]
+            fields = [parse_field(f, name, lo, hi, names) for f, (name, lo, hi, names) in zip(fields_raw, FIELD_SPECS, strict=False)]
         except CronError as exc:
             add("CRON-001", "error", no, f"Invalid schedule: {exc}", "Fix the field; see `man 5 crontab`.")
             job["valid"] = False
@@ -265,6 +265,19 @@ def parse_crontab(text: str, system: bool | None, now: dt.datetime, next_count: 
             "counts": {s: sum(1 for f in findings if f["severity"] == s) for s in ("error", "warn", "info")}}
 
 
+def count_arg(minimum: int):
+    """argparse type for a whole number of at least `minimum`; a bad value exits 2 with a usage error."""
+    def parse(text: str) -> int:
+        try:
+            value = int(text)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected a whole number, got {text!r}") from None
+        if value < minimum:
+            raise argparse.ArgumentTypeError(f"must be {minimum} or more, got {value}")
+        return value
+    return parse
+
+
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdin, sys.stdout):  # Windows pipes default to a legacy code page; read and write UTF-8
         if hasattr(stream, "reconfigure"):
@@ -274,7 +287,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--system", action="store_true", help="lines have a user field after the schedule (/etc/crontab, /etc/cron.d)")
     ap.add_argument("--now", help="ISO 8601 time used for the next-run computation (default: now, local time)")
-    ap.add_argument("--next", type=int, default=3, help="how many next runs to compute per job")
+    ap.add_argument("--next", type=count_arg(0), default=3, help="how many next runs to compute per job")
     args = ap.parse_args(argv)
     if args.file:
         p = Path(args.file)
@@ -284,6 +297,9 @@ def main(argv: list[str] | None = None) -> int:
         text = p.read_text(encoding="utf-8", errors="replace")
     else:
         text = sys.stdin.read()
+    if "\x00" in text:
+        print(f"error: {args.file or 'standard input'} is a binary file, not a crontab", file=sys.stderr)
+        return 2
     try:
         now = dt.datetime.fromisoformat(args.now) if args.now else dt.datetime.now()
     except ValueError:

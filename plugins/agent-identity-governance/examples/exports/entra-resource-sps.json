@@ -1,0 +1,2 @@
+{"value": [{"id": "20000000-0000-0000-0000-0000000000ff", "displayName": "Microsoft Graph", "appId": "00000003-0000-0000-c000-000000000000",
+  "appRoles": [{"id": "b633e1c5-b582-4048-a93e-9f11b44c7e96", "value": "Mail.Send"}, {"id": "df021288-bdef-4463-88db-98f22de89214", "value": "User.Read.All"}]}]}

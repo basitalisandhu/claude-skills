@@ -18,11 +18,11 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 138
+## Skills that point at a skill in another plugin: 144
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
-### agent-identity-governance (36)
+### agent-identity-governance (39)
 
 - `agent-identity-governance/agent-action-timeline -> agent-security/agent-config-audit`
 - `agent-identity-governance/agent-action-timeline -> aws-security/aws-account-audit`
@@ -44,9 +44,11 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `agent-identity-governance/credential-expiry-radar -> aws-security/aws-account-audit`
 - `agent-identity-governance/credential-expiry-radar -> aws-security/iam-least-privilege-review`
 - `agent-identity-governance/credential-expiry-radar -> compliance-evidence/evidence-pack-builder`
+- `agent-identity-governance/credential-expiry-radar -> m365-governance/access-review-pack`
 - `agent-identity-governance/credential-expiry-radar -> m365-governance/graph-permission-preflight`
 - `agent-identity-governance/entra-agent-id-review -> agent-security/agent-config-audit`
 - `agent-identity-governance/entra-agent-id-review -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/entra-agent-id-review -> m365-governance/entra-posture-review`
 - `agent-identity-governance/entra-agent-id-review -> m365-governance/graph-permission-preflight`
 - `agent-identity-governance/entra-agent-id-review -> m365-governance/privileged-access-review`
 - `agent-identity-governance/leaked-credential-response -> agent-security/agent-config-audit`
@@ -58,6 +60,7 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `agent-identity-governance/nhi-inventory -> agent-security/agent-config-audit`
 - `agent-identity-governance/nhi-inventory -> aws-security/aws-account-audit`
 - `agent-identity-governance/nhi-inventory -> aws-security/iam-least-privilege-review`
+- `agent-identity-governance/nhi-inventory -> m365-governance/access-review-pack`
 - `agent-identity-governance/nhi-inventory -> m365-governance/graph-permission-preflight`
 - `agent-identity-governance/nhi-inventory -> m365-governance/privileged-access-review`
 
@@ -94,10 +97,12 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `code-quality/test-gap-finder -> debugging/flaky-test-hunter`
 - `code-quality/test-gap-finder -> repo-engineering/untested-entry-points`
 
-### compliance-evidence (6)
+### compliance-evidence (8)
 
 - `compliance-evidence/aws-identity-and-logging-evidence -> aws-security/aws-account-audit`
+- `compliance-evidence/control-map-from-exports -> m365-governance/access-review-pack`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/conditional-access-gap-analysis`
+- `compliance-evidence/essential-eight-evidence-map -> m365-governance/entra-posture-review`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/intune-baseline-check`
 - `compliance-evidence/essential-eight-evidence-map -> m365-governance/privileged-access-review`
 - `compliance-evidence/maester-control-map -> m365-governance/conditional-access-gap-analysis`
@@ -161,11 +166,12 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `github-manager/incident-postmortem-timeline -> docs/postmortem-writer`
 - `github-manager/iteration-report -> ways-of-working/weekly-status-rollup`
 
-### repo-engineering (9)
+### repo-engineering (10)
 
 - `repo-engineering/adr-miner -> docs/adr-writer`
 - `repo-engineering/adr-miner -> ways-of-working/decision-log`
 - `repo-engineering/agent-context-writer -> agent-security/agent-config-audit`
+- `repo-engineering/docs-truth-check -> docs/readme-author`
 - `repo-engineering/plan-grill -> ways-of-working/rfc-lifecycle`
 - `repo-engineering/readme-who-what-why -> docs/readme-author`
 - `repo-engineering/release-notes-verifier -> devops/release-notes`

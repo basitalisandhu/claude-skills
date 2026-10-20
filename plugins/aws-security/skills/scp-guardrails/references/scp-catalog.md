@@ -18,7 +18,7 @@ Protected roles (`protected_roles`) become an `ArnNotLike` condition on `aws:Pri
 
 ## deny_disable_security_services
 
-- **Statements:** `ProtectCloudTrail` (DeleteTrail, PutEventSelectors, StopLogging, UpdateTrail), `ProtectGuardDuty` (DeleteDetector, DeleteMembers, Disassociate*, StopMonitoringMembers, UpdateDetector), `ProtectSecurityHub` (BatchDisableStandards, DeleteMembers, DisableSecurityHub, Disassociate*), `ProtectConfig` (DeleteConfigurationRecorder, DeleteDeliveryChannel, DeleteRetentionConfiguration, StopConfigurationRecorder). Each carries the protected-role exemption.
+- **Statements:** `ProtectCloudTrail` (DeleteTrail, PutEventSelectors, StopLogging, UpdateTrail), `ProtectGuardDuty` (DeleteDetector, DeleteMembers, Disassociate*, StopMonitoringMembers, UpdateDetector), `ProtectSecurityHub` (BatchDisableStandards, DeleteMembers, DisableSecurityHub, DisableSecurityHubV2 for the newer Security Hub, Disassociate*), `ProtectConfig` (DeleteConfigurationRecorder, DeleteDeliveryChannel, DeleteRetentionConfiguration, StopConfigurationRecorder). Each carries the protected-role exemption.
 - **Protects:** detection and audit logging from being switched off after a compromise.
 - **Side effects:** `guardduty:UpdateDetector` and `cloudtrail:UpdateTrail` are also used for legitimate changes (finding frequency, protection plans, adding a bucket), so those changes must come from a protected role. Infrastructure as code that manages these resources needs its deployment role in `protected_roles`.
 
@@ -48,6 +48,7 @@ Protected roles (`protected_roles`) become an `ArnNotLike` condition on `aws:Pri
 
 ## Size and attachment limits
 
-- An SCP document can be at most 5120 characters. The builder measures the compact JSON form and packs statements in order into as few documents as fit.
-- A root, OU or account can have at most 5 SCPs attached, including FullAWSAccess.
+- An SCP document can be at most 10,240 characters (a resource control policy is 5120). The console strips whitespace outside quotes; the AWS CLI and SDKs store the policy exactly as given, so whitespace counts. The builder measures and writes the compact JSON form and packs statements in order into as few documents as fit.
+- A root, OU or account can have at most 10 SCPs attached directly, including FullAWSAccess.
+- Source for both: the AWS Organizations quotas page (orgs_reference_limits.html), checked 2026-10-18.
 - Inheritance: an account is subject to every SCP attached to the root, to each OU above it and to itself.

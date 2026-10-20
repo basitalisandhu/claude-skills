@@ -96,7 +96,25 @@ def entra_steps(ident: dict) -> list[dict]:
     sp = refs.get("service_principal_id") or "<service principal object id>"
     creds, asgs = ident.get("credentials") or [], ident.get("assignments") or []
     graph = "https://graph.microsoft.com"
-    steps = [
+    if ident.get("type") == "entra-agent-identity":
+        return agent_identity_steps(ident, sp, asgs, graph)
+    steps = []
+    if ident.get("type") == "entra-agent-blueprint":
+        agents = refs.get("agent_identities") or []
+        steps.append(
+            step(
+                PHASES[0],
+                f"Decide the scope: this blueprint's credentials serve {len(agents)} agent identit"
+                f"{'y' if len(agents) == 1 else 'ies'}",
+                "Agent identities authenticate with the blueprint's credentials and inherit the permissions granted "
+                "to its principal, so the steps below stop every one of them: "
+                + (", ".join(f"`{x}`" for x in agents) or "(none in the inventory; check the tenant)")
+                + ". To stop one agent only, run this runbook for that agent identity instead.",
+                f'az rest --method GET --url "{graph}/v1.0/servicePrincipals/microsoft.graph.agentIdentity?'
+                f"$filter=agentIdentityBlueprintId eq '{app_id}'\"   (the agent identities that depend on it)",
+            )
+        )
+    steps += [
         step(
             PHASES[0],
             "Disable the service principal so no new tokens are issued",
@@ -167,6 +185,53 @@ def entra_steps(ident: dict) -> list[dict]:
             "Check Azure role assignments, which the inventory does not hold",
             f"az role assignment delete --assignee {app_id} --role <role> --scope <scope>",
             f"az role assignment list --assignee {app_id} --all --output table",
+        )
+    )
+    return steps
+
+
+def agent_identity_steps(ident: dict, sp: str, asgs: list[dict], graph: str) -> list[dict]:
+    """Entra Agent ID agent identity: no credentials of its own; it signs in through its blueprint."""
+    blueprint = (ident.get("refs") or {}).get("blueprint_app_id") or "<blueprint appId>"
+    steps = [
+        step(
+            PHASES[0],
+            "Disable the agent identity so no new tokens are issued for it",
+            f"az rest --method PATCH --url {graph}/v1.0/servicePrincipals/{sp}/microsoft.graph.agentIdentity "
+            "--headers Content-Type=application/json --body '{\"accountEnabled\": false}'   "
+            "(permission AgentIdentity.EnableDisable.All or the Agent ID Administrator role)",
+            f"az rest --method GET --url {graph}/v1.0/servicePrincipals/{sp}/microsoft.graph.agentIdentity "
+            "--query accountEnabled   (expect false)",
+        ),
+        step(
+            PHASES[1],
+            "Let issued access tokens run out and remove delegated grants",
+            "Access tokens already issued stay valid until they expire; record the disable time. Remove each "
+            f"delegated grant: az rest --method DELETE --url {graph}/v1.0/oauth2PermissionGrants/<grant id>",
+            f"az rest --method GET --url \"{graph}/v1.0/oauth2PermissionGrants?$filter=clientId eq '{sp}'\""
+            "   (expect an empty list)",
+            [asg_ref(a) for a in asgs if a.get("kind") == "delegated-permission"],
+        ),
+        step(
+            PHASES[2],
+            f"Leave the blueprint's credentials alone unless every agent of blueprint {blueprint} must stop",
+            "This agent identity holds no secret or certificate: it authenticates with the credentials of its "
+            "blueprint, which other agent identities share. Rotate them only after a leak, and plan for every agent "
+            "of the blueprint (run this runbook for entra:" + blueprint + ").",
+            f'az rest --method GET --url "{graph}/v1.0/servicePrincipals/microsoft.graph.agentIdentity?'
+            f"$filter=agentIdentityBlueprintId eq '{blueprint}'\"   (the agents sharing them)",
+        ),
+    ]
+    app_perms = [asg_ref(a) for a in asgs if a.get("kind") == "application-permission"]
+    steps.append(
+        step(
+            PHASES[3],
+            "Remove permissions granted to this agent identity, and note the ones it inherits",
+            f"az rest --method DELETE --url {graph}/v1.0/servicePrincipals/{sp}/appRoleAssignments/<assignment id>   "
+            "(one call per assignment). Permissions inherited from the blueprint principal stay until they are "
+            "removed there, for every agent of the blueprint; disabling this identity already stops it using them.",
+            f"az rest --method GET --url {graph}/v1.0/servicePrincipals/{sp}/appRoleAssignments",
+            app_perms,
         )
     )
     return steps
@@ -526,7 +591,11 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     output = json.dumps(doc, indent=2) + "\n" if args.json else text
     if args.out:
-        Path(args.out).write_text(output, encoding="utf-8")
+        try:
+            Path(args.out).write_text(output, encoding="utf-8")
+        except OSError as exc:
+            print(f"kill_switch_runbook.py: cannot write {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     else:
         sys.stdout.write(output)
     return 1 if doc["coverage"]["missing"] else 0

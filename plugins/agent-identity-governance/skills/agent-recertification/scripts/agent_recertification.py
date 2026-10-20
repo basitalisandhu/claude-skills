@@ -12,7 +12,8 @@ userPrincipalName or mail and accountEnabled. The previous inventory is last qua
 
 Rules (exit 1 when any identity has one):
   never-attested      no attestation row for the identity
-  attestation-stale   the latest attestation is older than --max-age days (90)
+  attestation-stale   the latest attestation is older than --max-age days (90), has no date, or is dated after
+                      --as-of (a typo such as 2062 would otherwise hide a missed review)
   owner-left          an owner is missing from the users export or the account is disabled (only with --users)
   no-owner            the inventory names no owner
   removal-not-done    the latest decision was remove (or retire) and the identity is still in the inventory
@@ -96,7 +97,11 @@ def load_inventory(path: Path) -> dict[str, dict]:
         if rows and "id" not in rows[0]:
             raise InputError(f"{path.name}: needs an id column")
         out = {}
-        for r in rows:
+        for n, r in enumerate(rows, start=2):
+            if not r.get("id"):
+                raise InputError(f"{path.name}: line {n}: the id is empty")
+            if r["id"] in out:
+                raise InputError(f"{path.name}: line {n}: identity {r['id']!r} is listed twice")
             perms = [p.strip() for p in r.get("permissions", "").split(";") if p.strip()]
             out[r["id"]] = {
                 "id": r["id"],
@@ -153,7 +158,14 @@ def load_users(path: Path | None) -> dict[str, bool] | None:
         rows = data.get("value") if isinstance(data, dict) else data
         if not isinstance(rows, list):
             raise InputError(f"{path.name}: expected a Graph users list")
-        rows = [{str(k).lower(): v for k, v in r.items()} for r in rows if isinstance(r, dict)]
+        flat: list = []
+        for r in rows:  # a list of pages ({"value": [...]}) as saved by --all or a paging loop
+            flat += r["value"] if isinstance(r, dict) and isinstance(r.get("value"), list) else [r]
+        rows = [{str(k).lower(): v for k, v in r.items()} for r in flat if isinstance(r, dict)]
+        if flat and not any(r.get("userprincipalname") or r.get("mail") for r in rows):
+            raise InputError(
+                f"{path.name}: no userPrincipalName or mail in the users export; every owner would count as left"
+            )
     users: dict[str, bool] = {}
     for r in rows:
         enabled = str(r.get("accountenabled", "true")).strip().lower() not in {"false", "0", "no"}
@@ -198,6 +210,8 @@ def build(args) -> dict:
         if parsed is None:
             raise InputError(f"--as-of {args.as_of!r} is not YYYY-MM-DD")
         as_of = parsed
+    if args.max_age < 1:
+        raise InputError("--max-age must be at least 1")
     inventory = load_inventory(Path(args.inventory))
     attest = load_attestations(Path(args.attestations) if args.attestations else None)
     users = load_users(Path(args.users) if args.users else None)
@@ -224,7 +238,7 @@ def build(args) -> dict:
             flags.append("never-attested")
         else:
             age = (as_of - att["_day"]).days if att["_day"] else None
-            if age is None or age > args.max_age:
+            if age is None or age > args.max_age or age < 0:
                 flags.append("attestation-stale")
             if att.get("decision", "").lower() in {"remove", "retire", "revoke"}:
                 flags.append("removal-not-done")
@@ -363,10 +377,22 @@ def main(argv: list[str] | None = None) -> int:
     sheets = {owner: sheet_markdown(doc, owner) for owner in doc["summary"]["sheets"]}
     if args.out:
         out = Path(args.out)
-        out.mkdir(parents=True, exist_ok=True)
-        for owner, text in sheets.items():
-            (out / f"review-{slug(owner)}.md").write_text(text, encoding="utf-8")
-        (out / "tracking.csv").write_text(tracking_csv(doc), encoding="utf-8")
+        # two owners can slug to the same file name (sam@example.com, sam.example.com): number the later ones
+        names: dict[str, str] = {}
+        for owner in sheets:
+            base = f"review-{slug(owner)}"
+            name, n = f"{base}.md", 2
+            while name in names.values():
+                name, n = f"{base}-{n}.md", n + 1
+            names[owner] = name
+        try:
+            out.mkdir(parents=True, exist_ok=True)
+            for owner, text in sheets.items():
+                (out / names[owner]).write_text(text, encoding="utf-8")
+            (out / "tracking.csv").write_text(tracking_csv(doc), encoding="utf-8")
+        except OSError as exc:
+            print(f"agent_recertification.py: cannot write to {args.out}: {exc.strerror or exc}", file=sys.stderr)
+            return 2
     if args.json:
         sys.stdout.write(json.dumps(doc, indent=2) + "\n")
     elif args.out:

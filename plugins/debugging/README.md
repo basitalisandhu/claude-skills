@@ -25,3 +25,21 @@ Skills then appear as `/debugging:<skill>`. Scripts need Python 3.11 or newer on
 | `memory-leak-checklist` | memory grows until restart, OOM kills | confirm, measure, retaining path, suspect, fix, verify |
 
 Tests for every script live in the repository's `tests/` directory; run `python3 -m pytest -q` at the repository root.
+
+## Sample output
+
+`flaky-test-hunter` on three JUnit XML reports from the same pytest suite, where the checkout test timed out in two runs and the migration test failed in all three:
+
+```text
+$ python3 "${CLAUDE_PLUGIN_ROOT}/skills/flaky-test-hunter/scripts/flaky_test_hunter.py" ci-runs/
+flaky-test-hunter 0.1.0: 3 runs, 3 distinct tests, 1 flaky, 1 always failing
+  run ci-runs/run-1.xml: 3 tests, 2 failed, 0 skipped
+  run ci-runs/run-2.xml: 3 tests, 1 failed, 0 skipped
+  run ci-runs/run-3.xml: 3 tests, 2 failed, 0 skipped
+flaky (passed and failed across runs):
+  tests.test_api::test_checkout  pass=1 fail=2 rate=0.667 reruns=0 time=2.1-5.02s
+      TimeoutError: payment stub did not answer in 5s
+always failing (not flaky, broken):
+  tests.test_db::test_migrate  fail=3  AssertionError: expected 12 tables, found 11
+exit 0
+```

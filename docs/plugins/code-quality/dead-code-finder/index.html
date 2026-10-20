@@ -37,7 +37,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.3.0"
+ "version": "0.3.1"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / dead-code-finder</p>
 <h1>Dead code finder</h1>
 <p class="lede">Shrink a codebase safely: a bundled script lists probably-unused functions, classes, unused methods and exports in a Python or JavaScript/TypeScript tree, each candidate is confirmed by searching for dynamic use, and the skill proposes a safe order to remove them. Use when asked to find dead or unused code, &quot;what can be deleted safely&quot;, or to prepare a cleanup before a refactor. Not for unused imports or variables inside a function (a linter does that) and not for unused dependencies in package manifests.</p>
-<p class="meta">Skill <code>dead-code-finder</code> in plugin <a href="../index.html">code-quality</a> 0.3.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/dead-code-finder/SKILL.md">plugins/code-quality/skills/dead-code-finder/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/dead-code-finder/SKILL.md">plugins/code-quality/skills/dead-code-finder/SKILL.md</a>.</p>
+<p class="meta">Skill <code>dead-code-finder</code> in plugin <a href="../index.html">code-quality</a> 0.3.1, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/dead-code-finder/SKILL.md">plugins/code-quality/skills/dead-code-finder/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/dead-code-finder/SKILL.md">plugins/code-quality/skills/dead-code-finder/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -58,7 +58,7 @@ cd claude-skills
 python3 install.py --user --skill code-quality/dead-code-finder</code></pre>
 
 <h2 id="what-it-does-not-do">What it does not do</h2>
-<ul><li>Name-based: it does not build a call graph. Two unrelated symbols with the same name mask each other; a name used only through reflection is reported as unused.</li><li>JavaScript detection covers <code>export</code> statements; CommonJS <code>module.exports</code> objects are not inventoried.</li><li>Framework entry points are skipped by decorator name; a framework that uses other decorators needs step 2 to catch its hooks.</li></ul>
+<ul><li>Name-based: it does not build a call graph. Two unrelated symbols with the same name mask each other; a name used only through reflection is reported as unused.</li><li>JavaScript detection covers <code>export</code> statements and CommonJS <code>module.exports = { ... }</code>, <code>module.exports.name =</code> and <code>exports.name =</code>; computed keys and spread (<code>...other</code>) are skipped.</li><li>Framework entry points are skipped by decorator name; a framework that uses other decorators needs step 2 to catch its hooks.</li></ul>
 <h2 id="skill-md">SKILL.md</h2>
 <p>Unused code costs reading time on every change and hides the code that matters. The bundled script lists definitions whose name appears nowhere else in the tree; this skill turns that list into confirmed deletions by checking the ways a name-based scan can be wrong.</p>
 <h3 id="when-to-use-it">When to use it</h3>

@@ -1,6 +1,6 @@
 ---
 name: log-triage
-description: "Reduce a large log file to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to investigate. Use when handed a log dump, a failing CI log or \"the logs are full of errors\" and asked what is going on. Not for log shipping or alerting setup, or for binary or structured-only formats without a text line per event."
+description: "Reduce a large log file or production log dump to its distinct message templates with counts, levels, first and last occurrence and attached stack traces using a bundled clustering script, then rank what to look at first. Use when handed a log dump or a failing CI log with \"the logs are full of errors\" or \"cluster the messages and tell me what to look at\". Not for log shipping or alerting setup, a single stack trace (use stack-trace-explainer), or binary or structured-only formats without a text line per event."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads plain text logs (any format with one event per line); JSON lines work but are clustered as text.
 metadata:

@@ -1,6 +1,6 @@
 ---
 name: issue-triage-digest
-description: "Clear an open-issue backlog with a triage digest: a bundled script reads a saved gh issue list export and flags unlabelled issues, issues nobody but the author has answered for N days, probable duplicates by title similarity, stale issues and issues with many thumbs-up, and suggests a label per issue from a keyword map you keep in a YAML file, as Markdown and JSON. Use when asked \"which issues need triage?\" or before a triage meeting. Not for pull requests (pr-queue-digest) and not for ranking who files or answers issues."
+description: "Prepare open-issue triage from a saved gh issue list export: flag unlabelled issues, issues nobody but the author has answered for N days, probable duplicates by title similarity, stale issues and issues with many thumbs-up, and suggest a label per issue from a keyword map kept in a YAML file. Use when asked \"which issues need triage?\", \"what has nobody answered?\" or before a triage meeting. Not for pull requests (pr-queue-digest) and not for ranking who files or answers issues."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs the gh CLI, logged in with read access to the repository.
 metadata:
@@ -101,6 +101,10 @@ Add `body` to the `--json` fields to let the keyword map match issue bodies as w
 | `--redact` | replace logins mentioned in titles with stable `user-xxxxxx` tokens |
 | `--markdown`, `--json` | output format (text by default) |
 | `--out DIR` | write `issue-triage.md` and `issue-triage.json` instead of printing |
+
+Exit codes: 0 nothing flagged, 1 at least one issue flagged, 2 bad input or usage (missing folder, bad keyword map, bad `--now`). Bad input includes an empty file, a file that is not JSON, an object where `gh` writes a list, a `number` that is not a whole number and a time field that is not an ISO time; the message names the file and row.
+
+Try it first on the synthetic fixture in a clone of the repository: `python3 scripts/cli.py issue-triage tests/fixtures/issue_triage --keywords tests/fixtures/issue_triage/fixture-labels-keywords.json` (exit 1, four planted issues flagged).
 
 ## Output format
 

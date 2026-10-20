@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.4.0"
+ "version": "0.4.2"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / iam-least-privilege-review</p>
 <h1>IAM least-privilege review</h1>
 <p class="lede">Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked &quot;is this least privilege?&quot;, before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies.</p>
-<p class="meta">Skill <code>iam-least-privilege-review</code> in plugin <a href="../index.html">aws-security</a> 0.4.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a>.</p>
+<p class="meta">Skill <code>iam-least-privilege-review</code> in plugin <a href="../index.html">aws-security</a> 0.4.2, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/iam-least-privilege-review/SKILL.md">plugins/aws-security/skills/iam-least-privilege-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -77,7 +77,7 @@ aws iam get-account-authorization-details --output json &gt; auth-details.json  
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/iam-least-privilege-review/scripts/iam_review.py&quot; auth-details.json --json --fail-on critical</code></pre>
 <p>Options: <code>--include-aws-managed</code> (AWS managed policies in authorization details are skipped by default), <code>--no-suggestions</code>, <code>--fail-on</code> (default <code>high</code>), <code>--json</code>. <code>--help</code> lists every check and the escalation paths.</p>
 <ol start="3"><li><strong>Confirm each critical and high finding</strong> by reading the statement. Conditions are not evaluated: a statement with a restrictive <code>Condition</code> may still be reported, and the evidence says so. Check permissions boundaries and SCPs that apply to the principal, which can block a path the policy allows.</li></ol>
-<ol start="4"><li><strong>Tighten.</strong> Start from the <code>suggested_policy</code>: read actions stay on <code>&quot;*&quot;</code>, other actions are grouped by service with <code>&lt;placeholder&gt;</code> ARNs, <code>iam:PassRole</code> gets an <code>iam:PassedToService</code> condition, and service wildcards become <code>&lt;list-the-...-actions-in-use&gt;</code>. Fill the placeholders from what the workload does: IAM Access Analyzer policy generation from CloudTrail, or last-accessed data:</li></ol>
+<ol start="4"><li><strong>Tighten.</strong> Start from the <code>suggested_policy</code>: sensitive data-read actions such as <code>secretsmanager:GetSecretValue</code>, <code>ssm:GetParameter</code>, <code>kms:Decrypt</code>, and <code>s3:GetObject</code> receive resource-scoped ARN suggestions where supported. Other actions are grouped by service with <code>&lt;placeholder&gt;</code> ARNs, <code>iam:PassRole</code> gets an <code>iam:PassedToService</code> condition, and service wildcards become <code>&lt;list-the-...-actions-in-use&gt;</code>. Fill the placeholders from what the workload does: IAM Access Analyzer policy generation from CloudTrail, or last-accessed data:</li></ol>
 <pre><code class="language-bash">aws iam generate-service-last-accessed-details --arn &lt;role-arn&gt; --output json
 aws iam get-service-last-accessed-details --job-id &lt;job-id&gt; --output json</code></pre>
 <p>Re-run the script on the tightened policy until no critical or high finding remains, or each remaining one has a written reason.</p>

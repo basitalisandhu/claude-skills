@@ -41,6 +41,18 @@ SEVERITIES = ["critical", "high", "medium", "low", "info"]
 RANK = {s: i for i, s in enumerate(SEVERITIES)}
 READ_PREFIXES = ("get", "list", "describe", "head", "view", "search", "query", "scan", "select", "lookup", "batchget")
 
+# Data-reading actions that should be scoped to specific resources.
+SCOPED_READ_ACTIONS = {
+    "secretsmanager:getsecretvalue",
+    "secretsmanager:batchgetsecretvalue",
+    "ssm:getparameter",
+    "ssm:getparameters",
+    "ssm:getparametersbypath",
+    "kms:decrypt",
+    "s3:getobject",
+    "s3:getobjectversion",
+}
+
 # Privilege-escalation paths in IAM, from published research (Rhino Security Labs, "AWS IAM Privilege Escalation
 # Methods", 2018, and later public write-ups). Each entry is a set of actions that together let a principal gain
 # permissions it was not granted.
@@ -246,6 +258,7 @@ def scoped_resource(service: str) -> str:
                  "sqs": "arn:aws:sqs:<region>:<account-id>:<queue-name>", "sns": "arn:aws:sns:<region>:<account-id>:<topic-name>",
                  "kms": "arn:aws:kms:<region>:<account-id>:key/<key-id>",
                  "secretsmanager": "arn:aws:secretsmanager:<region>:<account-id>:secret:<secret-name>-*",
+                 "ssm": "arn:aws:ssm:<region>:<account-id>:parameter/<parameter-name>",
                  "ec2": "arn:aws:ec2:<region>:<account-id>:instance/*"}
     return templates.get(service, f"arn:aws:{service}:<region>:<account-id>:<resource>")
 
@@ -263,7 +276,7 @@ def suggest(doc: dict) -> dict:
         if "*" not in resources:
             out.append(st)
             continue
-        reads = sorted(a for a in actions if a != "*" and is_read(a))
+        reads = sorted(a for a in actions if a != "*" and is_read(a) and a.lower() not in SCOPED_READ_ACTIONS)
         writes = [a for a in actions if a not in reads]
         if reads:
             out.append({"Sid": f"{sid}Read", "Effect": "Allow", "Action": reads, "Resource": "*",

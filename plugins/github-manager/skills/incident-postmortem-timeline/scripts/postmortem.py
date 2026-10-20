@@ -42,16 +42,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _ghexport import (  # noqa: E402
     InputError,
     Redactor,
+    check_rows,
     find_file,
-    flatten_pages,
     human_delta,
     is_bot,
     iso,
     load_json,
+    load_rows,
     login_of,
     md_cell,
     numbered_files,
     parse_time,
+    row_number,
     short,
 )
 
@@ -70,7 +72,9 @@ def load_issue(folder: Path, number: int) -> tuple[dict, Path]:
     issue = load_json(path)
     if not isinstance(issue, dict) or "number" not in issue:
         raise InputError(f"{path}: expected one issue object from gh issue view --json")
-    if int(issue["number"]) != number:
+    if row_number(issue) is None:
+        raise InputError(f"{path}: number {issue.get('number')!r} is not a whole number")
+    if row_number(issue) != number:
         raise InputError(f"{path}: holds issue #{issue['number']}, not #{number}")
     return issue, path
 
@@ -117,16 +121,18 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
         raise InputError(f"bad pattern: {exc}") from exc
     issue, issue_path = load_issue(folder, number)
     tl_path = numbered_files(folder, "timeline").get(number) or find_file(folder, "timeline")
-    events = flatten_pages(load_json(tl_path)) if tl_path else []
+    events = load_rows(tl_path) if tl_path else []
     prs_path = find_file(folder, "prs")
     pr_files = numbered_files(folder, "pr")
-    prs = {int(p["number"]): p for p in (flatten_pages(load_json(prs_path)) if prs_path else [])
-           if isinstance(p, dict) and "number" in p}
+    pr_rows = [p for p in (load_rows(prs_path) if prs_path else []) if isinstance(p, dict) and "number" in p]
+    check_rows(pr_rows, prs_path, "PR", required=(), optional=("createdAt", "mergedAt", "closedAt"))
+    prs = {row_number(p): p for p in pr_rows}
     for path in pr_files.values():
         one = load_json(path)
         if not isinstance(one, dict) or "number" not in one:
             raise InputError(f"{path}: expected one pull request object from gh pr view --json")
-        prs[int(one["number"])] = one
+        check_rows([one], path, "PR", required=(), optional=("createdAt", "mergedAt", "closedAt"))
+        prs[row_number(one)] = one
 
     opened = parse_time(issue.get("createdAt"))
     if opened is None:
