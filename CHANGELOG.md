@@ -6,6 +6,23 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-20
+
+### Fixed
+
+- `install.py` and the catalog could give two skills the same install directory, so one overwrote the other: a skill renamed to `<plugin>-<skill>` could land on a name another skill already used (for example `a/b-s`, `a/s` and `b/s`). A taken name now gets a number (`<plugin>-<skill>-2`). Today's catalog has no such clash, so no install name changes.
+- SKILL.md front matter with nothing between the two `---` lines was reported as not closed, and the closing line must now be exactly `---`, so a value line that starts with `---` no longer ends the block early.
+- Daily sync pull requests now get the `ci` checks without anyone closing and reopening them: `sync.yml` starts `ci.yml` on the sync branch (#24).
+
+### Added
+
+- Property-based tests with Hypothesis for install naming, the front matter parser and the site's Markdown converter (raw HTML is always escaped, no `javascript:` links), in `tests/test_properties.py`.
+- Tests that sync from two fake source repositories built with `git init` and check that a second run writes nothing, that an upstream commit only touches its own plugin, and that a plugin published twice is refused (#7).
+
+### Changed
+
+- The marketplace metadata version is 0.4.1.
+
 ## [0.4.0] - 2026-10-20
 
 ### Added

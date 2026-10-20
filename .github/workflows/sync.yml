@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
+      actions: write # to start ci.yml on the sync branch
       contents: write
       pull-requests: write
     steps:
@@ -38,9 +39,10 @@ jobs:
           python3 site/build.py --check
       - name: Tests
         run: |
-          python3 -m pip install pytest
+          python3 -m pip install pytest hypothesis
           python3 -m pytest -q
       - name: Open or update the sync pull request
+        id: cpr
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           branch: sync/plugins
@@ -57,3 +59,14 @@ jobs:
             SOURCES.json
             catalog.json
             .claude-plugin/marketplace.json
+      # A pull request opened or updated with GITHUB_TOKEN starts no other workflow, so ci.yml
+      # would never run on it. A workflow_dispatch is the exception: start ci.yml on the branch,
+      # and its checks attach to the head commit and show on the pull request (issue #24).
+      - name: Run ci on the sync branch
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ steps.cpr.outputs.pull-request-url }}
+        run: |
+          gh workflow run ci.yml --repo "$GITHUB_REPOSITORY" --ref sync/plugins
+          echo "Started ci.yml on sync/plugins for $PR_URL"

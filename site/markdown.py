@@ -153,7 +153,7 @@ def split_front_matter(source: str) -> tuple[dict[str, str], str]:
     """Split '---\\nkey: value\\n---' front matter from the body."""
     if not source.startswith("---\n"):
         return {}, source
-    end = source.find("\n---\n", 4)
+    end = source.find("\n---\n", 3)  # from 3, so an empty block closes too
     if end == -1:
         return {}, source
     meta: dict[str, str] = {}
