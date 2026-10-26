@@ -116,8 +116,8 @@
     {
       "name": "cc-setup-tooling",
       "source": "./plugins/cc-setup-tooling",
-      "description": "Eleven skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, sandbox-config-review, unattended-run-preflight, subagent-tool-scope-review, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
-      "version": "0.4.0",
+      "description": "Fourteen skills, each with a tested standard-library script over local files: skill-supply-chain-review, skill-description-linter, skill-trigger-eval, context-budget-audit, permissions-builder, sandbox-config-review, unattended-run-preflight, subagent-tool-scope-review, session-usage-ledger, shell-slip-audit, compaction-loss-check, hook-author, skill-collision-check and skill-portability-check. They drive skill-scan-gate, cc-plugin-lock, claude-perm-sim, claude-mcp-allow and cc-hooks where those are installed. No network.",
+      "version": "0.5.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -138,7 +138,9 @@
         "skill-collisions",
         "portability",
         "subagents",
-        "unattended"
+        "unattended",
+        "session-transcripts",
+        "compaction"
       ],
       "category": "development",
       "tags": [
@@ -177,8 +179,8 @@
     {
       "name": "compliance-evidence",
       "source": "./plugins/compliance-evidence",
-      "description": "Ten compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map, vendor attestation digest, Maester control map, evidence collection plan. Exports on disk, offline evaluation, three result states.",
-      "version": "0.6.0",
+      "description": "Eleven compliance evidence skills: evidence pack builder, control map from exports, GitHub change-control evidence, AWS identity and logging evidence, auditor narrative drafter, security questionnaire drafter, Essential Eight evidence map, vendor attestation digest, Maester control map, evidence collection plan, ISO 27001 SoA check. Exports on disk, offline evaluation, three result states.",
+      "version": "0.7.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -201,7 +203,8 @@
         "vendor-risk",
         "maester",
         "pbc-list",
-        "evidence-collection"
+        "evidence-collection",
+        "statement-of-applicability"
       ],
       "category": "security",
       "tags": [
@@ -416,8 +419,8 @@
     {
       "name": "repo-engineering",
       "source": "./plugins/repo-engineering",
-      "description": "Twelve skills, each with a tested standard-library script: docs-truth-check, cited-codebase-audit, agent-context-writer, readme-who-what-why, untested-entry-points, repo-onboarding-guide, restructure-planner, adr-miner, repo-hygiene-bundle, release-notes-verifier, stale-branch-sweep and plan-grill.",
-      "version": "0.5.0",
+      "description": "Thirteen skills, each with a tested standard-library script: docs-truth-check, cited-codebase-audit, agent-context-writer, readme-who-what-why, untested-entry-points, repo-onboarding-guide, restructure-planner, adr-miner, repo-hygiene-bundle, release-notes-verifier, stale-branch-sweep, plan-grill and mcp-registry-publish-preflight.",
+      "version": "0.6.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -437,7 +440,8 @@
         "adr",
         "restructure",
         "hygiene",
-        "release-notes"
+        "release-notes",
+        "mcp-registry"
       ],
       "category": "development",
       "tags": [

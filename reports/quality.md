@@ -18,7 +18,7 @@ None.
 
 None.
 
-## Skills that point at a skill in another plugin: 149
+## Skills that point at a skill in another plugin: 152
 
 A single-plugin install leaves these names dangling. Install the sibling plugin, or use `install.py --only` with several plugins.
 
@@ -76,11 +76,13 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `aws-security/aws-account-audit -> compliance-evidence/aws-identity-and-logging-evidence`
 - `aws-security/aws-agent-session-audit -> agent-security/agent-session-log-review`
 
-### cc-setup-tooling (11)
+### cc-setup-tooling (13)
 
+- `cc-setup-tooling/compaction-loss-check -> agent-security/agent-session-log-review`
 - `cc-setup-tooling/context-budget-audit -> repo-engineering/agent-context-writer`
 - `cc-setup-tooling/permissions-builder -> agent-security/agent-config-audit`
 - `cc-setup-tooling/sandbox-config-review -> agent-security/agent-config-audit`
+- `cc-setup-tooling/session-usage-ledger -> agent-security/agent-session-log-review`
 - `cc-setup-tooling/skill-collision-check -> devops/release-notes`
 - `cc-setup-tooling/skill-collision-check -> docs/changelog-keeper`
 - `cc-setup-tooling/skill-description-linter -> ways-of-working/decision-log`
@@ -171,12 +173,13 @@ A single-plugin install leaves these names dangling. Install the sibling plugin,
 - `github-manager/incident-postmortem-timeline -> docs/postmortem-writer`
 - `github-manager/iteration-report -> ways-of-working/weekly-status-rollup`
 
-### repo-engineering (10)
+### repo-engineering (11)
 
 - `repo-engineering/adr-miner -> docs/adr-writer`
 - `repo-engineering/adr-miner -> ways-of-working/decision-log`
 - `repo-engineering/agent-context-writer -> agent-security/agent-config-audit`
 - `repo-engineering/docs-truth-check -> docs/readme-author`
+- `repo-engineering/mcp-registry-publish-preflight -> agent-security/mcp-server-review`
 - `repo-engineering/plan-grill -> ways-of-working/rfc-lifecycle`
 - `repo-engineering/readme-who-what-why -> docs/readme-author`
 - `repo-engineering/release-notes-verifier -> devops/release-notes`

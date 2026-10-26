@@ -32,10 +32,10 @@
       "repo": "claude-code-tooling-skills",
       "url": "https://github.com/basitalisandhu/claude-code-tooling-skills",
       "path": "plugins/cc-setup-tooling",
-      "commit": "29d1d82f78e6b617afe6ef9a0badfa4dc4db56f6",
-      "synced_at": "2026-10-20T10:25:22Z",
-      "upstream_version": "0.4.0",
-      "content_sha256": "8a47543aec2dc166589ed2cdf2f213b18bf8b86f14baefa6118a2906392a1b21"
+      "commit": "e6320fe78bedc7f0b44979f45d2ebce7600f5f9b",
+      "synced_at": "2026-10-26T07:46:36Z",
+      "upstream_version": "0.5.0",
+      "content_sha256": "fda9cd34060c28098a70cba52b9dd12bebf88a0f3d749bd37640496116e527a6"
     },
     "code-quality": {
       "repo": "claude-dev-skills",
@@ -50,10 +50,10 @@
       "repo": "compliance-evidence-skills",
       "url": "https://github.com/basitalisandhu/compliance-evidence-skills",
       "path": "plugins/compliance-evidence",
-      "commit": "3255476c75ad29315a0b5e3ad8a1feb19f981e01",
-      "synced_at": "2026-10-20T10:25:22Z",
-      "upstream_version": "0.6.0",
-      "content_sha256": "985eca2d1735f25cc7d9bbb48347e091885b1c1569bb6d97f8a227e497518b59"
+      "commit": "d1f619decaffa50a8781d28847b2b34d3de9160e",
+      "synced_at": "2026-10-26T07:46:36Z",
+      "upstream_version": "0.7.0",
+      "content_sha256": "e57dab4bada55a7bfbbfae66979121018bbd6c093d0c24eb65ee5f6a57d07198"
     },
     "data": {
       "repo": "claude-dev-skills",
@@ -122,10 +122,10 @@
       "repo": "repo-engineering-skills",
       "url": "https://github.com/basitalisandhu/repo-engineering-skills",
       "path": "plugins/repo-engineering",
-      "commit": "ae5ba219ee49cc0aad851469b24d01306268ee12",
-      "synced_at": "2026-10-20T09:15:59Z",
-      "upstream_version": "0.5.0",
-      "content_sha256": "6f4179a0991cf75ea71759ec6230a1eb60d75288527b77ee0ebc91e051668f5b"
+      "commit": "cbcf427800cda61d56783f2b98668051f7e3fb18",
+      "synced_at": "2026-10-26T07:46:36Z",
+      "upstream_version": "0.6.0",
+      "content_sha256": "5e713b6325f4820122d88369ef4a2bbf94fb298014411a1b004632eafa112e51"
     },
     "security-basics": {
       "repo": "claude-dev-skills",
