@@ -259,6 +259,8 @@ def load_list(path: str) -> list[str]:
         text = Path(path).read_text(encoding="utf-8-sig")
     except OSError as exc:
         raise InputError(f"{path}: cannot read: {exc}") from exc
+    except UnicodeDecodeError as exc:
+        raise InputError(f"{path}: not UTF-8 text") from exc
     try:
         doc = json.loads(text)
     except json.JSONDecodeError:
@@ -326,7 +328,7 @@ def audit(records: list[dict], args) -> dict:
     if args.granted:
         try:
             gdoc = json.loads(Path(args.granted).read_text(encoding="utf-8-sig"))
-        except (OSError, json.JSONDecodeError) as exc:
+        except (OSError, ValueError) as exc:
             raise InputError(f"{args.granted}: cannot read policy: {exc}") from exc
         granted = granted_actions(gdoc, args.granted)
     kept = []
@@ -501,7 +503,7 @@ def render(rep: dict) -> str:
     return "\n".join(lines)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("inputs", nargs="+", help="CloudTrail export files or folders")
     ap.add_argument("--session-name", help="role session name of the agent, for example agent@operator")
@@ -538,6 +540,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: cannot write output: {exc}", file=sys.stderr)
         return 2
     return code
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

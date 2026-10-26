@@ -1,6 +1,6 @@
 ---
 name: env-diff
-description: "Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked \"which env vars am I missing?\", when a service fails on a missing variable, when onboarding, before deploying to a new environment, or to keep .env.example in sync in CI. Not for comparing values, and not a secret manager."
+description: "Compare the keys of .env.example against real .env files with a bundled script, listing missing, extra, empty and duplicate keys without ever printing a value. Use when asked \"which env vars am I missing?\", what to set in .env after cloning a repo, when a service fails on a missing variable, before deploying to a new environment, or to fail CI when .env.example drifts. Not for comparing values, and not a secret manager."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads dotenv files (KEY=value, export KEY=value, quotes, comments).
 metadata:

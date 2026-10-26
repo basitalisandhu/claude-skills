@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import functools
 import hashlib
 import io
 import json
@@ -61,10 +62,29 @@ class InputError(Exception):
     """Bad input: exit code 2."""
 
 
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
+
+
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{path.name}: not valid JSON: {exc}") from exc
@@ -73,7 +93,7 @@ def load_json(path: Path):
 def load_csv(path: Path) -> list[dict[str, str]]:
     try:
         rows = list(csv.DictReader(io.StringIO(path.read_text(encoding="utf-8-sig"))))
-    except (OSError, csv.Error) as exc:
+    except (OSError, UnicodeDecodeError, csv.Error) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     return [{(k or "").strip().lower(): (v or "").strip() for k, v in r.items() if k} for r in rows]
 
@@ -371,6 +391,7 @@ def render(doc: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="credential_expiry_radar.py",

@@ -1,0 +1,63 @@
+# agent-kill-switch-runbook
+
+Writes the ordered runbook to switch one agent identity off fast, each step with a read-only verification command, and checks every credential and assignment in the inventory has a step.
+
+How to export the inputs, run it and read the result: [SKILL.md](SKILL.md). Every option: `python3 scripts/kill_switch_runbook.py --help`.
+
+## Sample
+
+Run from the repository root on the bundled synthetic examples (every name, address and id in them is invented). Exit code 0.
+
+```bash
+python3 plugins/agent-identity-governance/skills/nhi-inventory/scripts/nhi_inventory.py plugins/agent-identity-governance/examples/exports --as-of 2026-10-05 --json --out inventory.json
+python3 plugins/agent-identity-governance/skills/agent-kill-switch-runbook/scripts/kill_switch_runbook.py inventory.json --identity entra:00000000-0000-0000-0000-0000000000e5 --as-of 2026-10-05
+```
+
+Output, as printed (first 40 lines):
+
+````markdown
+# Kill switch runbook: ledger-agent-emea
+
+Identity `entra:00000000-0000-0000-0000-0000000000e5` (entra-agent-identity). Owners: kim@example.com. Prepared 2026-10-05.
+
+Run the steps in order and tick each one. A change is for a person to read and run; it is never run by this
+runbook. Each verification command only reads. Keep the output of every verification for the incident record.
+
+### Step 1 (stop new actions): Disable the agent identity so no new tokens are issued for it
+
+- [ ] Change: az rest --method PATCH --url https://graph.microsoft.com/v1.0/servicePrincipals/40000000-0000-0000-0000-000000000001/microsoft.graph.agentIdentity --headers Content-Type=application/json --body '{"accountEnabled": false}'   (permission AgentIdentity.EnableDisable.All or the Agent ID Administrator role)
+- [ ] Verify (read only): `az rest --method GET --url https://graph.microsoft.com/v1.0/servicePrincipals/40000000-0000-0000-0000-000000000001/microsoft.graph.agentIdentity --query accountEnabled   (expect false)`
+
+### Step 2 (end sessions): Let issued access tokens run out and remove delegated grants
+
+- [ ] Change: Access tokens already issued stay valid until they expire; record the disable time. Remove each delegated grant: az rest --method DELETE --url https://graph.microsoft.com/v1.0/oauth2PermissionGrants/<grant id>
+- [ ] Verify (read only): `az rest --method GET --url "https://graph.microsoft.com/v1.0/oauth2PermissionGrants?$filter=clientId eq '40000000-0000-0000-0000-000000000001'"   (expect an empty list)`
+
+### Step 3 (credentials): Leave the blueprint's credentials alone unless every agent of blueprint 00000000-0000-0000-0000-0000000000d4 must stop
+
+- [ ] Change: This agent identity holds no secret or certificate: it authenticates with the credentials of its blueprint, which other agent identities share. Rotate them only after a leak, and plan for every agent of the blueprint (run this runbook for entra:00000000-0000-0000-0000-0000000000d4).
+- [ ] Verify (read only): `az rest --method GET --url "https://graph.microsoft.com/v1.0/servicePrincipals/microsoft.graph.agentIdentity?$filter=agentIdentityBlueprintId eq '00000000-0000-0000-0000-0000000000d4'"   (the agents sharing them)`
+
+### Step 4 (access): Remove permissions granted to this agent identity, and note the ones it inherits
+
+- [ ] Change: az rest --method DELETE --url https://graph.microsoft.com/v1.0/servicePrincipals/40000000-0000-0000-0000-000000000001/appRoleAssignments/<assignment id>   (one call per assignment). Permissions inherited from the blueprint principal stay until they are removed there, for every agent of the blueprint; disabling this identity already stops it using them.
+- [ ] Verify (read only): `az rest --method GET --url https://graph.microsoft.com/v1.0/servicePrincipals/40000000-0000-0000-0000-000000000001/appRoleAssignments`
+
+### Step 5 (gateway): Block the identity at <gateway, proxy or MCP gateway this agent calls>
+
+- [ ] Change: Add a deny rule for `entra:00000000-0000-0000-0000-0000000000e5` (and its client id, key or token) at <gateway, proxy or MCP gateway this agent calls>.
+- [ ] Verify (read only): `Read the gateway's rule list and its log for `entra:00000000-0000-0000-0000-0000000000e5`; requests after the switch-off show as denied.`
+
+### Step 6 (confirm): Confirm in the sign-in and audit logs that nothing succeeded after the switch-off
+
+- [ ] Change: None (read only).
+- [ ] Verify (read only): `az rest --method GET --url "https://graph.microsoft.com/beta/auditLogs/signIns?$filter=appId eq '00000000-0000-0000-0000-0000000000e5' and signInEventTypes/any(t: t eq 'servicePrincipal') and createdDateTime ge <switch-off time>"; az rest --method GET --url "https://graph.microsoft.com/v1.0/auditLogs/directoryAudits?$filter=initiatedBy/app/appId eq '00000000-0000-0000-0000-0000000000e5' and activityDateTime ge <switch-off time>"   (save both and run agent_action_timeline.py)`
+
+## Coverage
+
+0 of 0 credentials and assignments in the inventory are covered.
+
+... (6 more lines)
+````
+
+This file is generated by `python3 scripts/render_skill_readmes.py`; edit that script, not this file.

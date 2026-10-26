@@ -141,7 +141,7 @@ def check_env_hygiene(root: Path) -> list[dict]:
         if env.name in {".env.example", ".env.sample", ".env.template", ".env.dist"}:
             continue
         if not ignores_env:
-            out.append({"rule": "env-file-not-ignored", "severity": "high", "file": env.relative_to(root).as_posix(), "line": 0, "evidence": "no .env rule in .gitignore", "fingerprint": hashlib.sha256(f"{env.relative_to(root)}\nenv-file-not-ignored".encode()).hexdigest()[:16]})
+            out.append({"rule": "env-file-not-ignored", "severity": "high", "file": env.relative_to(root).as_posix(), "line": 0, "evidence": "no .env rule in .gitignore", "fingerprint": hashlib.sha256(f"{env.relative_to(root).as_posix()}\nenv-file-not-ignored".encode()).hexdigest()[:16]})
     return out
 
 

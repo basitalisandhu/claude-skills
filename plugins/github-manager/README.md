@@ -5,7 +5,7 @@ Four engineering manager skills that compute from exported GitHub data, each wit
 | Skill | Script | Use it to |
 |---|---|---|
 | `pr-queue-digest` | `skills/pr-queue-digest/scripts/pr_queue.py` | flag stuck PRs (waiting on review, blocked on one reviewer, changes requested with no new commits, failing checks, conflicts, approved but unmerged, no reviewer, stale drafts), count the review queue per reviewer, and list one next action per PR |
-| `iteration-report` | `skills/iteration-report/scripts/iteration_report.py` | report shipped, carried-over and newly opened work for a window, with cycle time (median, p90) and review turnaround (median), every number cited to its rows |
+| `iteration-report` | `skills/iteration-report/scripts/iteration_report.py` | report shipped, carried-over and newly opened work for a window, and scope added or removed during it, with cycle time (median, p90) and review turnaround (median), every number cited to its rows |
 | `incident-postmortem-timeline` | `skills/incident-postmortem-timeline/scripts/postmortem.py` | build a blameless timeline of an incident issue with detected, acknowledged, mitigated and resolved phases, people as roles, questions for the review and a cited postmortem skeleton |
 | `issue-triage-digest` | `skills/issue-triage-digest/scripts/issue_triage.py` | flag unlabelled, unanswered, possibly duplicate, stale and popular open issues, suggest a label per issue from a YAML keyword map, and count issues per check and label, as Markdown and JSON |
 

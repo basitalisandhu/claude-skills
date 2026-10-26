@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import json
 import re
 import sys
@@ -220,8 +221,16 @@ def _find_body(text: str, start: int) -> tuple[int, int] | None:
     return None
 
 
+def _line_index(text: str):
+    """Return line_of(pos), the 1-based line of character offset pos: one pass to find the newlines, then a binary
+    search per lookup. Counting newlines from the start for every match made large files quadratic."""
+    newlines = [m.start() for m in re.finditer("\n", text)]
+    return lambda pos: bisect.bisect_left(newlines, pos) + 1
+
+
 def js_functions(path: Path, text: str) -> list[dict]:
     clean = _strip_js(text)
+    line_of = _line_index(clean)
     out: list[dict] = []
     seen: set[tuple[int, int]] = set()
     for m in JS_FUNC_RE.finditer(clean):
@@ -250,8 +259,8 @@ def js_functions(path: Path, text: str) -> list[dict]:
                 max_depth = max(max_depth, depth)
             elif ch == "}":
                 depth -= 1
-        line = clean.count("\n", 0, m.start()) + 1
-        length = clean.count("\n", body[0], body[1]) + 1
+        line = line_of(m.start())
+        length = line_of(body[1]) - line_of(body[0]) + 1
         out.append({"file": str(path), "name": name, "line": line, "length": length, "complexity": complexity,
                     "max_depth": max_depth, "params": None, "language": "javascript"})
     return out

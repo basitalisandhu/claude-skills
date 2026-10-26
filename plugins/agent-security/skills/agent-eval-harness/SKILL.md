@@ -1,6 +1,6 @@
 ---
 name: agent-eval-harness
-description: "Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack-success-rate scores, using a bundled standard-library runner and a policy hook. Use when asked \"what is our attack success rate?\", to measure prompt-injection resistance, or to compare defences. Not for a manual code review without numbers (prompt-injection-review), and not a replacement for the full AgentDojo benchmark."
+description: "Build a security evaluation for an agent with benign tasks, injections planted in tool results, and utility and attack success rate (ASR) scores, using a bundled standard-library runner and a policy hook. Use when asked \"what is our attack success rate?\", to measure how well an agent resists prompt injection, to compare defences on the same tasks, or to gate CI on ASR. Not for a manual code review without numbers (prompt-injection-review), accuracy evals of a classifier or model, or a replacement for the full AgentDojo benchmark."
 license: MIT
 compatibility: Python 3.11 or newer for the template. AgentDojo (pip) and model API access only for the real benchmark; the template and its tests make no network calls.
 metadata:

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import json
 import re
 import sys
@@ -162,7 +163,15 @@ def parse_jsdoc(doc: str) -> dict:
     return {"summary": summary.split(". ")[0] + ("." if ". " in summary else "") if summary else "", "params": params, "returns": returns, "raises": raises, "deprecated": deprecated, "examples": examples}
 
 
+def _line_index(text: str):
+    """Return line_of(pos), the 1-based line of character offset pos: one pass to find the newlines, then a binary
+    search per lookup. Counting newlines from the start for every match made large files quadratic."""
+    newlines = [m.start() for m in re.finditer("\n", text)]
+    return lambda pos: bisect.bisect_left(newlines, pos) + 1
+
+
 def extract_js(path: Path, text: str, include_private: bool) -> dict:
+    line_of = _line_index(text)
     symbols: list[dict] = []
     documented_spans: set[int] = set()
     for m in JSDOC_RE.finditer(text):
@@ -174,12 +183,12 @@ def extract_js(path: Path, text: str, include_private: bool) -> dict:
         params = m.group("fparams") or m.group("aparams") or m.group("mparams") or ""
         kind = "class" if m.group("cname") else ("method" if m.group("mname") else "function")
         parsed = parse_jsdoc(m.group("doc"))
-        line = text.count("\n", 0, m.start("decl")) + 1
+        line = line_of(m.start("decl"))
         documented_spans.add(line)
         symbols.append({"kind": kind, "name": name, "line": line, "signature": f"{name}({' '.join(params.split())})" if kind != "class" else f"class {name}", "documented": bool(parsed["summary"] or parsed["params"]), **parsed})
     for m in re.finditer(r"^\s*export\s+(?:default\s+)?(?:async\s+)?(?:function\s*\*?\s*([\w$]+)|class\s+([\w$]+)|(?:const|let|var)\s+([\w$]+))", text, re.M):
         name = m.group(1) or m.group(2) or m.group(3)
-        line = text.count("\n", 0, m.start()) + 1
+        line = line_of(m.start())
         if line not in documented_spans and (include_private or not name.startswith("_")):
             symbols.append({"kind": "class" if m.group(2) else "function", "name": name, "line": line, "signature": name, "documented": False, "summary": "", "params": {}, "returns": "", "raises": []})
     symbols.sort(key=lambda s: s["line"])

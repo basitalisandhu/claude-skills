@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>semver-advisor: Decide the next version number | Claude Code skills</title>
-<meta name="description" content="Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked &quot;is this a breaking change?&quot;, what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).">
+<meta name="description" content="Decide the next version number (major, minor, patch or a pre-release) for a library, service, REST API, CLI or schema from the actual changes, with a table of what counts as a breaking change for each, and explain the bump with evidence. Use when asked &quot;is this a breaking change?&quot;, &quot;what version should I release?&quot;, whether removing or adding a field or parameter needs a major bump, or how to version an API. Not for release notes (release-notes) or a changelog entry (changelog-keeper).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/devops/semver-advisor/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="semver-advisor: Decide the next version number | Claude Code skills">
-<meta property="og:description" content="Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked &quot;is this a breaking change?&quot;, what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).">
+<meta property="og:description" content="Decide the next version number (major, minor, patch or a pre-release) for a library, service, REST API, CLI or schema from the actual changes, with a table of what counts as a breaking change for each, and explain the bump with evidence. Use when asked &quot;is this a breaking change?&quot;, &quot;what version should I release?&quot;, whether removing or adding a field or parameter needs a major bump, or how to version an API. Not for release notes (release-notes) or a changelog entry (changelog-keeper).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/devops/semver-advisor/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "semver-advisor",
- "description": "Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked \"is this a breaking change?\", what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).",
+ "description": "Decide the next version number (major, minor, patch or a pre-release) for a library, service, REST API, CLI or schema from the actual changes, with a table of what counts as a breaking change for each, and explain the bump with evidence. Use when asked \"is this a breaking change?\", \"what version should I release?\", whether removing or adding a field or parameter needs a major bump, or how to version an API. Not for release notes (release-notes) or a changelog entry (changelog-keeper).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/semver-advisor/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.3.1"
+ "version": "0.4.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / semver-advisor</p>
 <h1>Semver advisor</h1>
-<p class="lede">Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked &quot;is this a breaking change?&quot;, what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes).</p>
-<p class="meta">Skill <code>semver-advisor</code> in plugin <a href="../index.html">devops</a> 0.3.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a>.</p>
+<p class="lede">Decide the next version number (major, minor, patch or a pre-release) for a library, service, REST API, CLI or schema from the actual changes, with a table of what counts as a breaking change for each, and explain the bump with evidence. Use when asked &quot;is this a breaking change?&quot;, &quot;what version should I release?&quot;, whether removing or adding a field or parameter needs a major bump, or how to version an API. Not for release notes (release-notes) or a changelog entry (changelog-keeper).</p>
+<p class="meta">Skill <code>semver-advisor</code> in plugin <a href="../index.html">devops</a> 0.4.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/semver-advisor/SKILL.md">plugins/devops/skills/semver-advisor/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

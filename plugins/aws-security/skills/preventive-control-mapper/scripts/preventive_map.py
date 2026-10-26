@@ -543,7 +543,7 @@ def render_json(rep: dict) -> str:
 
 # ---------------------------------------------------------------- command line
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--findings", action="append", required=True, metavar="FILE",
                     help="Security Hub get-findings JSON, Prowler JSON-OCSF, or CSV with a control_id column (repeatable)")
@@ -589,6 +589,16 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(f"wrote {args.out}" if args.out else text)
     return 1 if rep["unmapped"] or rep["draft"]["over_limit"] else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

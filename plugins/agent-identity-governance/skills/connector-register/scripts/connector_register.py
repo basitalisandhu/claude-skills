@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import functools
 import io
 import json
 import re
@@ -59,6 +60,25 @@ MAPPING_ENTRY_RE = re.compile(r"""^(?:"[^"]*"|'[^']*'|[^\s"'\[{#-][^:]*?|-[^\s:]
 
 class InputError(Exception):
     """Bad input: exit code 2."""
+
+
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
 
 
 # ---- a small YAML subset reader (standard library only) ----------------------------------------------------------
@@ -154,7 +174,7 @@ def parse_block(lines: list, pos: int, indent: int):
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8-sig")
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
 
 
@@ -361,6 +381,7 @@ def render(doc: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="connector_register.py",

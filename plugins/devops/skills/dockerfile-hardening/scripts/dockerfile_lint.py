@@ -121,12 +121,12 @@ def lint(path: Path, text: str) -> list[dict]:
                             add("DF-015", "info", first["line"], "Base image not pinned by digest", first["args"], "Add @sha256:<digest> after the tag for a fully reproducible base; renovate or dependabot can keep it current.")
     final = stages[-1]
     users = [ins for ins in final if ins["instruction"] == "USER"]
-    final_is_scratch_or_alias = final[0]["instruction"] == "FROM" and final[0]["args"].split()[0].lower() in stage_names
+    final_is_scratch_or_alias = final[0]["instruction"] == "FROM" and (final[0]["args"].split() or [""])[0].lower() in stage_names
     if not users:
         # a non-root USER set in a stage that the final stage builds FROM carries over
         inherited = False
         if final_is_scratch_or_alias:
-            base_alias = final[0]["args"].split()[0].lower()
+            base_alias = (final[0]["args"].split() or [""])[0].lower()
             for st in stages:
                 m = re.match(r"^\S+\s+AS\s+(\S+)", st[0]["args"], re.I)
                 if m and m.group(1).lower() == base_alias and any(i["instruction"] == "USER" and i["args"].split(":")[0] not in {"root", "0"} for i in st):

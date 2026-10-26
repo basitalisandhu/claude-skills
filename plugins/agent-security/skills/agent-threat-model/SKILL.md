@@ -1,6 +1,6 @@
 ---
 name: agent-threat-model
-description: "Write a threat model for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", \"what could go wrong with this agent?\", to map its trust boundaries and attack surface, or for a design review. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist)."
+description: "Write a threat model or threat assessment for an LLM-agent system by drafting principals, tools, channels, data stores and controls in YAML from the code, running the atm analyser for STRIDE and OWASP findings, and summarising with incident precedents. Use when asked to \"threat model this agent\", \"what could go wrong with this agent?\", to map its trust boundaries and attack surface, or for a design review of an agent we are building. Not for scanning code (semgrep-agentic) or a ship decision (secure-agent-checklist)."
 license: MIT
 compatibility: Python 3.11 or newer. The atm CLI (pipx or uvx; from PyPI as agent-threat-model, or from git+https://github.com/basitalisandhu/agent-threat-model while PyPI publication is pending) for validation and analysis; the draft works without it.
 metadata:
@@ -64,6 +64,13 @@ The scanner reads source and configuration, and you open files to correct the dr
 
    ```bash
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/incident-lookup/scripts/incidents.py" precedents --channel-in email --authority send-message --vector indirect-injection --limit 5
+   ```
+
+   The scanner's detections already use that vocabulary, so for a first pass hand the scan to `--design` as it is and add flags for what the code does not show (flags and the file are combined):
+
+   ```bash
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/agent-threat-model/scripts/scan_agent_stack.py" . --json --out scan.json
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/incident-lookup/scripts/incidents.py" precedents --design scan.json --vector indirect-injection --limit 5
    ```
 
 6. **Summarise** in the format below. Keep the full `atm` output as an attachment; the summary is what gets read. Re-run `atm diff` after the controls are added and record the new score.

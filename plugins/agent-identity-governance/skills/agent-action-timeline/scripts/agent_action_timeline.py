@@ -2,7 +2,8 @@
 """Build one ordered timeline of what an agent identity did, from saved audit exports, and flag unusual actions.
 
 usage: agent_action_timeline.py --identity VALUE [--identity VALUE ...] [--entra-signins FILE] [--entra-audit FILE]
-                                [--cloudtrail FILE] [--github-audit FILE] [--app-log FILE] [--since T] [--until T]
+                                [--cloudtrail FILE] [--azure-activity FILE] [--github-audit FILE] [--app-log FILE]
+                                [--since T] [--until T]
                                 [--allow-list FILE] [--baseline FILE] [--burst-count N] [--burst-window SECONDS]
                                 [--json] [--out FILE]
 
@@ -11,6 +12,8 @@ Every input option can be repeated. Formats:
   --entra-audit    Graph /auditLogs/directoryAudits: activityDateTime, activityDisplayName, initiatedBy.app or .user
   --cloudtrail     aws cloudtrail lookup-events output ({"Events": [...]} with CloudTrailEvent) or log files
                    ({"Records": [...]})
+  --azure-activity az monitor activity-log list output (a list, or {"value": [...]} from the REST API): eventTimestamp,
+                   operationName.value, caller, claims.appid, resourceId, status.value
   --github-audit   gh api /orgs/ORG/audit-log output: @timestamp (epoch milliseconds), action, actor
   --app-log        JSON lines; the time is read from timestamp, time, ts, @timestamp or datetime, the action from
                    action, event, tool, operation or name, the identity from agent, agent_id, identity, actor,
@@ -18,10 +21,12 @@ Every input option can be repeated. Formats:
 
 An event belongs to the identity when any identity field equals one of the --identity values (ignoring case): appId,
 service principal id or name, user principal name, IAM ARN, principal id, access key id, user or role name,
-session issuer, GitHub actor or app log identity. Give every value the agent is known by.
+session issuer, Azure activity caller, app id or object id, GitHub actor or app log identity. Give every value the
+agent is known by.
 
 Action names: signin:<resource>, entra:<activity>, <aws service>:<eventName> (for example s3:GetObject),
-github:<action>, app:<action>. Timestamps are normalised to UTC and events ordered by time, then source and action.
+azure:<operation> (for example azure:Microsoft.Storage/storageAccounts/listKeys/action), github:<action>,
+app:<action>. Timestamps are normalised to UTC and events ordered by time, then source and action.
 
 Flags:
   burst                at least --burst-count events (20) within --burst-window seconds (60)
@@ -40,6 +45,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import functools
 import json
 import re
 import sys
@@ -55,6 +61,25 @@ class InputError(Exception):
     """Bad input: exit code 2."""
 
 
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
+
+
 # ---- shared event readers ----------------------------------------------------------------------------------------
 
 
@@ -62,7 +87,10 @@ def parse_dt(value) -> datetime | None:
     if value is None or value == "":
         return None
     if isinstance(value, (int, float)) and not isinstance(value, bool):
-        return datetime.fromtimestamp(value / 1000 if value > 10**11 else value, tz=timezone.utc)
+        try:
+            return datetime.fromtimestamp(value / 1000 if value > 10**11 else value, tz=timezone.utc)
+        except (OverflowError, OSError, ValueError):  # an epoch beyond what the platform can hold
+            return None
     text = str(value).strip()
     if re.fullmatch(r"\d{10,13}", text):
         return parse_dt(int(text))
@@ -89,7 +117,7 @@ def mask(value) -> str:
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{path.name}: not valid JSON: {exc}") from exc
@@ -243,6 +271,37 @@ def read_cloudtrail(path: Path) -> list[dict]:
     return [e for e in out if e]
 
 
+OBJECT_ID_CLAIM = "http://schemas.microsoft.com/identity/claims/objectidentifier"
+
+
+def read_azure_activity(path: Path) -> list[dict]:
+    """az monitor activity-log list: one event per row. The log writes a row per phase of an operation (Started,
+    then Succeeded or Failed), so an operation can appear more than once; each row keeps its status."""
+    out = []
+    for n, r in enumerate(rows_of(load_json(path))):
+        op = r.get("operationName")
+        op = (op.get("value") or op.get("localizedValue")) if isinstance(op, dict) else op
+        status = r.get("status")
+        status = (status.get("value") or status.get("localizedValue")) if isinstance(status, dict) else status
+        claims = r.get("claims") if isinstance(r.get("claims"), dict) else {}
+        http = r.get("httpRequest") if isinstance(r.get("httpRequest"), dict) else {}
+        out.append(
+            event(
+                "azure-activity",
+                r.get("eventTimestamp"),
+                f"azure:{op or 'unknown'}",
+                [r.get("caller"), claims.get("appid"), claims.get(OBJECT_ID_CLAIM), claims.get("oid")],
+                r.get("resourceId"),
+                http.get("clientIpAddress") or claims.get("ipaddr"),
+                str(status or "").lower() == "failed",
+                "",
+                path.name,
+                n,
+            )
+        )
+    return [e for e in out if e]
+
+
 def read_github_audit(path: Path) -> list[dict]:
     out = []
     for n, r in enumerate(rows_of(load_json(path))):
@@ -266,7 +325,7 @@ def read_github_audit(path: Path) -> list[dict]:
 def read_app_log(path: Path) -> list[dict]:
     try:
         text = path.read_text(encoding="utf-8-sig")
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     out = []
     for n, line in enumerate(text.splitlines(), start=1):
@@ -302,6 +361,7 @@ READERS = {
     "entra_signins": read_entra_signins,
     "entra_audit": read_entra_audit,
     "cloudtrail": read_cloudtrail,
+    "azure_activity": read_azure_activity,
     "github_audit": read_github_audit,
     "app_log": read_app_log,
 }
@@ -316,7 +376,8 @@ def collect(args) -> list[dict]:
             events += reader(Path(f))
     if not given:
         raise InputError(
-            "give at least one export (--entra-signins, --entra-audit, --cloudtrail, --github-audit, --app-log)"
+            "give at least one export (--entra-signins, --entra-audit, --cloudtrail, --azure-activity, --github-audit, "
+            "--app-log)"
         )
     return events
 
@@ -329,7 +390,7 @@ def read_lines(path: str | None) -> list[str] | None:
         return None
     try:
         text = Path(path).read_text(encoding="utf-8-sig")
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: cannot read: {exc}") from exc
     return [ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().startswith("#")]
 
@@ -441,6 +502,7 @@ def render(doc: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="agent_action_timeline.py",
@@ -451,6 +513,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--entra-signins", action="append", help="Graph sign-in log export (repeatable)")
     ap.add_argument("--entra-audit", action="append", help="Graph directory audit export (repeatable)")
     ap.add_argument("--cloudtrail", action="append", help="CloudTrail lookup-events output or log file (repeatable)")
+    ap.add_argument("--azure-activity", action="append", help="az monitor activity-log list output (repeatable)")
     ap.add_argument("--github-audit", action="append", help="GitHub organisation audit log export (repeatable)")
     ap.add_argument("--app-log", action="append", help="application log in JSON lines (repeatable)")
     ap.add_argument("--since", help="keep events at or after this date or time (UTC)")

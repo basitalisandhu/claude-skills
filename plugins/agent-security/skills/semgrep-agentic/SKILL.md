@@ -1,6 +1,6 @@
 ---
 name: semgrep-agentic
-description: "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour."
+description: "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output flowing into shells, subprocess, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour."
 license: MIT
 compatibility: Semgrep CLI 1.179 or later (pip install semgrep, or brew install semgrep). Bundled fallback rules run offline with --metrics=off.
 metadata:

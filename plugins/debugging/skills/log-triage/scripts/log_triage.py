@@ -10,16 +10,24 @@ Clusters are ranked by severity first (error > warn > info > debug) and then by 
 Input: one or more log files, or stdin when no file is given. Lines are read as UTF-8 with replacement.
 Stack traces: lines that start with whitespace or "at " or "File " are attached to the previous line's cluster.
 
+Time window: --since and --until (ISO 8601; a date alone means the start of that day for --since and the end of it
+for --until; no offset means UTC) keep a line when the first timestamp in it (ISO 8601, Apache access-log or
+syslog, which carries no year and is read as the current year) falls in the window. A line without a timestamp
+follows the decision for the line before it, so stack traces stay with their message; lines before the first
+timestamp are left out.
+
 Usage:
-    log_triage.py [FILE ...] [--json] [--top N] [--level LEVEL] [--grep REGEX] [--no-collapse]
+    log_triage.py [FILE ...] [--json] [--top N] [--level LEVEL] [--grep REGEX] [--since TIME] [--until TIME]
+                  [--no-collapse]
 
 Exit codes: 0 normally, 1 when --fail-on-level is given and a cluster at that level or above exists, 2 bad input
-(missing file, empty or binary input, invalid --grep).
+(missing file, empty or binary input, invalid --grep, --since or --until).
 Standard library only. Read-only. No network.
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import re
 import sys
@@ -47,6 +55,60 @@ NORMALISERS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\"[^\"]*\"|'[^']*'"), "<str>"),
     (re.compile(r"(?<![A-Za-z_])[-+]?\d+(?:\.\d+)?(?:ms|s|us|µs|ns|KB|MB|GB|kb|mb|gb|%)?(?![A-Za-z_])"), "<n>"),
 ]
+ISO_TS_RE = re.compile(r"(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(?:[.,](\d+))?(Z|[+-]\d{2}:?\d{2})?")
+APACHE_TS_RE = re.compile(r"(\d{2}/[A-Za-z]{3}/\d{4}:\d{2}:\d{2}:\d{2})(?: ([+-]\d{4}))?")
+SYSLOG_TS_RE = re.compile(r"\b([A-Z][a-z]{2}) ([ \d]\d) (\d{2}:\d{2}:\d{2})\b")
+MONTHS = {m: i for i, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], 1)}
+
+
+def current_year() -> int:
+    return dt.datetime.now(dt.UTC).year
+
+
+def line_time(line: str) -> dt.datetime | None:
+    """The first timestamp in the line as an aware datetime (UTC when it carries no offset), or None."""
+    found = []
+    m = ISO_TS_RE.search(line)
+    if m:
+        frac = (m.group(3) or "")[:6].ljust(6, "0") if m.group(3) else "000000"
+        tz = (m.group(4) or "+00:00").replace("Z", "+00:00")
+        if len(tz) == 5:
+            tz = tz[:3] + ":" + tz[3:]
+        try:
+            found.append((m.start(), dt.datetime.fromisoformat(f"{m.group(1)}T{m.group(2)}.{frac}{tz}")))
+        except ValueError:
+            pass
+    m = APACHE_TS_RE.search(line)
+    if m:
+        try:
+            found.append((m.start(), dt.datetime.strptime(m.group(1) + " " + (m.group(2) or "+0000"), "%d/%b/%Y:%H:%M:%S %z")))
+        except ValueError:
+            pass
+    m = SYSLOG_TS_RE.search(line)
+    if m and m.group(1) in MONTHS:
+        try:
+            when = dt.datetime.strptime(f"{current_year()} {MONTHS[m.group(1)]} {m.group(2).strip()} {m.group(3)}", "%Y %m %d %H:%M:%S")
+            found.append((m.start(), when.replace(tzinfo=dt.UTC)))
+        except ValueError:
+            pass
+    return min(found, key=lambda f: f[0])[1] if found else None
+
+
+def window_arg(end: bool):
+    """argparse type for --since (end=False) or --until (end=True): an ISO 8601 time or date; no offset means UTC."""
+    def parse(text: str) -> dt.datetime:
+        value = text.strip()
+        try:
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+                day = dt.datetime.fromisoformat(value).replace(tzinfo=dt.UTC)
+                return day + dt.timedelta(days=1) - dt.timedelta(microseconds=1) if end else day
+            parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"expected an ISO 8601 time such as 2026-01-02T10:00:00Z, got {text!r}") from None
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=dt.UTC)
+    return parse
+
+
 CONTINUATION_RE = re.compile(r"^(\s+|at |File \"|Traceback|Caused by|\.\.\. \d+ more|\t)")
 
 
@@ -66,16 +128,29 @@ def level_of(line: str) -> str | None:
     return LEVEL_ALIAS.get(lv, lv)
 
 
-def cluster(lines, grep: re.Pattern[str] | None, min_level: str | None, collapse: bool) -> dict:
+def cluster(lines, grep: re.Pattern[str] | None, min_level: str | None, collapse: bool,
+            since: dt.datetime | None = None, until: dt.datetime | None = None) -> dict:
     clusters: OrderedDict[str, dict] = OrderedDict()
     last_key = None
     total = 0
     skipped = 0
+    outside = 0
+    windowed = since is not None or until is not None
+    in_window = False  # the decision for lines without a timestamp: that of the line before them
     for no, raw in enumerate(lines, 1):
         line = raw.rstrip("\n")
         if not line.strip():
             continue
         total += 1
+        if windowed:
+            when = line_time(line)
+            if when is not None:
+                in_window = (since is None or when >= since) and (until is None or when <= until)
+            if not in_window:
+                outside += 1
+                skipped += 1
+                last_key = None
+                continue
         if collapse and CONTINUATION_RE.match(line) and last_key is not None:
             c = clusters[last_key]
             c["continuation_lines"] += 1
@@ -102,7 +177,11 @@ def cluster(lines, grep: re.Pattern[str] | None, min_level: str | None, collapse
         last_key = key
     out = list(clusters.values())
     out.sort(key=lambda c: (LEVEL_RANK.get(c["level"] or "zzz", 99), -c["count"], c["first_line"]))
-    return {"version": VERSION, "lines": total, "lines_skipped": skipped, "clusters": out}
+    report = {"version": VERSION, "lines": total, "lines_skipped": skipped, "clusters": out}
+    if windowed:
+        report["window"] = {"since": since.isoformat() if since else None, "until": until.isoformat() if until else None,
+                            "lines_outside": outside}
+    return report
 
 
 def render_text(report: dict, top: int) -> str:
@@ -147,6 +226,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--top", type=count_arg(1), default=30)
     ap.add_argument("--level", choices=LEVELS, help="keep only lines at this level or more severe")
     ap.add_argument("--grep", metavar="REGEX", help="keep only lines matching this regular expression")
+    ap.add_argument("--since", type=window_arg(end=False), metavar="TIME", help="keep lines whose timestamp is at or after TIME (ISO 8601)")
+    ap.add_argument("--until", type=window_arg(end=True), metavar="TIME", help="keep lines whose timestamp is at or before TIME (ISO 8601)")
     ap.add_argument("--no-collapse", action="store_true", help="treat indented continuation lines as their own lines")
     ap.add_argument("--fail-on-level", choices=LEVELS, help="exit 1 when any cluster is at this level or more severe")
     args = ap.parse_args(argv)
@@ -172,7 +253,10 @@ def main(argv: list[str] | None = None) -> int:
     if not any(ln.strip() for ln in lines):
         print(f"error: no log lines read from {source}", file=sys.stderr)
         return 2
-    report = cluster(lines, grep, args.level, not args.no_collapse)
+    if args.since and args.until and args.until < args.since:
+        print("error: --until is before --since", file=sys.stderr)
+        return 2
+    report = cluster(lines, grep, args.level, not args.no_collapse, args.since, args.until)
     if args.json:
         print(json.dumps(report, indent=2))
     else:

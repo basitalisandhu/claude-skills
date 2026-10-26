@@ -1,6 +1,6 @@
 ---
 name: http-security-headers
-description: "Grade the security headers of a saved HTTP response (HSTS, CSP, nosniff, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, CORS with credentials, disclosure, caching) with a bundled script, then write the header set for the server or framework. Use when asked \"are our security headers ok?\", to fix a scanner finding, or to configure headers for a new app. Not for fetching live sites (nothing is fetched) or authoring a strict CSP for a large single-page app."
+description: "Grade the security headers in a saved HTTP response (HSTS, CSP, nosniff, frame protection, Referrer-Policy, Permissions-Policy, cookie flags, disclosure, caching) with a bundled script, then write the header config for nginx, the server or the framework. Use when asked \"are our security headers ok?\", to check the headers in a response, to fix a scanner finding such as missing HSTS, or to set headers for a new app. Not for fetching live sites, a strict CSP for a large single-page app, or a CORS setup (cors-review)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Input is a saved response; curl, a browser's "copy response headers", or a saved HAR export produces it.
 metadata:

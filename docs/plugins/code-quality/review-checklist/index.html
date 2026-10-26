@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>review-checklist: Review a pull request | Claude Code skills</title>
-<meta name="description" content="Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or &quot;look over my changes&quot; before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that).">
+<meta name="description" content="Review a pull request, diff, patch or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and give findings with file and line references and a verdict: approve or request changes. Use when asked to &quot;review this code&quot;, review a PR or a colleague&#x27;s diff, &quot;look over my changes&quot; before merging, or go through a patch properly. Not for a security-only pass (diff-security-review), a deep error-handling pass (error-handling-review), formatter nitpicks or architecture reviews.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/review-checklist/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="review-checklist: Review a pull request | Claude Code skills">
-<meta property="og:description" content="Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or &quot;look over my changes&quot; before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that).">
+<meta property="og:description" content="Review a pull request, diff, patch or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and give findings with file and line references and a verdict: approve or request changes. Use when asked to &quot;review this code&quot;, review a PR or a colleague&#x27;s diff, &quot;look over my changes&quot; before merging, or go through a patch properly. Not for a security-only pass (diff-security-review), a deep error-handling pass (error-handling-review), formatter nitpicks or architecture reviews.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/review-checklist/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "review-checklist",
- "description": "Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or \"look over my changes\" before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that).",
+ "description": "Review a pull request, diff, patch or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and give findings with file and line references and a verdict: approve or request changes. Use when asked to \"review this code\", review a PR or a colleague's diff, \"look over my changes\" before merging, or go through a patch properly. Not for a security-only pass (diff-security-review), a deep error-handling pass (error-handling-review), formatter nitpicks or architecture reviews.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/review-checklist/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.3.1"
+ "version": "0.4.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / review-checklist</p>
 <h1>Review checklist</h1>
-<p class="lede">Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or &quot;look over my changes&quot; before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that).</p>
-<p class="meta">Skill <code>review-checklist</code> in plugin <a href="../index.html">code-quality</a> 0.3.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a>.</p>
+<p class="lede">Review a pull request, diff, patch or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and give findings with file and line references and a verdict: approve or request changes. Use when asked to &quot;review this code&quot;, review a PR or a colleague&#x27;s diff, &quot;look over my changes&quot; before merging, or go through a patch properly. Not for a security-only pass (diff-security-review), a deep error-handling pass (error-handling-review), formatter nitpicks or architecture reviews.</p>
+<p class="meta">Skill <code>review-checklist</code> in plugin <a href="../index.html">code-quality</a> 0.4.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/review-checklist/SKILL.md">plugins/code-quality/skills/review-checklist/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

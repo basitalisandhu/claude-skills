@@ -280,9 +280,13 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001
         print(f"block-secret-exposure: could not read hook input ({exc})", file=sys.stderr)
         return 1
+    if not isinstance(payload, dict):
+        print(f"block-secret-exposure: hook input is not a JSON object", file=sys.stderr)
+        return 1
     if payload.get("tool_name") != "Bash":
         return 0
-    command = (payload.get("tool_input") or {}).get("command") or ""
+    tool_input = payload.get("tool_input")
+    command = tool_input.get("command") if isinstance(tool_input, dict) else ""
     if not isinstance(command, str) or not command.strip():
         return 0
     reason = decide(command)

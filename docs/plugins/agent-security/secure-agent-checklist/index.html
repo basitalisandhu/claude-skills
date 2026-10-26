@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>secure-agent-checklist: Run a pre-ship security checklist for an LLM agent covering identity | Claude Code skills</title>
-<meta name="description" content="Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.">
+<meta name="description" content="Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit logging, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence for a go or no-go sign-off. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, releasing, open-sourcing or demoing an agent. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="secure-agent-checklist: Run a pre-ship security checklist for an LLM agent covering identity | Claude Code skills">
-<meta property="og:description" content="Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.">
+<meta property="og:description" content="Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit logging, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence for a go or no-go sign-off. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, releasing, open-sourcing or demoing an agent. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "secure-agent-checklist",
- "description": "Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked \"is this agent safe to ship?\" or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.",
+ "description": "Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit logging, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence for a go or no-go sign-off. Use when asked \"is this agent safe to ship?\" or before deploying, releasing, open-sourcing or demoing an agent. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.5.0"
+ "version": "0.6.0"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / secure-agent-checklist</p>
 <h1>Secure agent checklist</h1>
-<p class="lede">Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.</p>
-<p class="meta">Skill <code>secure-agent-checklist</code> in plugin <a href="../index.html">agent-security</a> 0.5.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a>.</p>
+<p class="lede">Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit logging, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence for a go or no-go sign-off. Use when asked &quot;is this agent safe to ship?&quot; or before deploying, releasing, open-sourcing or demoing an agent. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision.</p>
+<p class="meta">Skill <code>secure-agent-checklist</code> in plugin <a href="../index.html">agent-security</a> 0.6.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/secure-agent-checklist/SKILL.md">plugins/agent-security/skills/secure-agent-checklist/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

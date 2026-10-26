@@ -1,6 +1,6 @@
 ---
 name: api-docs-from-code
-description: "Generate an API reference from source with a bundled script that extracts Python docstrings (Google, NumPy and reST styles) and JavaScript/TypeScript JSDoc into Markdown or JSON, lists undocumented public symbols and measures documentation coverage; then fill the gaps and wire the extraction into the docs build. Use when asked to \"document this module\" or package, when the reference is stale, or to enforce docstrings on public code. Not for OpenAPI documents (use api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used."
+description: "Generate an API reference from source: a bundled script extracts Python docstrings and JavaScript or TypeScript JSDoc into Markdown or JSON, lists public functions and classes with no docstring and gives a documentation coverage number; then fill the gaps and wire it into the docs build. Use when asked to \"document this module\" or package, when the reference docs are out of date, or which public functions lack docstrings. Not for OpenAPI specs (api-contract-review) and not a replacement for Sphinx, mkdocstrings or TypeDoc where already used."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Reads .py, .js, .jsx, .ts, .tsx, .mjs.
 metadata:

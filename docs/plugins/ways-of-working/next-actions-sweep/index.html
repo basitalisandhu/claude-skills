@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>next-actions-sweep: Turn saved exports of several mailboxes and chats | Claude Code skills</title>
-<meta name="description" content="Turn saved exports of several mailboxes and chats (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list labelled reply, decide, do or FYI, with the reason, any stated deadline, the source link, duplicates across accounts merged, and a waiting-on-others list. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).">
+<title>next-actions-sweep: Turn saved exports of emails and chats from several inboxes | Claude Code skills</title>
+<meta name="description" content="Turn saved exports of emails and chats from several inboxes (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list: each message labelled reply, decide, do or FYI with the reason, any stated deadline and the source link, duplicates across accounts merged, and what is waiting on you versus waiting on others. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once and tell what to do next. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/next-actions-sweep/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="next-actions-sweep: Turn saved exports of several mailboxes and chats | Claude Code skills">
-<meta property="og:description" content="Turn saved exports of several mailboxes and chats (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list labelled reply, decide, do or FYI, with the reason, any stated deadline, the source link, duplicates across accounts merged, and a waiting-on-others list. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).">
+<meta property="og:title" content="next-actions-sweep: Turn saved exports of emails and chats from several inboxes | Claude Code skills">
+<meta property="og:description" content="Turn saved exports of emails and chats from several inboxes (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list: each message labelled reply, decide, do or FYI with the reason, any stated deadline and the source link, duplicates across accounts merged, and what is waiting on you versus waiting on others. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once and tell what to do next. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/next-actions-sweep/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "next-actions-sweep",
- "description": "Turn saved exports of several mailboxes and chats (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list labelled reply, decide, do or FYI, with the reason, any stated deadline, the source link, duplicates across accounts merged, and a waiting-on-others list. Use when asked \"what should I answer first?\" or to triage several inboxes at once. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).",
+ "description": "Turn saved exports of emails and chats from several inboxes (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list: each message labelled reply, decide, do or FYI with the reason, any stated deadline and the source link, duplicates across accounts merged, and what is waiting on you versus waiting on others. Use when asked \"what should I answer first?\" or to triage several inboxes at once and tell what to do next. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/next-actions-sweep/",
  "codeRepository": "https://github.com/basitalisandhu/ways-of-working-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "ways-of-working",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/ways-of-working/"
  },
- "version": "0.4.0"
+ "version": "0.5.0"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">ways-of-working</a> / next-actions-sweep</p>
 <h1>Next actions sweep</h1>
-<p class="lede">Turn saved exports of several mailboxes and chats (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list labelled reply, decide, do or FYI, with the reason, any stated deadline, the source link, duplicates across accounts merged, and a waiting-on-others list. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).</p>
-<p class="meta">Skill <code>next-actions-sweep</code> in plugin <a href="../index.html">ways-of-working</a> 0.4.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/next-actions-sweep/SKILL.md">plugins/ways-of-working/skills/next-actions-sweep/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/next-actions-sweep/SKILL.md">plugins/ways-of-working/skills/next-actions-sweep/SKILL.md</a>.</p>
+<p class="lede">Turn saved exports of emails and chats from several inboxes (Microsoft Graph mail and Teams JSON, Slack export, CSV; work and personal accounts together) into one ranked do-next list: each message labelled reply, decide, do or FYI with the reason, any stated deadline and the source link, duplicates across accounts merged, and what is waiting on you versus waiting on others. Use when asked &quot;what should I answer first?&quot; or to triage several inboxes at once and tell what to do next. Not for sending, drafting or filing mail, live connector access, or meeting actions (meeting-actions-ledger).</p>
+<p class="meta">Skill <code>next-actions-sweep</code> in plugin <a href="../index.html">ways-of-working</a> 0.5.0, 1 bundled script file, MIT licence. Source: <a href="https://github.com/basitalisandhu/ways-of-working-skills/blob/main/plugins/ways-of-working/skills/next-actions-sweep/SKILL.md">plugins/ways-of-working/skills/next-actions-sweep/SKILL.md</a> in <a href="https://github.com/basitalisandhu/ways-of-working-skills">ways-of-working-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/ways-of-working/skills/next-actions-sweep/SKILL.md">plugins/ways-of-working/skills/next-actions-sweep/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

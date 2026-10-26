@@ -20,6 +20,8 @@ Expected files in <folder> (names are fixed; see SKILL.md for the commands that 
 Regional files live in the folder itself (one region) or in regions/<region>/ (several regions):
 
   guardduty-detectors.json          aws guardduty list-detectors
+  guardduty-detector-<id>.json      aws guardduty get-detector --detector-id <id> (optional, one per detector;
+                                    a Status other than ENABLED is reported as GD-DISABLED)
   securityhub-hub.json              aws securityhub describe-hub ({} when not enabled)
   ec2-security-groups.json          aws ec2 describe-security-groups
   ec2-vpcs.json                     aws ec2 describe-vpcs
@@ -32,7 +34,7 @@ Checks (id, default severity):
   CT-MULTI-REGION        high      no multi-region CloudTrail trail
   CT-LOG-VALIDATION      medium    multi-region trail without log file validation
   CT-NOT-LOGGING         high      trail status says logging is stopped
-  GD-DISABLED            high      no GuardDuty detector in a region
+  GD-DISABLED            high      no GuardDuty detector in a region, or a detector whose status is not ENABLED
   SH-DISABLED            medium    Security Hub not enabled in a region
   S3-ACCOUNT-PAB         high      account-level S3 public access block missing or partial
   S3-BUCKET-PAB          medium    bucket without a full public access block (low when the account block is full)
@@ -56,6 +58,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 import urllib.parse
 from datetime import UTC, date, datetime
@@ -78,6 +81,7 @@ EXPECTED_KEYS: dict[str, tuple[tuple[str, ...], bool]] = {
     "s3control-public-access-block.json": (("PublicAccessBlockConfiguration",), True),
     "s3-buckets.json": (("Buckets",), False),
     "guardduty-detectors.json": (("DetectorIds",), False),
+    "guardduty-detector.json": (("Status",), False),
     "securityhub-hub.json": (("HubArn",), True),
     "ec2-security-groups.json": (("SecurityGroups",), False),
     "ec2-vpcs.json": (("Vpcs",), False),
@@ -93,7 +97,7 @@ class InputError(Exception):
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8") or "{}")
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: invalid JSON: {exc}") from exc
 
 
@@ -157,6 +161,8 @@ class Audit:
             stem = "cloudtrail-status.json"
         elif name.startswith("s3-public-access-block/"):
             stem = "s3control-public-access-block.json"
+        elif name.startswith("guardduty-detector-"):
+            stem = "guardduty-detector.json"
         shape = EXPECTED_KEYS.get(stem)
         if shape:
             keys, may_be_empty = shape
@@ -177,8 +183,11 @@ class Audit:
         path = self.folder / "credential-report.csv"
         if not path.exists():
             return None
-        with path.open(newline="", encoding="utf-8") as fh:
-            rows = list(csv.DictReader(fh))
+        try:
+            with path.open(newline="", encoding="utf-8-sig") as fh:
+                rows = list(csv.DictReader(fh, restval=""))  # a short row reads as empty fields, not None
+        except (UnicodeDecodeError, csv.Error) as exc:
+            raise InputError(f"{path}: not a readable CSV credential report: {exc}") from exc
         if not rows:
             raise InputError(f"{path}: empty; a credential report always has at least the <root_account> row")
         if "user" not in rows[0]:
@@ -378,10 +387,25 @@ class Audit:
             self.skip("GD-DISABLED", "guardduty-detectors.json", region)
             return
         self.evaluated.append("GD-DISABLED")
-        if not data.get("DetectorIds"):
+        ids = data.get("DetectorIds")
+        if not ids:
             self.add("GD-DISABLED", "high", "GuardDuty is not enabled", "account", "list-detectors returned no DetectorIds",
                      f"aws guardduty create-detector --enable{' --region ' + region if region else ''}   "
                      "# or enable it org-wide from the delegated administrator", region=region)
+            return
+        # a detector can exist and be suspended; get-detector says so when it was saved next to the list
+        for detector_id in as_list(ids):
+            if not isinstance(detector_id, str) or not re.fullmatch(r"[A-Za-z0-9]{1,64}", detector_id):
+                raise InputError(f"{base / 'guardduty-detectors.json'}: detector id {detector_id!r} is not a GuardDuty detector id")
+            detector = self.file(f"guardduty-detector-{detector_id}.json", base)
+            if detector is None:
+                continue
+            status = detector.get("Status")
+            if status != "ENABLED":
+                self.add("GD-DISABLED", "high", "GuardDuty detector exists but is not enabled", f"detector {detector_id}",
+                         f"get-detector Status is {status!r}",
+                         f"aws guardduty update-detector --detector-id {detector_id} --enable"
+                         f"{' --region ' + region if region else ''}", region=region)
 
     def check_securityhub(self, region: str, base: Path) -> None:
         data = self.file("securityhub-hub.json", base)
@@ -506,7 +530,7 @@ def render_table(report: dict) -> str:
     return "\n".join(lines)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("folder", help="folder holding the saved CLI JSON files")
     ap.add_argument("--json", action="store_true", help="print the JSON report instead of the table")
@@ -532,6 +556,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.fail_on == "none":
         return 0
     return 1 if any(RANK[f["severity"]] <= RANK[args.fail_on] for f in report["findings"]) else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

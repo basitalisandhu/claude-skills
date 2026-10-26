@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sandbox-account-guardrail-pack: Generate a guardrail pack for an AWS sandbox OU used by engineers | Claude Code skills</title>
-<meta name="description" content="Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs (scp-guardrails) and it never runs the cleanup.">
+<title>sandbox-account-guardrail-pack: Generate a guardrail pack for an AWS sandbox OU where engineers | Claude Code skills</title>
+<meta name="description" content="Generate a guardrail pack for an AWS sandbox OU where engineers and AI agents experiment: SCPs that pass the bundled size checks (region allowlist, IMDSv2, no root, protected logging), AWS Budgets, a checklist for new sandbox accounts and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs or linting an existing SCP (scp-guardrails), runaway spend alerts on their own (aws-spend-guardrails) or checking an existing account (aws-account-audit), and it never runs the cleanup.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="sandbox-account-guardrail-pack: Generate a guardrail pack for an AWS sandbox OU used by engineers | Claude Code skills">
-<meta property="og:description" content="Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs (scp-guardrails) and it never runs the cleanup.">
+<meta property="og:title" content="sandbox-account-guardrail-pack: Generate a guardrail pack for an AWS sandbox OU where engineers | Claude Code skills">
+<meta property="og:description" content="Generate a guardrail pack for an AWS sandbox OU where engineers and AI agents experiment: SCPs that pass the bundled size checks (region allowlist, IMDSv2, no root, protected logging), AWS Budgets, a checklist for new sandbox accounts and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs or linting an existing SCP (scp-guardrails), runaway spend alerts on their own (aws-spend-guardrails) or checking an existing account (aws-account-audit), and it never runs the cleanup.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "sandbox-account-guardrail-pack",
- "description": "Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. Use when asked to \"set up a safe sandbox account\", or when creating or tightening a sandbox or training OU. Not for production OUs (scp-guardrails) and it never runs the cleanup.",
+ "description": "Generate a guardrail pack for an AWS sandbox OU where engineers and AI agents experiment: SCPs that pass the bundled size checks (region allowlist, IMDSv2, no root, protected logging), AWS Budgets, a checklist for new sandbox accounts and a tag-based auto-expiry design. Use when asked to \"set up a safe sandbox account\", or when creating or tightening a sandbox or training OU. Not for production OUs or linting an existing SCP (scp-guardrails), runaway spend alerts on their own (aws-spend-guardrails) or checking an existing account (aws-account-audit), and it never runs the cleanup.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/",
  "codeRepository": "https://github.com/basitalisandhu/aws-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "aws-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/aws-security/"
  },
- "version": "0.5.0"
+ "version": "0.6.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">aws-security</a> / sandbox-account-guardrail-pack</p>
 <h1>Sandbox account guardrail pack</h1>
-<p class="lede">Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs (scp-guardrails) and it never runs the cleanup.</p>
-<p class="meta">Skill <code>sandbox-account-guardrail-pack</code> in plugin <a href="../index.html">aws-security</a> 0.5.0, 5 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md">plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md">plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md</a>.</p>
+<p class="lede">Generate a guardrail pack for an AWS sandbox OU where engineers and AI agents experiment: SCPs that pass the bundled size checks (region allowlist, IMDSv2, no root, protected logging), AWS Budgets, a checklist for new sandbox accounts and a tag-based auto-expiry design. Use when asked to &quot;set up a safe sandbox account&quot;, or when creating or tightening a sandbox or training OU. Not for production OUs or linting an existing SCP (scp-guardrails), runaway spend alerts on their own (aws-spend-guardrails) or checking an existing account (aws-account-audit), and it never runs the cleanup.</p>
+<p class="meta">Skill <code>sandbox-account-guardrail-pack</code> in plugin <a href="../index.html">aws-security</a> 0.6.1, 5 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/aws-security-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md">plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md</a> in <a href="https://github.com/basitalisandhu/aws-security-skills">aws-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md">plugins/aws-security/skills/sandbox-account-guardrail-pack/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

@@ -37,7 +37,7 @@
   "name": "mac-maintenance",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/mac-maintenance/"
  },
- "version": "0.1.4"
+ "version": "0.2.0"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">mac-maintenance</a> / mac-cleanup</p>
 <h1>Mac cleanup</h1>
 <p class="lede">Free disk space and speed up a Mac safely: survey it read-only, clear only what programs recreate (npm, Xcode and other package and build caches, Docker build cache, old logs), and write a decision list for everything else. Use when asked to free disk space, when &quot;my Mac feels slow&quot;, to find duplicate apps installed twice, or when System Data is huge and something is eating it. Not for Windows or Linux, malware scans, or deleting user files without an explicit yes.</p>
-<p class="meta">Skill <code>mac-cleanup</code> in plugin <a href="../index.html">mac-maintenance</a> 0.1.4, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a>.</p>
+<p class="meta">Skill <code>mac-cleanup</code> in plugin <a href="../index.html">mac-maintenance</a> 0.2.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/mac-maintenance-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/mac-maintenance-skills">mac-maintenance-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/mac-maintenance/skills/mac-cleanup/SKILL.md">plugins/mac-maintenance/skills/mac-cleanup/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -74,7 +74,7 @@ python3 install.py --user --skill mac-maintenance/mac-cleanup</code></pre>
 <ol start="3"><li><strong>Run the safe tier.</strong> First as a dry run, then show the plan to the user in a sentence or two and apply it. These actions touch only caches and leftovers that programs recreate, so a per-item yes is not needed, but the user should know what is about to happen and roughly how much it is:</li></ol>
 <pre><code class="language-bash">python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/mac-cleanup/scripts/safe_clean.py&quot;
 python3 &quot;${CLAUDE_PLUGIN_ROOT}/skills/mac-cleanup/scripts/safe_clean.py&quot; --apply --log mac-cleanup.log</code></pre>
-<p>Use <code>--skip</code> or <code>--only</code> to respect what the user said (for example <code>--skip chrome-cache,old-logs</code>). The cleaner skips an action whose condition fails and says why: npm cache while <code>npm install</code> runs, Chrome cache while Chrome is open, Xcode DerivedData while Xcode is open, uv cache when another uv process holds the lock. A &quot;partly failed&quot; path action means macOS refused some entries (a sandboxed container); report it, do not force it.</p>
+<p>Use <code>--skip</code> or <code>--only</code> to respect what the user said (for example <code>--skip chrome-cache,old-logs</code>); <code>safe_clean.py --list-actions</code> prints every action id with what it removes and when it is skipped, without reading the home folder. The cleaner skips an action whose condition fails and says why: npm cache while <code>npm install</code> runs, Chrome cache while Chrome is open, Xcode DerivedData while Xcode is open, uv cache when another uv process holds the lock. A &quot;partly failed&quot; path action means macOS refused some entries (a sandboxed container); report it, do not force it.</p>
 <p>Two things the cleaner does not do and you may, after a look: <code>git worktree prune</code> in a repository whose worktree list names folders that no longer exist (metadata only), and removing a CI cache folder the user confirms is stale.</p>
 <ol start="4"><li><strong>Build the decision list</strong> from the survey, the items in step 2, and the sibling skills: - <code>mac-app-leftovers</code> for data, login items and launch agents of apps that are no longer installed. - <code>mac-duplicate-finder</code> for byte-identical files; its suffix-copy class (&quot; (1)&quot; next to an identical original) is the one safe automatic move, and only after the user says yes.</li></ol>
 <p>Group the list by what the decision costs the user: apps to remove (with size and last-used date and the caveat that the date is unreliable), leftovers, duplicates, developer data (what is merged, what has uncommitted changes), personal folders that mirror each other, and the memory and startup items. Give sizes next to each item and a recommendation where you have one.</p>

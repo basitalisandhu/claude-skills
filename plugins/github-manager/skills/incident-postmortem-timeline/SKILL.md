@@ -1,6 +1,6 @@
 ---
 name: incident-postmortem-timeline
-description: "Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to \"write the postmortem for incident #412\" or \"how long did it take to mitigate?\". Not for deciding a root cause or blame, incidents with no GitHub issue, or live incident response."
+description: "Build a blameless, cited postmortem timeline and document skeleton from a saved incident issue export, ordering label changes, comments, cross-references, PR merges and the close by time, deriving detected, acknowledged, mitigated and resolved, listing people as roles and writing contributing factors as questions. Use when asked to \"write the postmortem for incident #412\" or \"how long did it take to mitigate?\". Not for deciding a root cause or blame, live incident response, or sprint reports of what shipped (iteration-report)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Standard library only, no network. The export step needs the gh CLI, logged in with read access to the repository.
 metadata:
@@ -101,6 +101,7 @@ Status: draft for the review. Blameless.
 
 ## Limits
 
+- It needs a GitHub issue for the incident; an incident tracked only in a pager or chat tool has nothing to export.
 - Only what the issue recorded is visible: pages, chat, dashboards and deploy logs are not in a GitHub export. The questions ask for them.
 - Detection is the issue's creation; if the incident was opened late, the real detection time must come from the people involved.
 - PR merge is used as the mitigation signal; a merge is not a deploy. The questions ask what confirmed the mitigation.

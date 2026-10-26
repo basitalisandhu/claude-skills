@@ -1,6 +1,6 @@
 ---
 name: aws-spend-guardrails
-description: "Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services, then check an exported Cost Explorer report for spikes. Use when asked to \"stop runaway AWS spend\", when setting cost alerts, protecting sandbox or agent accounts from runaway spend, or explaining a cost spike. Not for rightsizing or savings recommendations."
+description: "Generate AWS Budgets, a Cost Anomaly Detection monitor and a sandbox SCP that denies expensive services (large GPU instances, SageMaker and similar), then check an exported Cost Explorer report for spikes. Use when asked to \"stop runaway AWS spend\", when setting cost alerts, protecting sandbox or agent accounts from a bill that grows overnight, or explaining a cost spike. Not for rightsizing or savings recommendations, or a full sandbox OU pack (sandbox-account-guardrail-pack)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No AWS access needed to generate; review reads an export made with ce:GetCostAndUsage.
 metadata:

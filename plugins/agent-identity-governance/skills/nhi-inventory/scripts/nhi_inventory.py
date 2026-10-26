@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import functools
 import hashlib
 import json
 import re
@@ -60,13 +61,32 @@ class InputError(Exception):
     """Bad input: exit code 2."""
 
 
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
+
+
 # ---- shared helpers (each script carries its own copy so a skill folder stands alone) ---------------------------
 
 
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{path.name}: not valid JSON: {exc}") from exc
@@ -97,7 +117,10 @@ def parse_dt(value) -> datetime | None:
     if value is None or value == "":
         return None
     if isinstance(value, (int, float)) and not isinstance(value, bool):
-        return datetime.fromtimestamp(value / 1000 if value > 10**11 else value, tz=timezone.utc)
+        try:
+            return datetime.fromtimestamp(value / 1000 if value > 10**11 else value, tz=timezone.utc)
+        except (OverflowError, OSError, ValueError):  # an epoch beyond what the platform can hold
+            return None
     text = str(value).strip()
     if text.lower() in {"n/a", "no_information", "not_supported", "none", "null", "never"}:
         return None
@@ -712,6 +735,7 @@ KNOWN_FILES = {
 }
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="nhi_inventory.py",

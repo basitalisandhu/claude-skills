@@ -196,6 +196,21 @@ def flatten_pages(data: object) -> list:
     raise InputError("expected a JSON array")
 
 
+def text_of(value: object) -> str:
+    """A string field as text: the string itself, or "" for null or any other JSON type (a hand-edited export)."""
+    return value if isinstance(value, str) else ""
+
+
+def list_of(value: object) -> list:
+    """A list field as a list: the list itself, or [] for null or any other JSON type."""
+    return value if isinstance(value, list) else []
+
+
+def dict_of(value: object) -> dict:
+    """An object field as a dict: the dict itself, or {} for null or any other JSON type."""
+    return value if isinstance(value, dict) else {}
+
+
 def login_of(actor: object) -> str | None:
     """The login of a gh --json author ({'login': ...}) or a REST user object."""
     if isinstance(actor, dict):
@@ -221,19 +236,32 @@ def token(login: str) -> str:
     return "user-" + hashlib.sha256(login.lower().encode("utf-8")).hexdigest()[:6]
 
 
+_WORD_RUN = re.compile(r"(?<![\w-])@?([\w-]+)(?![\w-])")
+
+
 class Redactor:
     """Replace known logins (and @mentions of them) in any string with a token or a role name.
 
     With enabled=False it returns values unchanged, so call sites do not branch.
+
+    A login made only of word characters and hyphens (almost all of them) is found by one pass over the text that
+    looks up each whole word-and-hyphen run in a dict, so the cost grows with the text, not with texts times logins.
+    The few others (such as `renovate[bot]`) keep one regex each and run first, longest first.
     """
 
     def __init__(self, logins: set[str], enabled: bool, names: dict[str, str] | None = None) -> None:
         self.enabled = enabled
         self.names = {k.lower(): v for k, v in (names or {}).items()}
-        ordered = sorted((x for x in logins if x and len(x) > 1), key=len, reverse=True)
+        usable = [x for x in logins if x and len(x) > 1]
+        self.simple = {x.lower(): x for x in sorted(usable) if re.fullmatch(r"[\w-]+", x)}
+        ordered = sorted((x for x in usable if x.lower() not in self.simple), key=len, reverse=True)
         self.patterns = [
             (re.compile(r"(?<![\w-])@?" + re.escape(x) + r"(?![\w-])", re.IGNORECASE), x) for x in ordered
         ]
+
+    def _simple_sub(self, match: re.Match) -> str:
+        login = self.simple.get(match.group(1).lower())
+        return match.group(0) if login is None else self.name(login) or ""
 
     def name(self, login: str | None) -> str | None:
         if login is None or not self.enabled:
@@ -245,7 +273,7 @@ class Redactor:
             return value
         for rx, login in self.patterns:
             value = rx.sub(lambda _m, login=login: self.name(login) or "", value)
-        return value
+        return _WORD_RUN.sub(self._simple_sub, value) if self.simple else value
 
 
 def md_cell(value: object) -> str:
@@ -254,5 +282,5 @@ def md_cell(value: object) -> str:
 
 
 def short(text: str | None, limit: int = 90) -> str:
-    text = " ".join((text or "").split())
+    text = " ".join(text_of(text).split())
     return text if len(text) <= limit else text[: limit - 3].rstrip() + "..."

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>refactor-plan: Produce a step-by-step refactoring plan for a module | Claude Code skills</title>
-<meta name="description" content="Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or &quot;clean up&quot; code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.">
+<title>refactor-plan: Plan a safe refactor of a module | Claude Code skills</title>
+<meta name="description" content="Plan a safe refactor of a module, package or large file as small, behaviour-preserving commits, with the tests that guard each step and a rollback point: split a 3000-line file into smaller units, untangle packages that import each other in a circle, or clean up code when behaviour must not change. Use when asked to &quot;plan this refactor&quot;, for the steps to split or restructure a module, or to untangle dependencies. Not for ranking complexity (complexity-report), finding unused code (dead-code-finder), renames alone (naming-audit) or features and bug fixes.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/refactor-plan/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="refactor-plan: Produce a step-by-step refactoring plan for a module | Claude Code skills">
-<meta property="og:description" content="Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or &quot;clean up&quot; code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.">
+<meta property="og:title" content="refactor-plan: Plan a safe refactor of a module | Claude Code skills">
+<meta property="og:description" content="Plan a safe refactor of a module, package or large file as small, behaviour-preserving commits, with the tests that guard each step and a rollback point: split a 3000-line file into smaller units, untangle packages that import each other in a circle, or clean up code when behaviour must not change. Use when asked to &quot;plan this refactor&quot;, for the steps to split or restructure a module, or to untangle dependencies. Not for ranking complexity (complexity-report), finding unused code (dead-code-finder), renames alone (naming-audit) or features and bug fixes.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/code-quality/refactor-plan/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "refactor-plan",
- "description": "Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or \"clean up\" code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.",
+ "description": "Plan a safe refactor of a module, package or large file as small, behaviour-preserving commits, with the tests that guard each step and a rollback point: split a 3000-line file into smaller units, untangle packages that import each other in a circle, or clean up code when behaviour must not change. Use when asked to \"plan this refactor\", for the steps to split or restructure a module, or to untangle dependencies. Not for ranking complexity (complexity-report), finding unused code (dead-code-finder), renames alone (naming-audit) or features and bug fixes.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/refactor-plan/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "code-quality",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/code-quality/"
  },
- "version": "0.3.1"
+ "version": "0.4.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">code-quality</a> / refactor-plan</p>
 <h1>Refactor plan</h1>
-<p class="lede">Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or &quot;clean up&quot; code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change.</p>
-<p class="meta">Skill <code>refactor-plan</code> in plugin <a href="../index.html">code-quality</a> 0.3.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a>.</p>
+<p class="lede">Plan a safe refactor of a module, package or large file as small, behaviour-preserving commits, with the tests that guard each step and a rollback point: split a 3000-line file into smaller units, untangle packages that import each other in a circle, or clean up code when behaviour must not change. Use when asked to &quot;plan this refactor&quot;, for the steps to split or restructure a module, or to untangle dependencies. Not for ranking complexity (complexity-report), finding unused code (dead-code-finder), renames alone (naming-audit) or features and bug fixes.</p>
+<p class="meta">Skill <code>refactor-plan</code> in plugin <a href="../index.html">code-quality</a> 0.4.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/code-quality/skills/refactor-plan/SKILL.md">plugins/code-quality/skills/refactor-plan/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

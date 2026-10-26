@@ -1,6 +1,6 @@
 ---
 name: nhi-inventory
-description: "List every non-human identity your agents and automations run as, with owner, last use, credential count and oldest credential age, and flag the ownerless and the unused. Reads saved Entra (including Agent ID blueprints and agent identities), AWS IAM and GitHub exports plus a hand-kept register. Use when asked \"which agent identities have no owner?\" or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight), IAM policy content or a human access review pack (access-review-pack)."
+description: "Inventory every non-human or machine identity your agents and automations run as (service principals, IAM roles and users, GitHub apps and tokens), with owner, last use, credential count and oldest credential, and flag the ownerless and the unused. Merges saved Entra (with Agent ID), AWS IAM and GitHub exports with a hand-kept register. Use when asked \"which agent identities have no owner?\" or when starting agent identity governance. Not for one app's Graph permissions (graph-permission-preflight), IAM policy content or human access reviews (access-review-pack)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc), the AWS CLI and the GitHub CLI for the export step only.
 metadata:

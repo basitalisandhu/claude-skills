@@ -68,10 +68,10 @@ class InputError(Exception):
 
 
 def load_input(path: Path) -> dict:
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
         data = json.loads(text) if path.suffix == ".json" else yaml_load(text)
-    except (json.JSONDecodeError, YAMLError) as exc:
+    except (json.JSONDecodeError, YAMLError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: cannot parse: {exc}") from exc
     if not isinstance(data, dict):
         raise InputError(f"{path}: expected a mapping with organization and workloads")
@@ -184,6 +184,11 @@ def design(data: dict) -> dict:
     workload_accounts = [a for a in accounts if a["kind"] == "workload"]
     deployable = [a["name"] for a in workload_accounts if a["workload"]["environment"] != "sandbox"]
     networked = [a["name"] for a in workload_accounts if a["workload"]["environment"] != "sandbox"]
+    # who calls each workload, indexed once: scanning every account per account was quadratic in the workload count
+    callers_of: dict[tuple[str, str], list[str]] = {}
+    for b in workload_accounts:
+        for dep in dict.fromkeys(b["workload"]["depends_on"]):
+            callers_of.setdefault((dep, b["workload"]["environment"]), []).append(b["name"])
     rows = []
     for a in accounts:
         name = a["name"]
@@ -214,8 +219,7 @@ def design(data: dict) -> dict:
             w = a["workload"]
             reach = [f"{name} resources and {w['data_classification']} data"]
             reach += [by_key[(d, w["environment"])]["name"] + " (declared dependency)" for d in w["depends_on"]]
-            callers = [b["name"] for b in workload_accounts if w["name"] in b["workload"]["depends_on"]
-                       and b["workload"]["environment"] == w["environment"]]
+            callers = callers_of.get((w["name"], w["environment"]), [])
             exposure = "internet-facing" if w["internet_facing"] else "internal"
             rows.append(row(name, workload_impact(w), reach,
                             f"{exposure}; cross-account reach only through declared dependencies"
@@ -258,7 +262,7 @@ def render(d: dict) -> str:
     return "\n".join(out)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("input", help="YAML or JSON workload list")
     ap.add_argument("--json", action="store_true", help="print JSON instead of Markdown")
@@ -270,6 +274,16 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     print(json.dumps(d, indent=2) if args.json else render(d))
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

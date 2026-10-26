@@ -1,6 +1,6 @@
 ---
 name: aws-agent-session-audit
-description: "Audit what an AI coding agent did in an AWS account and which permissions it never needed, from a saved CloudTrail export filtered to the agent's role session: actions by service, writes versus reads, calls outside a declared allow list, logging tampering, destructive and IAM calls, resources touched, errors and the time window. Use when asked \"what did the agent do in our AWS account?\", after an agent session or before widening its role. Not for reviewing policy text (iam-least-privilege-review) or for an agent's local tool calls (agent-session-log-review in agent-security)."
+description: "Audit what an AI coding agent did in an AWS account and which permissions it never needed, from a saved CloudTrail export of the agent's role session: actions by service, writes versus reads, calls outside a declared allow list, logging tampering, destructive and IAM calls, resources touched and errors. Use when asked \"what did the agent do according to CloudTrail?\", after an agent session or before widening its role. Not for reviewing policy text (iam-least-privilege-review), planning a new agent role (agent-safe-aws-access) or local tool calls (agent-session-log-review)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. AWS CLI v2 with read-only CloudTrail and IAM access for the export step only; the script makes no network calls.
 metadata:

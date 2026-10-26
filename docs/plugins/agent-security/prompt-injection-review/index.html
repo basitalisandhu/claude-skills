@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>prompt-injection-review: Trace untrusted input such as web pages | Claude Code skills</title>
-<meta name="description" content="Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).">
+<meta name="description" content="Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code (sending replies, HTTP requests, shell, payments), and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege escalation paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="prompt-injection-review: Trace untrusted input such as web pages | Claude Code skills">
-<meta property="og:description" content="Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).">
+<meta property="og:description" content="Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code (sending replies, HTTP requests, shell, payments), and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege escalation paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "prompt-injection-review",
- "description": "Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. Use when asked \"can this agent be prompt injected?\", to find exfiltration or privilege paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).",
+ "description": "Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code (sending replies, HTTP requests, shell, payments), and judge each path against provenance and approval rules. Use when asked \"can this agent be prompt injected?\", to find exfiltration or privilege escalation paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.5.0"
+ "version": "0.6.0"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / prompt-injection-review</p>
 <h1>Prompt-injection review</h1>
-<p class="lede">Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).</p>
-<p class="meta">Skill <code>prompt-injection-review</code> in plugin <a href="../index.html">agent-security</a> 0.5.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/prompt-injection-review/SKILL.md">plugins/agent-security/skills/prompt-injection-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/prompt-injection-review/SKILL.md">plugins/agent-security/skills/prompt-injection-review/SKILL.md</a>.</p>
+<p class="lede">Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code (sending replies, HTTP requests, shell, payments), and judge each path against provenance and approval rules. Use when asked &quot;can this agent be prompt injected?&quot;, to find exfiltration or privilege escalation paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness).</p>
+<p class="meta">Skill <code>prompt-injection-review</code> in plugin <a href="../index.html">agent-security</a> 0.6.0, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/prompt-injection-review/SKILL.md">plugins/agent-security/skills/prompt-injection-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/prompt-injection-review/SKILL.md">plugins/agent-security/skills/prompt-injection-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

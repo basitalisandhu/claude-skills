@@ -1,6 +1,6 @@
 ---
 name: semver-advisor
-description: "Decide the next version number (major, minor or patch, or a pre-release) for a library, service, API, CLI or schema from the actual changes, using a decision table for what counts as breaking in each kind of artefact, and explain the decision with evidence. Use when asked \"is this a breaking change?\", what version to release, or how to version an API or a database schema. Not for generating release notes (use release-notes)."
+description: "Decide the next version number (major, minor, patch or a pre-release) for a library, service, REST API, CLI or schema from the actual changes, with a table of what counts as a breaking change for each, and explain the bump with evidence. Use when asked \"is this a breaking change?\", \"what version should I release?\", whether removing or adding a field or parameter needs a major bump, or how to version an API. Not for release notes (release-notes) or a changelog entry (changelog-keeper)."
 license: MIT
 compatibility: Any ecosystem. Reads the diff, the public API surface and the changelog; no tools required.
 metadata:

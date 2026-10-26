@@ -31,6 +31,7 @@ Exit codes: 0 runbook covers everything, 1 something is not covered, 2 bad input
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 from datetime import date
@@ -60,6 +61,25 @@ runbook. Each verification command only reads. Keep the output of every verifica
 
 class InputError(Exception):
     """Bad input: exit code 2."""
+
+
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
 
 
 def step(phase: str, title: str, change: str, verify: str, covers: list[str] | None = None) -> dict:
@@ -512,7 +532,7 @@ def render_steps(steps: list[dict]) -> str:
 def build(args) -> tuple[dict, str]:
     try:
         data = json.loads(Path(args.inventory).read_text(encoding="utf-8-sig"))
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{args.inventory}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{args.inventory}: not valid JSON: {exc}") from exc
@@ -526,7 +546,7 @@ def build(args) -> tuple[dict, str]:
     if args.template:
         try:
             template = Path(args.template).read_text(encoding="utf-8-sig")
-        except OSError as exc:
+        except (OSError, UnicodeDecodeError) as exc:
             raise InputError(f"{args.template}: cannot read: {exc}") from exc
     try:
         generated = date.fromisoformat(args.as_of).isoformat() if args.as_of else date.today().isoformat()
@@ -570,6 +590,7 @@ def build(args) -> tuple[dict, str]:
     return doc, text if text.endswith("\n") else text + "\n"
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="kill_switch_runbook.py",

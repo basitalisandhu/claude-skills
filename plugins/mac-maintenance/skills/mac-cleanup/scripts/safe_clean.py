@@ -26,6 +26,8 @@ the plan with sizes):
 Every path action refuses symbolic links and anything outside the home folder, and records entries macOS would
 not let it remove (sandboxed containers) instead of pretending. Exit codes: dry run 1 when there is something
 to clean, 0 when there is nothing; --apply 0 when every applicable action succeeded, 1 when any failed; 2 bad input.
+--list-actions prints every action id with what it removes and when it is skipped (--json for a list of objects), then
+exits 0 without reading the home folder or running any command.
 """
 from __future__ import annotations
 
@@ -40,10 +42,34 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-ACTION_IDS = ["npm-cache", "npx-stale", "go-build", "uv-cache", "pip-cache", "brew-cleanup", "docker-build-cache",
-              "docker-dangling-images", "docker-anon-volumes", "docker-orphan-buildx", "docker-stuck-installer",
-              "electron-updaters", "xcode-derived-data", "simulators-unavailable", "old-logs", "chrome-cache",
-              "orphan-login-items"]
+# Every action: what it removes, and when it is skipped. --list-actions prints this table; ACTION_IDS follows it.
+# Path actions also refuse symbolic links and anything outside the home and temp folders.
+ACTIONS: dict[str, str] = {
+    "npm-cache": "~/.npm/_cacache; skipped while npm install or npm ci is running",
+    "npx-stale": "~/.npm/_npx entries older than --npx-days; skipped for entries a running process uses",
+    "go-build": "~/Library/Caches/go-build; nothing to do when the folder is absent",
+    "uv-cache": "uv cache prune; skipped without uv or with --no-commands, locked while another uv holds the lock",
+    "pip-cache": "pip3 cache purge; without pip3 or with --no-commands, ~/Library/Caches/pip and ~/.cache/pip",
+    "brew-cleanup": "brew cleanup --prune=all -s; skipped without Homebrew or with --no-commands",
+    "docker-build-cache": "docker builder prune -af; skipped unless the Docker daemon answers",
+    "docker-dangling-images": "docker image prune -f; skipped unless the Docker daemon answers",
+    "docker-anon-volumes": "docker volume prune -f (anonymous volumes no container uses); skipped unless the Docker "
+                           "daemon answers",
+    "docker-orphan-buildx": "buildx_buildkit_*_state volumes whose builder no longer exists; skipped unless the "
+                            "Docker daemon answers",
+    "docker-stuck-installer": "Docker Desktop update downloads in Application Support and the temp folder, after "
+                              "detaching any installer image still mounted from them; nothing to do when absent",
+    "electron-updaters": "~/Library/Caches/*-updater and *electron-updater download folders; nothing to do when "
+                         "absent",
+    "xcode-derived-data": "~/Library/Developer/Xcode/DerivedData; skipped while Xcode is running",
+    "simulators-unavailable": "xcrun simctl delete unavailable; nothing to do without ~/Library/Developer/"
+                              "CoreSimulator, skipped without xcrun or with --no-commands",
+    "old-logs": "files in ~/Library/Logs older than --log-days; symbolic links are never followed",
+    "chrome-cache": "~/Library/Caches/Google/Chrome/*/Cache and */Code Cache; skipped while Google Chrome is running",
+    "orphan-login-items": "login items whose target no longer exists; skipped without osascript or with "
+                          "--no-commands",
+}
+ACTION_IDS = list(ACTIONS)
 
 
 def human(n: int | float | None) -> str:
@@ -327,7 +353,7 @@ class Cleaner:
             return
         halves = out.strip().split(", ")
         n = len(halves) // 2
-        missing = [name for name, path in zip(halves[:n], halves[n:], strict=False) if path and not Path(path).exists()]
+        missing = [name for name, path in zip(halves[:n], halves[n:], strict=False) if path and not exists(path)]
         if not missing:
             self.record("orphan-login-items", "login items with missing targets", "nothing to do", 0)
         elif not self.apply:
@@ -376,6 +402,14 @@ class Cleaner:
             self.chrome_cache()
         if "orphan-login-items" in wanted:
             self.orphan_login_items()
+
+
+def exists(text: str) -> bool:
+    """Path(text).exists(), treating a path the system cannot even look up (too long, NUL byte) as absent."""
+    try:
+        return Path(text).exists()
+    except (OSError, ValueError):
+        return False
 
 
 def free_bytes(path: Path) -> int | None:
@@ -444,7 +478,17 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--timeout", type=positive_int, default=600, help="seconds per external command (default 600)")
     ap.add_argument("--log", help="append a line per action to this file")
     ap.add_argument("--json", action="store_true", help="print the result as JSON")
+    ap.add_argument("--list-actions", action="store_true",
+                    help="print each action id with what it removes and when it is skipped, then exit")
     args = ap.parse_args(argv)
+
+    if args.list_actions:
+        if args.json:
+            print(json.dumps([{"id": a, "description": d} for a, d in ACTIONS.items()], indent=2))
+        else:
+            width = max(len(a) for a in ACTIONS)
+            print("\n".join(f"{a:<{width}}  {d}" for a, d in ACTIONS.items()))
+        return 0
 
     home = Path(args.home).expanduser()
     if not home.is_dir():

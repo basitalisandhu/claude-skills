@@ -199,7 +199,11 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             if isinstance(doc, dict) and "kind" in doc:
                 objects += 1
-            findings += review_doc(f, i, doc)
+            try:
+                findings += review_doc(f, i, doc)
+            except (AttributeError, TypeError, KeyError, ValueError) as exc:  # a field of the wrong YAML type
+                parse_errors.append(f"{f}: document {i}: unexpected structure ({type(exc).__name__}: {exc}); "
+                                    "check the field types against the Kubernetes API")
     if not objects and not parse_errors:
         print(f"error: no Kubernetes objects found in {len(files)} file(s): expected YAML or JSON documents with apiVersion and kind", file=sys.stderr)
         return 2
@@ -216,6 +220,8 @@ def main(argv: list[str] | None = None) -> int:
         for e in parse_errors:
             print(f"  parse error: {e}")
     if parse_errors:
+        for e in parse_errors:
+            print(f"error: {e}", file=sys.stderr)
         return 2
     worst = min((order[x["severity"]] for x in findings), default=99)
     return 1 if worst <= order[args.fail_on] else 0

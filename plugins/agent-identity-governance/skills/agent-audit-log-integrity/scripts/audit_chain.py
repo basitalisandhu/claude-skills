@@ -28,6 +28,7 @@ that holds no JSON lines at all, a bad --head value, an empty key file, a log th
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import hmac
 import json
@@ -43,6 +44,25 @@ ID_FIELDS = ("tool_use_id", "toolUseId", "action_id", "id", "event_id", "eventID
 
 class InputError(Exception):
     """Bad input: exit code 2."""
+
+
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
 
 
 def canonical(record: dict) -> bytes:
@@ -109,7 +129,10 @@ def when(rec: dict) -> datetime | None:
         v = rec.get(f)
         if isinstance(v, (int, float)) and not isinstance(v, bool):
             secs = v / 1000 if v > 1e11 else v
-            return datetime.fromtimestamp(secs, tz=timezone.utc)
+            try:
+                return datetime.fromtimestamp(secs, tz=timezone.utc)
+            except (OverflowError, OSError, ValueError):  # an epoch beyond what the platform can hold
+                return None
         if isinstance(v, str) and v:
             s = v.strip().replace("Z", "+00:00")
             try:
@@ -255,7 +278,7 @@ def cmd_verify(args) -> int:
     if args.head_file:
         try:
             head = parse_head(Path(args.head_file).read_text(encoding="utf-8").strip())
-        except OSError as exc:
+        except (OSError, UnicodeDecodeError) as exc:
             raise InputError(f"--head-file: cannot read {args.head_file}: {exc}") from exc
     records = parse(read_lines(path), path)
     findings, summary = verify(records, key, head, args.skew)
@@ -324,7 +347,8 @@ def cmd_coverage(args) -> int:
                 logged.setdefault(str(v), n)
                 break
     missing = [i for i in expect if i not in logged]
-    extra = [i for i in logged if i not in set(expect)]
+    expected_set = set(expect)  # built once: rebuilding it per logged id made coverage quadratic
+    extra = [i for i in logged if i not in expected_set]
     result = {
         "log": path.name,
         "expected": len(expect),
@@ -360,6 +384,7 @@ def write(text: str, out: str | None) -> None:
         sys.stdout.write(text)
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="audit_chain.py",

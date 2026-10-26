@@ -7,6 +7,9 @@ Input folder (export commands are in SKILL.md):
   issues.json       gh issue list --json number,title,url,state,stateReason,createdAt,closedAt,milestone,
                     assignees,labels
   milestones.json   optional, gh api 'repos/OWNER/REPO/milestones?state=all' --paginate --slurp
+  timeline-<N>.json optional, gh api repos/OWNER/REPO/issues/N/timeline --paginate --slurp, one per scope issue:
+                    milestoned and demilestoned events for the scope milestone inside the window are listed as
+                    scope added or removed during the window, each citing its event id
 An export may be split, for example prs-open.json and prs-closed.json; rows are merged by number. Files may carry
 a prefix, for example fixture-prs.json.
 
@@ -46,15 +49,19 @@ from _ghexport import (  # noqa: E402
     hours_between,
     human_hours,
     iso,
+    list_of,
     load_rows,
     login_of,
     md_cell,
     median,
     merge_rows,
+    numbered_files,
     parse_time,
     percentile_nearest_rank,
+    row_number,
     short,
     stem_files,
+    text_of,
 )
 
 CLOSING_RE = re.compile(r"(?i)\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s*:?\s+#(\d+)\b")
@@ -75,14 +82,14 @@ def window(start: str, end: str) -> tuple[datetime, datetime]:
 def linked_issues(pr: dict) -> tuple[list[int], str]:
     refs = pr.get("closingIssuesReferences")
     if isinstance(refs, list) and refs:
-        found = sorted({int(r["number"]) for r in refs if isinstance(r, dict) and "number" in r})
+        found = sorted({n for n in (row_number(r) for r in refs if isinstance(r, dict)) if n is not None})
         return found, "closingIssuesReferences"
-    found = sorted({int(n) for n in CLOSING_RE.findall(pr.get("body") or "")})
+    found = sorted({int(n) for n in CLOSING_RE.findall(text_of(pr.get("body")))})
     return found, ("PR body keywords" if found else "none")
 
 
 def first_commit(pr: dict) -> datetime | None:
-    times = [parse_time(c.get("authoredDate") or c.get("committedDate")) for c in pr.get("commits") or []
+    times = [parse_time(c.get("authoredDate") or c.get("committedDate")) for c in list_of(pr.get("commits"))
              if isinstance(c, dict)]
     times = [t for t in times if t]
     return min(times) if times else None
@@ -91,7 +98,7 @@ def first_commit(pr: dict) -> datetime | None:
 def first_review(pr: dict) -> datetime | None:
     author = (login_of(pr.get("author")) or "").lower()
     times = []
-    for r in pr.get("reviews") or []:
+    for r in list_of(pr.get("reviews")):
         if not isinstance(r, dict) or str(r.get("state") or "").upper() == "PENDING":
             continue
         if (login_of(r.get("author")) or "").lower() == author:
@@ -104,7 +111,7 @@ def first_review(pr: dict) -> datetime | None:
 
 def milestone_of(issue: dict) -> dict | None:
     m = issue.get("milestone")
-    return m if isinstance(m, dict) and m.get("title") else None
+    return m if isinstance(m, dict) and isinstance(m.get("title"), str) and m.get("title") else None
 
 
 def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_start: str, redact: bool) -> dict:
@@ -122,7 +129,7 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
 
     logins = {login_of(p.get("author")) or "" for p in prs} | {login_of(i.get("author")) or "" for i in issues}
     for i in issues:
-        logins |= {login_of(a) or "" for a in i.get("assignees") or []}
+        logins |= {login_of(a) or "" for a in list_of(i.get("assignees"))}
     red = Redactor(logins, redact)
     issue_by_no = {int(i["number"]): i for i in issues}
 
@@ -132,8 +139,8 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
     # Scope.
     due_in_window = set()
     for m in milestones:
-        if isinstance(m, dict) and inside(parse_time(m.get("due_on") or m.get("dueOn"))):
-            due_in_window.add(m.get("title"))
+        if isinstance(m, dict) and inside(parse_time(m.get("due_on") or m.get("dueOn"))) and text_of(m.get("title")):
+            due_in_window.add(m["title"])
     for i in issues:
         m = milestone_of(i)
         if m and inside(parse_time(m.get("dueOn") or m.get("due_on"))):
@@ -164,6 +171,22 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
 
     def issue_row(i: dict, **extra) -> dict:
         return {"number": int(i["number"]), "url": i.get("url"), "title": red.text(short(i.get("title"), 80)), **extra}
+
+    timeline_paths = numbered_files(folder, "timeline")
+    added, removed = scope_changes(timeline_paths, scope_ms, inside)
+    if not timeline_paths:
+        changes_basis = "not measured: no timeline-<N>.json files, so milestone membership is as at export time"
+    elif scope_ms is None:
+        changes_basis = "not measured: scope is not a milestone, so milestoned events do not apply"
+    else:
+        changes_basis = (f"milestoned and demilestoned events for {scope_ms!r} in the window, from "
+                         f"{len(timeline_paths)} timeline-<N>.json files")
+
+    def change_row(change: dict) -> dict:
+        n = change["number"]
+        base = issue_row(issue_by_no[n]) if n in issue_by_no else {"number": n, "url": None,
+                                                                    "title": "(not in the issues export)"}
+        return {**base, "when": iso(change["when"]), "cite": change["cite"]}
 
     completed, not_planned, carried = [], [], []
     for i in scope:
@@ -213,8 +236,11 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
     shipped_issue_numbers = sorted({n for p in shipped for n in p["issues"]})
     return {
         "window": {"from": iso(lo), "to_exclusive": iso(hi), "inclusive_dates": f"{start} to {end}"},
-        "source_files": sorted(p.name for p in [*prs_paths, *issues_paths, ms_path] if p),
-        "scope": {"basis": scope_basis, "milestone": scope_ms, "issues": sorted(scope_numbers)},
+        "source_files": sorted(p.name for p in [*prs_paths, *issues_paths, ms_path, *timeline_paths.values()] if p),
+        "scope": {"basis": scope_basis, "milestone": scope_ms, "issues": sorted(scope_numbers),
+                  "changes_basis": changes_basis,
+                  "added_during_window": [change_row(c) for c in added],
+                  "removed_during_window": [change_row(c) for c in removed]},
         "redacted": redact,
         "shipped": shipped,
         "shipped_issues": [issue_row(issue_by_no[n]) if n in issue_by_no else {"number": n, "url": None,
@@ -240,9 +266,42 @@ def analyse(folder: Path, start: str, end: str, milestone: str | None, cycle_sta
     }
 
 
+def scope_changes(timeline_paths: dict[int, Path], scope_ms: str | None, inside) -> tuple[list[dict], list[dict]]:
+    """Milestoned and demilestoned events for the scope milestone inside the window, one row per event, in time
+    order. Each row cites the event id, or the file and row when the event has none."""
+    added: list[dict] = []
+    removed: list[dict] = []
+    if scope_ms is None:
+        return added, removed
+    for number, path in sorted(timeline_paths.items()):
+        for index, event in enumerate(load_rows(path)):
+            if not isinstance(event, dict) or event.get("event") not in ("milestoned", "demilestoned"):
+                continue
+            milestone = event.get("milestone")
+            title = milestone.get("title") if isinstance(milestone, dict) else None
+            when = parse_time(event.get("created_at") or event.get("createdAt"))
+            if title != scope_ms or not inside(when):
+                continue
+            eid = event.get("id")
+            cite = f"event {eid}" if isinstance(eid, (int, str)) and str(eid) else f"{path.name} row {index + 1}"
+            (added if event["event"] == "milestoned" else removed).append({"number": number, "when": when,
+                                                                           "cite": cite})
+    added.sort(key=lambda c: (c["when"], c["number"]))
+    removed.sort(key=lambda c: (c["when"], c["number"]))
+    return added, removed
+
+
 def refs(rows: list) -> str:
     nums = [r if isinstance(r, int) else r["number"] for r in rows]
     return ", ".join(f"#{n}" for n in nums) if nums else "none"
+
+
+def scope_change_line(scope: dict) -> str:
+    if scope["changes_basis"].startswith("not measured"):
+        return f"- Scope changes during the window: {scope['changes_basis']}."
+    added, removed = scope["added_during_window"], scope["removed_during_window"]
+    return (f"- Scope changes during the window ({scope['changes_basis']}): added {len(added)} ({refs(added)}), "
+            f"removed {len(removed)} ({refs(removed)}).")
 
 
 def render_markdown(rep: dict) -> str:
@@ -261,6 +320,7 @@ def render_markdown(rep: dict) -> str:
         f"Completed {len(rep['completed'])} ({refs(rep['completed'])}), closed as not planned "
         f"{len(rep['not_planned'])} ({refs(rep['not_planned'])}), carried over {len(rep['carried_over'])} "
         f"({refs(rep['carried_over'])}).",
+        scope_change_line(rep["scope"]),
         f"- Newly opened in the window: {len(rep['newly_opened'])} issues ({refs(rep['newly_opened'])}), of which "
         f"{sum(1 for r in rep['newly_opened'] if r['in_scope'])} in scope "
         f"({refs([r for r in rep['newly_opened'] if r['in_scope']])}).",
@@ -284,12 +344,17 @@ def render_markdown(rep: dict) -> str:
         review = human_hours(p["review_hours"]) if p["review_hours"] is not None else "no review"
         out.append(f"| {link(p)} | {md_cell(p['title'])} | {p['merged']} | {closes} | {p['cycle_start_basis']} | "
                    f"{human_hours(p['cycle_hours'])} | {review} |")
-    sections = (("Carried over", rep["carried_over"], "state"), ("Completed", rep["completed"], "closed"),
+    sections = (("Added to scope during the window", rep["scope"]["added_during_window"], "when"),
+                ("Removed from scope during the window", rep["scope"]["removed_during_window"], "when"),
+                ("Carried over", rep["carried_over"], "state"), ("Completed", rep["completed"], "closed"),
                 ("Closed as not planned", rep["not_planned"], "closed"),
                 ("Newly opened", rep["newly_opened"], "created"),
                 ("Merged outside the window (not counted)", rep["merged_outside_window"], "merged"),
                 ("Closed without merging (not counted)", rep["closed_unmerged"], "closed"))
+    measured = not rep["scope"]["changes_basis"].startswith("not measured")
     for title, rows, key in sections:
+        if key == "when" and not measured:
+            continue
         out += ["", f"### {title}", ""]
         if not rows:
             out.append("None.")
@@ -297,6 +362,8 @@ def render_markdown(rep: dict) -> str:
         out += [f"| Row | Title | {key.capitalize()} |", "|---|---|---|"]
         for r in rows:
             extra = r[key] + (" (in scope)" if r.get("in_scope") else "") if key == "created" else r[key]
+            if key == "when":
+                extra = f"{r['when']} ({r['cite']})"
             out.append(f"| {link(r)} | {md_cell(r['title'])} | {md_cell(extra)} |")
     out += ["", f"Method: {ct['method']}. Durations are wall-clock hours from the exported timestamps; nothing is "
             "estimated, and a row missing a timestamp is left out of that figure."]

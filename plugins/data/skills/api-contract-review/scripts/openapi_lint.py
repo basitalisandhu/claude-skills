@@ -239,7 +239,12 @@ def main(argv: list[str] | None = None) -> int:
         shape = {list: "a list", str: "plain text", type(None): "empty"}.get(type(doc), type(doc).__name__)
         print(f"error: {p} is not an OpenAPI document: the top level is {shape}, expected a mapping with openapi, info and paths", file=sys.stderr)
         return 2
-    findings = lint(doc)
+    try:
+        findings = lint(doc)
+    except (AttributeError, TypeError, KeyError, ValueError) as exc:  # a field of the wrong type
+        print(f"error: {p} has an unexpected structure ({type(exc).__name__}: {exc}); check it against the OpenAPI "
+              "3.x schema (for example info must be a mapping)", file=sys.stderr)
+        return 2
     order = {lv: i for i, lv in enumerate(LEVELS)}
     counts = {lv: sum(1 for f in findings if f["level"] == lv) for lv in LEVELS}
     ops = sum(1 for item in ((doc.get("paths") or {}).values() if isinstance(doc, dict) and isinstance(doc.get("paths"), dict) else []) if isinstance(item, dict) for m in item if m in METHODS)

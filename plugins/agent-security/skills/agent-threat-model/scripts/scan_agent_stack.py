@@ -208,6 +208,8 @@ def detect(root: Path) -> dict:
                 notes += why
             except json.JSONDecodeError as exc:
                 notes.append(f"{rel}: not valid JSON (line {exc.lineno}); its MCP servers are missing from the draft")
+            except RecursionError:
+                notes.append(f"{rel}: JSON nested too deeply to read; its MCP servers are missing from the draft")
     return {"files": files, "truncated": state["truncated"], "notes": notes, "hits": {k: {n: sorted(v)[:5] for n, v in d.items()} for k, d in hits.items()},
             "credentials": {k: sorted(v)[:3] for k, v in sorted(creds.items())}, "mcp_servers": mcp_servers,
             "signals": {k: sorted(v)[:5] for k, v in signals.items()}}

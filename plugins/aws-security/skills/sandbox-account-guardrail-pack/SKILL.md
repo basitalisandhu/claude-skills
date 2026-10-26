@@ -1,6 +1,6 @@
 ---
 name: sandbox-account-guardrail-pack
-description: "Generate a guardrail pack for an AWS sandbox OU used by engineers and AI agents, with linted SCPs (region allowlist, IMDSv2, no root, protected logging), spend budgets, a baseline checklist and a tag-based auto-expiry design. Use when asked to \"set up a safe sandbox account\", or when creating or tightening a sandbox or training OU. Not for production OUs (scp-guardrails) and it never runs the cleanup."
+description: "Generate a guardrail pack for an AWS sandbox OU where engineers and AI agents experiment: SCPs that pass the bundled size checks (region allowlist, IMDSv2, no root, protected logging), AWS Budgets, a checklist for new sandbox accounts and a tag-based auto-expiry design. Use when asked to \"set up a safe sandbox account\", or when creating or tightening a sandbox or training OU. Not for production OUs or linting an existing SCP (scp-guardrails), runaway spend alerts on their own (aws-spend-guardrails) or checking an existing account (aws-account-audit), and it never runs the cleanup."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. No AWS access needed; the checklist commands need read-only access to the sandbox accounts.
 metadata:

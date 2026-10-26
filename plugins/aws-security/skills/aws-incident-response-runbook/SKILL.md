@@ -1,6 +1,6 @@
 ---
 name: aws-incident-response-runbook
-description: "Write a filled-in AWS incident response runbook for a leaked access key, a compromised EC2 instance, a public S3 bucket, suspicious IAM activity, ransomware against S3 or EBS, or crypto-mining, with read-only inventory first, containment commands that each need confirmation, evidence preservation, recovery and templates; a triage mode picks the scenario from GuardDuty findings. Use when asked \"we leaked an AWS key, what now?\", when a GuardDuty finding needs a response plan or to prepare runbooks early. Not for a posture backlog (security-hub-triage) or routine audits (aws-account-audit)."
+description: "Write a filled-in AWS incident response runbook for a leaked access key, a compromised EC2 instance, a public S3 bucket, suspicious IAM activity, ransomware that deletes S3 objects or EBS volumes, or crypto-mining: read-only inventory first, containment commands that each need confirmation, evidence, recovery and templates; a triage mode picks the scenario from GuardDuty findings. Use when asked \"we leaked an AWS key, what now?\", when a GuardDuty finding needs a response plan or to prepare runbooks early. Not for a posture backlog (security-hub-triage) or routine audits (aws-account-audit)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. The script makes no network calls; the runbook's commands need AWS CLI v2 and an incident response role.
 metadata:

@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>terraform-review: Review Terraform or OpenTofu code against a fixed checklist | Claude Code skills</title>
-<meta name="description" content="Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to &quot;review this Terraform&quot; or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode).">
+<title>terraform-review: Review Terraform or OpenTofu files | Claude Code skills</title>
+<meta name="description" content="Review Terraform or OpenTofu files (main.tf, modules, variables) against a checklist: state and backend safety, version pinning, typed and validated variables, secrets in variables, public exposure (open security groups, public buckets, 0.0.0.0/0), missing encryption and logging defaults, lifecycle and destroy protection. Use when asked to &quot;review this Terraform&quot; or other IaC files, or what in it is exposed to the internet. Not for gating a saved plan before apply (terraform-apply-gate), cloud architecture from scratch, or Dockerfiles and manifests.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/devops/terraform-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="terraform-review: Review Terraform or OpenTofu code against a fixed checklist | Claude Code skills">
-<meta property="og:description" content="Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to &quot;review this Terraform&quot; or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode).">
+<meta property="og:title" content="terraform-review: Review Terraform or OpenTofu files | Claude Code skills">
+<meta property="og:description" content="Review Terraform or OpenTofu files (main.tf, modules, variables) against a checklist: state and backend safety, version pinning, typed and validated variables, secrets in variables, public exposure (open security groups, public buckets, 0.0.0.0/0), missing encryption and logging defaults, lifecycle and destroy protection. Use when asked to &quot;review this Terraform&quot; or other IaC files, or what in it is exposed to the internet. Not for gating a saved plan before apply (terraform-apply-gate), cloud architecture from scratch, or Dockerfiles and manifests.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/devops/terraform-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "terraform-review",
- "description": "Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to \"review this Terraform\" or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode).",
+ "description": "Review Terraform or OpenTofu files (main.tf, modules, variables) against a checklist: state and backend safety, version pinning, typed and validated variables, secrets in variables, public exposure (open security groups, public buckets, 0.0.0.0/0), missing encryption and logging defaults, lifecycle and destroy protection. Use when asked to \"review this Terraform\" or other IaC files, or what in it is exposed to the internet. Not for gating a saved plan before apply (terraform-apply-gate), cloud architecture from scratch, or Dockerfiles and manifests.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/terraform-review/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "devops",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/devops/"
  },
- "version": "0.3.1"
+ "version": "0.4.1"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">devops</a> / terraform-review</p>
 <h1>Terraform review</h1>
-<p class="lede">Review Terraform or OpenTofu code against a fixed checklist: state and backend safety, provider and module version pinning, variables with types and validation, secrets handling, public exposure (open security groups, public buckets, 0.0.0.0/0), encryption and logging defaults, lifecycle and destroy protection, and plan hygiene. Use when asked to &quot;review this Terraform&quot; or other infrastructure code, a plan, or a module before apply. Not for writing cloud architecture from scratch and not a replacement for a policy engine (it tells you which rules to encode).</p>
-<p class="meta">Skill <code>terraform-review</code> in plugin <a href="../index.html">devops</a> 0.3.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/terraform-review/SKILL.md">plugins/devops/skills/terraform-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/terraform-review/SKILL.md">plugins/devops/skills/terraform-review/SKILL.md</a>.</p>
+<p class="lede">Review Terraform or OpenTofu files (main.tf, modules, variables) against a checklist: state and backend safety, version pinning, typed and validated variables, secrets in variables, public exposure (open security groups, public buckets, 0.0.0.0/0), missing encryption and logging defaults, lifecycle and destroy protection. Use when asked to &quot;review this Terraform&quot; or other IaC files, or what in it is exposed to the internet. Not for gating a saved plan before apply (terraform-apply-gate), cloud architecture from scratch, or Dockerfiles and manifests.</p>
+<p class="meta">Skill <code>terraform-review</code> in plugin <a href="../index.html">devops</a> 0.4.1, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/devops/skills/terraform-review/SKILL.md">plugins/devops/skills/terraform-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/devops/skills/terraform-review/SKILL.md">plugins/devops/skills/terraform-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

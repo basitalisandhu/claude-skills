@@ -115,7 +115,7 @@ def normalise(f: dict) -> dict | None:
 def load_findings(path: Path) -> list[dict]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: invalid JSON: {exc}") from exc
     if isinstance(data, dict):
         data = data.get("Findings")
@@ -130,10 +130,10 @@ def load_findings(path: Path) -> list[dict]:
 def load_config(path: Path | None) -> dict:
     if path is None:
         return {}
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
         cfg = json.loads(text) if path.suffix == ".json" else yaml_load(text)
-    except (json.JSONDecodeError, YAMLError) as exc:
+    except (json.JSONDecodeError, YAMLError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: cannot parse: {exc}") from exc
     if cfg is None:
         return {}
@@ -273,7 +273,7 @@ def render(rep: dict) -> str:
     return "\n".join(lines)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="+", help="exported findings JSON files")
     ap.add_argument("--config", help="suppression and owner config (YAML or JSON)")
@@ -299,6 +299,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.fail_on == "NONE":
         return 0
     return 1 if any(RANK[s] <= RANK[args.fail_on] and n for s, n in rep["counts"].items()) else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

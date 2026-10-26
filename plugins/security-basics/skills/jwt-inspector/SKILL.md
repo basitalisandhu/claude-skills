@@ -1,6 +1,6 @@
 ---
 name: jwt-inspector
-description: "Decode a JSON Web Token without verifying it with a bundled script that prints the header and claims with times explained, and flags unsafe settings (alg none, empty signature, missing or long expiry, jku or x5u headers, suspicious kid, symmetric algorithms, sensitive claims in the payload), then review how the application issues and verifies tokens. Use when asked to \"decode this JWT\", when debugging authentication, or when reviewing a token design. Not for verifying signatures (the application does that with its key) and not for OAuth server implementation."
+description: "Decode a JWT or bearer access token without verifying it, with a bundled script that prints the header, claims and expiry, and flags unsafe settings (alg none, empty signature, long or missing expiry, jku or x5u, suspicious kid, HS256 and other symmetric algorithms, email or other sensitive claims in the payload); then check whether the token design is safe. Use when asked to \"decode this JWT\", \"when does this token expire?\", or when debugging a 401. Not for verifying signatures, a whole login and session flow (auth-flow-review) or OAuth servers."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. JWS and JWE compact serialisations.
 metadata:

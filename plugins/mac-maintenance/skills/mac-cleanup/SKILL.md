@@ -47,7 +47,7 @@ Report only sizes the scripts measured and only removals that completed. A comma
    python3 "${CLAUDE_PLUGIN_ROOT}/skills/mac-cleanup/scripts/safe_clean.py" --apply --log mac-cleanup.log
    ```
 
-   Use `--skip` or `--only` to respect what the user said (for example `--skip chrome-cache,old-logs`). The cleaner skips an action whose condition fails and says why: npm cache while `npm install` runs, Chrome cache while Chrome is open, Xcode DerivedData while Xcode is open, uv cache when another uv process holds the lock. A "partly failed" path action means macOS refused some entries (a sandboxed container); report it, do not force it.
+   Use `--skip` or `--only` to respect what the user said (for example `--skip chrome-cache,old-logs`); `safe_clean.py --list-actions` prints every action id with what it removes and when it is skipped, without reading the home folder. The cleaner skips an action whose condition fails and says why: npm cache while `npm install` runs, Chrome cache while Chrome is open, Xcode DerivedData while Xcode is open, uv cache when another uv process holds the lock. A "partly failed" path action means macOS refused some entries (a sandboxed container); report it, do not force it.
 
    Two things the cleaner does not do and you may, after a look: `git worktree prune` in a repository whose worktree list names folders that no longer exist (metadata only), and removing a CI cache folder the user confirms is stale.
 

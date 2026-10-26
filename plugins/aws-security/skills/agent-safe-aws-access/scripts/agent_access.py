@@ -196,10 +196,10 @@ def as_list(value) -> list:
 
 
 def load_spec(path: Path) -> dict:
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
         data = json.loads(text) if path.suffix == ".json" else yaml_load(text)
-    except (json.JSONDecodeError, YAMLError) as exc:
+    except (json.JSONDecodeError, YAMLError, UnicodeDecodeError) as exc:
         raise SpecError(f"{path}: cannot parse: {exc}") from exc
     if not isinstance(data, dict):
         raise SpecError(f"{path}: the spec must be a mapping")
@@ -769,11 +769,11 @@ def write_plan(result: dict, out: Path) -> None:
 def read_json(path: str):
     try:
         return json.loads(Path(path).read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise ValueError(f"{path}: not JSON: {exc}") from exc
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="agent_access.py", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("plan", help="generate trust, permission, boundary and SCP documents from a spec")
@@ -831,6 +831,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {f['severity']:<8} {f['id']:<30} {f['where']:<40} {f['message']}")
     threshold = LEVELS.index(args.fail_on)
     return 1 if any(LEVELS.index(f["severity"]) <= threshold for f in report["findings"]) else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":
