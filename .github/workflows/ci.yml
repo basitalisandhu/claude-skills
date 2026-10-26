@@ -5,7 +5,8 @@ on:
     branches: [main]
   pull_request:
   # sync.yml starts this on the sync branch: pull requests opened with GITHUB_TOKEN start no
-  # workflows, but a workflow_dispatch does, and its checks show on the pull request (issue #24).
+  # workflows, but a workflow_dispatch does (issue #24). Its check runs are not listed on the pull
+  # request, so the report-to-pr job below posts the result as commit statuses.
   workflow_dispatch:
 
 permissions:
@@ -81,3 +82,39 @@ jobs:
         run: python3 plugins/devops/skills/github-actions-author/scripts/gha_lint.py .github/workflows --fail-on medium
       - name: Scan this repository with the security-basics plugin's secrets scanner
         run: python3 plugins/security-basics/skills/secrets-hygiene/scripts/secrets_scan.py . --fail-on high --baseline .secrets-baseline.json
+
+  # Check runs from a workflow_dispatch run are not listed on a pull request, but commit statuses
+  # are. On a dispatched run off main (the sync branch), post one "ci / <job>" status per job on
+  # the commit, replacing the pending ones sync.yml set. Skipped when the run is cancelled, since
+  # the run that cancelled it reports instead.
+  report-to-pr:
+    name: Report the result as commit statuses
+    if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && github.ref != 'refs/heads/main' }}
+    needs: [validate, claude-plugin-validate, bundled-checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Post the statuses
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          VALIDATE: ${{ needs.validate.result }}
+          PLUGIN_VALIDATE: ${{ needs.claude-plugin-validate.result }}
+          BUNDLED: ${{ needs.bundled-checks.result }}
+        run: |
+          post() {
+            case "$2" in
+              success) state=success ;;
+              failure) state=failure ;;
+              *) state=error ;;
+            esac
+            gh api -X POST "repos/$GITHUB_REPOSITORY/statuses/$SHA" -f state="$state" -f context="ci / $1" \
+              -f description="Job result: $2" -f target_url="$RUN_URL" > /dev/null
+            echo "ci / $1: $state"
+          }
+          post "Validate, build check and tests" "$VALIDATE"
+          post "claude plugin validate --strict" "$PLUGIN_VALIDATE"
+          post "Bundled workflow linter and secrets scanner" "$BUNDLED"

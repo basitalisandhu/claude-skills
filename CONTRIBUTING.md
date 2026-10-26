@@ -7,7 +7,7 @@ Thank you for helping. Read this first: skills are not edited here.
 - **A skill, its scripts, a plugin README, hooks, agents or the MCP server:** open an issue or pull request in the source repository. The source of every plugin is in [SOURCES.json](SOURCES.json) and in the catalog in [README.md](README.md). The next sync brings the change here.
 - **This repository's own files:** `install.py`, `scripts/`, `site/`, `tests/`, the workflows and the docs at the top level. Pull requests for those are welcome here.
 
-The daily sync opens its pull request with the workflow token, which starts no other workflow, so `sync.yml` starts `ci.yml` on the `sync/plugins` branch itself and the checks show on the pull request as usual. If a sync pull request ever has no checks, run the `ci` workflow on that branch from the Actions tab.
+The daily sync opens its pull request with the workflow token, which starts no other workflow, so `sync.yml` starts `ci.yml` on the `sync/plugins` branch itself. Check runs from that dispatched run are not listed on a pull request, so `ci.yml` posts its result as commit statuses named `ci / <job>`, which are. The `pull_request` run GitHub creates for the bot waits for approval and would mark the pull request unstable, so `sync.yml` deletes it (only that run: `ci.yml`, `sync/plugins`, `github-actions[bot]`, the sync head commit). If a sync pull request ever has no `ci / ...` statuses, run the `ci` workflow on that branch from the Actions tab.
 
 Never edit `plugins/`, `catalog.json`, `SOURCES.json`, `.claude-plugin/marketplace.json`, the README catalog block or `docs/` by hand. They are generated, and `scripts/validate.py` fails when they drift.
 
