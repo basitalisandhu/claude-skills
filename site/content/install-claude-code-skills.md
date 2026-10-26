@@ -92,7 +92,7 @@ Check these in order:
 
 ### Two skills have the same name
 
-If two plugins ever ship a skill with the same name, the first in plugin name order installs under the plain name and the second as `<plugin>-<skill>`, and the script says so. To avoid any clash, pass `--prefix` and every skill installs as `<plugin>-<skill>`. Today every skill name here is unique, and `scripts/validate.py` fails the build if that changes.
+If two plugins ever ship a skill with the same name, the first in plugin name order installs under the plain name and the second as `<plugin>-<skill>` (or `<plugin>-<skill>-2` if that name is taken too, so no skill ever overwrites another), and the script says so. To avoid any clash, pass `--prefix` and every skill installs as `<plugin>-<skill>`. Today every skill name here is unique, and `scripts/validate.py` fails the build if that changes.
 
 If a skill folder already exists and `install.py` did not write it, the script skips it. Pass `--force` to overwrite it.
 

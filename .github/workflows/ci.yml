@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # sync.yml starts this on the sync branch: pull requests opened with GITHUB_TOKEN start no
+  # workflows, but a workflow_dispatch does, and its checks show on the pull request (issue #24).
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -41,7 +44,7 @@ jobs:
       - name: Site is up to date and every internal link resolves
         if: runner.os != 'Windows'
         run: python3 site/build.py --check
-      - run: python -m pip install pytest
+      - run: python -m pip install pytest hypothesis
       - name: Tests (tests/ only on Windows)
         run: python -m pytest -q tests/
 
