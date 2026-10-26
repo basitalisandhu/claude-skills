@@ -71,6 +71,44 @@ UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]
 LESSER_AREAS = {"caches", "saved-state", "http-storages", "webkit", "logs"}
 MIN_TOKEN = 3
 SUBSTRING_MIN = 5
+INDEX_MAX = 64  # names longer than this are compared directly instead of indexed by substring
+
+
+def read_plist(path: Path) -> dict:
+    """The top-level dictionary of a property list, or {} when the file is unreadable, malformed or not a dictionary.
+    The files come from other programs (and may be truncated or hand-edited), so any parse failure means "no data",
+    never a traceback. A corrupt binary plist can declare a huge object count, hence MemoryError too."""
+    try:
+        with open(path, "rb") as fh:
+            data = plistlib.load(fh)
+    except Exception:  # plistlib raises ExpatError, ValueError, OverflowError, MemoryError and others on bad input
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def text_value(plist: dict, key: str) -> str | None:
+    """A string value from a plist, or None for a missing, empty or non-string value."""
+    value = plist.get(key)
+    return value if isinstance(value, str) and value else None
+
+
+def launch_program(plist: dict) -> str | None:
+    """The program a launch agent or daemon runs: Program, else the first ProgramArguments entry, when a string."""
+    program = text_value(plist, "Program")
+    if program:
+        return program
+    args = plist.get("ProgramArguments")
+    if isinstance(args, list) and args and isinstance(args[0], str) and args[0]:
+        return args[0]
+    return None
+
+
+def path_exists(text: str) -> bool:
+    """Path(text).exists(), treating a path the system cannot even look up (too long, NUL byte) as absent."""
+    try:
+        return Path(text).exists()
+    except (OSError, ValueError):
+        return False
 
 
 def human(n: int | float | None) -> str:
@@ -98,6 +136,7 @@ class Installed:
         self.commands = commands
         self.timeout = timeout
         self._mdfind: dict[str, bool] = {}
+        self._index: tuple[set[str], set[str], dict[str, str], int, list[str]] | None = None
         # command-line tools: executables on PATH and Homebrew formulae, so their caches are not "leftovers"
         for folder in os.environ.get("PATH", "").split(os.pathsep):
             try:
@@ -117,22 +156,50 @@ class Installed:
                 continue
             for app in folder.glob("*.app"):
                 self.add(app.stem)
-                try:
-                    with open(app / "Contents" / "Info.plist", "rb") as fh:
-                        plist = plistlib.load(fh)
-                except (OSError, plistlib.InvalidFileException, ValueError):
-                    continue
-                for key in ("CFBundleIdentifier",):
-                    if plist.get(key):
-                        self.bundle_ids.add(str(plist[key]).lower())
-                        self.tokens |= tokens(str(plist[key]))
+                plist = read_plist(app / "Contents" / "Info.plist")
+                bundle_id = text_value(plist, "CFBundleIdentifier")
+                if bundle_id:
+                    self.bundle_ids.add(bundle_id.lower())
+                    self.tokens |= tokens(bundle_id)
                 for key in ("CFBundleName", "CFBundleDisplayName", "CFBundleExecutable"):
-                    if plist.get(key):
-                        self.add(str(plist[key]))
+                    if text_value(plist, key):
+                        self.add(plist[key])
 
     def add(self, name: str) -> None:
         self.names.add(name.lower())
         self.tokens |= tokens(name)
+        self._index = None
+
+    def substring_index(self) -> tuple[set[str], set[str], dict[str, str], int, list[str]]:
+        """Lookups for match(), built once: every installed token and tool name; those of SUBSTRING_MIN or more
+        characters; every substring (SUBSTRING_MIN or longer) of those up to INDEX_MAX characters, mapped to the
+        first name in sorted order that contains it; the longest indexed name; and the rare longer names, which are
+        compared directly. Matching an entry then costs a few lookups instead of a pass over every installed name
+        and tool, which is thousands on a Mac with Homebrew."""
+        if self._index is None:
+            known = self.tokens | self.tools
+            long_names = {n for n in known if len(n) >= SUBSTRING_MIN}
+            indexed = sorted(n for n in long_names if len(n) <= INDEX_MAX)
+            inside: dict[str, str] = {}
+            for name in indexed:
+                for i in range(len(name) - SUBSTRING_MIN + 1):
+                    for j in range(i + SUBSTRING_MIN, len(name) + 1):
+                        inside.setdefault(name[i:j], name)
+            widest = max((len(n) for n in indexed), default=0)
+            self._index = (known, long_names, inside, widest, sorted(long_names - set(indexed)))
+        return self._index
+
+    def contained_names(self, et: str) -> set[str]:
+        """Installed names or tools (SUBSTRING_MIN characters or more) that et contains, plus names that contain et
+        (of the indexed ones, only the first in sorted order). Empty exactly when no name matches either way, and
+        the smallest name is the same as a full comparison would give, which is what match() reports."""
+        _, long_names, inside, widest, huge = self.substring_index()
+        hits = {et[i:j] for i in range(len(et) - SUBSTRING_MIN + 1)
+                for j in range(i + SUBSTRING_MIN, min(len(et), i + widest) + 1)} & long_names
+        if et in inside:
+            hits.add(inside[et])
+        hits.update(n for n in huge if n in et or et in n)
+        return hits
 
     def spotlight_has(self, bundle_id: str) -> bool | None:
         if not self.commands or shutil.which("mdfind") is None:
@@ -160,15 +227,15 @@ class Installed:
         if low in self.tools:
             return "command-line tool on PATH or in Homebrew"
         entry_tokens = tokens(low)
-        shared = entry_tokens & (self.tokens | self.tools)
+        shared = entry_tokens & self.substring_index()[0]
         if shared:
             return "name shared with installed app or tool: " + ", ".join(sorted(shared)[:3])
-        for et in entry_tokens:
+        for et in sorted(entry_tokens):
             if len(et) < SUBSTRING_MIN:
                 continue
-            for it in self.tokens | self.tools:
-                if len(it) >= SUBSTRING_MIN and (it in et or et in it):
-                    return f"name contains installed name: {it}"
+            hits = self.contained_names(et)
+            if hits:
+                return f"name contains installed name: {min(hits)}"
         if "." in low and not low.startswith("."):
             found = self.spotlight_has(low)
             if found:
@@ -261,7 +328,7 @@ def startup_leftovers(home: Path, commands: bool, timeout: int) -> dict:
                 halves = proc.stdout.strip().split(", ")
                 n = len(halves) // 2
                 for name, path in zip(halves[:n], halves[n:], strict=False):
-                    if path and not Path(path).exists():
+                    if path and not path_exists(path):
                         fix = ('osascript -e \'tell application "System Events" to delete login item '
                                f'"{name}"\'')
                         out["login_items"].append({"name": name, "path": path, "fix": fix})
@@ -273,13 +340,8 @@ def startup_leftovers(home: Path, commands: bool, timeout: int) -> dict:
         if not folder.is_dir():
             continue
         for plist_path in sorted(folder.glob("*.plist")):
-            try:
-                with open(plist_path, "rb") as fh:
-                    plist = plistlib.load(fh)
-            except (OSError, plistlib.InvalidFileException, ValueError):
-                continue
-            program = plist.get("Program") or (plist.get("ProgramArguments") or [None])[0]
-            if program and "/" in str(program) and not Path(str(program)).exists():
+            program = launch_program(read_plist(plist_path))
+            if program and "/" in program and not path_exists(program):
                 # os.getuid exists only on POSIX; elsewhere leave the uid for the shell to fill in.
                 uid = str(os.getuid()) if hasattr(os, "getuid") else "$(id -u)"
                 domain = "system" if system else f"gui/{uid}"

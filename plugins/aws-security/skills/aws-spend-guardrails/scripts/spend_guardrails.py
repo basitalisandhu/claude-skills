@@ -98,10 +98,10 @@ def need(cond: bool, message: str) -> None:
 
 
 def load_spec(path: Path) -> dict:
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
         data = json.loads(text) if path.suffix == ".json" else yaml_load(text)
-    except (json.JSONDecodeError, YAMLError) as exc:
+    except (json.JSONDecodeError, YAMLError, UnicodeDecodeError) as exc:
         raise SpecError(f"{path}: cannot parse: {exc}") from exc
     need(isinstance(data, dict), f"{path}: the spec must be a mapping")
     return data
@@ -368,7 +368,7 @@ def load_cost(paths: list[Path]) -> tuple[dict, list[str], str, int, bool]:
     for path in paths:
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
             raise ValueError(f"{path}: not JSON ({exc}); save aws ce get-cost-and-usage with --output json") from exc
         if not isinstance(data, dict) or not isinstance(data.get("ResultsByTime"), list):
             raise ValueError(f"{path}: expected aws ce get-cost-and-usage output with ResultsByTime")
@@ -485,7 +485,7 @@ def review(paths: list[Path], budget: dict | None, factor: float, window: int, m
 # --------------------------------------------------------------------------------------------------------------- main
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] == "review":
         ap = argparse.ArgumentParser(prog="spend_guardrails.py review", description="Review exported Cost Explorer data.")
@@ -569,6 +569,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"wrote {len(result['files'])} file(s) to {args.out}")
         print("Review every file before creating budgets or attaching SCPs.")
     return 1 if result["lint_errors"] else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

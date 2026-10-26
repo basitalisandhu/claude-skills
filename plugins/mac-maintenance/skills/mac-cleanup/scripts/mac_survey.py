@@ -59,6 +59,43 @@ LARGE_PRUNE = {"Library", ".Trash", "node_modules", ".git", ".npm", ".cache", ".
 NON_APPLE_PLIST_SKIP = ("com.apple.",)
 
 
+def read_plist(path: Path) -> dict:
+    """The top-level dictionary of a property list, or {} when the file is unreadable, malformed or not a dictionary.
+    The files come from other programs (and may be truncated or hand-edited), so any parse failure means "no data",
+    never a traceback. A corrupt binary plist can declare a huge object count, hence MemoryError too."""
+    try:
+        with open(path, "rb") as fh:
+            data = plistlib.load(fh)
+    except Exception:  # plistlib raises ExpatError, ValueError, OverflowError, MemoryError and others on bad input
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def text_value(plist: dict, key: str) -> str | None:
+    """A string value from a plist, or None for a missing, empty or non-string value."""
+    value = plist.get(key)
+    return value if isinstance(value, str) and value else None
+
+
+def launch_program(plist: dict) -> str | None:
+    """The program a launch agent or daemon runs: Program, else the first ProgramArguments entry, when a string."""
+    program = text_value(plist, "Program")
+    if program:
+        return program
+    args = plist.get("ProgramArguments")
+    if isinstance(args, list) and args and isinstance(args[0], str) and args[0]:
+        return args[0]
+    return None
+
+
+def path_exists(text: str) -> bool:
+    """Path(text).exists(), treating a path the system cannot even look up (too long, NUL byte) as absent."""
+    try:
+        return Path(text).exists()
+    except (OSError, ValueError):
+        return False
+
+
 def human(n: int | float | None) -> str:
     if n is None:
         return "?"
@@ -274,14 +311,9 @@ class Survey:
                 continue
             for app in sorted(folder.glob("*.app")):
                 info = app / "Contents" / "Info.plist"
-                bundle_id = version = None
-                try:
-                    with open(info, "rb") as fh:
-                        plist = plistlib.load(fh)
-                    bundle_id = plist.get("CFBundleIdentifier")
-                    version = plist.get("CFBundleShortVersionString") or plist.get("CFBundleVersion")
-                except (OSError, plistlib.InvalidFileException, ValueError):
-                    pass
+                plist = read_plist(info)
+                bundle_id = text_value(plist, "CFBundleIdentifier")
+                version = text_value(plist, "CFBundleShortVersionString") or text_value(plist, "CFBundleVersion")
                 last_used = None
                 out = self.run(["mdls", "-name", "kMDItemLastUsedDate", "-raw", str(app)], "apps")
                 if out is not None and out.strip() not in ("(null)", ""):
@@ -310,7 +342,7 @@ class Survey:
             # osascript prints "name1, name2, path1, path2" for a {name, path} pair of lists
             n = len(halves) // 2
             for name, path in zip(halves[:n], halves[n:], strict=False):
-                exists = Path(path).exists() if path else False
+                exists = path_exists(path) if path else False
                 section["login_items"].append({"name": name, "path": path, "exists": exists})
                 if not exists:
                     self.candidate("startup", f"login item {name}", None, f"target missing: {path}")
@@ -320,14 +352,8 @@ class Survey:
             if not folder.is_dir():
                 continue
             for plist_path in sorted(folder.glob("*.plist*")):
-                program = None
-                try:
-                    with open(plist_path, "rb") as fh:
-                        plist = plistlib.load(fh)
-                    program = plist.get("Program") or (plist.get("ProgramArguments") or [None])[0]
-                except (OSError, plistlib.InvalidFileException, ValueError):
-                    pass
-                missing = bool(program) and not Path(str(program)).exists() and "/" in str(program)
+                program = launch_program(read_plist(plist_path))
+                missing = bool(program) and "/" in program and not path_exists(program)
                 section[key].append({"plist": str(plist_path), "program": program, "program_missing": missing,
                                      "disabled": plist_path.suffix != ".plist"})
                 if missing:

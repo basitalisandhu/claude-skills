@@ -1,6 +1,6 @@
 ---
 name: auth-flow-review
-description: "Find the weaknesses in an application's login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked \"is our login flow secure?\", when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for in-app authorization rules beyond noting where they belong, or for implementing cryptography."
+description: "Find the weaknesses in an application's whole sign-in, login and session design (passwords, sessions and cookies, OAuth and OIDC with PKCE, state and redirect URIs, MFA, password reset, account enumeration, rate limiting), then report findings by severity with the corrected flow. Use when asked \"is our login flow secure?\", when designing or reviewing authentication, integrating an identity provider, or after an account takeover. Not for decoding one token (jwt-inspector), in-app authorization rules, or implementing cryptography."
 license: MIT
 compatibility: Any web or mobile stack. Covers session cookies, JWT access tokens, OAuth 2.0 and OpenID Connect.
 metadata:

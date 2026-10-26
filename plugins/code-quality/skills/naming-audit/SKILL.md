@@ -1,6 +1,6 @@
 ---
 name: naming-audit
-description: "Audit names in a module or diff for clarity, consistency with project conventions and lies (names that no longer match behaviour), then propose renames with a migration path for public ones. Use when asked \"are these names clear?\", to review naming in a PR, or to agree conventions for a new codebase. Not for formatting or choosing a product name."
+description: "Audit function, variable, method and module names in a file or diff: are the names any good, consistent with how the project names things, or misleading names that lie about behaviour (a getter that creates), then propose renames with a migration path for public ones. Use when asked \"are these names clear?\", whether names are misleading, to review naming in a PR, or to agree naming conventions for a new codebase (modules, functions, constants). Not for formatting or choosing a product name."
 license: MIT
 compatibility: Any language.
 metadata:

@@ -645,7 +645,7 @@ def triage(data, all_scenarios: bool) -> dict:
             "unmapped": [{k: r[k] for k in ("id", "type", "severity")} for r in unmapped], "runbooks": runbooks}
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     today = dt.date.today().isoformat()
     if argv and argv[0] == "triage":
@@ -726,6 +726,16 @@ def main(argv: list[str] | None = None) -> int:
     if rejected:
         print(f"warning: ignored values that are not valid identifiers: {', '.join(rejected)}", file=sys.stderr)
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

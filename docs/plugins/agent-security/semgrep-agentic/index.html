@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>semgrep-agentic: Scan Python | Claude Code skills</title>
-<meta name="description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
+<meta name="description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output flowing into shells, subprocess, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
 <meta property="og:title" content="semgrep-agentic: Scan Python | Claude Code skills">
-<meta property="og:description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
+<meta property="og:description" content="Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output flowing into shells, subprocess, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "semgrep-agentic",
- "description": "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.",
+ "description": "Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output flowing into shells, subprocess, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to \"scan this agent for security issues\", to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/",
  "codeRepository": "https://github.com/basitalisandhu/agent-security-skills",
  "programmingLanguage": [
@@ -36,7 +36,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.5.0"
+ "version": "0.6.0"
 }
 </script>
 </head>
@@ -45,8 +45,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / semgrep-agentic</p>
 <h1>Semgrep for agentic code</h1>
-<p class="lede">Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output reaching shells, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.</p>
-<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.5.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
+<p class="lede">Scan Python, JavaScript and TypeScript agent code with 36 Semgrep rules (model output flowing into shells, subprocess, SQL, paths or HTML, user input in system prompts, MCP servers without auth, leaked provider keys), with a bundled offline fallback, and triage the hits. Use when asked to &quot;scan this agent for security issues&quot;, to add agent rules to CI, or for the code step of an agent security audit. Not for general SAST, other languages or runtime behaviour.</p>
+<p class="meta">Skill <code>semgrep-agentic</code> in plugin <a href="../index.html">agent-security</a> 0.6.0, no bundled scripts, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/semgrep-agentic/SKILL.md">plugins/agent-security/skills/semgrep-agentic/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

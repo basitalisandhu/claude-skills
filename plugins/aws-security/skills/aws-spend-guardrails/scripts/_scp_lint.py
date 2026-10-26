@@ -167,7 +167,7 @@ def lint_policy(doc, limit: int = SCP_LIMIT, strategy: str = "deny-list") -> lis
 def load_policy(path: Path):
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise ValueError(f"{path}: invalid JSON: {exc}") from exc
     if isinstance(data, dict) and isinstance(data.get("Policy"), dict) and "Content" in data["Policy"]:
         content = data["Policy"]["Content"]
@@ -183,12 +183,12 @@ def load_policy(path: Path):
 def is_describe_output(path: Path) -> bool:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except (OSError, ValueError):
         return False
     return isinstance(data, dict) and isinstance(data.get("Policy"), dict)
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="+", help="SCP JSON files (or describe-policy output)")
     ap.add_argument("--limit", type=int, default=SCP_LIMIT, help="size limit in characters (default 10240)")
@@ -220,6 +220,16 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  {i['level']:<7} {i['id']:<24} {i['sid'] or '-':<34} {i['message']}")
     threshold = LEVELS.index(args.fail_on)
     return 1 if any(LEVELS.index(i["level"]) <= threshold for r in results for i in r["issues"]) else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

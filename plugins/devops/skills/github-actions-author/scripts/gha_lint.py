@@ -212,7 +212,10 @@ def main(argv: list[str] | None = None) -> int:
             shape = {list: "a list", str: "plain text", type(None): "empty"}.get(type(doc), type(doc).__name__)
             parse_errors.append(f"{f}: not a workflow: the top level is {shape}, expected a mapping with name, on and jobs")
             continue
-        findings += lint(f, doc)
+        try:
+            findings += lint(f, doc)
+        except (AttributeError, TypeError, KeyError, ValueError) as exc:  # a field of the wrong YAML type
+            parse_errors.append(f"{f}: unexpected structure ({type(exc).__name__}: {exc}); check the workflow syntax")
     order = {s: i for i, s in enumerate(SEVERITIES)}
     counts = {s: sum(1 for x in findings if x["severity"] == s) for s in SEVERITIES}
     report = {"version": VERSION, "files": [str(f) for f in files], "findings": findings, "parse_errors": parse_errors, "counts": counts, "fail_on": args.fail_on}
@@ -225,6 +228,8 @@ def main(argv: list[str] | None = None) -> int:
         for e in parse_errors:
             print(f"  parse error: {e}")
     if parse_errors:
+        for e in parse_errors:
+            print(f"error: {e}", file=sys.stderr)
         return 2
     worst = min((order[x["severity"]] for x in findings), default=99)
     return 1 if worst <= order[args.fail_on] else 0

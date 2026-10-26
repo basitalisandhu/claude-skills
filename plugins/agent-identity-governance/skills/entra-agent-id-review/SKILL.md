@@ -1,6 +1,6 @@
 ---
 name: entra-agent-id-review
-description: "Review the Entra ID identities your AI agents use, so each one has an owner or sponsor, only the permissions it needs (including those inherited from an Agent ID blueprint), current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports and highlights high-risk permissions from a fixed list. Use when asked \"what can our agent apps do in Entra?\" or before approving an agent app. Not for human admin roles (privileged-access-review), a tenant-wide baseline (entra-posture-review) or one consent decision (graph-permission-preflight)."
+description: "Review the Entra identities and service principals your AI agents use, so each one has an owner or sponsor, only the permissions it needs (including those inherited from an Agent ID blueprint), current credentials, safe redirect URIs and Conditional Access cover. Reads saved Graph exports and highlights high-risk permissions from a fixed list. Use when asked \"what can our agent apps do in Entra?\" or before approving an agent app. Not for human admin roles (privileged-access-review), a tenant-wide baseline (entra-posture-review) or ownerless lists (nhi-inventory)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Standard library only; the script makes no network calls. The Microsoft Graph CLI (mgc) or any Graph client for the export step only.
 metadata:

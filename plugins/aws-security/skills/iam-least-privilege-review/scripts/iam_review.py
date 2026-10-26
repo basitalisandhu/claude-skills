@@ -112,7 +112,7 @@ def decode(doc):
 def collect(path: Path, include_aws_managed: bool) -> list[tuple[str, dict]]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
         raise InputError(f"{path}: invalid JSON: {exc}") from exc
     if not isinstance(data, dict):
         raise InputError(f"{path}: expected a JSON object")
@@ -299,7 +299,7 @@ def suggest(doc: dict) -> dict:
     return {"Version": doc.get("Version", "2012-10-17"), "Statement": out}
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("files", nargs="+", help="policy JSON files")
     ap.add_argument("--json", action="store_true", help="print JSON")
@@ -347,6 +347,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.fail_on == "none":
         return 0
     return 1 if any(RANK[f["severity"]] <= RANK[args.fail_on] for f in findings) else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

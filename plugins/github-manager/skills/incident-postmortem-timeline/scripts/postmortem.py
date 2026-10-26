@@ -43,10 +43,12 @@ from _ghexport import (  # noqa: E402
     InputError,
     Redactor,
     check_rows,
+    dict_of,
     find_file,
     human_delta,
     is_bot,
     iso,
+    list_of,
     load_json,
     load_rows,
     login_of,
@@ -55,6 +57,7 @@ from _ghexport import (  # noqa: E402
     parse_time,
     row_number,
     short,
+    text_of,
 )
 
 DEFAULT_MITIGATION = r"(?i)\b(mitigat\w*|hotfix|revert\w*|roll ?back\w*|disable\w*|feature flag)\b"
@@ -150,12 +153,12 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
     row(opened, "opened", f"Issue opened: {short(issue.get('title'), 80)}", reporter, f"issue #{number} createdAt",
         issue.get("url"))
 
-    referenced: set[int] = set(int(n) for n in REF_RE.findall(issue.get("body") or ""))
+    referenced: set[int] = set(int(n) for n in REF_RE.findall(text_of(issue.get("body"))))
     comment_ids: set[str] = set()
     for idx, ev in enumerate(events):
         if not isinstance(ev, dict):
             continue
-        kind = ev.get("event")
+        kind = text_of(ev.get("event"))
         when = parse_time(ev.get("created_at") or ev.get("submitted_at"))
         actor = ev.get("actor") or ev.get("user")
         who = roles.see(actor)
@@ -172,12 +175,12 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
             row(when, "unassigned", "Unassigned", who, cite, target=roles.see(ev.get("assignee")))
         elif kind == "commented":
             comment_ids.add(str(eid))
-            body = ev.get("body") or ""
+            body = text_of(ev.get("body"))
             referenced |= {int(n) for n in REF_RE.findall(body)}
             row(when, "comment", f"Comment: {short(body, 110)}", who, f"comment {eid}", ev.get("html_url"))
         elif kind in {"cross-referenced", "connected"}:
-            source = (ev.get("source") or {}).get("issue") or {}
-            ref_no = source.get("number")
+            source = dict_of(dict_of(ev.get("source")).get("issue"))
+            ref_no = row_number(source)
             if ref_no is not None:
                 referenced.add(int(ref_no))
                 is_pr = "pull_request" in source
@@ -189,15 +192,15 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
         elif kind in {"renamed", "milestoned", "demilestoned", "locked", "transferred"}:
             row(when, kind, f"Issue {kind}", who, cite)
 
-    for c in issue.get("comments") or []:
+    for c in list_of(issue.get("comments")):
         if not isinstance(c, dict):
             continue
-        m = COMMENT_ID_RE.search(c.get("url") or "")
+        m = COMMENT_ID_RE.search(text_of(c.get("url")))
         cid = m.group(1) if m else str(c.get("id"))
         if cid in comment_ids:
             continue
         comment_ids.add(cid)
-        body = c.get("body") or ""
+        body = text_of(c.get("body"))
         referenced |= {int(n) for n in REF_RE.findall(body)}
         row(parse_time(c.get("createdAt")), "comment", f"Comment: {short(body, 110)}", roles.see(c.get("author")),
             f"comment {cid}", c.get("url"))
@@ -210,9 +213,9 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
             continue
         roles.see(pr.get("author"), "change-author")
         merged = parse_time(pr.get("mergedAt"))
-        labels = [str(lb.get("name") if isinstance(lb, dict) else lb) for lb in pr.get("labels") or []]
-        sha = (pr.get("mergeCommit") or {}).get("oid") if isinstance(pr.get("mergeCommit"), dict) else None
-        mitigation = bool(mit_rx.search(pr.get("title") or "") or any(mit_rx.search(lb) for lb in labels))
+        labels = [str(lb.get("name") if isinstance(lb, dict) else lb) for lb in list_of(pr.get("labels"))]
+        sha = text_of(dict_of(pr.get("mergeCommit")).get("oid")) or None
+        mitigation = bool(mit_rx.search(text_of(pr.get("title"))) or any(mit_rx.search(lb) for lb in labels))
         if merged:
             before = merged < opened
             if before and (opened - merged).total_seconds() > lookback_hours * 3600:
@@ -325,7 +328,7 @@ def build(folder: Path, number: int, mitigation_pattern: str, ack_labels: str, m
     return {
         "issue": {"number": number, "title": red.text(issue.get("title")), "url": issue.get("url"),
                   "state": issue.get("state"), "labels": [str(lb.get("name") if isinstance(lb, dict) else lb)
-                                                          for lb in issue.get("labels") or []]},
+                                                          for lb in list_of(issue.get("labels"))]},
         "source_files": sorted(p.name for p in [issue_path, tl_path, prs_path, *pr_files.values()] if p),
         "redacted": redact,
         "phases": phases,

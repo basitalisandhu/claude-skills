@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>api-contract-review: Review an OpenAPI 3.x contract | Claude Code skills</title>
-<meta name="description" content="Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API.">
+<title>api-contract-review: Review an OpenAPI 3.x spec | Claude Code skills</title>
+<meta name="description" content="Review an OpenAPI 3.x spec (openapi.yaml or JSON) for consistency, versioning, error responses and client friendliness after a bundled script lints it: missing operationIds, undeclared path parameters, responses without schemas, http servers, missing security schemes, dangling components, naming. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API contract, before publishing a spec, or when a client generator chokes on it. Not for GraphQL or gRPC, implementing endpoints, version numbers (semver-advisor) or one payload&#x27;s JSON Schema (json-schema-author).">
 <link rel="canonical" href="https://basitalisandhu.github.io/claude-skills/plugins/data/api-contract-review/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Claude Code skills">
-<meta property="og:title" content="api-contract-review: Review an OpenAPI 3.x contract | Claude Code skills">
-<meta property="og:description" content="Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API.">
+<meta property="og:title" content="api-contract-review: Review an OpenAPI 3.x spec | Claude Code skills">
+<meta property="og:description" content="Review an OpenAPI 3.x spec (openapi.yaml or JSON) for consistency, versioning, error responses and client friendliness after a bundled script lints it: missing operationIds, undeclared path parameters, responses without schemas, http servers, missing security schemes, dangling components, naming. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API contract, before publishing a spec, or when a client generator chokes on it. Not for GraphQL or gRPC, implementing endpoints, version numbers (semver-advisor) or one payload&#x27;s JSON Schema (json-schema-author).">
 <meta property="og:url" content="https://basitalisandhu.github.io/claude-skills/plugins/data/api-contract-review/">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="../../../style.css">
@@ -19,7 +19,7 @@
  "@context": "https://schema.org",
  "@type": "SoftwareSourceCode",
  "name": "api-contract-review",
- "description": "Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to \"review this OpenAPI spec\", when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API.",
+ "description": "Review an OpenAPI 3.x spec (openapi.yaml or JSON) for consistency, versioning, error responses and client friendliness after a bundled script lints it: missing operationIds, undeclared path parameters, responses without schemas, http servers, missing security schemes, dangling components, naming. Use when asked to \"review this OpenAPI spec\", when designing a REST API contract, before publishing a spec, or when a client generator chokes on it. Not for GraphQL or gRPC, implementing endpoints, version numbers (semver-advisor) or one payload's JSON Schema (json-schema-author).",
  "url": "https://basitalisandhu.github.io/claude-skills/plugins/data/api-contract-review/",
  "codeRepository": "https://github.com/basitalisandhu/claude-dev-skills",
  "programmingLanguage": [
@@ -37,7 +37,7 @@
   "name": "data",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/data/"
  },
- "version": "0.3.1"
+ "version": "0.4.1"
 }
 </script>
 </head>
@@ -46,8 +46,8 @@
 <main>
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">data</a> / api-contract-review</p>
 <h1>API contract review</h1>
-<p class="lede">Review an OpenAPI 3.x contract (YAML or JSON) for consistency, versioning and client friendliness, after a bundled script lints it for missing operationIds, undeclared path parameters, responses without schemas or error cases, servers over http, missing security schemes, unused or dangling components and naming inconsistencies. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API, before publishing a spec or generating clients, or when a client generator fails. Not for GraphQL or gRPC and not for implementing the API.</p>
-<p class="meta">Skill <code>api-contract-review</code> in plugin <a href="../index.html">data</a> 0.3.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a>.</p>
+<p class="lede">Review an OpenAPI 3.x spec (openapi.yaml or JSON) for consistency, versioning, error responses and client friendliness after a bundled script lints it: missing operationIds, undeclared path parameters, responses without schemas, http servers, missing security schemes, dangling components, naming. Use when asked to &quot;review this OpenAPI spec&quot;, when designing a REST API contract, before publishing a spec, or when a client generator chokes on it. Not for GraphQL or gRPC, implementing endpoints, version numbers (semver-advisor) or one payload&#x27;s JSON Schema (json-schema-author).</p>
+<p class="meta">Skill <code>api-contract-review</code> in plugin <a href="../index.html">data</a> 0.4.1, 2 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/claude-dev-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a> in <a href="https://github.com/basitalisandhu/claude-dev-skills">claude-dev-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/data/skills/api-contract-review/SKILL.md">plugins/data/skills/api-contract-review/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills

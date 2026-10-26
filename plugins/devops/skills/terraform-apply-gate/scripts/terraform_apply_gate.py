@@ -239,6 +239,8 @@ def main(argv: list[str] | None = None) -> int:
             raise BadInput(f"plan file not found: {plan_path}")
         try:
             plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError as exc:
+            raise BadInput(f"plan is not UTF-8 text: {exc}; save it with terraform show -json tf.plan > plan.json") from exc
         except json.JSONDecodeError as exc:
             raise BadInput(f"plan is not JSON: {exc}") from exc
         policy_text = ""
@@ -246,8 +248,16 @@ def main(argv: list[str] | None = None) -> int:
             policy_path = Path(args.policy)
             if not policy_path.is_file():
                 raise BadInput(f"policy file not found: {policy_path}")
-            policy_text = policy_path.read_text(encoding="utf-8")
-        report = evaluate(plan, load_policy(policy_text))
+            try:
+                policy_text = policy_path.read_text(encoding="utf-8")
+            except UnicodeDecodeError as exc:
+                raise BadInput(f"policy is not UTF-8 text: {exc}") from exc
+        policy = load_policy(policy_text)
+        try:
+            report = evaluate(plan, policy)
+        except (AttributeError, TypeError, KeyError, ValueError) as exc:  # a field of the wrong JSON type
+            raise BadInput(f"plan has an unexpected structure ({type(exc).__name__}: {exc}); "
+                           "pass the output of terraform show -json") from exc
     except BadInput as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

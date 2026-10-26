@@ -1,6 +1,6 @@
 ---
 name: mcp-server-review
-description: "Review an MCP server you wrote or plan to install for missing authentication, public network binding, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. Use when asked \"is this MCP server safe to install?\", before publishing a server, or before enabling a third-party one. Not for agent configuration files (agent-config-audit), the agent that calls the server (prompt-injection-review) or writing a new server."
+description: "Review an MCP server you wrote or plan to install for missing authentication, binding to a public interface, tool description poisoning, path traversal, SSRF, weak input validation and secrets in logs, then report a verdict per area with severity and file:line. Use when asked \"is this MCP server safe to install?\", before publishing a server, or before enabling a third-party one. Not for agent configuration files (agent-config-audit), the agent that calls the server (prompt-injection-review) or writing a new server."
 license: MIT
 compatibility: Semgrep optional (pip install semgrep) for the automated pass. Reads code only.
 metadata:

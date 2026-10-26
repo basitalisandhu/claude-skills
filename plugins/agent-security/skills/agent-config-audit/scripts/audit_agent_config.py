@@ -30,7 +30,7 @@ import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 SEVERITIES = ["critical", "high", "medium", "low", "info"]
 MAX_FILE_BYTES = 2 * 1024 * 1024
 
@@ -138,13 +138,17 @@ class Auditor:
         self.scanned: list[str] = []
         self.errors: list[str] = []
         self._seen = set()
+        self._rel: dict[Path, str] = {}
 
     # ------------------------------------------------------------------ helpers
     def rel(self, path: Path) -> str:
-        try:
-            return path.resolve().relative_to(self.root).as_posix()
-        except ValueError:
-            return str(path)
+        # cached: a settings file with thousands of risky rules calls this once per finding
+        if path not in self._rel:
+            try:
+                self._rel[path] = path.resolve().relative_to(self.root).as_posix()
+            except ValueError:
+                self._rel[path] = str(path)
+        return self._rel[path]
 
     def add(self, fid: str, severity: str, category: str, title: str, path: Path, line: int | None, evidence: str, recommendation: str) -> None:
         f = Finding(fid, severity, category, title, self.rel(path), line, redact(evidence)[:300], recommendation)
@@ -157,12 +161,20 @@ class Auditor:
     def line_of(text: str, needle: str) -> int | None:
         if not needle:
             return None
-        idx = text.find(needle)
+        # rules are usually looked up in file order, so search on from the previous hit before the whole text
+        hint = _LAST_HIT.get(id(text), (None, 0))
+        start = hint[1] if hint[0] is text else 0
+        idx = text.find(needle, start)
+        if idx < 0 and start:
+            idx = text.find(needle)
         if idx < 0:
             idx = text.find(needle.split("\n")[0][:40])
         if idx < 0:
             return None
-        return text.count("\n", 0, idx) + 1
+        if len(_LAST_HIT) > 16:
+            _LAST_HIT.clear()
+        _LAST_HIT[id(text)] = (text, idx)
+        return _line_number(text, idx)
 
     def read(self, path: Path) -> str | None:
         try:
@@ -261,6 +273,10 @@ class Auditor:
     def scan_json(self, path: Path, text: str) -> None:
         try:
             data = json.loads(text)
+        except RecursionError:
+            self.add("CFG-001", "low", "config", "JSON file is nested too deeply to parse", path, None, path.name,
+                     "Fix the file; a config that fails to parse is silently ignored by most hosts, so its protections are not applied.")
+            return
         except json.JSONDecodeError as exc:
             self.add("CFG-001", "low", "config", "JSON file does not parse", path, exc.lineno, str(exc)[:120],
                      "Fix the syntax; a config that fails to parse is silently ignored by most hosts, so its protections (deny rules, hooks) are not applied.")
@@ -294,7 +310,7 @@ class Auditor:
 
     # settings.json ------------------------------------------------------------
     def scan_settings(self, path: Path, text: str, data: dict) -> None:
-        perms = data.get("permissions") or {}
+        perms = _dict(data.get("permissions"))
         mode = perms.get("defaultMode") or data.get("defaultMode")
         if mode == "bypassPermissions":
             self.add("PERM-003", "critical", "permissions", "defaultMode is bypassPermissions", path, self.line_of(text, "bypassPermissions"),
@@ -311,16 +327,16 @@ class Auditor:
         if data.get("disableAllHooks") is True:
             self.add("PERM-008", "medium", "permissions", "All hooks are disabled", path, self.line_of(text, "disableAllHooks"), '"disableAllHooks": true',
                      "Re-enable hooks; guard hooks such as secret-exposure blocking do not run while this is set.")
-        for rule in perms.get("allow") or []:
+        for rule in _list(perms.get("allow")):
             if not isinstance(rule, str):
                 continue
             self.scan_allow_rule(path, text, rule)
-        for d in perms.get("additionalDirectories") or []:
+        for d in _list(perms.get("additionalDirectories")):
             if isinstance(d, str) and (d.rstrip("/") or "/") in {"/", "~", "$HOME", os.path.expanduser("~"), "/home", "/Users", "C:\\", "C:"}:
                 self.add("PERM-010", "medium", "permissions", "additionalDirectories grants the whole home or root directory", path, self.line_of(text, d), d,
                          "Grant the specific project directories you need.")
-        allow = [r for r in perms.get("allow") or [] if isinstance(r, str)]
-        deny = perms.get("deny") or []
+        allow = [r for r in _list(perms.get("allow")) if isinstance(r, str)]
+        deny = _list(perms.get("deny"))
         if any(r.split("(")[0] in {"Bash", "Write", "Edit", "MultiEdit"} and ("(" not in r or r.endswith("(*)")) for r in allow) and not deny:
             self.add("PERM-011", "low", "permissions", "Broad allow rules with no deny rules", path, None, "permissions.deny is empty",
                      "Add deny rules for the commands and paths that must never run (for example Bash(rm -rf *), Read(./.env), Bash(curl *)).")
@@ -367,19 +383,19 @@ class Auditor:
             for matcher in matchers:
                 if not isinstance(matcher, dict):
                     continue
-                for h in matcher.get("hooks") or []:
+                for h in _list(matcher.get("hooks")):
                     if not isinstance(h, dict):
                         continue
                     self.scan_hook(path, text, event, h, plugin_root)
 
     def scan_hook(self, path: Path, text: str, event: str, h: dict, plugin_root: Path | None) -> None:
         htype = h.get("type", "command")
-        command = h.get("command") or ""
-        args = [a for a in (h.get("args") or []) if isinstance(a, str)]
+        command = _str(h.get("command"))
+        args = [a for a in _list(h.get("args")) if isinstance(a, str)]
         full = " ".join([command] + args)
-        line = self.line_of(text, command or h.get("url") or "")
+        line = self.line_of(text, command or _str(h.get("url")))
         if htype == "http":
-            url = h.get("url") or ""
+            url = _str(h.get("url"))
             host = re.sub(r"^[a-z]+://", "", url).split("/")[0].split(":")[0].lower()
             if host and host not in {"localhost", "127.0.0.1", "::1", "[::1]"} and not host.endswith(".localhost"):
                 self.add("HOOK-002", "high", "hooks", f"{event} hook posts tool data to a remote endpoint", path, line, url,
@@ -445,8 +461,8 @@ class Auditor:
     # MCP ------------------------------------------------------------------------
     def scan_mcp(self, path: Path, text: str, servers: dict) -> None:
         for name, cfg in servers.items():
-            url = cfg.get("url") or ""
-            stype = cfg.get("type") or ("http" if url else "stdio")
+            url = _str(cfg.get("url"))
+            stype = _str(cfg.get("type")) or ("http" if url else "stdio")
             line = self.line_of(text, f'"{name}"')
             if url:
                 host = re.sub(r"^[a-z]+://", "", url).split("/")[0].split("@")[-1]
@@ -460,14 +476,14 @@ class Auditor:
                              "Use a DNS name with a valid certificate so the server identity can be verified and pinned.")
                 if stype == "sse":
                     self.add("MCP-006", "low", "mcp", f"MCP server {name} uses the deprecated SSE transport", path, line, '"type": "sse"', "Switch to type http (streamable HTTP).")
-            for hname, hval in (cfg.get("headers") or {}).items():
+            for hname, hval in _dict(cfg.get("headers")).items():
                 if isinstance(hval, str):
                     self.literal_credential(path, line, name, f"headers.{hname}", hval)
-            for ename, eval_ in (cfg.get("env") or {}).items():
+            for ename, eval_ in _dict(cfg.get("env")).items():
                 if isinstance(eval_, str):
                     self.literal_credential(path, line, name, f"env.{ename}", eval_)
-            command = cfg.get("command") or ""
-            args = [a for a in (cfg.get("args") or []) if isinstance(a, str)]
+            command = _str(cfg.get("command"))
+            args = [a for a in _list(cfg.get("args")) if isinstance(a, str)]
             self.pinning(path, line, name, command, args)
             joined = " ".join([command] + args)
             for flag in DANGEROUS_FLAGS:
@@ -609,6 +625,38 @@ class Auditor:
             "scanned_files": self.scanned, "errors": self.errors, "summary": summary,
             "findings": [asdict(f) for f in findings],
         }
+
+
+_LINE_STARTS: dict[int, tuple[str, list[int]]] = {}
+_LAST_HIT: dict[int, tuple[str, int]] = {}
+
+
+def _line_number(text: str, idx: int) -> int:
+    """1-based line of offset idx. The newline offsets of the last texts seen are kept, so one finding per rule in a
+    large settings file costs a binary search instead of a count over the whole text (that count was quadratic)."""
+    from bisect import bisect_right
+
+    cached = _LINE_STARTS.get(id(text))
+    if cached is None or cached[0] is not text:
+        if len(_LINE_STARTS) > 16:
+            _LINE_STARTS.clear()
+        cached = (text, [i for i, ch in enumerate(text) if ch == "\n"])
+        _LINE_STARTS[id(text)] = cached
+    return bisect_right(cached[1], idx - 1) + 1
+
+
+def _str(value) -> str:
+    """A config value that should be a string; anything else (a number, list or object) reads as empty."""
+    return value if isinstance(value, str) else ""
+
+
+def _list(value) -> list:
+    """A config value that should be a list; anything else reads as empty so a malformed file cannot crash the scan."""
+    return value if isinstance(value, list) else []
+
+
+def _dict(value) -> dict:
+    return value if isinstance(value, dict) else {}
 
 
 def shannon_entropy(s: str) -> float:

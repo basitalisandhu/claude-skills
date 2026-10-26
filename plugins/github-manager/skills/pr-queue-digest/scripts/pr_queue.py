@@ -44,6 +44,7 @@ from _ghexport import (  # noqa: E402
     human_hours,
     is_bot,
     iso,
+    list_of,
     load_json,
     load_rows,
     login_of,
@@ -51,6 +52,7 @@ from _ghexport import (  # noqa: E402
     numbered_files,
     parse_time,
     short,
+    text_of,
 )
 
 FAILING = {"FAILURE", "ERROR", "TIMED_OUT", "CANCELLED", "STARTUP_FAILURE", "ACTION_REQUIRED"}
@@ -83,7 +85,7 @@ ACTION_ORDER = list(ACTION_FOR)
 def requested(pr: dict) -> list[tuple[str, str]]:
     """Pending review requests as (kind, name): ('user', login) or ('team', slug)."""
     out = []
-    for req in pr.get("reviewRequests") or []:
+    for req in list_of(pr.get("reviewRequests")):
         if not isinstance(req, dict):
             continue
         kind = "team" if req.get("__typename") == "Team" or ("slug" in req and "login" not in req) else "user"
@@ -95,7 +97,7 @@ def requested(pr: dict) -> list[tuple[str, str]]:
 
 def failing_checks(pr: dict) -> list[str]:
     names = []
-    for check in pr.get("statusCheckRollup") or []:
+    for check in list_of(pr.get("statusCheckRollup")):
         if not isinstance(check, dict):
             continue
         state = str(check.get("conclusion") or check.get("state") or "").upper()
@@ -106,7 +108,7 @@ def failing_checks(pr: dict) -> list[str]:
 
 def commit_times(pr: dict) -> list[datetime]:
     times = []
-    for commit in pr.get("commits") or []:
+    for commit in list_of(pr.get("commits")):
         if isinstance(commit, dict):
             t = parse_time(commit.get("committedDate") or commit.get("authoredDate"))
             if t:
@@ -117,7 +119,7 @@ def commit_times(pr: dict) -> list[datetime]:
 def reviews_by_others(pr: dict) -> list[dict]:
     author = (login_of(pr.get("author")) or "").lower()
     out = []
-    for review in pr.get("reviews") or []:
+    for review in list_of(pr.get("reviews")):
         if isinstance(review, dict) and (login_of(review.get("author")) or "").lower() != author:
             if parse_time(review.get("submittedAt")):
                 out.append(review)
@@ -173,7 +175,7 @@ def analyse(folder: Path, hours: float, stale_days: float, reviewer_load: int, n
     for pr in open_prs:
         logins.add(login_of(pr.get("author")) or "")
         logins.update(name for kind, name in requested(pr) if kind == "user")
-        logins.update(login_of(r.get("author")) or "" for r in pr.get("reviews") or [] if isinstance(r, dict))
+        logins.update(login_of(r.get("author")) or "" for r in list_of(pr.get("reviews")) if isinstance(r, dict))
     red = Redactor(logins, redact)
 
     # Pending requests per reviewer, across all open PRs (drafts included: a request on a draft is still a request).
@@ -324,7 +326,7 @@ def analyse(folder: Path, hours: float, stale_days: float, reviewer_load: int, n
 
     counts = {c: sorted({f["pr"] for f in findings if f["check"] == c}) for c in CHECKS}
     return {
-        "repo": meta.get("repo") or None,
+        "repo": text_of(meta.get("repo")) or None,
         "as_of": iso(now),
         "as_of_source": now_source,
         "source_files": sorted([prs_path.name] + [p.name for p in numbered_files(folder, "timeline").values()]

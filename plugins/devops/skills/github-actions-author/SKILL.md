@@ -1,6 +1,6 @@
 ---
 name: github-actions-author
-description: "Write or review GitHub Actions workflows with least-privilege permissions, SHA-pinned actions, timeouts, concurrency and caching, and validate them with a bundled linter that catches missing permissions, pull_request_target checkout of fork code, expression injection in run steps, unpinned actions and literal secrets. Use when asked to \"write a CI workflow\", to create a release workflow, review .github/workflows, or fix a workflow security finding. Not for other CI systems and not for GitHub Apps or branch protection settings."
+description: "Write or review GitHub Actions workflows in .github/workflows with least-privilege permissions, SHA-pinned actions, timeouts, concurrency and caching, checked by a bundled linter for missing or too permissive permissions, pull_request_target checkout of forks, expression injection in run steps, unpinned actions and literal secrets. Use when asked to \"write a CI workflow\", a release workflow that publishes on a tag, to review a workflow file such as deploy.yml, or to fix a workflow security finding. Not for other CI systems or branch protection."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for the linter (bundled YAML reader; no PyYAML needed).
 metadata:

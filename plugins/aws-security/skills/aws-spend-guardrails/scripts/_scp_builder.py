@@ -84,10 +84,10 @@ class SpecError(Exception):
 
 
 def load_spec(path: Path) -> dict:
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
         data = json.loads(text) if path.suffix == ".json" else yaml_load(text)
-    except (json.JSONDecodeError, YAMLError) as exc:
+    except (json.JSONDecodeError, YAMLError, UnicodeDecodeError) as exc:
         raise SpecError(f"{path}: cannot parse: {exc}") from exc
     if not isinstance(data, dict):
         raise SpecError(f"{path}: the spec must be a mapping")
@@ -221,7 +221,7 @@ def build(spec: dict) -> tuple[list[dict], dict]:
     return documents, manifest
 
 
-def main(argv: list[str] | None = None) -> int:
+def _main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("spec", help="YAML or JSON spec file")
     ap.add_argument("--out", help="directory for scp-NN.json and manifest.json (default: print only)")
@@ -255,6 +255,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"wrote {len(documents)} document(s) and manifest.json to {args.out}")
         print("Review every document and test it on a non-production OU before attaching it.")
     return 1 if errors else 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the script; a value of the wrong type or shape anywhere in the input exits 2 with a message, not a traceback."""
+    try:
+        return _main(argv)
+    except (TypeError, AttributeError, KeyError, IndexError, RecursionError) as exc:
+        print(f"error: the input has a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+              "check that it is the unmodified export or spec the skill describes", file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":

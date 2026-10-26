@@ -19,6 +19,7 @@ import argparse
 import csv
 import datetime as dt
 import json
+import math
 import re
 import statistics
 import sys
@@ -79,9 +80,9 @@ def classify(value: str) -> str:
     v = value.strip()
     if v in NULLS:
         return "null"
-    if INT_RE.match(v):
+    if INT_RE.match(v) and math.isfinite(to_number(v)):
         return "integer"
-    if NUM_RE.match(v) and any(ch.isdigit() for ch in v):
+    if NUM_RE.match(v) and any(ch.isdigit() for ch in v) and math.isfinite(to_number(v)):
         return "number"
     if v.lower() in BOOLS:
         return "boolean"

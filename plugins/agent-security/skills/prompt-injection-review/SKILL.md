@@ -1,6 +1,6 @@
 ---
 name: prompt-injection-review
-description: "Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code, and judge each path against provenance and approval rules. Use when asked \"can this agent be prompt injected?\", to find exfiltration or privilege paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness)."
+description: "Trace untrusted input such as web pages, emails, tickets and tool results to consequential tool calls in agent code (sending replies, HTTP requests, shell, payments), and judge each path against provenance and approval rules. Use when asked \"can this agent be prompt injected?\", to find exfiltration or privilege escalation paths, or to decide where approvals belong. Not for config files (agent-config-audit) or for measuring attack success rates (agent-eval-harness)."
 license: MIT
 compatibility: Python 3.11 or newer for the inventory script. Reads code only.
 metadata:

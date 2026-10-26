@@ -1,6 +1,6 @@
 ---
 name: tool-approval-gate-audit
-description: "Find every tool a Python agent's model can call, decide which have consequential side effects, and check each one sits behind a deterministic human approval gate that cannot fail open, with gaps reported per tool at file and line. Use when asked \"which of my agent's tools run without approval?\", before shipping an OpenAI Agents SDK, LangGraph, crewAI or FastMCP agent, or to check needs_approval and interrupt gates. Not for tracing injected input to tools (prompt-injection-review) or a whole-system threat model (agent-threat-model)."
+description: "Find every tool a Python agent's model can call, decide which have consequential side effects (deleting files, sending email, cloud writes), and check whether a human approves each one through a deterministic gate that cannot fail open, with gaps reported per tool at file and line. Use when asked \"which of my agent's tools run without approval?\", before shipping an OpenAI Agents SDK, LangGraph, crewAI or FastMCP agent, or to check needs_approval and interrupt gates. Not for tracing injected input to tools (prompt-injection-review) or a whole-system threat model (agent-threat-model)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. Parses Python source with the standard library; never imports or runs it; no network access.
 metadata:

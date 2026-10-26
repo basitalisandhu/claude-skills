@@ -1,6 +1,6 @@
 ---
 name: agent-session-log-review
-description: "Review an AI agent session log for signs that prompt injection took effect, tool misuse, data leaving the boundary and loops, with a bundled script that normalises transcript, chat and event logs and writes a timeline of flagged events. Use when asked \"what did the agent actually do in this session?\", after a suspicious run, or before trusting an agent's output. Not for agent configuration (agent-config-audit), agent source code (prompt-injection-review) or AWS API activity (aws-agent-session-audit in aws-security)."
+description: "Review an AI agent session log, transcript or chat export for signs that prompt injection took effect, tool misuse, destructive commands, denied actions retried another way, data leaving to unknown hosts and loops, with a bundled script that normalises the log and writes a timeline of flagged events. Use when asked \"what did the agent actually do in this session?\", after a suspicious run, or before trusting an agent's output. Not for agent configuration (agent-config-audit), agent source code (prompt-injection-review) or CloudTrail activity (aws-agent-session-audit in aws-security)."
 license: MIT
 compatibility: Python 3.10 or newer on PATH as python3. Reads one local log file; no network access needed.
 metadata:

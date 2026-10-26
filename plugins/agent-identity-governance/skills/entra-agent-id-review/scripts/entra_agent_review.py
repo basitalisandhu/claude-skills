@@ -44,6 +44,7 @@ Exit codes: 0 no finding at or above --fail-on (default MEDIUM), 1 at least one,
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import json
 import re
@@ -97,10 +98,29 @@ class InputError(Exception):
     """Bad input: exit code 2."""
 
 
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
+
+
 def load_json(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8-sig"))
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
     except json.JSONDecodeError as exc:
         raise InputError(f"{path.name}: not valid JSON: {exc}") from exc
@@ -266,10 +286,14 @@ def review(folder: Path, args, as_of: datetime) -> dict:
     }
     res_names = {str(r.get("id")): str(r.get("displayName") or r.get("appId")) for r in resources}
     blueprint_by_id = {str(b.get("appId") or b.get("id")): b for b in blueprints}
+    # one pass over the service principals instead of one per blueprint
+    sp_by_app_id: dict[str, dict] = {}
+    for sp in sps:
+        sp_by_app_id.setdefault(str(sp.get("appId") or ""), sp)
     for b in blueprints:
         blueprint_by_id[str(b.get("id"))] = b
         # the blueprint's own service principal holds the permissions its agent identities inherit
-        principal = next((sp for sp in sps if str(sp.get("appId") or "") == str(b.get("appId") or "")), None)
+        principal = sp_by_app_id.get(str(b.get("appId") or ""))
         if principal is not None and principal.get("id"):
             b["_principal_id"] = str(principal["id"])
     last_seen: dict[str, datetime] = {}
@@ -282,12 +306,13 @@ def review(folder: Path, args, as_of: datetime) -> dict:
         seen = [s for s in seen if s]
         if seen:
             last_seen[str(row.get("appId"))] = max(seen)
-    for b in blueprints:
-        b["_agents"] = [
+    agents_by_blueprint: dict[str, list[str]] = {}
+    for a in [*agent_objs, *(sp for sp in sps if is_agent_type(sp))]:
+        agents_by_blueprint.setdefault(str(a.get("agentIdentityBlueprintId") or ""), []).append(
             str(a.get("appId") or "")
-            for a in [*agent_objs, *(sp for sp in sps if is_agent_type(sp))]
-            if str(a.get("agentIdentityBlueprintId") or "") == str(b.get("appId") or "")
-        ]
+        )
+    for b in blueprints:
+        b["_agents"] = list(agents_by_blueprint.get(str(b.get("appId") or ""), []))
     by_object = {str(sp.get("id")): sp for sp in sps}
     for a in agent_objs:
         by_object.setdefault(str(a.get("id")), a)
@@ -529,6 +554,7 @@ def render(doc: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="entra_agent_review.py",

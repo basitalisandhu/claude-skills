@@ -1,6 +1,6 @@
 ---
 name: secure-agent-checklist
-description: "Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence. Use when asked \"is this agent safe to ship?\" or before deploying, open-sourcing or demoing one. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision."
+description: "Run a pre-ship security checklist for an LLM agent covering identity, least privilege, approvals, sandboxing, audit logging, kill switch, supply chain and evals, and report pass, fail or n.a. per item with evidence for a go or no-go sign-off. Use when asked \"is this agent safe to ship?\" or before deploying, releasing, open-sourcing or demoing an agent. Not for a deep component review (agent-threat-model, prompt-injection-review); it turns their evidence into a decision."
 license: MIT
 compatibility: No dependencies. Uses the other agent-security skills for evidence when they are available.
 metadata:

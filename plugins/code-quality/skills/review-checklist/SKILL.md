@@ -1,6 +1,6 @@
 ---
 name: review-checklist
-description: "Review a pull request, diff or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and produce findings with file and line references and a verdict. Use when asked to review code, a PR, a diff or \"look over my changes\" before merging. Not for style-only nitpicks a formatter handles, and not for a full security audit (use the security-basics skills for that)."
+description: "Review a pull request, diff, patch or branch against a fixed checklist (correctness, tests, error handling, security, performance, readability, compatibility) and give findings with file and line references and a verdict: approve or request changes. Use when asked to \"review this code\", review a PR or a colleague's diff, \"look over my changes\" before merging, or go through a patch properly. Not for a security-only pass (diff-security-review), a deep error-handling pass (error-handling-review), formatter nitpicks or architecture reviews."
 license: MIT
 compatibility: Any language. Uses git when a repository is available; works on a pasted diff otherwise.
 metadata:

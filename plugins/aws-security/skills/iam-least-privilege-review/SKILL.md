@@ -1,6 +1,6 @@
 ---
 name: iam-least-privilege-review
-description: "Review AWS IAM policies offline for over-broad permissions and privilege-escalation paths (full admin, service and action wildcards, unscoped iam:PassRole, NotAction in Allow statements, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked \"is this least privilege?\", before approving a permissions change, or after an audit flags an admin policy. Not for SCPs (scp-guardrails) or resource policies such as bucket or key policies."
+description: "Review AWS IAM policies offline, from policy files or a get-account-authorization-details export, for over-broad permissions and privilege-escalation paths (admin, wildcards, unscoped iam:PassRole, NotAction in Allow, known escalation combinations), ranked by severity with a tightened policy per document. Use when asked \"is this IAM policy least privilege?\", before approving a permissions change, or after an audit flags an admin policy on a role. Not for SCPs (scp-guardrails), bucket or key policies, or planning an agent's role (agent-safe-aws-access)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. AWS CLI only if policies are exported from an account; the script makes no network calls.
 metadata:

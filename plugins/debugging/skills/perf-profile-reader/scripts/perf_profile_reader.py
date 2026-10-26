@@ -67,7 +67,7 @@ def parse_collapsed(text: str) -> dict:
         max_depth = max(max_depth, len(frames))
         stacks[";".join(frames)] += n
         self_c[frames[-1]] += n
-        for f in set(frames):
+        for f in dict.fromkeys(frames):  # ordered, so ties rank the same on every run
             total_c[f] += n
     return {"unit": "samples", "total": total, "self": self_c, "cumulative": total_c, "stacks": stacks, "max_depth": max_depth}
 
@@ -125,7 +125,7 @@ def parse_pyspy_dump(text: str) -> dict:
         if ln.startswith("Thread "):
             if stack:
                 self_c[stack[0]] += 1
-                for f in set(stack):
+                for f in dict.fromkeys(stack):  # ordered, so ties rank the same on every run
                     total_c[f] += 1
                 max_depth = max(max_depth, len(stack))
             stack = []
@@ -136,7 +136,7 @@ def parse_pyspy_dump(text: str) -> dict:
             stack.append(f"{m.group(1)} ({m.group(2)}:{m.group(3)})")
     if stack:
         self_c[stack[0]] += 1
-        for f in set(stack):
+        for f in dict.fromkeys(stack):  # ordered, so ties rank the same on every run
             total_c[f] += 1
         max_depth = max(max_depth, len(stack))
     return {"unit": "threads", "total": threads, "self": self_c, "cumulative": total_c, "stacks": None, "max_depth": max_depth}

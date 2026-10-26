@@ -1,6 +1,6 @@
 ---
 name: bug-repro-minimiser
-description: "Turn a vague bug report into the smallest reliable reproduction: a single command or test that fails every time, with the environment, input and expected versus actual result pinned down. Use when a bug report says \"sometimes\", \"on my machine\" or \"it just crashes\", before any fix is attempted, or when a fix needs a regression test. Not for performance regressions (use perf-profile-reader) and not a debugger tutorial."
+description: "Turn a vague bug report or a long failing script into the smallest reliable reproduction: reduce it to a single command or test that fails every time and still shows the bug, with the environment, input and expected versus actual result pinned down. Use when a bug report says \"sometimes\", \"on my machine\" or \"it just crashes\", before any fix is attempted, or when a fix needs a regression test. Not for performance regressions (perf-profile-reader) and not a debugger tutorial."
 license: MIT
 compatibility: Any language. Uses git bisect when a repository with history is available.
 metadata:

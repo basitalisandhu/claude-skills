@@ -39,6 +39,7 @@ from _ghexport import (  # noqa: E402
     find_file,
     is_bot,
     iso,
+    list_of,
     load_json,
     login_of,
     md_cell,
@@ -46,6 +47,7 @@ from _ghexport import (  # noqa: E402
     parse_time,
     short,
     stem_files,
+    text_of,
 )
 
 CHECKS = ("unlabelled", "unanswered", "possible-duplicate", "stale", "popular")
@@ -111,19 +113,30 @@ def jaccard(a: set[str], b: set[str]) -> float:
     return len(a & b) / len(a | b) if a and b else 0.0
 
 
+def _count(value: object) -> int:
+    """A totalCount as a non-negative int; anything that is not a whole number counts as 0."""
+    if isinstance(value, bool):
+        return 0
+    if isinstance(value, int):
+        return max(value, 0)
+    if isinstance(value, str) and value.strip().isdigit():
+        return int(value.strip())
+    return 0
+
+
 def thumbs_up(issue: dict) -> int:
-    for group in issue.get("reactionGroups") or []:
+    for group in list_of(issue.get("reactionGroups")):
         if isinstance(group, dict) and group.get("content") == "THUMBS_UP":
             users = group.get("users")
             if isinstance(users, dict):
-                return int(users.get("totalCount") or 0)
-            return int(group.get("totalCount") or 0)
+                return _count(users.get("totalCount"))
+            return _count(group.get("totalCount"))
     return 0
 
 
 def label_names(issue: dict) -> list[str]:
     out = []
-    for label in issue.get("labels") or []:
+    for label in list_of(issue.get("labels")):
         name = label.get("name") if isinstance(label, dict) else label
         if isinstance(name, str):
             out.append(name)
@@ -177,7 +190,7 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
     for issue in issues:
         for who in [
             issue.get("author"),
-            *[c.get("author") for c in issue.get("comments") or [] if isinstance(c, dict)],
+            *[c.get("author") for c in list_of(issue.get("comments")) if isinstance(c, dict)],
         ]:
             if login_of(who):
                 logins.add(login_of(who))
@@ -193,7 +206,7 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
         author = login_of(issue.get("author"))
         responders = [
             c
-            for c in issue.get("comments") or []
+            for c in list_of(issue.get("comments"))
             if isinstance(c, dict) and login_of(c.get("author")) not in (None, author) and not is_bot(c.get("author"))
         ]
         labels = label_names(issue)
@@ -210,12 +223,12 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
                 "updated": iso(updated),
                 "age_days": age_days,
                 "idle_days": idle_days,
-                "comments": len(issue.get("comments") or []),
+                "comments": len(list_of(issue.get("comments"))),
                 "answered": bool(responders),
                 "thumbs_up": thumbs_up(issue),
                 "suggested_labels": suggest(issue, keyword_map, labels) if keyword_map else [],
                 "checks": [],
-                "_words": significant_words(issue.get("title") or ""),
+                "_words": significant_words(text_of(issue.get("title"))),
             }
         )
 
@@ -252,7 +265,7 @@ def analyse(folder: Path, args: argparse.Namespace) -> dict:
         for label in row["suggested_labels"]:
             suggested.setdefault(label, []).append(row["number"])
     return {
-        "repo": meta.get("repo"),
+        "repo": text_of(meta.get("repo")) or None,
         "as_of": iso(now),
         "as_of_source": source,
         "thresholds": {

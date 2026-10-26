@@ -1,6 +1,6 @@
 ---
 name: refactor-plan
-description: "Produce a step-by-step refactoring plan for a module, package or feature, with a behaviour-preserving sequence of small commits, the tests that guard each step, and a rollback point. Use when asked to refactor, restructure, split a large file, untangle dependencies, or \"clean up\" code without changing behaviour. Not for feature work or bug fixes; those change behaviour and belong in a normal change."
+description: "Plan a safe refactor of a module, package or large file as small, behaviour-preserving commits, with the tests that guard each step and a rollback point: split a 3000-line file into smaller units, untangle packages that import each other in a circle, or clean up code when behaviour must not change. Use when asked to \"plan this refactor\", for the steps to split or restructure a module, or to untangle dependencies. Not for ranking complexity (complexity-report), finding unused code (dead-code-finder), renames alone (naming-audit) or features and bug fixes."
 license: MIT
 compatibility: Any language. Uses complexity-report and dead-code-finder when the code-quality plugin is installed.
 metadata:

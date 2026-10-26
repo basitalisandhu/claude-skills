@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import functools
 import io
 import json
 import re
@@ -62,10 +63,29 @@ class InputError(Exception):
     """Bad input: exit code 2."""
 
 
+def guard_bad_shapes(main):
+    """Decorate main(): a value of an unexpected type inside an input file (a number where a string belongs, a list
+    where an object belongs) exits 2 with a message instead of a traceback."""
+
+    @functools.wraps(main)
+    def wrapper(*args, **kwargs):
+        try:
+            return main(*args, **kwargs)
+        except (TypeError, AttributeError, KeyError, IndexError, ValueError, RecursionError) as exc:
+            print(
+                f"error: an input file holds a value of an unexpected type or shape ({type(exc).__name__}: {exc}); "
+                "check that each file is the unchanged export or output named in --help, then run again",
+                file=sys.stderr,
+            )
+            return 2
+
+    return wrapper
+
+
 def read_text(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8-sig")
-    except OSError as exc:
+    except (OSError, UnicodeDecodeError) as exc:
         raise InputError(f"{path.name}: cannot read: {exc}") from exc
 
 
@@ -278,8 +298,10 @@ def build(args) -> dict:
     }
 
 
-def sheet_markdown(doc: dict, owner: str) -> str:
-    rows = [r for r in doc["identities"] if r["sheet"] == owner]
+def sheet_markdown(doc: dict, owner: str, rows: list[dict] | None = None) -> str:
+    """One owner's review sheet. Pass that owner's rows when writing every sheet, so the identities are grouped once."""
+    if rows is None:
+        rows = [r for r in doc["identities"] if r["sheet"] == owner]
     title = "Unassigned identities (no current owner)" if owner == "unassigned" else owner
     lines = [
         f"# Recertification {doc['quarter']}: {title}",
@@ -353,6 +375,7 @@ def tracking_csv(doc: dict) -> str:
     return buf.getvalue()
 
 
+@guard_bad_shapes
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="agent_recertification.py",
@@ -374,7 +397,10 @@ def main(argv: list[str] | None = None) -> int:
     except InputError as exc:
         print(f"agent_recertification.py: {exc}", file=sys.stderr)
         return 2
-    sheets = {owner: sheet_markdown(doc, owner) for owner in doc["summary"]["sheets"]}
+    by_sheet: dict[str, list[dict]] = {}
+    for r in doc["identities"]:
+        by_sheet.setdefault(r["sheet"], []).append(r)
+    sheets = {owner: sheet_markdown(doc, owner, by_sheet.get(owner, [])) for owner in doc["summary"]["sheets"]}
     if args.out:
         out = Path(args.out)
         # two owners can slug to the same file name (sam@example.com, sam.example.com): number the later ones

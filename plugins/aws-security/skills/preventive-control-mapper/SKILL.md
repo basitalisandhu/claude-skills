@@ -1,6 +1,6 @@
 ---
 name: preventive-control-mapper
-description: "Turn failing Security Hub controls and Prowler checks into the preventive controls that stop the same misconfiguration coming back: an SCP statement, an account or declarative-policy setting, an IaC check, plus the AWS Config rule that detects a regression. Offline, from saved exports. Use when asked \"how do we stop this finding coming back?\" or to move from fixing findings to preventing them. Not for ordering the backlog (security-hub-triage), linting an SCP (scp-guardrails) or checking one account (aws-account-audit)."
+description: "Turn failing Security Hub controls and Prowler checks (S3, EC2, IAM, CloudTrail, KMS, RDS and more) into the preventive controls that stop the same misconfiguration coming back: an SCP statement, an account or declarative-policy setting, an IaC check, plus the AWS Config rule that detects a regression. Offline, from saved exports. Use when asked \"how do we stop this finding coming back?\" or to move from fixing findings to preventing them. Not for deciding what to fix first (security-hub-triage), linting an SCP (scp-guardrails) or checking one account (aws-account-audit)."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3. AWS CLI only for exporting findings; the script makes no network calls.
 metadata:

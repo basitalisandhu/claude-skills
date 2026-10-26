@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import json
 import re
 import sys
@@ -144,8 +145,16 @@ def _split_params(params: str) -> list[str]:
     return [p for p in parts if p]
 
 
+def _line_index(text: str):
+    """Return line_of(pos), the 1-based line of character offset pos: one pass to find the newlines, then a binary
+    search per lookup. Counting newlines from the start for every match made large files quadratic."""
+    newlines = [m.start() for m in re.finditer("\n", text)]
+    return lambda pos: bisect.bisect_left(newlines, pos) + 1
+
+
 def ts_file(path: Path, text: str) -> dict:
     clean = _strip_ts(text)
+    line_of = _line_index(clean)
     slots = covered = functions = any_count = 0
     untyped: list[dict] = []
     for m in TS_FUNC_RE.finditer(clean):
@@ -175,7 +184,7 @@ def ts_file(path: Path, text: str) -> dict:
             else:
                 missing.append(p.split("=")[0].strip() or "?")
         if missing:
-            untyped.append({"name": name, "line": clean.count("\n", 0, m.start()) + 1, "missing": missing})
+            untyped.append({"name": name, "line": line_of(m.start()), "missing": missing})
     any_count += len(re.findall(r"\bas\s+any\b", clean))
     return {"file": str(path), "language": "typescript", "slots": slots, "covered": covered, "functions": functions, "any": any_count, "untyped": untyped}
 

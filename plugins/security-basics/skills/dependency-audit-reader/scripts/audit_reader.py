@@ -198,7 +198,19 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         items = PARSERS[fmt](doc)
-    except (AttributeError, TypeError) as exc:  # --format forced onto a document of another shape
+        for item in items:
+            item["ids"] = [str(x) for x in item.get("ids") or []]
+            item["_groups"] = [[str(x) for x in g] for g in item.get("_groups") or [] if isinstance(g, (list, tuple))]
+            for key in ("package", "version", "severity", "fix"):
+                if not isinstance(item.get(key), str):
+                    item[key] = "" if item.get(key) is None else str(item[key])
+            item["titles"] = [str(t) for t in item.get("titles") or []]
+            if "via" in item:
+                item["via"] = [str(v) for v in item["via"] or []]
+            if item.get("direct") not in (True, False, None):
+                item["direct"] = None
+            item["fixable"] = bool(item.get("fixable"))
+    except (AttributeError, TypeError, KeyError, ValueError) as exc:  # a forced --format, or fields of the wrong type
         print(f"error: {name} does not have the shape of a {fmt} report ({exc}); drop --format to auto-detect", file=sys.stderr)
         return 2
     ignored = {i.lower() for i in args.ignore}

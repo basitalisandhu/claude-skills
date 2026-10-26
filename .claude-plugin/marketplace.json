@@ -15,7 +15,7 @@
       "name": "agent-identity-governance",
       "source": "./plugins/agent-identity-governance",
       "description": "Nine agent identity governance skills, each with a tested standard-library script over saved Entra, AWS, GitHub and register exports: nhi-inventory, entra-agent-id-review, agent-recertification, credential-expiry-radar, connector-register, agent-action-timeline, agent-kill-switch-runbook, leaked-credential-response and agent-audit-log-integrity. No network calls; key ids shown by their last four characters.",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -53,7 +53,7 @@
       "name": "agent-security",
       "source": "./plugins/agent-security",
       "description": "Ten security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -82,7 +82,7 @@
       "name": "aws-security",
       "source": "./plugins/aws-security",
       "description": "Eleven AWS security skills: account audit, SCP guardrails, landing zone blast radius, IAM least-privilege review, Security Hub triage, agent-safe AWS access, incident response runbooks, spend guardrails, a sandbox guardrail pack, an agent session audit from CloudTrail and a preventive control mapper for Security Hub findings. Scripts run offline on specs and saved CLI output.",
-      "version": "0.5.0",
+      "version": "0.6.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -153,7 +153,7 @@
       "name": "code-quality",
       "source": "./plugins/code-quality",
       "description": "Review checklist, refactor planning, dead code and complexity reports, naming and error-handling audits, type coverage and test gap finder.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -218,7 +218,7 @@
       "name": "data",
       "source": "./plugins/data",
       "description": "SQL query review, schema migration planning, CSV profiler, JSON Schema inference, regex builder and OpenAPI 3 contract review.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -246,7 +246,7 @@
       "name": "debugging",
       "source": "./plugins/debugging",
       "description": "Bug reproduction minimiser, log triage, flaky test hunter, stack trace explainer, profile reader and a memory leak checklist.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -272,7 +272,7 @@
       "name": "devops",
       "source": "./plugins/devops",
       "description": "Dockerfile hardening, GitHub Actions authoring, Kubernetes manifest and Terraform review, a Terraform apply gate, cron doctor, env file diff, release notes and a semver advisor.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -302,7 +302,7 @@
       "name": "docs",
       "source": "./plugins/docs",
       "description": "README author, ADR writer, changelog keeper, onboarding doc, API docs from code and a postmortem writer.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -327,7 +327,7 @@
       "name": "github-manager",
       "source": "./plugins/github-manager",
       "description": "Four skills, each with a tested standard-library script over saved gh exports: pr-queue-digest, iteration-report, incident-postmortem-timeline and issue-triage-digest. Team level only, no per-person scoring.",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -359,7 +359,7 @@
       "name": "m365-governance",
       "source": "./plugins/m365-governance",
       "description": "Ten Microsoft 365 governance skills: Graph permission preflight, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and groups sprawl, access review pack, Copilot oversharing readiness. Read-only exports, offline evaluation.",
-      "version": "0.5.1",
+      "version": "0.6.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -390,7 +390,7 @@
       "name": "mac-maintenance",
       "source": "./plugins/mac-maintenance",
       "description": "Three skills, each with a tested standard-library script: mac-cleanup (survey, safe tier, decision report), mac-duplicate-finder and mac-app-leftovers.",
-      "version": "0.1.4",
+      "version": "0.2.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -457,7 +457,7 @@
       "name": "security-basics",
       "source": "./plugins/security-basics",
       "description": "Secrets hygiene scan, dependency audit reader, HTTP security header check, JWT inspector, CORS review, auth flow review and a diff security review. For agent-specific security see agent-security-skills.",
-      "version": "0.3.1",
+      "version": "0.4.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -485,7 +485,7 @@
       "name": "ways-of-working",
       "source": "./plugins/ways-of-working",
       "description": "Thirteen ways-of-working skills, each with a tested standard-library script over local files: change-request-writer, meeting-actions-ledger, risk-exception-register, risk-register-refresh, rfc-lifecycle, decision-log, weekly-status-rollup, one-on-one-ledger, focus-plan, vendor-scorecard, working-agreement-check, shift-handover and next-actions-sweep. No network, no rating of people.",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"

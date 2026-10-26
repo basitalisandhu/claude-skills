@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import bisect
 import json
 import re
 import sys
@@ -227,15 +228,23 @@ def _js_object_export_names(text: str, inner_start: int, inner_end: int) -> list
     return names
 
 
+def _line_index(text: str):
+    """Return line_of(pos), the 1-based line of character offset pos: one pass to find the newlines, then a binary
+    search per lookup. Counting newlines from the start for every match made large files quadratic."""
+    newlines = [m.start() for m in re.finditer("\n", text)]
+    return lambda pos: bisect.bisect_left(newlines, pos) + 1
+
+
 def js_candidates(path: Path, text: str) -> list[dict]:
+    line_of = _line_index(text)
     out: list[dict] = []
     if path.stem == "index" or JS_EXPORT_DEFAULT_RE.search(text) and path.suffix in {".jsx", ".tsx"}:
         return out
     for m in JS_EXPORT_RE.finditer(text):
-        line = text.count("\n", 0, m.start()) + 1
+        line = line_of(m.start())
         out.append({"file": str(path), "line": line, "name": m.group(1), "kind": "export", "qualname": m.group(1), "language": "javascript"})
     for m in JS_EXPORT_LIST_RE.finditer(text):
-        line = text.count("\n", 0, m.start()) + 1
+        line = line_of(m.start())
         for part in m.group(1).split(","):
             part = part.strip()
             if not part or part.startswith("type "):
@@ -249,13 +258,13 @@ def js_candidates(path: Path, text: str) -> list[dict]:
         if inner_start < 0:
             continue
         for name, pos in _js_object_export_names(text, inner_start, inner_end):
-            line = text.count("\n", 0, pos) + 1
+            line = line_of(pos)
             out.append({"file": str(path), "line": line, "name": name, "kind": "export", "qualname": name, "language": "javascript"})
     for m in JS_MODULE_EXPORTS_DOT_RE.finditer(text):
-        line = text.count("\n", 0, m.start()) + 1
+        line = line_of(m.start())
         out.append({"file": str(path), "line": line, "name": m.group(1), "kind": "export", "qualname": m.group(1), "language": "javascript"})
     for m in JS_EXPORTS_DOT_RE.finditer(text):
-        line = text.count("\n", 0, m.start()) + 1
+        line = line_of(m.start())
         out.append({"file": str(path), "line": line, "name": m.group(1), "kind": "export", "qualname": m.group(1), "language": "javascript"})
     return out
 

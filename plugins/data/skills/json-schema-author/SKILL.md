@@ -1,6 +1,6 @@
 ---
 name: json-schema-author
-description: "Write a JSON Schema (draft 2020-12) for an API payload, configuration file or event by inferring a draft from sample documents with a bundled script (types, required fields, nullability, formats, enums, bounds) and then hand-finishing it: tighter constraints, descriptions, examples, additionalProperties and versioning. Use when asked to \"write a JSON Schema\", to validate JSON, document a payload, or create a schema from examples. Not for OpenAPI documents as a whole (use api-contract-review) and not for XML or protobuf."
+description: "Write a JSON Schema (draft 2020-12) for an API payload, config file, webhook or event: a bundled script infers a draft from sample documents (types, required fields, nullability, formats, enums, bounds), then it is tightened by hand with constraints, descriptions, examples and additionalProperties. Use when asked to \"write a JSON Schema\", to create a schema from examples or sample payloads, or to document a payload so others can validate it. Not for whole OpenAPI specs (api-contract-review) and not for XML or protobuf."
 license: MIT
 compatibility: Python 3.11 or newer on PATH as python3 for inference. A validator (python-jsonschema, ajv) is optional for the verification step.
 metadata:
