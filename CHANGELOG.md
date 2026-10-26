@@ -6,6 +6,16 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-10-26
+
+### Fixed
+
+- Sync pull requests showed only CodeQL and were marked unstable (#45): check runs from the `ci` run that `sync.yml` starts are not listed on a pull request, and the `pull_request` run GitHub creates for `github-actions[bot]` waited for approval. `ci.yml` now posts its result as `ci / <job>` commit statuses on dispatched runs off `main`, `sync.yml` marks them pending first, and `sync.yml` deletes only that bot run waiting for approval. Approval for first-time contributors is unchanged.
+
+### Changed
+
+- The marketplace metadata version is 0.6.1.
+
 ## [0.6.0] - 2026-10-26
 
 ### Changed
