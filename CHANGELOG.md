@@ -6,6 +6,14 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-26
+
+### Changed
+
+- Synced in #45 after the second deep pass on eight source packs: m365-governance 0.6.0, agent-identity-governance 0.4.0, agent-security 0.6.0, aws-security 0.6.1, github-manager 0.4.0, the claude-dev plugins 0.4.1, ways-of-working 0.5.0 and mac-maintenance 0.2.0. Across these packs, skill descriptions were reworded where the trigger check found misses, input parsers were fuzzed and now exit 2 with a message instead of a traceback (including a YAML reader that looped for ever on some malformed input), several quadratic loops were made linear, and every skill has a README with a sample produced by its script. New behaviour includes `agent-action-timeline --azure-activity`, the GuardDuty detector status check, `log-triage --since/--until`, milestone scope changes in `iteration-report`, stateful-resource notes in change records and `safe_clean.py --list-actions`.
+- The sync pull request #45 got its `ci` checks from the run that `sync.yml` starts, with no close and reopen (#24).
+- The marketplace metadata version is 0.6.0.
+
 ## [0.5.1] - 2026-10-26
 
 ### Fixed

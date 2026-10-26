@@ -8,7 +8,7 @@
   },
   "metadata": {
     "description": "Every Claude Code skill maintained by Muhammad Basit Ali, in one marketplace: security, AWS, Microsoft 365, compliance evidence, GitHub, repository engineering, everyday development and Mac maintenance. Synced daily from the source repositories.",
-    "version": "0.5.1"
+    "version": "0.6.0"
   },
   "plugins": [
     {
