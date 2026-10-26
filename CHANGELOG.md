@@ -6,6 +6,16 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-26
+
+### Added
+
+- New skills synced from their source repositories in #39: `session-usage-ledger`, `shell-slip-audit` and `compaction-loss-check` (cc-setup-tooling 0.5.0), `mcp-registry-publish-preflight` (repo-engineering 0.6.0) and `iso27001-soa-check` (compliance-evidence 0.7.0). Each has a standard-library script, synthetic fixtures and tests in its source repository. The catalog now lists 140 skills in 16 plugins.
+
+### Changed
+
+- The marketplace metadata version is 0.5.0.
+
 ## [0.4.0] - 2026-10-20
 
 ### Added
