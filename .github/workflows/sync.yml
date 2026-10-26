@@ -69,7 +69,8 @@ jobs:
   # - check runs from a workflow_dispatch run are not listed on the pull request, so ci.yml
   #   reports its result as commit statuses named "ci / <job>"; this job sets them to pending first;
   # - the pull_request event still creates a ci.yml run for the bot, held at "action_required"
-  #   (approval for first-time contributors), which marks the pull request unstable. It would only
+  #   (approval for first-time contributors; the API reports status "completed" with conclusion
+  #   "action_required"), which marks the pull request unstable. It would only
   #   repeat the dispatched run, so this job deletes it. Only runs of ci.yml for this head commit,
   #   on sync/plugins, by github-actions[bot] are touched; approval for everyone else is unchanged.
   # This is its own job so that actions: write is never held by the job that runs the synced code.
@@ -104,7 +105,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           SHA: ${{ needs.sync.outputs.head-sha }}
         run: |
-          query='.workflow_runs[] | select(.event == "pull_request" and .status == "action_required"
+          query='.workflow_runs[] | select(.event == "pull_request" and .conclusion == "action_required"
             and .head_branch == "sync/plugins" and .path == ".github/workflows/ci.yml"
             and .actor.login == "github-actions[bot]") | .id'
           for attempt in 1 2 3 4 5 6; do

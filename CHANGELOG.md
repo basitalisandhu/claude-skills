@@ -6,6 +6,10 @@ Changes to individual skills are recorded in their source repositories. Plugin v
 
 ## [Unreleased]
 
+### Fixed
+
+- `sync.yml` did not find the `pull_request` run waiting for approval: the API reports it with status `completed` and conclusion `action_required`, not status `action_required`. It now matches on the conclusion.
+
 ## [0.6.1] - 2026-10-26
 
 ### Fixed
