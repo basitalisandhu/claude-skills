@@ -14,10 +14,10 @@
       "repo": "agent-security-skills",
       "url": "https://github.com/basitalisandhu/agent-security-skills",
       "path": "plugins/agent-security",
-      "commit": "6b32239d62074ef17fe522017525fdb043390476",
-      "synced_at": "2026-10-26T09:49:14Z",
+      "commit": "ff3747466864fed71266b4f41c93111e3166267d",
+      "synced_at": "2026-10-27T09:01:43Z",
       "upstream_version": "0.6.0",
-      "content_sha256": "ee2e97e2cd10b386c52e756ad624f56dc0807633f06356b1f80e34eba0b81a33"
+      "content_sha256": "b58b4c35bb3c0e71c4a7288f563068feabdcc2ff7023bef3f0f5c6aaa6de1ea0"
     },
     "aws-security": {
       "repo": "aws-security-skills",
@@ -32,10 +32,10 @@
       "repo": "claude-code-tooling-skills",
       "url": "https://github.com/basitalisandhu/claude-code-tooling-skills",
       "path": "plugins/cc-setup-tooling",
-      "commit": "e6320fe78bedc7f0b44979f45d2ebce7600f5f9b",
-      "synced_at": "2026-10-26T07:46:36Z",
+      "commit": "4b5c92f0d9ce63b84f4cb11b781c2791c3b603a6",
+      "synced_at": "2026-10-27T09:01:43Z",
       "upstream_version": "0.5.0",
-      "content_sha256": "fda9cd34060c28098a70cba52b9dd12bebf88a0f3d749bd37640496116e527a6"
+      "content_sha256": "8a97fa035200814d175ef249c761c08fb0c3c67c0cb7796795e525d5692f71c2"
     },
     "code-quality": {
       "repo": "claude-dev-skills",
