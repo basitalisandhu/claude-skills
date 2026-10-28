@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -334,7 +335,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.out:
         Path(args.out).write_text(text, encoding="utf-8", newline="\n")
     else:
-        sys.stdout.write(text)
+        try:
+            sys.stdout.write(text)
+            sys.stdout.flush()
+        except BrokenPipeError:
+            # The reader closed the pipe early (| head): stop quietly. Point stdout at devnull so the
+            # interpreter's final flush does not raise again, and exit 141 like a shell on SIGPIPE.
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, sys.stdout.fileno())
+            os.close(devnull)
+            return 141
     return code
 
 

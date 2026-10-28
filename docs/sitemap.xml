@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://basitalisandhu.github.io/claude-skills/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/guide/install-claude-code-skills/</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-action-timeline/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/agent-audit-log-integrity/</loc><lastmod>2026-10-26</lastmod></url>
@@ -12,17 +12,17 @@
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/entra-agent-id-review/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/leaked-credential-response/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-identity-governance/nhi-inventory/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-session-log-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/incident-lookup/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/mcp-server-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/tool-approval-gate-audit/</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-config-audit/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-eval-harness/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-session-log-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/agent-threat-model/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/incident-lookup/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/mcp-server-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/prompt-injection-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/secure-agent-checklist/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/semgrep-agentic/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/agent-security/tool-approval-gate-audit/</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/agent-safe-aws-access/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/aws-account-audit/</loc><lastmod>2026-10-26</lastmod></url>
@@ -35,21 +35,21 @@
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/sandbox-account-guardrail-pack/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/scp-guardrails/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/aws-security/security-hub-triage/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/compaction-loss-check/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/sandbox-config-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/session-usage-ledger/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/shell-slip-audit/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/subagent-tool-scope-review/</loc><lastmod>2026-10-26</lastmod></url>
-  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/unattended-run-preflight/</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/compaction-loss-check/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/context-budget-audit/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/hook-author/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/permissions-builder/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/sandbox-config-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/session-usage-ledger/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/shell-slip-audit/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-collision-check/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-description-linter/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-portability-check/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-supply-chain-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/skill-trigger-eval/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/subagent-tool-scope-review/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/cc-setup-tooling/unattended-run-preflight/</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/complexity-report/</loc><lastmod>2026-10-26</lastmod></url>
   <url><loc>https://basitalisandhu.github.io/claude-skills/plugins/code-quality/dead-code-finder/</loc><lastmod>2026-10-26</lastmod></url>
