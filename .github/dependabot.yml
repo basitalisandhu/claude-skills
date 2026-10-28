@@ -2,6 +2,25 @@ version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
+    exclude-paths:
+      - "plugins/**"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+  # plugins/ is synced from the pack repos; never scan it from the hub.
+  - package-ecosystem: npm
+    directory: /
+    exclude-paths:
+      - "plugins/**"
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+  - package-ecosystem: pip
+    directory: /
+    exclude-paths:
+      - "plugins/**"
     schedule:
       interval: weekly
     labels:
