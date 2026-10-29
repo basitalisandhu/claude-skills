@@ -150,6 +150,8 @@ def test_convert_escapes_raw_html_and_never_links_scripts(text):
 def test_safe_url_rejects_unknown_schemes(url):
     got = md.safe_url(url)
     if got is not None:
+        if got.startswith(("/", "#", "./", "../")):
+            return  # relative or fragment: a colon here is not a scheme ("#:")
         head = got.split("/", 1)[0]
         assert ":" not in head or got.startswith(md._SAFE_SCHEMES)
 
