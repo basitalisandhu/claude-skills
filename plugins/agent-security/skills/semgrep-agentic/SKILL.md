@@ -96,7 +96,7 @@ Upstream ids are bare (`llm-output-to-exec-eval`); when Semgrep loads them from 
 | agentic.js.user-input-in-system-prompt | user-input-in-system-prompt (javascript) |
 | agentic.js.tool-fetches-model-controlled-url | llm-output-to-fetch (related) |
 | agentic.js.mcp-server-binds-all-interfaces | mcp-http-transport-without-auth (related) |
-| agentic.config.bash-wildcard-allowed, bypass-permissions-default, mcp-plain-http, mcp-literal-bearer-token, mcp-unpinned-npx | none yet (configuration rules are on the upstream roadmap) |
+| agentic.config.bash-wildcard-allowed, bypass-permissions-default, mcp-plain-http, mcp-literal-bearer-token, mcp-unpinned-npx, hook-pipes-remote-into-shell | none yet (configuration rules are on the upstream roadmap) |
 
 Upstream rules with no bundled counterpart, worth knowing by name: `llm-output-to-sql`, `llm-output-to-file-path`, `llm-output-to-html`, `llm-output-to-innerhtml`, `agent-tool-param-to-file-path`, `mcp-tool-param-to-file-path`, `langchain-allow-dangerous-code`, `langchain-allow-dangerous-requests`, `langchain-dangerous-tools`, `langchain-allow-dangerous-deserialization`, `transformers-trust-remote-code`, `yaml-unsafe-load`, `hardcoded-llm-api-key`, `llm-api-key-logged`, `api-key-in-command-line-arg`.
 

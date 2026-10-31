@@ -12,6 +12,10 @@ coverage: a mention proves nothing ran. Size is the unit's line span; fan-in is 
 files, other than its own, that mention the name. Untested units are ranked by entry point first, then by
 size x (1 + fan-in).
 
+--methods also reports public methods of public Python classes as separate units. A method counts as tested when
+a test file mentions its method name as a whole word; common names such as "get" or "run" can therefore appear
+tested even when the specific method is not covered.
+
 --stubs prints characterisation test stubs in the detected framework (pytest, unittest, jest, vitest, node:test);
 --stubs-dir writes them as new files and never overwrites an existing one. Stubs are skipped or todo tests: they
 pass nothing until someone records the current behaviour in them.
@@ -70,7 +74,7 @@ def py_module(rel: str) -> str:
     return ".".join(parts)
 
 
-def python_units(rel: str, text: str) -> list[dict]:
+def python_units(rel: str, text: str, methods: bool = False) -> list[dict]:
     try:
         tree = ast.parse(text)
     except (SyntaxError, ValueError):
@@ -87,6 +91,29 @@ def python_units(rel: str, text: str) -> list[dict]:
             units.append({"name": node.name, "kind": kind, "lang": "python", "path": rel, "line": node.lineno,
                           "size": end - node.lineno + 1, "params": params,
                           "entry_point": has_guard and node.name == "main", "module": py_module(rel)})
+            if methods and isinstance(node, ast.ClassDef):
+                for method in node.body:
+                    if not isinstance(method, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                        continue
+                    if method.name.startswith("_"):
+                        continue
+
+                    method_end = getattr(method, "end_lineno", method.lineno) or method.lineno
+                    method_params = [
+                        a.arg for a in method.args.args + method.args.kwonlyargs
+                        if a.arg not in {"self", "cls"}
+                    ]
+                    units.append({
+                        "name": f"{node.name}.{method.name}",
+                        "kind": "method",
+                        "lang": "python",
+                        "path": rel,
+                        "line": method.lineno,
+                        "size": method_end - method.lineno + 1,
+                        "params": method_params,
+                        "entry_point": False,
+                        "module": py_module(rel),
+                    })
     return units
 
 
@@ -195,29 +222,40 @@ def detect_framework(root: Path, test_texts: dict[str, str], lang: str) -> str:
 def stub(unit: dict, framework: str) -> tuple[str, str]:
     """Return (suggested file name, stub text)."""
     name = unit["name"]
+    safe_name = name.lower().replace(".", "_")
     where = f"{unit['path']}:{unit['line']}"
     args = ", ".join(unit["params"])
     if unit["lang"] == "python":
         mod = unit["module"]
+        import_name = name.split(".", 1)[0] if unit["kind"] == "method" else name
         placeholders = ", ".join(f"{p}=..." for p in unit["params"])
-        call = f"{name}({placeholders})" if unit["kind"] == "function" else f"{name}(...)"
+        call = (
+            f"{name}({placeholders})"
+            if unit["kind"] == "function"
+            else f"{import_name}().{name.split('.', 1)[1]}(...)"
+        )
         head = (f'"""Characterisation test stub for {mod}.{name} ({where}).\n\n'
                 "Record what the code does today before changing it: call it with real inputs, paste the observed\n"
                 'output as the expected value, then remove the skip."""\n')
         if framework == "unittest":
-            body = (f"{head}import unittest\n\nfrom {mod} import {name}\n\n\n"
-                    f"class Test{name[:1].upper()}{name[1:]}Characterisation(unittest.TestCase):\n"
-                    f'    @unittest.skip("characterisation stub: fill in real inputs and the observed output")\n'
-                    f"    def test_current_behaviour(self):\n"
-                    f"        result = {call}  # replace the arguments with real values\n"
-                    f"        self.assertEqual(result, None)  # replace None with the observed output\n")
+            class_name = "".join(
+                p[:1].upper() + p[1:] for p in name.split(".")
+            )
+            body = (
+                f"{head}import unittest\n\nfrom {mod} import {import_name}\n\n\n"
+                f"class Test{class_name}Characterisation(unittest.TestCase):\n"
+                f'    @unittest.skip("characterisation stub: fill in real inputs and the observed output")\n'
+                f"    def test_current_behaviour(self):\n"
+                f"        result = {call}  # replace the arguments with real values\n"
+                f"        self.assertEqual(result, None)  # replace None with the observed output\n"
+            )
         else:
-            body = (f"{head}import pytest\n\nfrom {mod} import {name}\n\n\n"
+            body = (f"{head}import pytest\n\nfrom {mod} import {import_name}\n\n\n"
                     f'@pytest.mark.skip(reason="characterisation stub: fill in real inputs and the observed output")\n'
-                    f"def test_{name.lower()}_current_behaviour():\n"
+                    f"def test_{safe_name}_current_behaviour():\n"
                     f"    result = {call}  # replace the arguments with real values\n"
                     f"    assert result == None  # noqa: E711  replace None with the observed output\n")
-        return f"test_{name.lower()}_characterisation.py", body
+        return f"test_{safe_name}_characterisation.py", body
     rel_import = "./" + os.path.splitext(unit["path"])[0]
     todo = f"{name}({args}) returns what it returns today; record real inputs and the observed output"
     ext = ".ts" if unit["path"].endswith((".ts", ".tsx", ".mts", ".cts")) else ".js"
@@ -233,14 +271,14 @@ def stub(unit: dict, framework: str) -> tuple[str, str]:
     return f"{name}.characterisation.test{ext}", body
 
 
-def analyse(root: Path, top: int) -> dict:
+def analyse(root: Path, top: int, methods: bool = False) -> dict:
     files = walk(root)
     texts = {r: t for r in files if (t := read(root, r)) is not None}
     tests = {r: t for r, t in texts.items() if is_test(r)}
     sources = {r: t for r, t in texts.items() if r not in tests}
     units: list[dict] = []
     for rel, text in sources.items():
-        units += python_units(rel, text) if rel.endswith(".py") else js_units(rel, text)
+        units += python_units(rel, text, methods) if rel.endswith(".py") else js_units(rel, text)
     entries = entry_targets(root)
     for u in units:
         for mod, fn in entries:
@@ -249,7 +287,8 @@ def analyse(root: Path, top: int) -> dict:
                 u["entry_point"] = True
     word_cache: dict[str, re.Pattern] = {}
     for u in units:
-        pat = word_cache.setdefault(u["name"], re.compile(rf"(?<![\w$]){re.escape(u['name'])}(?![\w$])"))
+        match_name = u["name"].split(".", 1)[1] if u["kind"] == "method" else u["name"]
+        pat = word_cache.setdefault(match_name, re.compile(rf"(?<![\w$]){re.escape(match_name)}(?![\w$])"))
         refs = sorted(r for r, t in tests.items() if pat.search(t))
         u["tested_by"] = refs
         u["tested"] = bool(refs)
@@ -301,12 +340,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--stubs", action="store_true", help="print a characterisation test stub for each listed unit")
     ap.add_argument("--stubs-dir", metavar="DIR", help="write the stubs into DIR as new files (never overwrites)")
     ap.add_argument("--max-untested", type=int, help="exit 1 when more units than this are untested")
+    ap.add_argument("--methods", action="store_true",
+                help="include public methods of public Python classes as units")
     args = ap.parse_args(argv)
     root = Path(args.repo).resolve()
     if not root.is_dir():
         print(f"error: not a directory: {args.repo}", file=sys.stderr)
         return 2
-    rep = analyse(root, max(1, args.top))
+    rep = analyse(root, max(1, args.top), args.methods)
+
     stubs = []
     if args.stubs or args.stubs_dir:
         for u in rep["ranked_untested"]:
