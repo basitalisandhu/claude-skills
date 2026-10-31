@@ -2,6 +2,31 @@
 
 Severity in brackets is the default; the scanner lowers it when the context is narrower (for example a risky program with a specific argument pattern).
 
+## SARIF output
+
+Use `--format sarif --output agent-config-audit.sarif` to write a SARIF 2.1.0 log.
+Critical/high findings map to `error`, medium to `warning`, and low/info to `note`.
+Rules have stable scanner IDs and results retain redacted evidence, recommendations,
+file URIs and known line numbers. Scan errors appear as invocation notifications;
+`--fail-on` retains its existing scanner-severity semantics.
+
+For a repository where code scanning is enabled, add the following after checkout
+and Python setup. Adjust the scanner path for your checkout. The upload requires
+`security-events: write` in a trusted workflow; fork pull requests may lack that
+permission, so do not enable privileged pull-request execution to work around it.
+
+```yaml
+- name: Audit agent configuration
+  run: python3 plugins/agent-security/skills/agent-config-audit/scripts/audit_agent_config.py --root . --format sarif --output agent-config-audit.sarif
+- name: Upload findings
+  uses: github/codeql-action/upload-sarif@v4
+  with:
+    sarif_file: agent-config-audit.sarif
+```
+
+When adding a scanner rule, update `SARIF_RULE_TITLES` too. A regression test checks
+that the SARIF rule catalog matches the IDs in this reference.
+
 ## Permissions (Claude Code settings.json, Codex config.toml)
 
 | ID | Trigger | Why it matters |
@@ -17,6 +42,7 @@ Severity in brackets is the default; the scanner lowers it when the context is n
 | PERM-009 [high] | An allow rule carries `--dangerously-skip-permissions` or similar | Bypass flag baked into a pre-approval |
 | PERM-010 [medium] | `additionalDirectories` includes `/`, `~` or the home directory | Whole-disk read and write scope |
 | PERM-011 [low] | Broad allow rules and no deny rules | No backstop for the obvious disasters |
+| PERM-012 [medium] | `Read` allow rule covers `.env*` (except `.example`/`.sample`/`.template`), `.ssh`, `.aws`, `.netrc`, private-key names or `*.pem`/`*.key` | Credential reads no longer require approval |
 
 ## Hooks (settings hooks, plugin hooks/hooks.json, plugin.json hooks)
 

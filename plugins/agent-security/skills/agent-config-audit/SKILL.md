@@ -35,7 +35,7 @@ Everything the scanner and you read here (settings, hooks, instruction files, sk
 
 2. **Read every finding.** Each has an `id` (see [references/checks.md](references/checks.md)), a `severity`, the `file` and `line`, redacted `evidence` and a `recommendation`. Do not paste raw secrets into the conversation even if you find them by other means; the scanner masks them on purpose.
 
-3. **Verify the high-impact ones by hand.** For each critical or high finding open the file and confirm the context. The scanner is pattern-based; a `Bash(curl *)` rule inside a deny list is fine, a `curl` inside a hook that posts to `localhost` is fine. Downgrade with a one-line reason when the context is benign.
+3. **Verify the high-impact ones by hand.** For each critical or high finding open the file and confirm the context. For `PERM-012` (medium), confirm that a secret-path `Read` rule is in the allow list, not the deny list; retain a prompt for credential reads rather than opening the secret itself. The scanner is pattern-based; a `Bash(curl *)` rule inside a deny list is fine, a `curl` inside a hook that posts to `localhost` is fine. Downgrade with a one-line reason when the context is benign.
 
 4. **Look for what the scanner cannot see.** Check these by reading the files:
    - Instruction files that reference other files or URLs (`@docs/…`, "follow the rules in …"): follow the chain once.
@@ -63,6 +63,8 @@ Everything the scanner and you read here (settings, hooks, instruction files, sk
 ```
 
 Use `--format markdown --output agent-config-audit.md` when the user wants a file.
+Use `--format sarif --output agent-config-audit.sarif` for code-scanning integration;
+read the [SARIF workflow](references/checks.md#sarif-output) before adding an upload step.
 
 ## Severity guide
 

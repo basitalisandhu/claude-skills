@@ -14,10 +14,10 @@
       "repo": "agent-security-skills",
       "url": "https://github.com/basitalisandhu/agent-security-skills",
       "path": "plugins/agent-security",
-      "commit": "ff3747466864fed71266b4f41c93111e3166267d",
-      "synced_at": "2026-10-27T09:01:43Z",
-      "upstream_version": "0.6.0",
-      "content_sha256": "b58b4c35bb3c0e71c4a7288f563068feabdcc2ff7023bef3f0f5c6aaa6de1ea0"
+      "commit": "51fe49a46569683366dbee86defd8c97fd6ba71e",
+      "synced_at": "2026-10-31T09:40:19Z",
+      "upstream_version": "0.6.1",
+      "content_sha256": "901f0f226c88bf93ac576510f8c8d83e13453ff70eabda2539744fd5235c5fe9"
     },
     "aws-security": {
       "repo": "aws-security-skills",
@@ -50,10 +50,10 @@
       "repo": "compliance-evidence-skills",
       "url": "https://github.com/basitalisandhu/compliance-evidence-skills",
       "path": "plugins/compliance-evidence",
-      "commit": "d1f619decaffa50a8781d28847b2b34d3de9160e",
-      "synced_at": "2026-10-26T07:46:36Z",
+      "commit": "a69e40dc80ac46c2db00795a3aa528a5607c483e",
+      "synced_at": "2026-10-31T09:40:19Z",
       "upstream_version": "0.7.0",
-      "content_sha256": "e57dab4bada55a7bfbbfae66979121018bbd6c093d0c24eb65ee5f6a57d07198"
+      "content_sha256": "0c1ec365aaf8be672ddbd0994c7b20720f57c6e1b33ae6fbd0075dfdcafbb7bf"
     },
     "data": {
       "repo": "claude-dev-skills",
@@ -104,10 +104,10 @@
       "repo": "m365-governance-skills",
       "url": "https://github.com/basitalisandhu/m365-governance-skills",
       "path": "plugins/m365-governance",
-      "commit": "d88ee9f09f7cf1c1ba4b018fc48cf15549c50253",
-      "synced_at": "2026-10-26T09:49:14Z",
-      "upstream_version": "0.6.0",
-      "content_sha256": "492ca84340641ad3bf3394b23068cf7b0852f82f6608f54a4ee23b62157e3332"
+      "commit": "282534a94ea2f4b10c91af09207339060a962e1c",
+      "synced_at": "2026-10-31T09:40:19Z",
+      "upstream_version": "0.7.0",
+      "content_sha256": "f80b8f80a9fde3d638f22e57a7144350282b993ec9b118908841f6a859f28540"
     },
     "mac-maintenance": {
       "repo": "mac-maintenance-skills",
@@ -122,10 +122,10 @@
       "repo": "repo-engineering-skills",
       "url": "https://github.com/basitalisandhu/repo-engineering-skills",
       "path": "plugins/repo-engineering",
-      "commit": "cbcf427800cda61d56783f2b98668051f7e3fb18",
-      "synced_at": "2026-10-26T07:46:36Z",
+      "commit": "3a8505f3bf1a22395bfb31f3220c1ab6f4ed6406",
+      "synced_at": "2026-10-31T09:40:19Z",
       "upstream_version": "0.6.0",
-      "content_sha256": "5e713b6325f4820122d88369ef4a2bbf94fb298014411a1b004632eafa112e51"
+      "content_sha256": "f762c213f21233d6fdef8bc5871a22bb3388a7f7e2c08090e5307c510a9342c1"
     },
     "security-basics": {
       "repo": "claude-dev-skills",
