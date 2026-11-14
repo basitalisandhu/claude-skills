@@ -53,7 +53,7 @@
       "name": "agent-security",
       "source": "./plugins/agent-security",
       "description": "Ten security skills for LLM agents, two guard hooks for Bash, a read-only security reviewer agent, and an optional incident-database MCP server.",
-      "version": "0.6.0",
+      "version": "0.6.1",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"
@@ -359,7 +359,7 @@
       "name": "m365-governance",
       "source": "./plugins/m365-governance",
       "description": "Ten Microsoft 365 governance skills: Graph permission preflight, Entra ID posture review, Conditional Access gap analysis, privileged access review, guest and external sharing review, licence and service plan audit, Intune baseline check, Teams and groups sprawl, access review pack, Copilot oversharing readiness. Read-only exports, offline evaluation.",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "author": {
         "name": "Muhammad Basit Ali",
         "url": "https://github.com/basitalisandhu"

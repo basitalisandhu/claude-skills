@@ -10,7 +10,7 @@ Scans, relative to --root (default: current directory):
   --include-home  ~/.claude/settings.json, ~/.claude/CLAUDE.md, ~/.cursor/mcp.json, claude_desktop_config.json, ...
   --extra FILE    any additional file (for example a claude_desktop_config.json somewhere else)
 
-Output: JSON (default) or Markdown with findings {id, severity, title, file, line, evidence, recommendation}.
+Output: JSON (default), Markdown or SARIF 2.1.0 with findings and recommendations.
 Evidence is redacted: a matched secret is never printed in full.
 Exit code: 0, or 1 when --fail-on SEVERITY is given and a finding of that severity or higher exists.
 
@@ -28,9 +28,10 @@ import shlex
 import stat
 import sys
 from dataclasses import asdict, dataclass
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
+from urllib.parse import quote
 
-VERSION = "0.6.0"
+VERSION = "0.6.1"
 SEVERITIES = ["critical", "high", "medium", "low", "info"]
 MAX_FILE_BYTES = 2 * 1024 * 1024
 
@@ -346,6 +347,9 @@ class Auditor:
         spec = spec[:-1] if spec.endswith(")") else spec
         line = self.line_of(text, rule)
         tool_l = tool.strip()
+        if tool_l == "Read" and re.search(r"(?:^|[/\\])(?:\.env(?![^/\\]*\.(?:example|sample|template)(?:$|[/\\]))[^/\\]*|\.ssh|\.aws|\.netrc|id_rsa|id_ed25519)(?:$|[/\\])|(?:^|[/\\])[^/\\]*\.(?:pem|key)$", spec):
+            self.add("PERM-012", "medium", "permissions", "Read allow rule covers a secret-bearing path", path, line, rule,
+                     "Remove the pre-approval for credential stores and private keys; allow only the project files needed and retain a prompt for secrets.")
         if tool_l == "Bash":
             words = spec.split()
             if not spec.strip() or spec.strip() in {"*", "**", ":*"}:
@@ -707,23 +711,123 @@ def to_markdown(rep: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+SARIF_RULE_TITLES = {
+    "PERM-001": "Unrestricted shell permission",
+    "PERM-002": "Risky program pre-approved",
+    "PERM-003": "Permission prompts bypassed",
+    "PERM-004": "Unrestricted write permission",
+    "PERM-005": "Unrestricted network permission",
+    "PERM-006": "Whole MCP server pre-approved",
+    "PERM-007": "Project MCP servers automatically enabled",
+    "PERM-008": "Hooks disabled",
+    "PERM-009": "Permission bypass flag pre-approved",
+    "PERM-010": "Overbroad additional directories",
+    "PERM-011": "Broad permissions without deny rules",
+    "HOOK-001": "Missing hook script",
+    "HOOK-002": "Network-capable hook",
+    "HOOK-003": "Credential in hook command",
+    "HOOK-004": "Remote code piped into hook",
+    "HOOK-005": "Unquoted plugin root",
+    "HOOK-006": "World-writable hook script",
+    "MCP-001": "Unencrypted remote MCP transport",
+    "MCP-002": "Literal MCP credential",
+    "MCP-003": "Unpinned MCP server",
+    "MCP-004": "MCP server in untrusted directory",
+    "MCP-005": "MCP server safety bypass",
+    "MCP-006": "Deprecated SSE transport",
+    "MCP-007": "Filesystem server has whole-disk access",
+    "MCP-008": "Remote MCP server uses raw IP",
+    "SEC-001": "Credential in configuration",
+    "INJ-001": "Instruction override",
+    "INJ-002": "Hidden action instruction",
+    "INJ-003": "Exfiltration instruction",
+    "INJ-004": "Automatic remote code execution instruction",
+    "INJ-005": "Invisible or bidirectional characters",
+    "INJ-006": "Instruction in HTML comment",
+    "INJ-007": "Encoded instruction blob",
+    "INJ-008": "Safety bypass instruction",
+    "INJ-009": "Credential-file read instruction",
+    "SKILL-001": "Unrestricted tool grant",
+    "SKILL-002": "Incomplete skill frontmatter",
+    "PLUGIN-001": "Plugin adds executables to PATH",
+    "FILE-001": "World-writable configuration",
+    "CFG-001": "Invalid JSON configuration",
+}
+
+
+def to_sarif(rep: dict) -> dict:
+    """Render the existing redacted report without rescanning or changing thresholds."""
+    titles = dict(SARIF_RULE_TITLES)
+    # A mirrored scanner rule may land before its preferred display title. Keep the
+    # packaged reference authoritative for IDs, including on a clean scan.
+    reference = Path(__file__).resolve().parent.parent / "references" / "checks.md"
+    if reference.is_file():
+        for line in reference.read_text(encoding="utf-8").splitlines():
+            match = re.match(r"^\| ([A-Z]+-\d+)(?: \[[^\]]+\])? \| (.*?)(?<!\\) \|", line)
+            if match:
+                titles.setdefault(match[1], match[2].replace("\\|", "|"))
+    for finding in rep["findings"]:
+        # Also retain findings from newer rules if this bundled renderer lags the scanner.
+        titles.setdefault(finding["id"], finding["title"])
+    rules = [{"id": fid, "shortDescription": {"text": titles[fid]}} for fid in sorted(titles)]
+    indexes = {rule["id"]: i for i, rule in enumerate(rules)}
+    levels = {"critical": "error", "high": "error", "medium": "warning", "low": "note", "info": "note"}
+    results = []
+    for finding in rep["findings"]:
+        path = finding["file"]
+        if Path(path).is_absolute():
+            uri = Path(path).as_uri()
+        elif PureWindowsPath(path).is_absolute():
+            uri = PureWindowsPath(path).as_uri()
+        else:
+            uri = quote(path.replace("\\", "/"), safe="/")
+        physical = {"artifactLocation": {"uri": uri}}
+        if finding["line"] is not None and finding["line"] > 0:
+            physical["region"] = {"startLine": finding["line"]}
+        results.append({
+            "ruleId": finding["id"], "ruleIndex": indexes[finding["id"]],
+            "level": levels[finding["severity"]],
+            "message": {"text": f"{finding['title']}\n{finding['evidence']}\nRecommendation: {finding['recommendation']}"},
+            "locations": [{"physicalLocation": physical}],
+        })
+    return {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{
+            "tool": {"driver": {"name": "agent-config-audit", "version": rep["version"], "rules": rules}},
+            "results": results,
+            "invocations": [{
+                "executionSuccessful": not rep["errors"],
+                "toolExecutionNotifications": [
+                    {"level": "warning", "message": {"text": error}} for error in rep["errors"]
+                ],
+            }],
+        }],
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", default=".", help="project directory to audit (default: current directory)")
     ap.add_argument("--extra", action="append", default=[], help="additional file to audit (repeatable)")
     ap.add_argument("--include-home", action="store_true", help="also audit the user-level config files in the home directory")
-    ap.add_argument("--format", choices=["json", "markdown"], default="json")
+    ap.add_argument("--format", choices=["json", "markdown", "sarif"], default="json")
     ap.add_argument("--output", help="write the report to this file instead of stdout")
     ap.add_argument("--fail-on", choices=SEVERITIES, help="exit 1 when a finding of this severity or higher exists")
     args = ap.parse_args(argv)
     auditor = Auditor(Path(args.root), include_home=args.include_home, extra=[Path(e) for e in args.extra])
     auditor.run()
     rep = auditor.report()
-    text = to_markdown(rep) if args.format == "markdown" else json.dumps(rep, indent=1, ensure_ascii=False) + "\n"
+    text = to_markdown(rep) if args.format == "markdown" else json.dumps(
+        to_sarif(rep) if args.format == "sarif" else rep, indent=1, ensure_ascii=False
+    ) + "\n"
     if args.output:
         Path(args.output).write_text(text, encoding="utf-8")
         print(f"wrote {args.output} ({rep['summary']['total']} findings)", file=sys.stderr)
     else:
+        # A Windows console encoding such as cp1252 cannot print every character in evidence.
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(errors="backslashreplace")
         sys.stdout.write(text)
     if args.fail_on:
         threshold = SEVERITIES.index(args.fail_on)

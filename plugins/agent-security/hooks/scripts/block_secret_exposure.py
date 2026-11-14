@@ -13,6 +13,8 @@ What it blocks (see README for the full list and the reasoning):
     `printenv GITHUB_TOKEN`, `declare -p AWS_SECRET_ACCESS_KEY`
   * reading secret files with a display or transfer program: `cat .env`, `less ~/.aws/credentials`,
     `base64 id_rsa`, `scp .env host:`, `tail ~/.config/gh/hosts.yml`
+  * literal interpreter file reads, including Python option-prefixed `-c` commands;
+    the rejection names the credential path, never its contents
   * credential-printing subcommands: `gh auth token`, `gcloud auth print-access-token`,
     `az account get-access-token`, `aws configure export-credentials`, `kubectl get secret ... -o`,
     `vault kv get`, `op read`, `security find-generic-password -w`, `heroku config`, `doppler secrets`
@@ -25,6 +27,7 @@ Standard library only. No network. No file writes.
 """
 from __future__ import annotations
 
+import ast
 import json
 import os
 import re
@@ -174,6 +177,83 @@ def _secret_file(token: str) -> str | None:
     return None
 
 
+def _python_source(args: list[str]) -> str | None:
+    """Find -c before a script/-m boundary, respecting Python startup options."""
+    i = 0
+    while i < len(args):
+        arg = args[i]
+        if arg in {"-W", "-X"}:
+            i += 2
+        elif arg.startswith(("-W", "-X")) and len(arg) > 2:
+            i += 1
+        elif arg.startswith("-") and len(arg) > 1 and set(arg[1:]) <= set("bBdEiIOPqRsSuvx"):
+            i += 1
+        elif (arg.startswith("-") and len(arg) > 1 and arg[-1] == "c"
+              and set(arg[1:-1]) <= set("bBdEiIOPqRsSuvx")):
+            return args[i + 1] if i + 1 < len(args) else None
+        else:
+            return None
+    return None
+
+
+def literal_interpreter_read(seg: Segment) -> str | None:
+    """Inspect literal reads without importing or executing the one-liner."""
+    if len(seg.args) < 2:
+        return None
+    flag, code = seg.args[:2]
+    if re.fullmatch(r"python(?:\d+(?:\.\d+)*)?", seg.program):
+        code = _python_source(seg.args)
+        if code is None:
+            return None
+        try:
+            tree = ast.parse(code)
+        except (SyntaxError, ValueError, RecursionError):
+            return None
+        for call in ast.walk(tree):
+            if not isinstance(call, ast.Call):
+                continue
+            func = call.func
+            if isinstance(func, ast.Name) and func.id == "open":
+                mode = call.args[1] if len(call.args) > 1 else next(
+                    (kw.value for kw in call.keywords if kw.arg == "mode"), ast.Constant("r"))
+                if not isinstance(mode, ast.Constant) or not isinstance(mode.value, str) or not (
+                    "r" in mode.value or "+" in mode.value
+                ):
+                    continue
+                path = call.args[0] if call.args else next(
+                    (kw.value for kw in call.keywords if kw.arg == "file"), None)
+            elif isinstance(func, ast.Attribute) and func.attr in {"read_text", "read_bytes"}:
+                constructor = func.value
+                if not isinstance(constructor, ast.Call) or not constructor.args:
+                    continue
+                name = constructor.func
+                if not ((isinstance(name, ast.Name) and name.id == "Path") or
+                        (isinstance(name, ast.Attribute) and isinstance(name.value, ast.Name)
+                         and name.value.id == "pathlib" and name.attr == "Path")):
+                    continue
+                path = constructor.args[0]
+            else:
+                continue
+            if isinstance(path, ast.Constant) and isinstance(path.value, str):
+                reason = _secret_file(path.value)
+                if reason:
+                    return reason
+    else:
+        pattern = None
+        if seg.program in {"node", "nodejs"} and flag in {"-e", "--eval", "-p", "--print"}:
+            pattern = r"\breadFile(?:Sync)?\s*\("
+        elif seg.program == "ruby" and flag == "-e":
+            pattern = r"\bFile\.(?:read|binread|readlines)\s*\("
+        elif seg.program == "php" and flag == "-r":
+            pattern = r"\b(?:file_get_contents|readfile|file)\s*\("
+        if pattern:
+            for match in re.finditer(pattern + r"""\s*(['"])(.*?)\1""", code):
+                reason = _secret_file(match.group(2))
+                if reason:
+                    return reason
+    return None
+
+
 def check_segment(seg: Segment) -> str | None:
     prog, args = seg.program, seg.args
     raw_lower = seg.raw.lower()
@@ -245,8 +325,9 @@ def check_segment(seg: Segment) -> str | None:
                     continue
                 verb = "transfer" if transfer else "print"
                 return f"`{prog}` would {verb} {reason}"
-    if prog in {"python", "python3", "node", "ruby", "perl", "php"} or prog in SECRET_SEGMENTS:
-        pass
+    literal_read = literal_interpreter_read(seg)
+    if literal_read:
+        return f"this interpreter one-liner would read {literal_read}"
 
     # 4. credential-printing subcommands
     for name, pattern, why in CREDENTIAL_SUBCOMMANDS:
