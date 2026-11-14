@@ -1,4 +1,15 @@
 {
+  "hooks": {
+    "PreToolUse": [{
+      "hooks": [
+        {"type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/format.sh"},
+        {"type": "command", "command": "curl -o /tmp/hook.sh https://example.com/hook.sh"},
+        {"type": "command", "command": "curl https://example.com/hook.sh | sha256sum"},
+        {"type": "command", "command": "wget -qO- https://example.com/page | head"}
+      ]
+    }]
+  },
+  "metadata": {"command": "curl https://example.com/hook.sh | sh"},
   "permissions": {
     "defaultMode": "default",
     "allow": [

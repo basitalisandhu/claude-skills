@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.6.0"
+ "version": "0.6.1"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / incident-lookup</p>
 <h1>Incident lookup</h1>
 <p class="lede">Look up 80 coded AI-agent security incidents from 2023 to 2026 (prompt injection, tool poisoning, exfiltration and more), mapped to OWASP Agentic and LLM Top 10 and MITRE ATLAS techniques, and list real precedents with sources. Use when asked &quot;has this happened before?&quot;, to find incidents that justify a control with evidence, or to &quot;cite a precedent&quot;. Not for general CVE lookups, security news, a live threat feed or writing a threat model (agent-threat-model); it reads a daily-refreshed copy of the published dataset and falls back to a bundled snapshot offline.</p>
-<p class="meta">Skill <code>incident-lookup</code> in plugin <a href="../index.html">agent-security</a> 0.6.0, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/incident-lookup/SKILL.md">plugins/agent-security/skills/incident-lookup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/incident-lookup/SKILL.md">plugins/agent-security/skills/incident-lookup/SKILL.md</a>.</p>
+<p class="meta">Skill <code>incident-lookup</code> in plugin <a href="../index.html">agent-security</a> 0.6.1, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/incident-lookup/SKILL.md">plugins/agent-security/skills/incident-lookup/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/incident-lookup/SKILL.md">plugins/agent-security/skills/incident-lookup/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -75,7 +75,7 @@ python3 &quot;$S&quot; precedents --channel-in &quot;repo issue/pr&quot; --autho
 python3 &quot;$S&quot; show 030
 python3 &quot;$S&quot; stats --by owasp_agentic --since 2025-01
 python3 &quot;$S&quot; --offline fields</code></pre>
-<p><code>--format</code> goes before or after the subcommand, and <code>--framework MCP</code> matches the dataset&#x27;s &quot;Model Context Protocol&quot;. From a copy of the skill folder without the plugin system, set <code>S=scripts/incidents.py</code> from the skill folder; the bundled snapshot is then not found, so the script needs the network or <code>--data &lt;file&gt;</code>.</p>
+<p><code>--format</code> goes before or after the subcommand, and <code>--framework MCP</code> matches the dataset&#x27;s &quot;Model Context Protocol&quot;. Use <code>list --format csv</code> or <code>precedents --format csv</code> for spreadsheet export. List columns are <code>id,date,name,vector,channel_in,authority,outcome,owasp_agentic,url</code>; precedent columns are <code>id,date,name,score,why,outcome,owasp_agentic,url</code>. Lists within cells use <code>;</code>; stdout contains only CSV. From a copy of the skill folder without the plugin system, set <code>S=scripts/incidents.py</code> from the skill folder; the bundled snapshot is then not found, so the script needs the network or <code>--data &lt;file&gt;</code>.</p>
 <p>The <code>agent-incidents</code> MCP server (if the user enabled it) exposes the same data and filters as <code>search_incidents</code>, <code>get_incident</code> and <code>stats</code>; prefer it when it is available, the script otherwise.</p>
 <ol start="3"><li><strong>Summarise with citations.</strong> Every record has a primary source (<code>sources[0].url</code>), a <code>summary</code> and a <code>status</code> (<code>confirmed</code>, <code>reported</code>, <code>disputed</code>). Quote the name, date, status and URL; paraphrase the summary; never invent details that are not in the record. If the user asks about an event that is not in the dataset, say so and suggest they add it upstream (one JSON file per event, validated in CI).</li></ol>
 <ol start="4"><li><strong>Turn precedents into controls.</strong> <code>precedents</code> prints, per vector, the control that addresses it (provenance rule, approval gating, brokered credentials, pinning, sandboxing), and the OWASP Agentic ids among the matches so the report can cite them.</li></ol>

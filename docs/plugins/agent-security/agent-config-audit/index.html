@@ -37,7 +37,7 @@
   "name": "agent-security",
   "url": "https://basitalisandhu.github.io/claude-skills/plugins/agent-security/"
  },
- "version": "0.6.0"
+ "version": "0.6.1"
 }
 </script>
 </head>
@@ -47,7 +47,7 @@
 <p class="crumbs"><a href="../../../index.html">Home</a> / <a href="../index.html">agent-security</a> / agent-config-audit</p>
 <h1>Agent configuration audit</h1>
 <p class="lede">Scan an AI agent configuration for risky permissions, leaked secrets, unpinned MCP servers and prompt injection in instruction files, with a bundled scanner that masks secrets. Use when asked to &quot;check my .claude settings&quot;, to review or harden CLAUDE.md, .cursor rules, .mcp.json, hooks, skills or plugins, or before trusting a cloned repository. Not for application code (prompt-injection-review, semgrep-agentic) or MCP server code (mcp-server-review).</p>
-<p class="meta">Skill <code>agent-config-audit</code> in plugin <a href="../index.html">agent-security</a> 0.6.0, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a>.</p>
+<p class="meta">Skill <code>agent-config-audit</code> in plugin <a href="../index.html">agent-security</a> 0.6.1, 3 bundled script files, MIT licence. Source: <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a> in <a href="https://github.com/basitalisandhu/agent-security-skills">agent-security-skills</a>. Copy in this repository: <a href="https://github.com/basitalisandhu/claude-skills/blob/main/plugins/agent-security/skills/agent-config-audit/SKILL.md">plugins/agent-security/skills/agent-config-audit/SKILL.md</a>.</p>
 <h2 id="install">Install</h2>
 <p>In Claude Code, add the marketplace and install the plugin:</p>
 <pre><code>/plugin marketplace add basitalisandhu/claude-skills
@@ -70,7 +70,7 @@ python3 install.py --user --skill agent-security/agent-config-audit</code></pre>
 <p>From a copy of the skill folder without the plugin system (<code>CLAUDE_PLUGIN_ROOT</code> empty), the script is <code>scripts/audit_agent_config.py</code> inside it.</p>
 <p>Add <code>--include-home</code> to also audit the user-level files (<code>~/.claude/settings.json</code>, <code>~/.cursor/mcp.json</code>, the Claude Desktop config). Add <code>--extra path/to/file</code> for a config that lives elsewhere. Add <code>--fail-on high</code> in CI.</p>
 <ol start="2"><li><strong>Read every finding.</strong> Each has an <code>id</code> (see <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/references/checks.md">references/checks.md</a>), a <code>severity</code>, the <code>file</code> and <code>line</code>, redacted <code>evidence</code> and a <code>recommendation</code>. Do not paste raw secrets into the conversation even if you find them by other means; the scanner masks them on purpose.</li></ol>
-<ol start="3"><li><strong>Verify the high-impact ones by hand.</strong> For each critical or high finding open the file and confirm the context. The scanner is pattern-based; a <code>Bash(curl *)</code> rule inside a deny list is fine, a <code>curl</code> inside a hook that posts to <code>localhost</code> is fine. Downgrade with a one-line reason when the context is benign.</li></ol>
+<ol start="3"><li><strong>Verify the high-impact ones by hand.</strong> For each critical or high finding open the file and confirm the context. For <code>PERM-012</code> (medium), confirm that a secret-path <code>Read</code> rule is in the allow list, not the deny list; retain a prompt for credential reads rather than opening the secret itself. The scanner is pattern-based; a <code>Bash(curl *)</code> rule inside a deny list is fine, a <code>curl</code> inside a hook that posts to <code>localhost</code> is fine. Downgrade with a one-line reason when the context is benign.</li></ol>
 <ol start="4"><li><strong>Look for what the scanner cannot see.</strong> Check these by reading the files: - Instruction files that reference other files or URLs (<code>@docs/…</code>, &quot;follow the rules in …&quot;): follow the chain once. - Hooks of type <code>prompt</code> or <code>agent</code>: read their instructions for the same injection patterns. - Skills with <code>disable-model-invocation</code> unset that carry powerful <code>allowed-tools</code>. - Plugin <code>bin/</code> directories and anything in <code>scripts/</code> that hooks call. - <code>.gitignore</code> covering <code>.claude/settings.local.json</code> and <code>.env*</code>.</li></ol>
 <ol start="5"><li><strong>Report</strong> in the format below. Lead with the one change that removes the most risk.</li></ol>
 <h3 id="output-format">Output format</h3>
@@ -85,7 +85,7 @@ python3 install.py --user --skill agent-security/agent-config-audit</code></pre>
 **Not flagged but worth knowing:** &lt;manual observations from step 4, or &quot;none&quot;&gt;
 
 **Scanned:** &lt;n&gt; files (&lt;list the notable ones&gt;)</code></pre>
-<p>Use <code>--format markdown --output agent-config-audit.md</code> when the user wants a file.</p>
+<p>Use <code>--format markdown --output agent-config-audit.md</code> when the user wants a file. Use <code>--format sarif --output agent-config-audit.sarif</code> for code-scanning integration; read the <a href="https://github.com/basitalisandhu/agent-security-skills/blob/main/plugins/agent-security/skills/agent-config-audit/references/checks.md#sarif-output">SARIF workflow</a> before adding an upload step.</p>
 <h3 id="severity-guide">Severity guide</h3>
 <table><thead><tr><th>Severity</th><th>Meaning</th></tr></thead><tbody><tr><td>critical</td><td>Exploitable now with no user interaction: bypass mode, <code>Bash(*)</code>, a live credential, remote code piped into a hook</td></tr><tr><td>high</td><td>One prompt injection away from damage: dangerous program wildcards, exfil-capable hooks, plain-HTTP MCP with a token, override phrases in instruction files</td></tr><tr><td>medium</td><td>Weakens defence in depth: unpinned servers, broad write grants, invisible characters, auto-approved project MCP servers</td></tr><tr><td>low</td><td>Hygiene: unquoted plugin paths, missing deny rules, unparseable config</td></tr><tr><td>info</td><td>Quality notes, no security impact on their own</td></tr></tbody></table>
 <h3 id="related">Related</h3>
