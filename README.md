@@ -101,7 +101,7 @@ Version 0.4.0. Source: [agent-identity-governance-skills](https://github.com/bas
 
 ### agent-security
 
-Version 0.6.0. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
+Version 0.6.1. Source: [agent-security-skills](https://github.com/basitalisandhu/agent-security-skills). Install: `/plugin install agent-security@claude-skills`. Also ships plugin-level hooks, commands, agents and an MCP server (marketplace route only).
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
@@ -256,7 +256,7 @@ Version 0.4.0. Source: [github-manager-skills](https://github.com/basitalisandhu
 
 ### m365-governance
 
-Version 0.6.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
+Version 0.7.0. Source: [m365-governance-skills](https://github.com/basitalisandhu/m365-governance-skills). Install: `/plugin install m365-governance@claude-skills`.
 
 | Skill | What it does | Scripts | Links |
 | --- | --- | --- | --- |
